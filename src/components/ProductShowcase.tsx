@@ -1,56 +1,124 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { Package, ShieldCheck, Microscope } from 'lucide-react';
+
+const steps = [
+    {
+        num: '01',
+        icon: Microscope,
+        title: 'Micro Mill.',
+        desc: 'Nature-derived nutrients, milled to a molecular scale that disappears into your food instantly. No texture, no taste, no compromise.',
+        color: '#7cb342',
+    },
+    {
+        num: '02',
+        icon: ShieldCheck,
+        title: 'Bio Guard.',
+        desc: 'Our mix-blend technology prevents nutrient oxidation, ensuring 100% absorption at the cellular level. Every milligram counts.',
+        color: '#3a6b35',
+    },
+    {
+        num: '03',
+        icon: Package,
+        title: 'Completion.',
+        desc: '26 Micronutrients filling the silent gaps in your morning. Pure, simple, and invisible. The delta — bridged.',
+        color: '#7cb342',
+    },
+];
 
 export default function ProductShowcase() {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-    const imgScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1.05]);
-    const imgRotate = useTransform(scrollYProgress, [0, 0.5, 1], [-3, 0, 3]);
-
     return (
-        <section ref={ref} id="how-it-works" className="bg-[#fafaf7] py-24 md:py-32 overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 md:px-10">
+        <section id="habit" className="bg-[#0a0a0a] section-pad relative overflow-hidden">
 
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-center mb-20">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3a6b35] mb-4">How It Works</p>
-                    <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#171717] leading-tight">
-                        Balance in <span className="text-[#3a6b35]">three steps.</span>
+            {/* Background */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full blur-[120px]"
+                    style={{ background: 'radial-gradient(ellipse, rgba(122,195,66,0.05) 0%, transparent 70%)' }} />
+            </div>
+
+            <div className="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10">
+
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-20"
+                >
+                    <div className="tag-pill mb-6 mx-auto whitespace-nowrap" style={{ display: 'inline-flex' }}>How It Works</div>
+                    <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                        The Formula.<br />
+                        <span className="font-playfair italic text-white/20">Decoded.</span>
                     </h2>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
-                    {[
-                        { step: '01', title: 'Add one scoop', desc: 'To your morning dosa batter, oats, smoothie, or roti atta.', img: '/images/scoop.png' },
-                        { step: '02', title: 'Eat as usual', desc: 'No taste change. No special prep. It fits into what you already eat.', img: '/images/lifestyle.png' },
-                        { step: '03', title: 'Stay complete', desc: 'Your daily meal now covers protein, fibre, and micronutrient gaps.', img: '/images/product.png' },
-                    ].map((s, i) => (
-                        <motion.div key={s.step}
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.15, duration: 0.6 }}
-                            whileHover={{ y: -8 }}
-                            className="group rounded-3xl overflow-hidden bg-white border border-black/5 shadow-sm hover:shadow-xl transition-all duration-500">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20">
+                    {steps.map((step, i) => {
+                        const Icon = step.icon;
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: i * 0.15 }}
+                                className="group glass rounded-3xl p-8 hover:border-[rgba(122,195,66,0.2)] transition-all duration-500 relative overflow-hidden"
+                            >
+                                {/* Number backdrop */}
+                                <div className="absolute top-6 right-6 font-playfair text-8xl font-black text-white/[0.04] leading-none select-none">
+                                    {step.num}
+                                </div>
 
-                            {/* Image */}
-                            <div className="relative h-56 overflow-hidden">
-                                <Image src={s.img} alt={s.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
-                                <span className="absolute top-4 left-4 bg-[#3a6b35] text-white text-xs font-bold px-3 py-1.5 rounded-full">{s.step}</span>
-                            </div>
+                                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-8"
+                                    style={{ background: `${step.color}15`, border: `1px solid ${step.color}25` }}>
+                                    <Icon className="w-6 h-6" style={{ color: step.color }} />
+                                </div>
 
-                            {/* Text */}
-                            <div className="p-6 md:p-8">
-                                <h3 className="font-playfair text-2xl font-bold text-[#171717] mb-3">{s.title}</h3>
-                                <p className="text-[#171717]/50 leading-relaxed">{s.desc}</p>
-                            </div>
-                        </motion.div>
-                    ))}
+                                <h3 className="font-playfair text-3xl font-bold text-white mb-4">{step.title}</h3>
+                                <p className="text-white/35 text-base leading-relaxed font-light group-hover:text-white/55 transition-colors">{step.desc}</p>
+
+                                {/* Bottom accent line */}
+                                <div className="mt-8 h-px w-0 group-hover:w-full transition-all duration-700 rounded-full"
+                                    style={{ background: `linear-gradient(90deg, ${step.color}, transparent)` }} />
+                            </motion.div>
+                        );
+                    })}
                 </div>
+
+                {/* Product image strip */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="glass rounded-3xl overflow-hidden flex flex-col md:flex-row items-center gap-10 md:gap-0"
+                >
+                    <div className="relative w-[200px] h-[260px] flex-shrink-0">
+                        <Image
+                            src="/images/product_premium.png"
+                            alt="Plainfuel formula"
+                            fill
+                            className="object-contain filter brightness-[1.05]"
+                        />
+                    </div>
+                    <div className="flex-1 p-10 border-t md:border-t-0 md:border-l" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                        <p className="text-[10px] uppercase tracking-[0.15em] text-[#7cb342] font-black mb-4">The Result</p>
+                        <h3 className="font-playfair text-4xl font-bold text-white mb-5">One Scoop. Everything.</h3>
+                        <p className="text-white/35 text-lg font-light leading-relaxed max-w-lg">
+                            Mix into your morning oats, smoothie, or batter. It disappears — no taste, no texture. Just your meal, and now, everything your body needs.
+                        </p>
+                        <div className="mt-8 flex flex-wrap gap-3">
+                            {['Odorless', 'Tasteless', 'Dissolves Instantly', 'Heat Stable'].map((tag) => (
+                                <span key={tag} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full border"
+                                    style={{ color: '#7cb342', borderColor: 'rgba(122,195,66,0.2)', background: 'rgba(122,195,66,0.05)' }}>
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

@@ -1,112 +1,153 @@
 'use client';
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { ArrowRight, Star } from 'lucide-react';
 
 export default function HeroExperience() {
-    const ref = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-    const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-    const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.95]);
-    const productY = useTransform(scrollYProgress, [0, 0.6], [0, -60]);
-
     return (
-        <section ref={ref} className="relative min-h-screen overflow-hidden">
-            {/* Full-bleed background image */}
-            <div className="absolute inset-0">
-                <Image src="/images/hero-bg.png" alt="" fill className="object-cover" priority />
-                <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white/80" />
+        <section className="relative min-h-screen bg-[#050505] flex items-center overflow-hidden">
+
+            {/* Background radial glow */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full"
+                    style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.18) 0%, transparent 70%)' }} />
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full"
+                    style={{ background: 'radial-gradient(circle, rgba(122,195,66,0.06) 0%, transparent 70%)' }} />
             </div>
 
-            {/* Nav */}
-            <nav className="fixed top-0 inset-x-0 z-50 transition-all">
-                <div className="max-w-7xl mx-auto px-6 md:px-10 py-5 flex items-center justify-between">
-                    <span className="font-playfair text-2xl font-bold tracking-tight text-[#171717]">Plainfuel</span>
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[#171717]/70">
-                        <a href="#story" className="hover:text-[#3a6b35] transition-colors">Story</a>
-                        <a href="#whats-inside" className="hover:text-[#3a6b35] transition-colors">What&apos;s Inside</a>
-                        <a href="#how-it-works" className="hover:text-[#3a6b35] transition-colors">How It Works</a>
+            {/* Grid pattern */}
+            <div className="absolute inset-0 z-0 opacity-[0.025]"
+                style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+
+            <div className="max-w-screen-xl mx-auto px-6 md:px-12 pt-28 pb-16 relative z-10 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-7rem)]">
+
+                    {/* Left: Copy */}
+                    <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="tag-pill mb-8"
+                        >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#7cb342] pulse-dot" />
+                            Now Taking Pre-Orders
+                        </motion.div>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.9, delay: 0.2 }}
+                            className="font-playfair text-[4rem] md:text-[5.5rem] lg:text-[6.5rem] font-black leading-[0.88] tracking-tight text-white mb-8"
+                        >
+                            The{' '}
+                            <span className="font-playfair italic" style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                                Delta.
+                            </span>
+                            <br />
+                            <span className="text-white/20">Complete.</span>
+                        </motion.h1>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.35 }}
+                            className="text-xl text-white/40 font-light leading-relaxed mb-12 max-w-md"
+                        >
+                            One invisible scoop. 26 micronutrients. The precise gap between what your Indian diet gives you and what your body actually needs — bridged.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                            className="flex flex-wrap items-center gap-4 mb-14"
+                        >
+                            <a href="#buy"
+                                className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#3a6b35] to-[#4a8540] text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-[0.1em] shadow-[0_8px_30px_rgba(58,107,53,0.4)] hover:shadow-[0_8px_40px_rgba(122,195,66,0.4)] hover:-translate-y-0.5 transition-all duration-200">
+                                Pre-Order Now
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </a>
+                            <a href="#investigation"
+                                className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm font-semibold tracking-wide transition-colors">
+                                See the science
+                                <span className="text-[#7cb342]">↓</span>
+                            </a>
+                        </motion.div>
+
+                        {/* Trust bar */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.7 }}
+                            className="flex flex-wrap items-center gap-6"
+                        >
+                            {['FSSAI Certified', 'Zero Fillers', '26 Micronutrients', 'Lab Verified'].map((tag, i) => (
+                                <div key={i} className="flex items-center gap-2">
+                                    <div className="w-1 h-1 rounded-full bg-[#7cb342]" />
+                                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/25">{tag}</span>
+                                </div>
+                            ))}
+                        </motion.div>
                     </div>
-                    <a href="#buy" className="inline-flex items-center gap-2 bg-[#3a6b35] text-white text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-[#2d5429] transition-colors shadow-sm">
-                        Get Plainfuel
-                    </a>
+
+                    {/* Right: Product Visual */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 1.1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative flex justify-center lg:justify-end"
+                    >
+                        <div className="relative w-[280px] md:w-[360px] lg:w-[420px] aspect-[3/4]">
+                            {/* Glow ring */}
+                            <div className="absolute inset-[-20%] rounded-full opacity-40"
+                                style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.35) 0%, transparent 70%)' }} />
+
+                            {/* Product image */}
+                            <div className="float-anim relative w-full h-full">
+                                <Image
+                                    src="/images/product_premium.png"
+                                    alt="Plainfuel — The Meal Completer"
+                                    fill
+                                    className="object-contain filter brightness-[1.1] contrast-[1.05]"
+                                    priority
+                                />
+                            </div>
+
+                            {/* Floating badge — rating */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.8 }}
+                                className="absolute top-8 -left-8 glass rounded-2xl px-5 py-4 shadow-xl"
+                            >
+                                <div className="flex items-center gap-2 mb-1">
+                                    {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-[#7cb342] text-[#7cb342]" />)}
+                                </div>
+                                <p className="text-white text-sm font-bold">4.9/5</p>
+                                <p className="text-white/30 text-[10px]">Early adopters</p>
+                            </motion.div>
+
+                            {/* Floating badge — price */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 1 }}
+                                className="absolute bottom-12 -right-8 glass-green rounded-2xl px-5 py-4 shadow-xl"
+                            >
+                                <p className="text-[10px] uppercase tracking-widest text-[#7cb342] font-black mb-1">Launch Price</p>
+                                <p className="text-white text-2xl font-black">₹599</p>
+                                <p className="text-white/30 text-xs line-through">₹899</p>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+
                 </div>
-            </nav>
+            </div>
 
-            {/* Hero Content */}
-            <motion.div style={{ opacity: heroOpacity, scale: heroScale }}
-                className="relative z-10 flex flex-col items-center text-center pt-32 md:pt-40 pb-20 px-6">
-
-                {/* Badge */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                    className="inline-flex items-center gap-2 bg-[#3a6b35]/10 text-[#3a6b35] text-xs font-semibold px-4 py-2 rounded-full mb-8 border border-[#3a6b35]/20">
-                    <span className="w-2 h-2 rounded-full bg-[#3a6b35] animate-pulse" />
-                    India&apos;s First Meal Completer
-                </motion.div>
-
-                {/* Headline */}
-                <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}
-                    className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[#171717] max-w-4xl leading-[1.05]">
-                    Complete your meals. <br className="hidden md:block" />
-                    <span className="text-[#3a6b35]">Simply.</span>
-                </motion.h1>
-
-                <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
-                    className="mt-6 text-lg md:text-xl text-[#171717]/60 max-w-2xl font-light leading-relaxed">
-                    One scoop adds the protein, fibre, and micronutrients your daily food misses. Not a replacement — a completion.
-                </motion.p>
-
-                {/* CTA Buttons */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
-                    className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                    <a href="#buy" className="inline-flex items-center gap-2 bg-[#3a6b35] text-white font-semibold px-8 py-4 rounded-full hover:bg-[#2d5429] transition-all shadow-lg shadow-[#3a6b35]/20 hover:shadow-[#3a6b35]/30 hover:-translate-y-0.5 text-base">
-                        Start Today — ₹599
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                    </a>
-                    <a href="#story" className="inline-flex items-center gap-2 text-[#171717] font-semibold px-8 py-4 rounded-full border border-[#171717]/15 hover:border-[#171717]/30 transition-all hover:-translate-y-0.5 text-base">
-                        Our Story
-                    </a>
-                </motion.div>
-
-                {/* Product Image — the hero */}
-                <motion.div style={{ y: productY }}
-                    initial={{ opacity: 0, y: 60, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="relative mt-16 md:mt-20">
-
-                    <div className="relative w-[280px] h-[350px] md:w-[400px] md:h-[500px]">
-                        <Image src="/images/product.png" alt="Plainfuel Product" fill className="object-contain drop-shadow-2xl" priority />
-                    </div>
-
-                    {/* Floating ingredient badges */}
-                    <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3, delay: 0 }}
-                        className="absolute -left-16 md:-left-32 top-1/4 bg-white rounded-2xl px-4 py-3 shadow-lg border border-black/5">
-                        <p className="text-xs font-semibold text-[#3a6b35]">🌾 6g Fibre</p>
-                    </motion.div>
-                    <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
-                        className="absolute -right-16 md:-right-32 top-1/3 bg-white rounded-2xl px-4 py-3 shadow-lg border border-black/5">
-                        <p className="text-xs font-semibold text-[#3a6b35]">💊 40% Micronutrients</p>
-                    </motion.div>
-                    <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3, delay: 1 }}
-                        className="absolute -left-8 md:-left-20 bottom-8 bg-white rounded-2xl px-4 py-3 shadow-lg border border-black/5">
-                        <p className="text-xs font-semibold text-[#3a6b35]">🥩 Complete Protein</p>
-                    </motion.div>
-                </motion.div>
-
-                {/* Trust bar */}
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-                    className="mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12 text-[#171717]/40 text-xs font-medium uppercase tracking-wider">
-                    <span>🧪 Lab Tested</span>
-                    <span className="w-1 h-1 rounded-full bg-[#171717]/20" />
-                    <span>🌿 No Artificial Anything</span>
-                    <span className="w-1 h-1 rounded-full bg-[#171717]/20" />
-                    <span>🇮🇳 Made in India</span>
-                    <span className="w-1 h-1 rounded-full bg-[#171717]/20" />
-                    <span>⭐ 4.8/5 Rating</span>
-                </motion.div>
-            </motion.div>
+            {/* Bottom fade */}
+            <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-10" />
         </section>
     );
 }

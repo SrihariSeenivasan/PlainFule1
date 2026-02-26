@@ -1,111 +1,156 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { ArrowRight, Instagram, Mail, Twitter } from 'lucide-react';
+
+const faqs = [
+    { q: 'Is this a meal replacement?', a: 'Plainfuel is a completer. We provide the 20% your high-quality meals usually miss — not a replacement.' },
+    { q: 'Why neutral taste?', a: 'Habit science. We integrated into your current meals so you don\'t have to change your palette.' },
+    { q: 'Is it safe?', a: 'Standardized by pharmacists. FSSAI certified. No artificial fillers, megadoses or synthetics.' },
+    { q: 'How do I use it?', a: 'One scoop in your morning oats, smoothie, or batter. It disappears instantly — no texture, no taste.' },
+];
 
 export default function FinalCTA() {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] });
-    const productScale = useTransform(scrollYProgress, [0, 0.6], [0.85, 1]);
-    const productY = useTransform(scrollYProgress, [0, 0.6], [40, 0]);
-
     return (
-        <section id="buy" ref={ref} className="overflow-hidden">
+        <section id="buy" className="bg-[#050505]">
 
-            {/* CTA Section */}
-            <div className="bg-[#3a6b35] text-white py-24 md:py-32 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#3a6b35] via-[#2d5429] to-[#3a6b35]" />
-                <div className="absolute inset-0 opacity-5">
-                    <Image src="/images/ingredients.png" alt="" fill className="object-cover" />
+            {/* CTA Block */}
+            <div className="relative overflow-hidden section-pad">
+                {/* Background */}
+                <div className="absolute inset-0">
+                    <Image src="/images/hero-bg.png" alt="" fill className="object-cover opacity-[0.07] blur-xl" />
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(58,107,53,0.15) 0%, transparent 60%)' }} />
                 </div>
 
-                <div className="max-w-6xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row items-center gap-16 relative z-10">
+                <div className="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
-                    {/* Product */}
-                    <motion.div style={{ scale: productScale, y: productY }}
-                        className="flex-shrink-0">
-                        <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4 }}
-                            className="relative w-[240px] h-[320px] md:w-[320px] md:h-[420px]">
-                            <Image src="/images/product.png" alt="Plainfuel" fill className="object-contain drop-shadow-2xl" />
+                        {/* Left: Product */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.92 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1 }}
+                            className="flex justify-center lg:justify-start"
+                        >
+                            <div className="relative w-[280px] md:w-[380px] aspect-[3/4]">
+                                <div className="absolute inset-[-15%] rounded-full blur-3xl"
+                                    style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.3) 0%, transparent 70%)' }} />
+                                <div className="float-anim relative w-full h-full">
+                                    <Image
+                                        src="/images/product_premium.png"
+                                        alt="Order Plainfuel"
+                                        fill
+                                        className="object-contain filter brightness-[1.1]"
+                                    />
+                                </div>
+                            </div>
                         </motion.div>
-                    </motion.div>
 
-                    {/* Content */}
-                    <div className="flex-1 text-center lg:text-left">
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60 mb-6">Start Your Balance</p>
-                            <h2 className="font-playfair text-4xl md:text-6xl font-bold leading-tight mb-6">
-                                Return to balance. <br />Today.
+                        {/* Right: CTA copy */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.9, delay: 0.15 }}
+                        >
+                            <div className="tag-pill mb-8">The New Protocol</div>
+
+                            <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight mb-8">
+                                Begin the<br />
+                                <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+                                    className="font-playfair italic">Completion.</span>
                             </h2>
-                            <p className="text-lg text-white/70 max-w-lg mb-8">
-                                One scoop. One minute. Every day. That&apos;s all it takes to bridge the nutritional gap.
+
+                            <p className="text-white/35 text-lg font-light leading-relaxed mb-10 max-w-md">
+                                Your biology doesn&apos;t wait for the right moment. Start bridging the gap today with the only precision habit built for urban life.
                             </p>
 
-                            {/* Price Box */}
-                            <div className="inline-block bg-white/10 rounded-2xl p-6 border border-white/10 mb-8">
-                                <div className="flex items-baseline gap-3">
-                                    <span className="font-playfair text-4xl font-bold">₹599</span>
-                                    <span className="text-white/50 line-through">₹899</span>
-                                    <span className="bg-white/20 text-xs font-bold px-2 py-1 rounded-full">33% OFF</span>
+                            {/* Price card */}
+                            <div className="glass-green rounded-3xl p-8 mb-10 inline-block w-full">
+                                <div className="flex items-baseline gap-4 mb-3">
+                                    <span className="font-playfair text-6xl font-black text-white">₹599</span>
+                                    <span className="text-white/20 line-through text-2xl">₹899</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full"
+                                        style={{ background: '#3a6b35', color: '#fff' }}>33% OFF</span>
                                 </div>
-                                <p className="text-white/50 text-sm mt-2">30 servings • Free shipping</p>
+                                <p className="text-[#7cb342] text-xs font-black uppercase tracking-widest">30 Servings • Free Shipping • Launch Price</p>
                             </div>
 
-                            <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                                <motion.button whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}
-                                    className="inline-flex items-center gap-2 bg-white text-[#3a6b35] font-bold px-10 py-4 rounded-full shadow-xl hover:shadow-2xl transition-shadow text-lg">
-                                    Buy Now
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                </motion.button>
-                            </div>
+                            <motion.a
+                                href="#"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="group inline-flex items-center gap-4 bg-gradient-to-r from-[#3a6b35] to-[#4a8540] text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-[0.1em] shadow-[0_8px_40px_rgba(58,107,53,0.5)] hover:shadow-[0_8px_60px_rgba(122,195,66,0.4)] transition-all duration-300 mb-8 w-full justify-center md:w-auto md:justify-start"
+                            >
+                                Reserve Your Protocol
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </motion.a>
 
-                            {/* Trust */}
-                            <div className="flex flex-wrap gap-6 mt-8 text-white/40 text-xs font-medium uppercase tracking-wider justify-center lg:justify-start">
-                                <span>30-day guarantee</span>
+                            <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.12em] text-white/20">
+                                <span>Risk Free</span>
                                 <span>•</span>
-                                <span>Free shipping</span>
+                                <span>Dermatologically Safe</span>
                                 <span>•</span>
-                                <span>Lab tested</span>
+                                <span>Lab Verified</span>
                             </div>
                         </motion.div>
                     </div>
                 </div>
             </div>
 
-            {/* FAQ Quick */}
-            <div className="bg-[#fafaf7] py-16 md:py-24">
-                <div className="max-w-3xl mx-auto px-6 md:px-10">
-                    <h3 className="font-playfair text-3xl font-bold text-[#171717] text-center mb-12">Quick answers</h3>
-                    {[
-                        { q: 'Is this a meal replacement?', a: 'No. Plainfuel is a meal completer — it adds what your regular food misses.' },
-                        { q: 'Why not 100% of daily nutrients?', a: 'Because your food already provides some. We only fill the gap, intentionally.' },
-                        { q: 'What does it taste like?', a: 'Neutral. It blends into your oats, batter, smoothie, or atta without changing the taste.' },
-                        { q: 'Is it safe for daily use?', a: 'Yes. Lab tested, FSSAI approved, made with real food ingredients. No artificial anything.' },
-                    ].map((faq, i) => (
-                        <motion.div key={i}
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.08 }}
-                            className="border-b border-black/5 py-6">
-                            <p className="font-semibold text-[#171717] text-lg">{faq.q}</p>
-                            <p className="text-[#171717]/50 mt-2">{faq.a}</p>
-                        </motion.div>
-                    ))}
+            {/* FAQ Block */}
+            <div className="border-t section-pad" style={{ borderColor: 'rgba(255,255,255,0.04)', background: '#080808' }}>
+                <div className="max-w-screen-xl mx-auto px-6 md:px-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="mb-12"
+                    >
+                        <div className="tag-pill mb-4">Biological Logic</div>
+                        <h3 className="font-playfair text-4xl font-bold text-white">Common Questions</h3>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {faqs.map((faq, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.1 }}
+                                className="glass rounded-2xl p-7"
+                            >
+                                <p className="text-white font-bold text-base mb-3">{faq.q}</p>
+                                <p className="text-white/35 text-sm font-light leading-relaxed">{faq.a}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
             {/* Footer */}
-            <footer className="bg-[#171717] text-white">
-                <div className="max-w-6xl mx-auto px-6 md:px-10 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <span className="font-playfair text-xl font-bold">Plainfuel</span>
-                    <div className="flex gap-8 text-sm text-white/40">
-                        <a href="#" className="hover:text-white transition-colors">Instagram</a>
-                        <a href="#" className="hover:text-white transition-colors">Twitter</a>
-                        <a href="#" className="hover:text-white transition-colors">Email</a>
+            <footer className="border-t py-10" style={{ borderColor: 'rgba(255,255,255,0.04)', background: '#050505' }}>
+                <div className="max-w-screen-xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm"
+                            style={{ background: 'linear-gradient(135deg, #3a6b35, #7cb342)' }}>P</div>
+                        <span className="font-playfair text-xl font-bold text-white tracking-tight">Plainfuel</span>
                     </div>
-                    <p className="text-xs text-white/20">© 2026 Plainfuel. All rights reserved.</p>
+                    <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                            <Instagram className="w-4 h-4" /> Instagram
+                        </a>
+                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                            <Twitter className="w-4 h-4" /> Twitter
+                        </a>
+                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                            <Mail className="w-4 h-4" /> Contact
+                        </a>
+                    </div>
+                    <p className="text-[10px] font-mono text-white/10 uppercase tracking-widest">© 2026 Designed for Longevity.</p>
                 </div>
             </footer>
         </section>

@@ -1,58 +1,107 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { Star } from 'lucide-react';
 
 const reviews = [
-    { name: 'Priya S.', role: 'Working Mom, Bangalore', text: "I used to buy protein powder, fibre supplements, AND a multivitamin. Plainfuel replaced all three. My monthly spend dropped by ₹2,000.", rating: 5 },
-    { name: 'Arjun M.', role: 'Software Engineer, Hyderabad', text: "No weird taste, no extra steps. I just mix it into my morning oats. It's the easiest health upgrade I've made.", rating: 5 },
-    { name: 'Dr. Kavitha R.', role: 'Nutritionist, Chennai', text: "What I love is the intentional dosing — not 100% of everything. It's designed to work WITH food, not replace it. That's rare.", rating: 5 },
-    { name: 'Rohit K.', role: 'Fitness Enthusiast, Mumbai', text: "Finally a brand that's honest about what Indian diets actually need. Not another hyped protein brand.", rating: 5 },
+    {
+        name: 'Amaan Bakali',
+        role: 'Owner & Coach, CrossFit Third Eye',
+        quote: 'Finally a truly delicious and quality protein powder.',
+        img: '/images/user1.png',
+        stars: 5,
+    },
+    {
+        name: 'Prerna Maarvikurne',
+        role: 'Student, Oberoi International',
+        quote: "It's so tasty, I didn't even feel like I was having a supplement.",
+        img: '/images/user2.png',
+        stars: 5,
+    },
+    {
+        name: 'Shailin Suvarna',
+        role: 'Antal International, India Partner',
+        quote: 'Found my go-to daily ritual. Simple and effective.',
+        img: '/images/user3.png',
+        stars: 5,
+    },
+    {
+        name: 'Arjun Singh',
+        role: 'Partnerships, Thought Over Design',
+        quote: 'Tastes like it\'s been freshly squeezed. Blends into everything.',
+        img: '/images/user4.png',
+        stars: 5,
+    },
 ];
 
 export default function EfficiencyGrid() {
     return (
-        <section className="bg-[#f4f1ec] py-24 md:py-32 overflow-hidden">
-            <div className="max-w-6xl mx-auto px-6 md:px-10">
+        <section className="bg-[#050505] section-pad relative overflow-hidden">
+            <div className="max-w-screen-xl mx-auto px-6 md:px-12">
 
-                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                    className="text-center mb-16 md:mb-20">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3a6b35] mb-4">Real People. Real Results.</p>
-                    <h2 className="font-playfair text-4xl md:text-6xl font-bold text-[#171717] leading-tight">
-                        Loved by <span className="text-[#3a6b35]">thousands.</span>
-                    </h2>
-                    <div className="mt-6 inline-flex items-center gap-2 bg-[#3a6b35]/10 text-[#3a6b35] text-sm font-semibold px-5 py-2.5 rounded-full">
-                        ⭐ 4.8/5 average rating • 2,000+ happy customers
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 gap-8"
+                >
+                    <div>
+                        <div className="tag-pill mb-6">Real People. Real Results.</div>
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                            Real people.<br />
+                            <span className="font-playfair italic text-white/20">Real love.</span>
+                        </h2>
+                    </div>
+                    <div className="text-right">
+                        <p className="font-playfair text-5xl font-black text-[#7cb342]">4.9</p>
+                        <div className="flex justify-end gap-1 my-2">
+                            {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#7cb342] text-[#7cb342]" />)}
+                        </div>
+                        <p className="text-white/25 text-sm">Average rating</p>
                     </div>
                 </motion.div>
 
-                {/* Review Cards — Masonry style */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Review cards grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {reviews.map((r, i) => (
-                        <motion.div key={r.name}
+                        <motion.div
+                            key={i}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            whileHover={{ y: -4 }}
-                            className="bg-white rounded-3xl p-8 shadow-sm border border-black/5 hover:shadow-lg transition-all duration-500">
-
+                            transition={{ duration: 0.7, delay: i * 0.1 }}
+                            className="group glass rounded-3xl p-6 flex flex-col gap-6 hover:border-[rgba(122,195,66,0.2)] transition-all duration-500"
+                        >
                             {/* Stars */}
-                            <div className="flex gap-1 mb-5">
-                                {Array.from({ length: r.rating }).map((_, j) => (
-                                    <span key={j} className="text-amber-400 text-lg">★</span>
+                            <div className="flex gap-1">
+                                {[...Array(r.stars)].map((_, s) => (
+                                    <Star key={s} className="w-3.5 h-3.5 fill-[#7cb342] text-[#7cb342]" />
                                 ))}
                             </div>
 
-                            <p className="text-[#171717]/80 text-lg leading-relaxed mb-6">&ldquo;{r.text}&rdquo;</p>
+                            {/* Quote */}
+                            <p className="text-white/70 text-base font-light leading-relaxed flex-1">
+                                &ldquo;{r.quote}&rdquo;
+                            </p>
 
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-[#3a6b35]/10 flex items-center justify-center text-[#3a6b35] font-bold text-sm">
-                                    {r.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-[#171717] text-sm">{r.name}</p>
-                                    <p className="text-xs text-[#171717]/40">{r.role}</p>
-                                </div>
+                            {/* Avatar */}
+                            <div className="relative w-full aspect-square rounded-2xl overflow-hidden">
+                                <Image
+                                    src={r.img}
+                                    alt={r.name}
+                                    fill
+                                    className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent opacity-60" />
+                            </div>
+
+                            {/* Name */}
+                            <div>
+                                <p className="text-white font-bold text-sm">{r.name}</p>
+                                <p className="text-white/25 text-xs mt-1 leading-snug">{r.role}</p>
                             </div>
                         </motion.div>
                     ))}
