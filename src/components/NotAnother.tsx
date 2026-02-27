@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Check, X } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const rows = [
     { theirs: 'Whey Protein Powder', ours: 'Protein Included' },
@@ -14,7 +15,7 @@ const rows = [
 
 export default function NotAnother() {
     return (
-        <section className="bg-[#0a0a0a] section-pad relative overflow-hidden">
+        <section className="bg-[#FAF9F6] section-pad relative overflow-hidden">
             <div className="max-w-screen-xl mx-auto px-6 md:px-12">
 
                 {/* Header */}
@@ -27,12 +28,14 @@ export default function NotAnother() {
                 >
                     <div className="tag-pill mb-6">The Transformation</div>
                     <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
                             The old vs.<br />
-                            <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
-                                className="font-playfair italic">Plainfuel.</span>
+                            <SketchHighlight type="underline" delay={0.6}>
+                                <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+                                    className="font-playfair italic">Plainfuel.</span>
+                            </SketchHighlight>
                         </h2>
-                        <p className="text-white/35 text-lg font-light leading-relaxed max-w-sm md:text-right">
+                        <p className="text-[#121812]/35 text-lg font-light leading-relaxed max-w-sm md:text-right">
                             Stop managing a pharmacy. Start living a habit.
                         </p>
                     </div>
@@ -60,9 +63,9 @@ export default function NotAnother() {
                             className="grid grid-cols-2 gap-4"
                         >
                             <div className="rounded-2xl px-6 py-4 flex items-center gap-3"
-                                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                style={{ background: 'rgba(0,0,0,0.02)', border: '1px solid rgba(0,0,0,0.05)' }}>
                                 <X className="w-4 h-4 text-red-500/40 flex-shrink-0" />
-                                <span className="text-white/25 line-through text-sm">{row.theirs}</span>
+                                <span className="text-[#121812]/30 line-through text-sm">{row.theirs}</span>
                             </div>
                             <div className="rounded-2xl px-6 py-4 flex items-center gap-3"
                                 style={{ background: 'rgba(122,195,66,0.05)', border: '1px solid rgba(122,195,66,0.12)' }}>
@@ -84,8 +87,8 @@ export default function NotAnother() {
                         style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.1)' }}
                     >
                         <div className="text-6xl mb-6">😮‍💨</div>
-                        <h3 className="font-playfair text-3xl font-bold text-white mb-4">Friction Induced.</h3>
-                        <p className="text-white/35 text-base font-light leading-relaxed">
+                        <h3 className="font-playfair text-3xl font-bold text-[#121812] mb-4">Friction Induced.</h3>
+                        <p className="text-[#121812]/40 text-base font-light leading-relaxed">
                             Managing 4+ separate products — powders, tablets, capsules — leads to habit fatigue. Most people quit after 14 days.
                         </p>
                     </motion.div>
@@ -99,8 +102,8 @@ export default function NotAnother() {
                         style={{ background: 'rgba(122,195,66,0.06)', border: '1px solid rgba(122,195,66,0.15)' }}
                     >
                         <div className="text-6xl mb-6">⚡</div>
-                        <h3 className="font-playfair text-3xl font-bold text-white mb-4 group-hover:text-[#7cb342] transition-colors">Habit Integrated.</h3>
-                        <p className="text-white/35 text-base font-light leading-relaxed group-hover:text-white/55 transition-colors">
+                        <h3 className="font-playfair text-3xl font-bold text-[#121812] mb-4 group-hover:text-[#7cb342] transition-colors">Habit Integrated.</h3>
+                        <p className="text-[#121812]/40 text-base font-light leading-relaxed group-hover:text-[#121812]/60 transition-colors">
                             Everything integrated into a single scoop. Zero cognitive load. Just a complete life, silently maintained.
                         </p>
                     </motion.div>

@@ -3,22 +3,23 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowRight, Star } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 export default function HeroExperience() {
     return (
-        <section className="relative min-h-screen bg-[#050505] flex items-center overflow-hidden">
+        <section className="relative min-h-screen bg-[#FAF9F6] flex items-center overflow-hidden">
 
             {/* Background radial glow */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full"
-                    style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.18) 0%, transparent 70%)' }} />
+                    style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.12) 0%, transparent 70%)' }} />
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full"
-                    style={{ background: 'radial-gradient(circle, rgba(122,195,66,0.06) 0%, transparent 70%)' }} />
+                    style={{ background: 'radial-gradient(circle, rgba(122,195,66,0.05) 0%, transparent 70%)' }} />
             </div>
 
             {/* Grid pattern */}
-            <div className="absolute inset-0 z-0 opacity-[0.025]"
-                style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+            <div className="absolute inset-0 z-0 opacity-[0.05]"
+                style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
 
             <div className="max-w-screen-xl mx-auto px-6 md:px-12 pt-28 pb-16 relative z-10 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-7rem)]">
@@ -39,21 +40,23 @@ export default function HeroExperience() {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.9, delay: 0.2 }}
-                            className="font-playfair text-[4rem] md:text-[5.5rem] lg:text-[6.5rem] font-black leading-[0.88] tracking-tight text-white mb-8"
+                            className="font-playfair text-[4rem] md:text-[5.5rem] lg:text-[6.5rem] font-black leading-[0.88] tracking-tight text-[#121812] mb-8"
                         >
                             The{' '}
-                            <span className="font-playfair italic" style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                                Delta.
-                            </span>
+                            <SketchHighlight type="circle" delay={1.2}>
+                                <span className="font-playfair italic" style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                                    Delta.
+                                </span>
+                            </SketchHighlight>
                             <br />
-                            <span className="text-white/20">Complete.</span>
+                            <span className="text-[#121812]/20">Complete.</span>
                         </motion.h1>
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.35 }}
-                            className="text-xl text-white/40 font-light leading-relaxed mb-12 max-w-md"
+                            className="text-xl text-[#121812]/50 font-light leading-relaxed mb-12 max-w-md"
                         >
                             One invisible scoop. 26 micronutrients. The precise gap between what your Indian diet gives you and what your body actually needs — bridged.
                         </motion.p>
@@ -70,7 +73,7 @@ export default function HeroExperience() {
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </a>
                             <a href="#investigation"
-                                className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm font-semibold tracking-wide transition-colors">
+                                className="inline-flex items-center gap-2 text-[#121812]/40 hover:text-[#121812] text-sm font-semibold tracking-wide transition-colors">
                                 See the science
                                 <span className="text-[#7cb342]">↓</span>
                             </a>
@@ -86,7 +89,7 @@ export default function HeroExperience() {
                             {['FSSAI Certified', 'Zero Fillers', '26 Micronutrients', 'Lab Verified'].map((tag, i) => (
                                 <div key={i} className="flex items-center gap-2">
                                     <div className="w-1 h-1 rounded-full bg-[#7cb342]" />
-                                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-white/25">{tag}</span>
+                                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#121812]/30">{tag}</span>
                                 </div>
                             ))}
                         </motion.div>
@@ -125,8 +128,8 @@ export default function HeroExperience() {
                                 <div className="flex items-center gap-2 mb-1">
                                     {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-[#7cb342] text-[#7cb342]" />)}
                                 </div>
-                                <p className="text-white text-sm font-bold">4.9/5</p>
-                                <p className="text-white/30 text-[10px]">Early adopters</p>
+                                <p className="text-[#121812] text-sm font-bold">4.9/5</p>
+                                <p className="text-[#121812]/40 text-[10px]">Early adopters</p>
                             </motion.div>
 
                             {/* Floating badge — price */}
@@ -137,8 +140,8 @@ export default function HeroExperience() {
                                 className="absolute bottom-12 -right-8 glass-green rounded-2xl px-5 py-4 shadow-xl"
                             >
                                 <p className="text-[10px] uppercase tracking-widest text-[#7cb342] font-black mb-1">Launch Price</p>
-                                <p className="text-white text-2xl font-black">₹599</p>
-                                <p className="text-white/30 text-xs line-through">₹899</p>
+                                <p className="text-[#121812] text-2xl font-black">₹599</p>
+                                <p className="text-[#121812]/30 text-xs line-through">₹899</p>
                             </motion.div>
                         </div>
                     </motion.div>
@@ -147,7 +150,7 @@ export default function HeroExperience() {
             </div>
 
             {/* Bottom fade */}
-            <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-10" />
+            <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#FAF9F6] to-transparent z-10" />
         </section>
     );
 }

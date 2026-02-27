@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const reviews = [
     {
@@ -37,7 +38,7 @@ const reviews = [
 
 export default function EfficiencyGrid() {
     return (
-        <section className="bg-[#050505] section-pad relative overflow-hidden">
+        <section className="bg-[#FAF9F6] section-pad relative overflow-hidden">
             <div className="max-w-screen-xl mx-auto px-6 md:px-12">
 
                 {/* Header */}
@@ -50,9 +51,11 @@ export default function EfficiencyGrid() {
                 >
                     <div>
                         <div className="tag-pill mb-6">Real People. Real Results.</div>
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
                             Real people.<br />
-                            <span className="font-playfair italic text-white/20">Real love.</span>
+                            <SketchHighlight type="circle" delay={0.8} color="#7cb342" className="mt-2">
+                                <span className="font-playfair italic text-[#121812]/20">Real love.</span>
+                            </SketchHighlight>
                         </h2>
                     </div>
                     <div className="text-right">
@@ -60,7 +63,7 @@ export default function EfficiencyGrid() {
                         <div className="flex justify-end gap-1 my-2">
                             {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#7cb342] text-[#7cb342]" />)}
                         </div>
-                        <p className="text-white/25 text-sm">Average rating</p>
+                        <p className="text-[#121812]/30 text-sm">Average rating</p>
                     </div>
                 </motion.div>
 
@@ -83,7 +86,7 @@ export default function EfficiencyGrid() {
                             </div>
 
                             {/* Quote */}
-                            <p className="text-white/70 text-base font-light leading-relaxed flex-1">
+                            <p className="text-[#121812]/70 text-base font-light leading-relaxed flex-1">
                                 &ldquo;{r.quote}&rdquo;
                             </p>
 
@@ -95,13 +98,13 @@ export default function EfficiencyGrid() {
                                     fill
                                     className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent opacity-60" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F6] via-transparent opacity-40" />
                             </div>
 
                             {/* Name */}
                             <div>
-                                <p className="text-white font-bold text-sm">{r.name}</p>
-                                <p className="text-white/25 text-xs mt-1 leading-snug">{r.role}</p>
+                                <p className="text-[#121812] font-bold text-sm">{r.name}</p>
+                                <p className="text-[#121812]/30 text-xs mt-1 leading-snug">{r.role}</p>
                             </div>
                         </motion.div>
                     ))}

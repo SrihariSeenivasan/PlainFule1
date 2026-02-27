@@ -1,13 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import SketchHighlight from './SketchHighlight';
 
 export default function PhilosophyImpact() {
     return (
-        <section className="bg-[#0a0a0a] section-pad relative overflow-hidden">
+        <section className="bg-[#F2F0ED] section-pad relative overflow-hidden">
             {/* Large background text */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-                <span className="font-playfair text-[25vw] font-black text-white/[0.025] leading-none whitespace-nowrap">PURITY</span>
+                <span className="font-playfair text-[25vw] font-black text-[#121812]/[0.025] leading-none whitespace-nowrap">PURITY</span>
             </div>
 
             {/* Green glow */}
@@ -30,12 +31,12 @@ export default function PhilosophyImpact() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.9, delay: 0.1 }}
-                    className="font-playfair text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tight mb-10"
+                    className="font-playfair text-5xl md:text-8xl font-black text-[#121812] leading-[0.9] tracking-tight mb-10"
                 >
                     Clean is{' '}
-                    <span className="font-playfair italic text-white/20">not enough.</span>
+                    <span className="font-playfair italic text-[#121812]/20">not enough.</span>
                     <br />
-                    Efficiency{' '}
+                    <SketchHighlight type="underline" delay={0.8}>Efficiency</SketchHighlight>{' '}
                     <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>is.</span>
                 </motion.h2>
 
@@ -45,12 +46,12 @@ export default function PhilosophyImpact() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left border-t pt-10 mt-10"
-                    style={{ borderColor: 'rgba(255,255,255,0.06)' }}
+                    style={{ borderColor: 'rgba(0,0,0,0.06)' }}
                 >
-                    <p className="text-white/60 text-lg font-light leading-relaxed">
+                    <p className="text-[#121812]/70 text-lg font-light leading-relaxed">
                         We don&apos;t build for the trend. We build for the long-term metabolism of the modern individual.
                     </p>
-                    <p className="text-white/30 text-base leading-relaxed font-light">
+                    <p className="text-[#121812]/40 text-base leading-relaxed font-light">
                         Plainfuel is the result of stripping away the supplement industry&apos;s noise. No megadoses. No fillers. Just the exact delta between your plate and your potential.
                     </p>
                 </motion.div>

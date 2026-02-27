@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Activity, FlaskConical, Layers, Shield } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const nutrients = [
     { icon: Activity, label: 'Complete Protein', value: '100% Amino Profile', pct: 100 },
@@ -15,7 +16,7 @@ const certs = ['ISO-9001', 'FSSAI Certified', 'Vegan Label', 'Non-GMO'];
 
 export default function MacroOrbit() {
     return (
-        <section id="inside" className="bg-[#050505] section-pad relative overflow-hidden">
+        <section id="inside" className="bg-[#FAF9F6] section-pad relative overflow-hidden">
 
             {/* Background glow */}
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full blur-[120px]"
@@ -33,12 +34,14 @@ export default function MacroOrbit() {
                 >
                     <div>
                         <div className="tag-pill mb-6">Engineering the Scoop</div>
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
                             Inside the<br />
-                            <span className="font-playfair italic text-white/20">Precision.</span>
+                            <SketchHighlight type="circle" delay={0.6} color="#3a6b35">
+                                <span className="font-playfair italic text-[#121812]/20">Precision.</span>
+                            </SketchHighlight>
                         </h2>
                     </div>
-                    <p className="text-white/35 text-lg font-light leading-relaxed max-w-sm md:text-right">
+                    <p className="text-[#121812]/35 text-lg font-light leading-relaxed max-w-sm md:text-right">
                         A formulation that doesn&apos;t add volume — it addresses the specific clinical gaps of the modern individual.
                     </p>
                 </motion.div>
@@ -60,10 +63,10 @@ export default function MacroOrbit() {
                             fill
                             className="object-cover opacity-25 grayscale group-hover:opacity-35 group-hover:scale-105 transition-all duration-1000"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF9F6]/90 via-transparent to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-10">
-                            <h3 className="font-playfair text-4xl font-bold text-white mb-3">Bio-Baseline Completer</h3>
-                            <p className="text-white/35 text-base font-light leading-relaxed max-w-sm">
+                            <h3 className="font-playfair text-4xl font-bold text-[#121812] mb-3">Bio-Baseline Completer</h3>
+                            <p className="text-[#121812]/50 text-base font-light leading-relaxed max-w-sm">
                                 Optimized for absorption. Every milligram mapped to a biological need. No fillers, no noise.
                             </p>
                         </div>
@@ -84,11 +87,11 @@ export default function MacroOrbit() {
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-3">
                                             <Icon className="w-5 h-5 text-[#7cb342]" />
-                                            <span className="text-white font-bold text-sm">{n.label}</span>
+                                            <span className="text-[#121812] font-bold text-sm">{n.label}</span>
                                         </div>
                                         <span className="text-[#7cb342] font-black text-sm">{n.pct}%</span>
                                     </div>
-                                    <div className="h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                                    <div className="h-1 rounded-full" style={{ background: 'rgba(0,0,0,0.06)' }}>
                                         <motion.div
                                             initial={{ width: 0 }}
                                             whileInView={{ width: `${n.pct}%` }}
@@ -98,7 +101,7 @@ export default function MacroOrbit() {
                                             style={{ background: 'linear-gradient(90deg, #3a6b35, #7cb342)' }}
                                         />
                                     </div>
-                                    <p className="text-white/25 text-xs mt-2 font-light">{n.value}</p>
+                                    <p className="text-[#121812]/30 text-xs mt-2 font-light">{n.value}</p>
                                 </div>
                             );
                         })}
@@ -116,13 +119,13 @@ export default function MacroOrbit() {
                     <div className="flex items-center gap-4">
                         <FlaskConical className="w-8 h-8 text-[#7cb342]" />
                         <div>
-                            <h4 className="text-white font-bold">Clinical Lab Standard</h4>
-                            <p className="text-white/25 text-xs uppercase tracking-widest font-bold">100% Transparency Labeling</p>
+                            <h4 className="text-[#121812] font-bold">Clinical Lab Standard</h4>
+                            <p className="text-[#121812]/30 text-xs uppercase tracking-widest font-bold">100% Transparency Labeling</p>
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-3">
                         {certs.map(cert => (
-                            <span key={cert} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full border text-white/30 border-white/10 hover:border-[#7cb342]/40 hover:text-white/70 transition-all">
+                            <span key={cert} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full border text-[#121812]/30 border-black/10 hover:border-[#7cb342]/40 hover:text-[#121812]/70 transition-all">
                                 {cert}
                             </span>
                         ))}

@@ -11,7 +11,7 @@ import FinalCTA from '@/components/FinalCTA';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#050505] overflow-x-hidden">
+    <main className="min-h-screen bg-[#FAF9F6] overflow-x-hidden">
       <Navbar />
       <HeroExperience />
       <ChaosScroll />

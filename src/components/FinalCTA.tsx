@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowRight, Instagram, Mail, Twitter } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const faqs = [
     { q: 'Is this a meal replacement?', a: 'Plainfuel is a completer. We provide the 20% your high-quality meals usually miss — not a replacement.' },
@@ -13,7 +14,7 @@ const faqs = [
 
 export default function FinalCTA() {
     return (
-        <section id="buy" className="bg-[#050505]">
+        <section id="buy" className="bg-[#FAF9F6]">
 
             {/* CTA Block */}
             <div className="relative overflow-hidden section-pad">
@@ -57,25 +58,27 @@ export default function FinalCTA() {
                         >
                             <div className="tag-pill mb-8">The New Protocol</div>
 
-                            <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight mb-8">
+                            <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight mb-8">
                                 Begin the<br />
-                                <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
-                                    className="font-playfair italic">Completion.</span>
+                                <SketchHighlight type="circle" color="#3a6b35" delay={1}>
+                                    <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+                                        className="font-playfair italic">Completion.</span>
+                                </SketchHighlight>
                             </h2>
 
-                            <p className="text-white/35 text-lg font-light leading-relaxed mb-10 max-w-md">
+                            <p className="text-[#121812]/50 text-lg font-light leading-relaxed mb-10 max-w-md">
                                 Your biology doesn&apos;t wait for the right moment. Start bridging the gap today with the only precision habit built for urban life.
                             </p>
 
                             {/* Price card */}
                             <div className="glass-green rounded-3xl p-8 mb-10 inline-block w-full">
                                 <div className="flex items-baseline gap-4 mb-3">
-                                    <span className="font-playfair text-6xl font-black text-white">₹599</span>
-                                    <span className="text-white/20 line-through text-2xl">₹899</span>
+                                    <span className="font-playfair text-6xl font-black text-[#121812]">₹599</span>
+                                    <span className="text-[#121812]/20 line-through text-2xl">₹899</span>
                                     <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full"
                                         style={{ background: '#3a6b35', color: '#fff' }}>33% OFF</span>
                                 </div>
-                                <p className="text-[#7cb342] text-xs font-black uppercase tracking-widest">30 Servings • Free Shipping • Launch Price</p>
+                                <p className="text-[#3a6b35] text-xs font-black uppercase tracking-widest">30 Servings • Free Shipping • Launch Price</p>
                             </div>
 
                             <motion.a
@@ -88,7 +91,7 @@ export default function FinalCTA() {
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </motion.a>
 
-                            <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.12em] text-white/20">
+                            <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.12em] text-[#121812]/30">
                                 <span>Risk Free</span>
                                 <span>•</span>
                                 <span>Dermatologically Safe</span>
@@ -101,7 +104,7 @@ export default function FinalCTA() {
             </div>
 
             {/* FAQ Block */}
-            <div className="border-t section-pad" style={{ borderColor: 'rgba(255,255,255,0.04)', background: '#080808' }}>
+            <div className="border-t section-pad" style={{ borderColor: 'rgba(0,0,0,0.06)', background: '#F7F6F4' }}>
                 <div className="max-w-screen-xl mx-auto px-6 md:px-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -110,7 +113,7 @@ export default function FinalCTA() {
                         className="mb-12"
                     >
                         <div className="tag-pill mb-4">Biological Logic</div>
-                        <h3 className="font-playfair text-4xl font-bold text-white">Common Questions</h3>
+                        <h3 className="font-playfair text-4xl font-bold text-[#121812]">Common Questions</h3>
                     </motion.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -123,8 +126,8 @@ export default function FinalCTA() {
                                 transition={{ delay: i * 0.1 }}
                                 className="glass rounded-2xl p-7"
                             >
-                                <p className="text-white font-bold text-base mb-3">{faq.q}</p>
-                                <p className="text-white/35 text-sm font-light leading-relaxed">{faq.a}</p>
+                                <p className="text-[#121812] font-bold text-base mb-3">{faq.q}</p>
+                                <p className="text-[#121812]/50 text-sm font-light leading-relaxed">{faq.a}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -132,14 +135,14 @@ export default function FinalCTA() {
             </div>
 
             {/* Footer */}
-            <footer className="border-t py-10" style={{ borderColor: 'rgba(255,255,255,0.04)', background: '#050505' }}>
+            <footer className="border-t py-10" style={{ borderColor: 'rgba(0,0,0,0.06)', background: '#FAF9F6' }}>
                 <div className="max-w-screen-xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm"
                             style={{ background: 'linear-gradient(135deg, #3a6b35, #7cb342)' }}>P</div>
-                        <span className="font-playfair text-xl font-bold text-white tracking-tight">Plainfuel</span>
+                        <span className="font-playfair text-xl font-bold text-[#121812] tracking-tight">Plainfuel</span>
                     </div>
-                    <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.1em] text-white/20">
+                    <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.1em] text-[#121812]/40">
                         <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
                             <Instagram className="w-4 h-4" /> Instagram
                         </a>
@@ -150,7 +153,7 @@ export default function FinalCTA() {
                             <Mail className="w-4 h-4" /> Contact
                         </a>
                     </div>
-                    <p className="text-[10px] font-mono text-white/10 uppercase tracking-widest">© 2026 Designed for Longevity.</p>
+                    <p className="text-[10px] font-mono text-[#121812]/20 uppercase tracking-widest">© 2026 Designed for Longevity.</p>
                 </div>
             </footer>
         </section>

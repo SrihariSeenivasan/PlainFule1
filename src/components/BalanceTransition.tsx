@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { CheckCircle2, Droplets, Target, Wind } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const stats = [
     { val: '26', label: 'Micronutrients', icon: CheckCircle2 },
@@ -13,7 +14,7 @@ const stats = [
 
 export default function BalanceTransition() {
     return (
-        <section className="bg-[#050505] section-pad relative overflow-hidden">
+        <section className="bg-[#FAF9F6] section-pad relative overflow-hidden">
 
             {/* Background */}
             <div className="absolute inset-0">
@@ -54,7 +55,7 @@ export default function BalanceTransition() {
                                     <Target className="w-5 h-5 text-[#7cb342]" />
                                     <div>
                                         <p className="text-[10px] uppercase tracking-widest text-[#7cb342] font-black">Target</p>
-                                        <p className="text-white font-bold text-sm">Bio-Baseline</p>
+                                        <p className="text-[#121812] font-bold text-sm">Bio-Baseline</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -68,7 +69,7 @@ export default function BalanceTransition() {
                                     <Droplets className="w-5 h-5 text-[#7cb342]" />
                                     <div>
                                         <p className="text-[10px] uppercase tracking-widest text-[#7cb342] font-black">Purity</p>
-                                        <p className="text-white font-bold text-sm">Zero Fillers</p>
+                                        <p className="text-[#121812] font-bold text-sm">Zero Fillers</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -84,13 +85,15 @@ export default function BalanceTransition() {
                     >
                         <div className="tag-pill mb-8">The Biological Completion</div>
 
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight mb-8">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight mb-8">
                             The exact<br />
-                            <span className="font-playfair italic text-white/20">delta,</span>{' '}
-                            <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>solved.</span>
+                            <span className="font-playfair italic text-[#121812]/20">delta,</span>{' '}
+                            <SketchHighlight type="circle" delay={1} color="#3a6b35">
+                                <span style={{ background: 'linear-gradient(135deg, #7cb342, #3a6b35)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>solved.</span>
+                            </SketchHighlight>
                         </h2>
 
-                        <p className="text-white/35 text-lg font-light leading-relaxed mb-14 max-w-md">
+                        <p className="text-[#121812]/50 text-lg font-light leading-relaxed mb-14 max-w-md">
                             We meticulously mapped the nutritional gaps of the modern Indian habit. Plainfuel is the result — a surgical addition to your day that changes nothing about your taste, but everything about your longevity.
                         </p>
 
@@ -108,7 +111,7 @@ export default function BalanceTransition() {
                                         className="glass rounded-2xl p-6"
                                     >
                                         <Icon className="w-5 h-5 text-[#7cb342] mb-3 opacity-50" />
-                                        <p className="font-playfair text-4xl font-black text-white mb-1">{stat.val}</p>
+                                        <p className="font-playfair text-4xl font-black text-[#121812] mb-1">{stat.val}</p>
                                         <p className="text-[10px] uppercase tracking-widest text-[#7cb342] font-black">{stat.label}</p>
                                     </motion.div>
                                 );

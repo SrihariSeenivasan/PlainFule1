@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { AlertTriangle, Dna, Leaf, Shell } from 'lucide-react';
+import SketchHighlight from './SketchHighlight';
 
 const gaps = [
     {
@@ -48,7 +49,7 @@ const gaps = [
 
 export default function ChaosScroll() {
     return (
-        <section id="investigation" className="bg-[#050505] section-pad">
+        <section id="investigation" className="bg-[#FAF9F6] section-pad">
             <div className="max-w-screen-xl mx-auto px-6 md:px-12">
 
                 {/* Header */}
@@ -61,11 +62,13 @@ export default function ChaosScroll() {
                 >
                     <div className="tag-pill mb-6">Sector 01: The Investigation</div>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tight">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
                             Solving the<br />
-                            <span className="font-playfair italic text-white/20">Biological Gap.</span>
+                            <SketchHighlight type="underline" delay={0.6} color="#ef4444">
+                                <span className="font-playfair italic text-[#121812]/20">Biological Gap.</span>
+                            </SketchHighlight>
                         </h2>
-                        <p className="text-white/35 text-lg font-light leading-relaxed max-w-xs md:text-right">
+                        <p className="text-[#121812]/50 text-lg font-light leading-relaxed max-w-xs md:text-right">
                             Four critical deficiencies hiding in the modern Indian diet — identified, mapped, solved.
                         </p>
                     </div>
@@ -95,13 +98,13 @@ export default function ChaosScroll() {
                                         <Icon className="w-6 h-6" style={{ color: gap.accent }} />
                                     </div>
                                     <div className="text-right">
-                                        <div className="font-playfair text-4xl font-black text-white">{gap.stat}</div>
+                                        <div className="font-playfair text-4xl font-black text-[#121812]">{gap.stat}</div>
                                         <div className="text-[10px] uppercase tracking-widest font-black mt-1" style={{ color: gap.accent }}>{gap.label}</div>
                                     </div>
                                 </div>
 
-                                <h3 className="font-playfair text-3xl font-bold text-white mb-3">{gap.title}</h3>
-                                <p className="text-white/40 text-base leading-relaxed font-light group-hover:text-white/60 transition-colors">{gap.body}</p>
+                                <h3 className="font-playfair text-3xl font-bold text-[#121812] mb-3">{gap.title}</h3>
+                                <p className="text-[#121812]/50 text-base leading-relaxed font-light group-hover:text-[#121812]/70 transition-colors">{gap.body}</p>
                             </motion.div>
                         );
                     })}
