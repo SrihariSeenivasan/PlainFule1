@@ -18,7 +18,7 @@ const steps = [
         icon: ShieldCheck,
         title: 'Bio Guard.',
         desc: 'Our mix-blend technology prevents nutrient oxidation, ensuring 100% absorption at the cellular level. Every milligram counts.',
-        color: '#3a6b35',
+        color: '#053b05',
     },
     {
         num: '03',
@@ -31,7 +31,7 @@ const steps = [
 
 export default function ProductShowcase() {
     return (
-        <section id="habit" className="bg-[#F7F6F4] section-pad relative overflow-hidden">
+        <section id="habit" className="bg-[var(--background)] section-pad relative overflow-hidden">
 
             {/* Background */}
             <div className="absolute inset-0">
@@ -49,10 +49,10 @@ export default function ProductShowcase() {
                     className="text-center mb-20"
                 >
                     <div className="tag-pill mb-6 mx-auto whitespace-nowrap" style={{ display: 'inline-flex' }}>How It Works</div>
-                    <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
+                    <h2 className="font-playfair text-5xl md:text-7xl font-black text-[var(--foreground)] leading-[0.9] tracking-tight">
                         The Formula.<br />
-                        <SketchHighlight type="underline" delay={0.8} color="#3a6b35">
-                            <span className="font-playfair italic text-[#121812]/20">Decoded.</span>
+                        <SketchHighlight type="underline" delay={0.8} color="#053b05">
+                            <span className="font-playfair italic text-[var(--foreground)]/20">Decoded.</span>
                         </SketchHighlight>
                     </h2>
                 </motion.div>
@@ -70,7 +70,7 @@ export default function ProductShowcase() {
                                 className="group glass rounded-3xl p-8 hover:border-[rgba(122,195,66,0.2)] transition-all duration-500 relative overflow-hidden"
                             >
                                 {/* Number backdrop */}
-                                <div className="absolute top-6 right-6 font-playfair text-8xl font-black text-[#121812]/[0.04] leading-none select-none">
+                                <div className="absolute top-6 right-6 font-playfair text-8xl font-black text-[var(--foreground)]/[0.04] leading-none select-none">
                                     {step.num}
                                 </div>
 
@@ -79,8 +79,8 @@ export default function ProductShowcase() {
                                     <Icon className="w-6 h-6" style={{ color: step.color }} />
                                 </div>
 
-                                <h3 className="font-playfair text-3xl font-bold text-[#121812] mb-4">{step.title}</h3>
-                                <p className="text-[#121812]/50 text-base leading-relaxed font-light group-hover:text-[#121812]/70 transition-colors">{step.desc}</p>
+                                <h3 className="font-playfair text-3xl font-bold text-[var(--foreground)] mb-4">{step.title}</h3>
+                                <p className="text-[var(--foreground)]/50 text-base leading-relaxed font-light group-hover:text-[var(--foreground)]/70 transition-colors">{step.desc}</p>
 
                                 {/* Bottom accent line */}
                                 <div className="mt-8 h-px w-0 group-hover:w-full transition-all duration-700 rounded-full"
@@ -106,10 +106,10 @@ export default function ProductShowcase() {
                             className="object-contain filter brightness-[1.05]"
                         />
                     </div>
-                    <div className="flex-1 p-10 border-t md:border-t-0 md:border-l" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
+                    <div className="flex-1 p-10 border-t md:border-t-0 md:border-l" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                         <p className="text-[10px] uppercase tracking-[0.15em] text-[#7cb342] font-black mb-4">The Result</p>
-                        <h3 className="font-playfair text-4xl font-bold text-[#121812] mb-5">One Scoop. Everything.</h3>
-                        <p className="text-[#121812]/50 text-lg font-light leading-relaxed max-w-lg">
+                        <h3 className="font-playfair text-4xl font-bold text-[var(--foreground)] mb-5">One Scoop. Everything.</h3>
+                        <p className="text-[var(--foreground)]/50 text-lg font-light leading-relaxed max-w-lg">
                             Mix into your morning oats, smoothie, or batter. It disappears — no taste, no texture. Just your meal, and now, everything your body needs.
                         </p>
                         <div className="mt-8 flex flex-wrap gap-3">

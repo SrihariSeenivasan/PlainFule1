@@ -45,7 +45,7 @@ function ProductMesh({ scrollProgress }: { scrollProgress: number }) {
             <mesh position={[0, 0, 0.401]}>
                 <planeGeometry args={[1.3, 1.8]} />
                 <meshPhysicalMaterial
-                    color="#3a6b35"
+                    color="#053b05"
                     metalness={0}
                     roughness={0.6}
                 />
@@ -66,7 +66,7 @@ function ProductMesh({ scrollProgress }: { scrollProgress: number }) {
             {/* Seal on top */}
             <mesh position={[0, 1.25, 0]} rotation={[Math.PI / 2, 0, 0]}>
                 <cylinderGeometry args={[0.3, 0.3, 0.1, 16]} />
-                <meshPhysicalMaterial color="#3a6b35" metalness={0.2} roughness={0.4} />
+                <meshPhysicalMaterial color="#053b05" metalness={0.2} roughness={0.4} />
             </mesh>
         </group>
     );
@@ -121,7 +121,7 @@ export default function Product3DShowcase() {
     ];
 
     return (
-        <section ref={containerRef} id="how-it-works" className="relative h-[500vh] bg-gradient-to-b from-[#fafaf7] to-[#f0ede8]">
+        <section ref={containerRef} id="how-it-works" className="relative h-[500vh] bg-gradient-to-b from-[var(--background)] to-[var(--dark-2)]">
             <div className="sticky top-0 h-screen flex overflow-hidden">
 
                 {/* Left: 3D Product Canvas */}
@@ -134,10 +134,10 @@ export default function Product3DShowcase() {
 
                     {/* Progress ring at bottom */}
                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3">
-                        <div className="w-32 h-1 bg-black/10 rounded-full overflow-hidden">
-                            <motion.div style={{ width: barWidth }} className="h-full bg-[#3a6b35] rounded-full" />
+                        <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div style={{ width: barWidth }} className="h-full bg-[#053b05] rounded-full" />
                         </div>
-                        <span className="text-xs font-medium text-[#171717]/40">Scroll to explore</span>
+                        <span className="text-xs font-medium text-[var(--foreground)]/40">Scroll to explore</span>
                     </div>
                 </div>
 
@@ -148,9 +148,9 @@ export default function Product3DShowcase() {
                             style={{ opacity: step.opacity, y: step.y }}
                             className="absolute inset-y-0 left-0 right-0 flex flex-col justify-center px-12"
                         >
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3a6b35] mb-4">{step.label}</p>
-                            <h3 className="font-playfair text-4xl md:text-5xl font-bold text-[#171717] leading-tight mb-4">{step.title}</h3>
-                            <p className="text-lg text-[#171717]/50 leading-relaxed max-w-md">{step.desc}</p>
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7cb342] mb-4">{step.label}</p>
+                            <h3 className="font-playfair text-4xl md:text-5xl font-bold text-[var(--foreground)] leading-tight mb-4">{step.title}</h3>
+                            <p className="text-lg text-[var(--foreground)]/50 leading-relaxed max-w-md">{step.desc}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -159,10 +159,10 @@ export default function Product3DShowcase() {
                 <div className="lg:hidden absolute bottom-24 inset-x-0 text-center px-6">
                     {steps.map((step, i) => (
                         <motion.div key={i} style={{ opacity: step.opacity, y: step.y }} className="absolute inset-x-0 bottom-0 px-6">
-                            <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-black/5 mx-auto max-w-sm">
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#3a6b35] mb-2">{step.label}</p>
-                                <h3 className="font-playfair text-2xl font-bold text-[#171717] mb-2">{step.title}</h3>
-                                <p className="text-sm text-[#171717]/50">{step.desc}</p>
+                            <div className="bg-[var(--card)]/90 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/5 mx-auto max-w-sm">
+                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7cb342] mb-2">{step.label}</p>
+                                <h3 className="font-playfair text-2xl font-bold text-[var(--foreground)] mb-2">{step.title}</h3>
+                                <p className="text-sm text-[var(--foreground)]/50">{step.desc}</p>
                             </div>
                         </motion.div>
                     ))}

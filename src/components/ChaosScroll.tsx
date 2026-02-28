@@ -12,8 +12,8 @@ const gaps = [
         title: 'Protein Myth.',
         body: 'The Indian diet is high in refined carbs that block protein absorption. We fix both gaps simultaneously.',
         accent: '#ef4444',
-        bg: 'rgba(239,68,68,0.06)',
-        border: 'rgba(239,68,68,0.12)',
+        bg: 'rgba(239,68,68,0.08)',
+        border: 'rgba(239,68,68,0.2)',
     },
     {
         icon: Shell,
@@ -22,8 +22,8 @@ const gaps = [
         title: 'Fibre Void.',
         body: 'Metabolic health starts in the gut. Without 30g+ of daily fibre, nutrients you eat can\'t be processed.',
         accent: '#f59e0b',
-        bg: 'rgba(245,158,11,0.06)',
-        border: 'rgba(245,158,11,0.12)',
+        bg: 'rgba(245,158,11,0.08)',
+        border: 'rgba(245,158,11,0.2)',
     },
     {
         icon: Dna,
@@ -32,8 +32,8 @@ const gaps = [
         title: 'Bone Density.',
         body: 'Massive Vitamin D and Magnesium gaps lead to silent long-term decay. We provide the exact RDI delta.',
         accent: '#3b82f6',
-        bg: 'rgba(59,130,246,0.06)',
-        border: 'rgba(59,130,246,0.12)',
+        bg: 'rgba(59,130,246,0.08)',
+        border: 'rgba(59,130,246,0.2)',
     },
     {
         icon: Leaf,
@@ -42,14 +42,14 @@ const gaps = [
         title: 'Metabolic Gap.',
         body: 'Supplement stacking causes habit fatigue. Plainfuel integrates all gaps into your existing meal, invisibly.',
         accent: '#7cb342',
-        bg: 'rgba(122,195,66,0.06)',
-        border: 'rgba(122,195,66,0.15)',
+        bg: 'rgba(122,195,66,0.08)',
+        border: 'rgba(122,195,66,0.25)',
     },
 ];
 
 export default function ChaosScroll() {
     return (
-        <section id="investigation" className="bg-[#FAF9F6] section-pad">
+        <section id="investigation" className="bg-[var(--background)] section-pad">
             <div className="max-w-screen-xl mx-auto px-6 md:px-12">
 
                 {/* Header */}
@@ -62,13 +62,13 @@ export default function ChaosScroll() {
                 >
                     <div className="tag-pill mb-6">Sector 01: The Investigation</div>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[#121812] leading-[0.9] tracking-tight">
+                        <h2 className="font-playfair text-5xl md:text-7xl font-black text-[var(--foreground)] leading-[0.9] tracking-tight">
                             Solving the<br />
                             <SketchHighlight type="underline" delay={0.6} color="#ef4444">
-                                <span className="font-playfair italic text-[#121812]/20">Biological Gap.</span>
+                                <span className="font-playfair italic text-[var(--foreground)]/20">Biological Gap.</span>
                             </SketchHighlight>
                         </h2>
-                        <p className="text-[#121812]/50 text-lg font-light leading-relaxed max-w-xs md:text-right">
+                        <p className="text-[var(--foreground)]/50 text-lg font-light leading-relaxed max-w-xs md:text-right">
                             Four critical deficiencies hiding in the modern Indian diet — identified, mapped, solved.
                         </p>
                     </div>
@@ -98,13 +98,13 @@ export default function ChaosScroll() {
                                         <Icon className="w-6 h-6" style={{ color: gap.accent }} />
                                     </div>
                                     <div className="text-right">
-                                        <div className="font-playfair text-4xl font-black text-[#121812]">{gap.stat}</div>
+                                        <div className="font-playfair text-4xl font-black text-[var(--foreground)]">{gap.stat}</div>
                                         <div className="text-[10px] uppercase tracking-widest font-black mt-1" style={{ color: gap.accent }}>{gap.label}</div>
                                     </div>
                                 </div>
 
-                                <h3 className="font-playfair text-3xl font-bold text-[#121812] mb-3">{gap.title}</h3>
-                                <p className="text-[#121812]/50 text-base leading-relaxed font-light group-hover:text-[#121812]/70 transition-colors">{gap.body}</p>
+                                <h3 className="font-playfair text-3xl font-bold text-[var(--foreground)] mb-3">{gap.title}</h3>
+                                <p className="text-[var(--foreground)]/50 text-base leading-relaxed font-light group-hover:text-[var(--foreground)]/70 transition-colors">{gap.body}</p>
                             </motion.div>
                         );
                     })}

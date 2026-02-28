@@ -11,11 +11,12 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
 
   body {
-    background: #FAF9F6;
-    color: #121812;
+    background: var(--background);
+    color: var(--foreground);
     font-family: 'Inter', system-ui, sans-serif;
     overscroll-behavior: none;
   }
@@ -29,8 +30,8 @@
   }
 
   ::selection {
-    background: rgba(122, 195, 66, 0.15);
-    color: #000;
+    background: rgba(124, 179, 66, 0.3);
+    color: #fff;
   }
 }
 
@@ -40,27 +41,30 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAF9F6;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3a6b35;
+  background: var(--green-mid);
   border-radius: 10px;
 }
 
 /* Design Tokens */
 :root {
+  --background: #0A0D0A;
+  --foreground: #FAF9F6;
+  --card: #121812;
   --green-deep: #1e3d1a;
-  --green-mid: #3a6b35;
+  --green-mid: #053b05;
   --green-bright: #7cb342;
-  --green-glow: rgba(122, 195, 66, 0.1);
-  --dark: #FAF9F6;
-  --dark-2: #F2F0ED;
-  --dark-3: #EBE8E4;
-  --cream: #121812;
-  --cream-dim: rgba(18, 24, 18, 0.6);
-  --border: rgba(0, 0, 0, 0.08);
-  --border-green: rgba(58, 107, 53, 0.15);
+  --green-glow: rgba(122, 195, 66, 0.15);
+  --dark: #0A0D0A;
+  --dark-2: #121812;
+  --dark-3: #1B241B;
+  --cream: #FAF9F6;
+  --cream-dim: rgba(250, 249, 246, 0.6);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-green: rgba(124, 179, 66, 0.2);
 }
 
 /* Glow Effects */
@@ -78,9 +82,9 @@
 
 /* Glass Morphism */
 .glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(18, 24, 18, 0.7);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glass-green {
@@ -91,14 +95,14 @@
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #7cb342 0%, #3a6b35 100%);
+  background: linear-gradient(135deg, #7cb342 0%, #053b05 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-white {
-  background: linear-gradient(135deg, #121812 0%, rgba(18, 24, 18, 0.6) 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--cream-dim) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -107,7 +111,7 @@
 /* Section divider */
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
 }
 
 /* Animated border */
