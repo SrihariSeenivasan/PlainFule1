@@ -1,357 +1,393 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring, type TargetAndTransition, type Transition } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import SketchHighlight from '../SketchHighlight';
+import SketchHighlight from '../Elements/SketchHighlight';
+import { LogoReveal, DoodleMg, DoodleCa, DoodleLeaf, DoodleStar, DoodleWave, DoodlePlant } from '../Elements/Loading1';
 
-// ─── Doodle SVGs ──────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
+type TransitionType = 'wipe' | 'iris' | 'split' | 'rotate' | 'shatter';
 
-const DoodleMg = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 64 64" fill="none" style={style}>
-    <path d="M32 6 L54 19 L54 45 L32 58 L10 45 L10 19 Z"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    <text x="32" y="37" textAnchor="middle" fontSize="14" fontWeight="700" fill="#22c55e" fontFamily="serif">Mg</text>
-    <circle cx="56" cy="18" r="2" fill="#22c55e" opacity="0.5" />
-  </svg>
-);
-
-const DoodleCa = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 64 64" fill="none" style={style}>
-    <ellipse cx="18" cy="14" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="46" cy="14" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="18" cy="50" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="46" cy="50" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <rect x="13" y="19" width="10" height="26" rx="3" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <rect x="41" y="19" width="10" height="26" rx="3" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <text x="32" y="36" textAnchor="middle" fontSize="11" fontWeight="700" fill="#16a34a" fontFamily="serif">Ca</text>
-  </svg>
-);
-
-const DoodleLeaf = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 64 64" fill="none" style={style}>
-    <path d="M32 56 C32 56 12 40 14 22 C16 8 32 8 32 8 C32 8 48 8 50 22 C52 40 32 56 32 56Z"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
-    <path d="M32 56 L32 18" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" />
-    <path d="M32 38 L22 28" stroke="#22c55e" strokeWidth="1.4" strokeLinecap="round" />
-    <path d="M32 30 L42 22" stroke="#22c55e" strokeWidth="1.4" strokeLinecap="round" />
-  </svg>
-);
-
-const DoodleStar = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 40 40" fill="none" style={style}>
-    <path d="M20 4 L23 16 L36 16 L26 24 L30 36 L20 28 L10 36 L14 24 L4 16 L17 16 Z"
-      stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="rgba(34,197,94,0.1)" />
-  </svg>
-);
-
-const DoodleWave = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 80 30" fill="none" style={style}>
-    <path d="M4 15 C12 5 20 25 28 15 C36 5 44 25 52 15 C60 5 68 25 76 15"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-  </svg>
-);
-
-const DoodlePlant = ({ style }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 50 70" fill="none" style={style}>
-    <path d="M25 65 L25 30" stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" />
-    <path d="M25 50 C15 45 10 35 14 26 C20 18 30 22 30 30" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
-    <path d="M25 40 C35 35 40 25 36 16 C30 8 20 12 20 20" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
-  </svg>
-);
-
-// ─── Doodles that burst out during reveal ────────────────────────────────────
-
-const doodlePool = [
-  { C: DoodleMg,   w: 52, label: 'Magnesium' },
-  { C: DoodleCa,   w: 48, label: 'Calcium'   },
-  { C: DoodleLeaf, w: 40, label: ''           },
-  { C: DoodleStar, w: 28, label: ''           },
-  { C: DoodleWave, w: 64, label: ''           },
-  { C: DoodleMg,   w: 36, label: ''           },
-  { C: DoodleCa,   w: 40, label: ''           },
-  { C: DoodleLeaf, w: 32, label: ''           },
-  { C: DoodleStar, w: 22, label: ''           },
-  { C: DoodlePlant,w: 36, label: ''           },
-];
-
-// Helper function to generate random doodle items - safe outside React component
-function generateDoodleItems() {
-  return doodlePool.map((d, i) => ({
-    ...d, id: i,
-    angle:    (Math.PI * 2 * i) / doodlePool.length + (Math.random() - 0.5) * 0.4,
-    radius:   130 + Math.random() * 90,
-    delay:    0.05 + Math.random() * 0.4,
-    rotate:   -25 + Math.random() * 50,
-    rotateEnd:-10 + Math.random() * 20,
-    opacity:  0.5 + Math.random() * 0.4,
-  }));
+interface Slide {
+  src: string;
+  label: string;
+  tag: string;
+  accent: string;
+  glow: string;
+  transition: TransitionType;
 }
 
-function FloatingDoodles({ active }: { active: boolean }) {
-  // useMemo prevents recalculation of the random items - they're generated once and reused
-  const items = useMemo(() => generateDoodleItems(), []);
+// ─── Spring presets ───────────────────────────────────────────────────────────
+const spBouncy = { type: 'spring' as const, damping: 10, stiffness: 200 };
+
+
+// ─── Slide data ───────────────────────────────────────────────────────────────
+// Replace src with your actual product image paths
+const SLIDES: Slide[] = [
+  {
+    src: '/images/product_premium.png',
+    label: 'Premium Formula', tag: 'Best Seller',
+    accent: '#22c55e', glow: 'rgba(34,197,94,0.35)',
+    transition: 'wipe',
+  },
+  {
+    src: '/images/limepack.png',
+    label: 'Classic Blend', tag: 'Essential',
+    accent: '#16a34a', glow: 'rgba(22,163,74,0.30)',
+    transition: 'iris',
+  },
+  {
+    src: '/images/brownpack.png',
+    label: 'Sport Edition', tag: 'High Performance',
+    accent: '#4ade80', glow: 'rgba(74,222,128,0.35)',
+    transition: 'split',
+  },
+  {
+    src: '/images/redpack.png',
+    label: 'Zen Recovery', tag: 'Sleep & Restore',
+    accent: '#86efac', glow: 'rgba(134,239,172,0.30)',
+    transition: 'rotate',
+  },
+  {
+    src: '/images/orangepack.png',
+    label: 'Daily Essentials', tag: 'Everyday',
+    accent: '#15803d', glow: 'rgba(21,128,61,0.33)',
+    transition: 'shatter',
+  },
+];
+
+// ─── Clip-path variants ───────────────────────────────────────────────────────
+type AnimationVariant = {
+  initial: TargetAndTransition | undefined;
+  animate: TargetAndTransition | undefined;
+  exit: TargetAndTransition | undefined;
+  transition: Transition | undefined;
+};
+
+const TV: Record<TransitionType, AnimationVariant> = {
+  wipe: {
+    initial:    { clipPath: 'inset(0 100% 0 0)',    scale: 1.06, opacity: 1 },
+    animate:    { clipPath: 'inset(0 0% 0 0)',       scale: 1,    opacity: 1 },
+    exit:       { clipPath: 'inset(0 0 0 100%)',     scale: 0.96, opacity: 1 },
+    transition: { duration: 0.5, ease: [0.77, 0, 0.175, 1] },
+  },
+  iris: {
+    initial:    { clipPath: 'circle(0% at 50% 50%)',  scale: 1.12, opacity: 1 },
+    animate:    { clipPath: 'circle(75% at 50% 50%)', scale: 1,    opacity: 1 },
+    exit:       { clipPath: 'circle(0% at 50% 50%)',  scale: 0.9,  opacity: 0 },
+    transition: { duration: 0.52, ease: [0.34, 1.56, 0.64, 1] },
+  },
+  split: {
+    initial:    { clipPath: 'inset(50% 0 50% 0)', scale: 1.08, opacity: 1 },
+    animate:    { clipPath: 'inset(0% 0 0% 0)',   scale: 1,    opacity: 1 },
+    exit:       { clipPath: 'inset(50% 0 50% 0)', scale: 0.95, opacity: 0 },
+    transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] },
+  },
+  rotate: {
+    initial:    { rotate: -15, scale: 0.72, opacity: 0 },
+    animate:    { rotate: 0,   scale: 1,    opacity: 1 },
+    exit:       { rotate: 15,  scale: 0.72, opacity: 0 },
+    transition: { type: 'spring', damping: 18, stiffness: 160, delay: 0.04 },
+  },
+  shatter: {
+    initial:    { clipPath: 'polygon(100% 0,100% 0,100% 100%,100% 100%)', scale: 1.06, opacity: 1 },
+    animate:    { clipPath: 'polygon(0 0,100% 0,100% 100%,0 100%)',        scale: 1,    opacity: 1 },
+    exit:       { clipPath: 'polygon(0 0,0 0,0 100%,0 100%)',              scale: 0.96, opacity: 1 },
+    transition: { duration: 0.46, ease: [0.77, 0, 0.175, 1] },
+  },
+};
+
+// ─── Orbital doodles ──────────────────────────────────────────────────────────
+const ORBITALS = [
+  { C: DoodleMg,   w: 36, style: { top: '6%',    right: '4%'  }, rotate: 15,  dy: -6 },
+  { C: DoodleCa,   w: 32, style: { bottom: '10%',left: '2%'   }, rotate: -12, dy:  6 },
+  { C: DoodleStar, w: 22, style: { top: '32%',   left: '0%'   }, rotate: 20,  dy: -5 },
+  { C: DoodleLeaf, w: 28, style: { bottom: '22%',right: '4%'  }, rotate: -8,  dy:  7 },
+] as const;
+
+const INGREDIENTS = [
+  { Icon: DoodleMg,   label: 'Magnesium', color: '#22c55e', bg: 'rgba(34,197,94,0.08)'  },
+  { Icon: DoodleCa,   label: 'Calcium',   color: '#16a34a', bg: 'rgba(22,163,74,0.08)'  },
+  { Icon: DoodleLeaf, label: 'Natural',   color: '#22c55e', bg: 'rgba(34,197,94,0.08)'  },
+];
+
+const AUTO_MS = 2400;
+
+// ─── Product Carousel (clean — no UI chrome) ──────────────────────────────────
+function ProductCarousel({ revealDone }: { revealDone: boolean }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [paused, setPaused]       = useState(false);
+  const tickRef = useRef<number>(0);
+  const rafRef  = useRef<number>(0);
+  const tiltRef = useRef<HTMLDivElement>(null);
+
+  // Initialize tickRef after mount to avoid impure function during render
+  useEffect(() => {
+    tickRef.current = Date.now();
+  }, []);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const rotX = useSpring(useTransform(rawY, [-1, 1], [8, -8]), { stiffness: 180, damping: 24 });
+  const rotY = useSpring(useTransform(rawX, [-1, 1], [-8, 8]), { stiffness: 180, damping: 24 });
+
+  const slide = SLIDES[activeIdx];
+  const v     = TV[slide.transition];
+
+  // Auto-advance via RAF
+  useEffect(() => {
+    if (!revealDone) return;
+    function tick() {
+      if (!paused) {
+        const elapsed = Date.now() - tickRef.current;
+        if (elapsed >= AUTO_MS) {
+          setActiveIdx(i => (i + 1) % SLIDES.length);
+          tickRef.current = Date.now();
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [revealDone, paused]);
+
+  // Reset tick on index change
+  useEffect(() => { tickRef.current = Date.now(); }, [activeIdx]);
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const r = tiltRef.current?.getBoundingClientRect();
+    if (!r) return;
+    rawX.set(((e.clientX - r.left) / r.width  - 0.5) * 2);
+    rawY.set(((e.clientY - r.top)  / r.height - 0.5) * 2);
+  }
+  function onMouseLeave() {
+    rawX.set(0); rawY.set(0); setPaused(false);
+  }
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {items.map(({ C, w, id, angle, radius, delay, rotate, rotateEnd, opacity, label }) => {
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
-        return (
+    <div
+      style={{ position: 'relative', width: 400, maxWidth: '90vw' }}
+    >
+      {/* Glow disc */}
+      <motion.div
+        animate={{ background: `radial-gradient(circle, ${slide.glow} 0%, transparent 68%)` }}
+        transition={{ duration: 1 }}
+        style={{
+          position: 'absolute', inset: '10%', top: '20%',
+          borderRadius: '50%', filter: 'blur(40px)', pointerEvents: 'none',
+          animation: 'none',
+        }}
+      />
+
+      {/* Float wrapper */}
+      <motion.div
+        animate={{ y: [0, -16, 0] }}
+        transition={{ repeat: Infinity, duration: 4.4, ease: 'easeInOut', delay: 1 }}
+        style={{ position: 'relative' }}
+      >
+        {/* Tilt + carousel frame */}
+        <motion.div
+          ref={tiltRef}
+          onMouseEnter={() => setPaused(true)}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+          style={{ rotateX: rotX, rotateY: rotY, transformStyle: 'preserve-3d', perspective: 900 }}
+        >
+          {/* Image frame — NO border-radius, NO overflow clip */}
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '3/4' }}>
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={activeIdx}
+                style={{ position: 'absolute', inset: 0 }}
+                initial={v.initial}
+                animate={v.animate}
+                exit={v.exit}
+                transition={v.transition}
+              >
+                <Image
+                  src={slide.src}
+                  alt={slide.label}
+                  fill
+                  className="object-contain"
+                  style={{ filter: 'drop-shadow(0 32px 56px rgba(0,0,0,0.2))' }}
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Shimmer on slide change */}
+      <AnimatePresence>
+        <motion.div
+          key={`shimmer-${activeIdx}`}
+          initial={{ x: '-130%', opacity: 0 }}
+          animate={{ x: '150%',  opacity: 0.38 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 4,
+            background: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%)',
+          }}
+        />
+      </AnimatePresence>
+
+      {/* Orbital doodles */}
+      {ORBITALS.map((o, i) => (
+        <motion.div
+          key={i}
+          style={{ position: 'absolute', width: o.w, height: o.w, pointerEvents: 'none', ...o.style }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: revealDone ? 0.6 : 0, scale: revealDone ? 1 : 0 }}
+          transition={{ ...spBouncy, delay: 0.7 + i * 0.12 }}
+        >
           <motion.div
-            key={id}
-            className="absolute"
-            style={{ width: w, height: w }}
-            initial={{ x: 0, y: 0, opacity: 0, scale: 0, rotate }}
-            animate={active
-              ? { x, y, opacity: [0, opacity, opacity], scale: [0, 1.2, 1], rotate: rotateEnd }
-              : { x: 0, y: 0, opacity: 0, scale: 0 }
-            }
-            transition={{ duration: 1.4, delay, ease: [0.34, 1.56, 0.64, 1] }}
+            animate={{ y: [0, o.dy, 0], rotate: [o.rotate, o.rotate + (i % 2 === 0 ? 8 : -8), o.rotate] }}
+            transition={{ repeat: Infinity, duration: 3.6 + i * 0.7, ease: 'easeInOut', delay: i * 0.4 }}
           >
-            <C style={{ width: w, height: w }} />
-            {label && (
-              <span style={{
-                position: 'absolute', top: '100%', left: '50%',
-                transform: 'translateX(-50%)', marginTop: 2,
-                fontSize: 9, fontWeight: 700, letterSpacing: '0.1em',
-                textTransform: 'uppercase', color: '#888', whiteSpace: 'nowrap',
-              }}>{label}</span>
-            )}
+            <o.C style={{ width: o.w, height: o.w }} />
           </motion.div>
-        );
-      })}
+        </motion.div>
+      ))}
+
+      {/* Slide label — minimal, below image */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIdx}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3 }}
+          style={{ textAlign: 'center', marginTop: 20 }}
+        >
+          <div style={{
+            fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.14em',
+            textTransform: 'uppercase', color: slide.accent, marginBottom: 3,
+          }}>
+            {slide.tag}
+          </div>
+          <div style={{
+            fontSize: '0.85rem', fontWeight: 600,
+            color: 'var(--foreground)', opacity: 0.6,
+          }}>
+            {slide.label}
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
 
-// ─── Hand-drawn ring around logo ─────────────────────────────────────────────
-
-function DrawRing({ active }: { active: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 340 140"
-      style={{ position: 'absolute', width: 340, height: 140, top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none' }}
-    >
-      <motion.ellipse
-        cx="170" cy="70" rx="158" ry="60"
-        stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="none" strokeDasharray="2 5"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={active ? { pathLength: 1, opacity: 0.5 } : { pathLength: 0, opacity: 0 }}
-        transition={{ duration: 1.3, ease: 'easeInOut', delay: 0.2 }}
-      />
-      <motion.path
-        d="M15 70 C25 18 315 12 325 70 C332 128 20 132 15 70"
-        stroke="#22c55e" strokeWidth="1.3" strokeLinecap="round" fill="none"
-        initial={{ pathLength: 0, opacity: 0 }}
-        animate={active ? { pathLength: 1, opacity: 0.22 } : { pathLength: 0, opacity: 0 }}
-        transition={{ duration: 1.7, ease: 'easeInOut' }}
-      />
-    </svg>
-  );
-}
-
-// ─── Logo Reveal Stage (renders inside hero, not fullscreen) ─────────────────
-
-function LogoRevealStage({ onDone }: { onDone: () => void }) {
-  const [phase, setPhase] = useState('blank');
-  // blank → rise → burst → hold → done
-
-  useEffect(() => {
-    const t = [
-      setTimeout(() => setPhase('rise'),  300),
-      setTimeout(() => setPhase('burst'), 900),
-      setTimeout(() => setPhase('hold'),  1500),
-      setTimeout(() => onDone(),          3000),
-    ];
-    return () => t.forEach(clearTimeout);
-  }, [onDone]);
-
-  const isBurst = phase === 'burst' || phase === 'hold';
-  const logoUp  = phase !== 'blank';
-
-  return (
-    <motion.div
-      className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden"
-      style={{ background: '#fafaf7', borderRadius: 'inherit' }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.7, ease: 'easeInOut' }}
-    >
-      {/* Dot grid */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle, rgba(34,197,94,0.2) 1px, transparent 1px)',
-        backgroundSize: '28px 28px', opacity: 0.6,
-      }} />
-
-      {/* Warm glow */}
-      <motion.div style={{
-        position: 'absolute', width: 500, height: 500, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 50%, transparent 70%)',
-        filter: 'blur(50px)', pointerEvents: 'none',
-      }}
-        animate={{ scale: phase === 'blank' ? 0.3 : 1.2, opacity: phase === 'blank' ? 0 : 1 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      />
-
-      {/* Doodles burst */}
-      <FloatingDoodles active={isBurst} />
-
-      {/* Ring */}
-      <DrawRing active={isBurst} />
-
-      {/* Corner brackets */}
-      {[{ top: 20, left: 20 }, { top: 20, right: 20 }, { bottom: 20, left: 20 }, { bottom: 20, right: 20 }].map((pos, i) => (
-        <motion.svg key={i} viewBox="0 0 40 40"
-          style={{ position: 'absolute', width: 32, height: 32, ...pos }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: isBurst ? 0.45 : 0, scale: isBurst ? 1 : 0 }}
-          transition={{ delay: 0.15 + i * 0.08, duration: 0.4 }}
-        >
-          <path d={i % 2 === 0 ? 'M8 32 L8 8 L32 8' : 'M8 8 L32 8 L32 32'}
-            stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          <circle cx={i % 2 === 0 ? 8 : 32} cy={i < 2 ? 8 : 32} r="3" fill="#22c55e" />
-        </motion.svg>
-      ))}
-
-      {/* THE LOGO — centered in hero */}
-      <motion.div
-        className="relative z-10 flex flex-col items-center"
-        initial={{ opacity: 0, scale: 0.3, y: 20, filter: 'blur(12px)' }}
-        animate={{
-          opacity: logoUp ? 1 : 0,
-          scale:   phase === 'rise' ? 0.88 : 1,
-          y:       phase === 'rise' ? 6 : 0,
-          filter:  phase === 'rise' ? 'blur(3px)' : 'blur(0px)',
-        }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Warm halo */}
-        <div style={{
-          position: 'absolute', inset: '-40%',
-          background: 'radial-gradient(ellipse, rgba(196,162,58,0.22) 0%, transparent 65%)',
-          filter: 'blur(20px)', pointerEvents: 'none',
-        }} />
-
-        {/* Logo image */}
-        <div style={{ position: 'relative', width: 280, height: 105 }}>
-          <Image
-            src="/images/plainfuel-logo.png"
-            alt="Plainfuel"
-            fill
-            className="object-contain"
-            priority
-          />
-        </div>
-
-        {/* Tagline */}
-        <motion.p
-          style={{
-            marginTop: 14, fontSize: 10, fontWeight: 700,
-            letterSpacing: '0.15em', textTransform: 'uppercase', color: '#999',
-          }}
-          animate={{
-            opacity: phase === 'hold' ? 1 : 0,
-            letterSpacing: phase === 'hold' ? '0.42em' : '0.15em',
-            y: phase === 'hold' ? 0 : 8,
-          }}
-          transition={{ duration: 0.65 }}
-        >
-          Fuel. Purely.
-        </motion.p>
-
-        {/* Hand-drawn underline under tagline */}
-        <svg viewBox="0 0 150 8" style={{ width: 140, height: 8, marginTop: 4 }}>
-          <motion.path
-            d="M4 4 C30 2 80 6 146 4"
-            stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" fill="none"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: phase === 'hold' ? 1 : 0 }}
-            transition={{ duration: 0.55, delay: 0.3, ease: 'easeOut' }}
-          />
-        </svg>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ─── Ingredient badges ────────────────────────────────────────────────────────
-
-const ingredients = [
-  { Icon: DoodleMg,   label: 'Magnesium', color: '#22c55e', bg: 'rgba(34,197,94,0.08)'  },
-  { Icon: DoodleCa,   label: 'Calcium',   color: '#16a34a', bg: 'rgba(22,163,74,0.08)' },
-  { Icon: DoodleLeaf, label: 'Natural',   color: '#22c55e', bg: 'rgba(34,197,94,0.08)'  },
-];
-
 // ─── Hero Section ─────────────────────────────────────────────────────────────
-
 export default function Herosection() {
   const [revealDone, setRevealDone] = useState(false);
+  const words1 = ['The', 'Motto:'];
+  const words2 = ['Bridge', 'the', 'Gap.'];
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden py-20 bg-[var(--background)]">
 
-      {/* ── Logo Reveal — lives inside the hero ── */}
       <AnimatePresence>
-        {!revealDone && (
-          <LogoRevealStage key="reveal" onDone={() => setRevealDone(true)} />
-        )}
+        {!revealDone && <LogoReveal key="reveal" onDone={() => setRevealDone(true)} />}
       </AnimatePresence>
 
       {/* Dot-grid texture */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle, rgba(196,162,58,0.12) 1px, transparent 1px)',
-        backgroundSize: '30px 30px', opacity: 0.5,
+        backgroundImage: 'radial-gradient(circle, rgba(196,162,58,0.13) 1.2px, transparent 1.2px)',
+        backgroundSize: '28px 28px', opacity: 0.5,
       }} />
 
-      {/* Warm ambient blobs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--green-glow)] rounded-full blur-[120px] -mr-64 -mt-64 opacity-50" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[var(--green-glow)] rounded-full blur-[100px] -ml-48 -mb-48 opacity-30" />
+      {/* Ambient blobs */}
+      <motion.div
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full -mr-64 -mt-64"
+        style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.18), transparent 70%)', filter: 'blur(80px)' }}
+        animate={{ scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+        transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-0 left-0 w-[420px] h-[420px] rounded-full -ml-48 -mb-48"
+        style={{ background: 'radial-gradient(circle, rgba(21,128,61,0.14), transparent 70%)', filter: 'blur(70px)' }}
+        animate={{ scale: [1, 1.12, 1], opacity: [0.6, 0.9, 0.6] }}
+        transition={{ repeat: Infinity, duration: 7, ease: 'easeInOut', delay: 1 }}
+      />
 
-      {/* Corner doodle accents */}
-      <div className="absolute top-8 right-10 pointer-events-none opacity-25">
+      {/* Corner doodles */}
+      <motion.div className="absolute top-8 right-10 pointer-events-none"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: revealDone ? 0.22 : 0, x: revealDone ? 0 : 20 }}
+        transition={{ delay: 1, duration: 0.6 }}>
         <DoodleWave style={{ width: 80, height: 30 }} />
-      </div>
-      <div className="absolute bottom-12 left-8 pointer-events-none opacity-20">
+      </motion.div>
+      <motion.div className="absolute bottom-12 left-8 pointer-events-none"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: revealDone ? 0.18 : 0, y: revealDone ? 0 : 20 }}
+        transition={{ delay: 1.1, duration: 0.6 }}>
         <DoodlePlant style={{ width: 38, height: 54 }} />
-      </div>
+      </motion.div>
 
-      <div className="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-screen-xl mx-auto px-6 md:px-16 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-          {/* LEFT: copy */}
+          {/* ── LEFT ── */}
           <div className="order-2 lg:order-1">
 
+            {/* Tag pill */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: revealDone ? 1 : 0, x: revealDone ? 0 : -20 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="tag-pill mb-6"
+              initial={{ opacity: 0, x: -28, filter: 'blur(6px)' }}
+              animate={{ opacity: revealDone ? 1 : 0, x: revealDone ? 0 : -28, filter: revealDone ? 'blur(0px)' : 'blur(6px)' }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '6px 14px', borderRadius: 999,
+                border: '1.5px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.07)',
+                fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', color: '#16a34a',
+                textTransform: 'uppercase', marginBottom: 28,
+              }}
             >
+              <motion.span
+                animate={{ opacity: [1, 0.35, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }}
+              />
               Our Mission
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 20 }}
-              transition={{ delay: 0.35, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="font-playfair text-5xl md:text-7xl font-black mb-6 leading-tight"
-            >
-              The Motto: <br />
-              <span style={{ position: 'relative', display: 'inline-block' }}>
-                <SketchHighlight type="underline" delay={0.8}>
-                  <span className="gradient-text">Bridge the Gap.</span>
+            {/* Headline */}
+            <h1 className="font-playfair text-5xl md:text-[4.2rem] font-black mb-6 leading-[1.08]">
+              <div style={{ display: 'flex', gap: '0.28em', flexWrap: 'wrap', marginBottom: '0.1em' }}>
+                {words1.map((w, i) => (
+                  <motion.span key={w}
+                    initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+                    animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 32, filter: revealDone ? 'blur(0px)' : 'blur(8px)' }}
+                    transition={{ delay: 0.35 + i * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                  >{w}</motion.span>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: '0.28em', flexWrap: 'wrap' }}>
+                <SketchHighlight type="underline" delay={0.88}>
+                  <span style={{ display: 'inline-flex', gap: '0.28em', flexWrap: 'wrap' }}>
+                    {words2.map((w, i) => (
+                      <motion.span key={w} className="gradient-text"
+                        initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+                        animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 32, filter: revealDone ? 'blur(0px)' : 'blur(8px)' }}
+                        transition={{ delay: 0.5 + i * 0.09, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                      >{w}</motion.span>
+                    ))}
+                  </span>
                 </SketchHighlight>
-              </span>
-            </motion.h1>
+              </div>
+            </h1>
 
+            {/* Body */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 20 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="text-lg md:text-xl text-[var(--foreground)]/60 mb-8 max-w-lg leading-relaxed"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 18 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="text-lg md:text-xl text-[var(--foreground)]/55 mb-8 max-w-lg leading-relaxed"
             >
               We identified the precise nutritional deficits in the modern Indian diet.
               PlainFuel isn&apos;t just another supplement; it&apos;s the missing piece of your daily nutrition,
@@ -359,86 +395,62 @@ export default function Herosection() {
             </motion.p>
 
             {/* Ingredient badges */}
-            <motion.div
-              className="flex flex-wrap gap-3 mb-10"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 14 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              {ingredients.map(({ Icon, label, color, bg }) => (
-                <div key={label} style={{
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  background: bg, border: `1.5px solid ${color}33`,
-                  borderRadius: 999, padding: '5px 12px 5px 7px',
-                }}>
+            <div className="flex flex-wrap gap-3 mb-10">
+              {INGREDIENTS.map(({ Icon, label, color, bg }, i) => (
+                <motion.div key={label}
+                  initial={{ opacity: 0, y: 22, scale: 0.82 }}
+                  animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 22, scale: revealDone ? 1 : 0.82 }}
+                  transition={{ ...spBouncy, delay: 0.78 + i * 0.1 }}
+                  whileHover={{ scale: 1.07, y: -2 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 7,
+                    background: bg, border: `1.5px solid ${color}33`,
+                    borderRadius: 999, padding: '5px 13px 5px 7px',
+                    position: 'relative', overflow: 'hidden', cursor: 'default',
+                  }}
+                >
+                  <motion.div
+                    initial={{ x: '-100%' }}
+                    animate={{ x: revealDone ? '220%' : '-100%' }}
+                    transition={{ delay: 1.05 + i * 0.12, duration: 0.65, ease: 'easeOut' }}
+                    style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, transparent, ${color}20, transparent)`, pointerEvents: 'none' }}
+                  />
                   <Icon style={{ width: 20, height: 20 }} />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color, letterSpacing: '0.05em' }}>
-                    {label}
-                  </span>
-                </div>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color, letterSpacing: '0.06em' }}>{label}</span>
+                </motion.div>
               ))}
-            </motion.div>
+            </div>
 
+            {/* CTA */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: revealDone ? 1 : 0, y: revealDone ? 0 : 20 }}
-              transition={{ delay: 0.72, duration: 0.6 }}
+              initial={{ opacity: 0, scale: 0.72 }}
+              animate={{ opacity: revealDone ? 1 : 0, scale: revealDone ? 1 : 0.72 }}
+              transition={{ ...spBouncy, delay: 1.0 }}
             >
-              <button className="group glass-green px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:bg-[var(--green-mid)] transition-all duration-300">
+              <motion.button
+                className="glass-green px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:bg-[var(--green-mid)] transition-colors duration-300"
+                whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} transition={spBouncy}
+              >
                 EXPLORE OUR STORY
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <motion.span
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut', delay: 1.6 }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.span>
+              </motion.button>
             </motion.div>
           </div>
 
-          {/* RIGHT: product image */}
-          <div className="order-1 lg:order-2 flex justify-center relative">
-            {/* Dashed rings */}
-            <div style={{
-              position: 'absolute', width: 380, height: 380, borderRadius: '50%',
-              border: '1.5px dashed rgba(196,162,58,0.3)',
-              top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none',
-            }} />
-            <div style={{
-              position: 'absolute', width: 295, height: 295, borderRadius: '50%',
-              border: '1px dashed rgba(90,138,62,0.2)',
-              top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none',
-            }} />
-
+          {/* ── RIGHT ── */}
+          <div className="order-1 lg:order-2 flex justify-center">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-              animate={{ opacity: revealDone ? 1 : 0, scale: revealDone ? 1 : 0.8, rotate: revealDone ? 0 : -5 }}
-              transition={{ type: 'spring', damping: 15, delay: 0.4 }}
-              className="relative w-full max-w-md aspect-square"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: revealDone ? 1 : 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--green-mid)]/20 to-transparent rounded-full blur-2xl" />
-              <Image
-                src="/images/product_premium.png"
-                alt="Plainfuel Product"
-                fill
-                className="object-contain float-anim"
-              />
+              <ProductCarousel revealDone={revealDone} />
             </motion.div>
-
-            {/* Doodle accents around product */}
-            {[
-              { C: DoodleMg,   w: 36, top: '8%',    right: '4%',  rotate: 15  },
-              { C: DoodleCa,   w: 32, bottom: '12%', left: '2%',   rotate: -12 },
-              { C: DoodleStar, w: 22, top: '32%',    left: '1%',   rotate: 20  },
-              { C: DoodleLeaf, w: 28, bottom: '22%', right: '5%',  rotate: -8  },
-            ].map((d, i) => (
-              <motion.div key={i} style={{
-                position: 'absolute', width: d.w, height: d.w,
-                top: d.top, bottom: d.bottom, left: d.left, right: d.right,
-                pointerEvents: 'none', rotate: d.rotate,
-              }}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: revealDone ? 0.6 : 0, scale: revealDone ? 1 : 0 }}
-                transition={{ delay: 0.6 + i * 0.1, type: 'spring', damping: 14 }}
-              >
-                <d.C style={{ width: d.w, height: d.w }} />
-              </motion.div>
-            ))}
           </div>
 
         </div>

@@ -49,7 +49,7 @@ const StatPill = ({
         fontSize: "22px",
         fontWeight: 900,
         color: "#22c55e",
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: "var(--font-playfair)",
         lineHeight: 1,
       }}
     >
@@ -88,8 +88,6 @@ export default function InsiderBundleSection() {
     <>
       {/* ── Global Keyframes ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Manrope:wght@400;500;600&display=swap');
-
         @keyframes starBob {
           0%,100% { transform: translateY(0) scale(1); }
           50%      { transform: translateY(-3px) scale(1.18); }
@@ -137,7 +135,7 @@ export default function InsiderBundleSection() {
 
         .insider-btn {
           position:relative; overflow:hidden; cursor:pointer;
-          font-family:'Syne',sans-serif;
+          font-family:var(--font-playfair);
         }
         .insider-btn::after {
           content:'';
@@ -161,7 +159,7 @@ export default function InsiderBundleSection() {
           width: "100%",
           background: "#F5F5F5",
           overflow: "hidden",
-          fontFamily: "'Manrope', sans-serif",
+          fontFamily: "var(--font-inter)",
         }}
       >
         {/* ── Background noise grain ── */}
@@ -306,7 +304,7 @@ export default function InsiderBundleSection() {
                     color: "#22c55e",
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",
-                    fontFamily: "'Syne', sans-serif",
+                  fontFamily: "var(--font-playfair)",
                   }}
                 >
                   Best Value
@@ -324,7 +322,7 @@ export default function InsiderBundleSection() {
             <div>
               <h1
                 style={{
-                  fontFamily: "'Syne', sans-serif",
+                  fontFamily: "var(--font-playfair)",
                   fontSize: "clamp(52px, 7.5vw, 90px)",
                   fontWeight: 900,
                   lineHeight: 0.9,
@@ -337,7 +335,7 @@ export default function InsiderBundleSection() {
               </h1>
               <h1
                 style={{
-                  fontFamily: "'Syne', sans-serif",
+                  fontFamily: "var(--font-playfair)",
                   fontSize: "clamp(52px, 7.5vw, 90px)",
                   fontWeight: 900,
                   lineHeight: 0.9,
@@ -538,7 +536,7 @@ export default function InsiderBundleSection() {
                   color: "#051a0b",
                   borderRadius: "16px",
                   padding: "10px 16px",
-                  fontFamily: "'Syne', sans-serif",
+                    fontFamily: "var(--font-playfair)",
                   fontWeight: 900,
                   fontSize: "13px",
                   boxShadow: "0 8px 24px rgba(34,197,94,0.4)",
@@ -562,7 +560,7 @@ export default function InsiderBundleSection() {
                   color: "#000",
                   borderRadius: "16px",
                   padding: "10px 16px",
-                  fontFamily: "'Syne', sans-serif",
+                  fontFamily: "var(--font-playfair)",
                   fontWeight: 700,
                   fontSize: "13px",
                   animation: "floatChip2 3.8s ease-in-out infinite",

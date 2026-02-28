@@ -3,7 +3,7 @@
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
-import SketchHighlight from './SketchHighlight';
+import SketchHighlight from './Elements/SketchHighlight';
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);

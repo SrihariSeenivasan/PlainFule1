@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { ArrowRight, Instagram, Mail, Twitter } from 'lucide-react';
-import SketchHighlight from './SketchHighlight';
+import SketchHighlight from './Elements/SketchHighlight';
 
 const faqs = [
     { q: 'Is this a meal replacement?', a: 'Plainfuel is a completer. We provide the 20% your high-quality meals usually miss — not a replacement.' },
