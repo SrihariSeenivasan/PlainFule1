@@ -21,7 +21,7 @@ export default function FinalCTA() {
                 {/* Background */}
                 <div className="absolute inset-0">
                     <Image src="/images/hero-bg.png" alt="" fill className="object-cover opacity-[0.07] blur-xl" />
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(58,107,53,0.15) 0%, transparent 60%)' }} />
+                    <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, transparent 60%)' }} />
                 </div>
 
                 <div className="max-w-screen-xl mx-auto px-6 md:px-12 relative z-10">
@@ -37,7 +37,7 @@ export default function FinalCTA() {
                         >
                             <div className="relative w-[280px] md:w-[380px] aspect-[3/4]">
                                 <div className="absolute inset-[-15%] rounded-full blur-3xl"
-                                    style={{ background: 'radial-gradient(circle, rgba(58,107,53,0.3) 0%, transparent 70%)' }} />
+                                    style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%)' }} />
                                 <div className="float-anim relative w-full h-full">
                                     <Image
                                         src="/images/product_premium.png"
@@ -60,8 +60,8 @@ export default function FinalCTA() {
 
                             <h2 className="font-playfair text-5xl md:text-7xl font-black text-[var(--foreground)] leading-[0.9] tracking-tight mb-8">
                                 Begin the<br />
-                                <SketchHighlight type="circle" color="#053b05" delay={1}>
-                                    <span style={{ background: 'linear-gradient(135deg, #7cb342, #053b05)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+                                <SketchHighlight type="circle" color="#22c55e" delay={1}>
+                                    <span style={{ background: 'linear-gradient(135deg, #22c55e, #15803d)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
                                         className="font-playfair italic">Completion.</span>
                                 </SketchHighlight>
                             </h2>
@@ -76,16 +76,16 @@ export default function FinalCTA() {
                                     <span className="font-playfair text-6xl font-black text-[var(--foreground)]">₹599</span>
                                     <span className="text-[var(--foreground)]/20 line-through text-2xl">₹899</span>
                                     <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full"
-                                        style={{ background: '#053b05', color: '#fff' }}>33% OFF</span>
+                                        style={{ background: '#22c55e', color: '#fff' }}>33% OFF</span>
                                 </div>
-                                <p className="text-[#053b05] text-xs font-black uppercase tracking-widest">30 Servings • Free Shipping • Launch Price</p>
+                                <p className="text-[#22c55e] text-xs font-black uppercase tracking-widest">30 Servings • Free Shipping • Launch Price</p>
                             </div>
 
                             <motion.a
                                 href="#"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="group inline-flex items-center gap-4 bg-gradient-to-r from-[#053b05] to-[#4a8540] text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-[0.1em] shadow-[0_8px_40px_rgba(58,107,53,0.5)] hover:shadow-[0_8px_60px_rgba(122,195,66,0.4)] transition-all duration-300 mb-8 w-full justify-center md:w-auto md:justify-start"
+                                className="group inline-flex items-center gap-4 bg-gradient-to-r from-[#22c55e] to-[#16a34a] text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-[0.1em] shadow-[0_8px_40px_rgba(34,197,94,0.5)] hover:shadow-[0_8px_60px_rgba(34,197,94,0.4)] transition-all duration-300 mb-8 w-full justify-center md:w-auto md:justify-start"
                             >
                                 Reserve Your Protocol
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -104,7 +104,7 @@ export default function FinalCTA() {
             </div>
 
             {/* FAQ Block */}
-            <div className="border-t section-pad" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'var(--dark-2)' }}>
+            <div className="border-t section-pad" style={{ borderColor: 'rgba(0,0,0,0.06)', background: '#FFFFFF' }}>
                 <div className="max-w-screen-xl mx-auto px-6 md:px-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -135,21 +135,21 @@ export default function FinalCTA() {
             </div>
 
             {/* Footer */}
-            <footer className="border-t py-10" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'var(--background)' }}>
+            <footer className="border-t py-10" style={{ borderColor: 'rgba(0,0,0,0.06)', background: 'var(--background)' }}>
                 <div className="max-w-screen-xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-black text-sm"
-                            style={{ background: 'linear-gradient(135deg, #053b05, #7cb342)' }}>P</div>
+                            style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>P</div>
                         <span className="font-playfair text-xl font-bold text-[var(--foreground)] tracking-tight">Plainfuel</span>
                     </div>
                     <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-[var(--foreground)]/40">
-                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                        <a href="#" className="hover:text-[#22c55e] transition-colors flex items-center gap-2">
                             <Instagram className="w-4 h-4" /> Instagram
                         </a>
-                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                        <a href="#" className="hover:text-[#22c55e] transition-colors flex items-center gap-2">
                             <Twitter className="w-4 h-4" /> Twitter
                         </a>
-                        <a href="#" className="hover:text-[#7cb342] transition-colors flex items-center gap-2">
+                        <a href="#" className="hover:text-[#22c55e] transition-colors flex items-center gap-2">
                             <Mail className="w-4 h-4" /> Contact
                         </a>
                     </div>

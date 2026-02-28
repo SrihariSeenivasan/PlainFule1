@@ -14,7 +14,7 @@ interface SketchHighlightProps {
 export default function SketchHighlight({
     children,
     type = 'circle',
-    color = '#7cb342',
+    color = '#22c55e',
     className,
     delay = 0.5
 }: SketchHighlightProps) {

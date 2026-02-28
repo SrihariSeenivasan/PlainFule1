@@ -17,12 +17,12 @@ const StatPill = ({ value, label, delay = 0 }: StatPillProps) => (
         transition={{ duration: 0.5, delay }}
         className="flex flex-col gap-1 px-4 py-3 rounded-xl cursor-default"
         style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(0,0,0,0.03)',
+            border: '1px solid rgba(0,0,0,0.07)',
         }}
     >
         <span className="text-2xl font-black leading-none tracking-tight" style={{ color: 'var(--green-bright)' }}>{value}</span>
-        <span className="text-[9px] uppercase tracking-[0.2em] font-bold" style={{ color: 'rgba(255,255,255,0.35)' }}>{label}</span>
+        <span className="text-[9px] uppercase tracking-[0.2em] font-bold" style={{ color: 'rgba(0,0,0,0.4)' }}>{label}</span>
     </motion.div>
 );
 
@@ -58,7 +58,7 @@ export default function Sciencesection() {
                 <div
                     className="absolute inset-0"
                     style={{
-                        backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+                        backgroundImage: 'linear-gradient(rgba(0,0,0,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px)',
                         backgroundSize: '48px 48px',
                     }}
                 />
@@ -85,17 +85,17 @@ export default function Sciencesection() {
                 <div
                     className="rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-2"
                     style={{
-                        background: 'rgba(255,255,255,0.02)',
-                        border: '1px solid rgba(255,255,255,0.06)',
+                        background: 'rgba(0,0,0,0.02)',
+                        border: '1px solid rgba(0,0,0,0.06)',
                         backdropFilter: 'blur(16px)',
-                        boxShadow: '0 24px 64px rgba(0,0,0,0.55)',
+                        boxShadow: '0 24px 64px rgba(0,0,0,0.1)',
                     }}
                 >
 
                     {/* ── LEFT: PROBLEM ── */}
                     <div
                         className="relative p-7 sm:p-9 md:p-11 flex flex-col justify-between gap-7 overflow-hidden border-b lg:border-b-0 lg:border-r"
-                        style={{ borderColor: 'rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.18)' }}
+                        style={{ borderColor: 'rgba(0,0,0,0.05)', background: 'rgba(0,0,0,0.03)' }}
                     >
                         {/* watermark */}
                         <motion.span
@@ -140,7 +140,7 @@ export default function Sciencesection() {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.7, delay: 0.2 }}
                                 className="text-sm leading-relaxed mb-6 max-w-[400px] font-light"
-                                style={{ color: 'rgba(255,255,255,0.42)' }}
+                                style={{ color: 'rgba(0,0,0,0.55)' }}
                             >
                                 We consume more than ever, yet our cells are starving. The modern thali has been hollowed out by processed soil and high-yield farming. The calories remain, but the micronutrients have vanished.
                             </motion.p>
@@ -174,13 +174,13 @@ export default function Sciencesection() {
                             className="relative z-10 rounded-xl overflow-hidden"
                             style={{
                                 background: 'linear-gradient(135deg, rgba(74,222,128,0.06) 0%, transparent 100%)',
-                                border: '1px solid rgba(255,255,255,0.06)',
+                                border: '1px solid rgba(0,0,0,0.06)',
                             }}
                         >
                             <div className="absolute top-0 left-0 w-[2px] h-full" style={{ background: 'var(--green-bright)' }} />
                             <div className="p-5 pl-6">
-                                <span className="text-2xl font-black leading-none block mb-1" style={{ color: 'var(--green-bright)', opacity: 0.4 }}>"</span>
-                                <p className="text-xs italic font-medium leading-relaxed" style={{ color: 'rgba(255,255,255,0.48)' }}>
+                                <span className="text-2xl font-black leading-none block mb-1" style={{ color: 'var(--green-bright)', opacity: 0.4 }}>&quot;</span>
+                                <p className="text-xs italic font-medium leading-relaxed" style={{ color: 'rgba(0,0,0,0.55)' }}>
                                     Complexity is the smoke screen for insufficiency.
                                 </p>
                             </div>
@@ -233,9 +233,9 @@ export default function Sciencesection() {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.7, delay: 0.2 }}
                                 className="text-sm leading-relaxed mb-6 max-w-[400px] font-light"
-                                style={{ color: 'rgba(255,255,255,0.42)' }}
+                                style={{ color: 'rgba(0,0,0,0.55)' }}
                             >
-                                Supplements shouldn't be a scattergun approach of generic fillers. We believe in matching bio-identical nutrients to your unique biological context. We don't just add; we bridge the specific Delta that exists within your thali.
+                                Supplements shouldn&apos;t be a scattergun approach of generic fillers. We believe in matching bio-identical nutrients to your unique biological context. We don&apos;t just add; we bridge the specific Delta that exists within your thali.
                             </motion.p>
 
                             <motion.div
@@ -262,25 +262,25 @@ export default function Sciencesection() {
                                         transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
                                         className="flex items-center gap-3 px-4 py-3 rounded-lg cursor-default"
                                         style={{
-                                            border: '1px solid rgba(255,255,255,0.06)',
-                                            background: 'rgba(255,255,255,0.02)',
+                                            border: '1px solid rgba(0,0,0,0.08)',
+                                            background: 'rgba(0,0,0,0.02)',
                                             transition: 'background 0.25s, border-color 0.25s, transform 0.2s',
                                         }}
                                         onMouseEnter={(e) => {
                                             const el = e.currentTarget as HTMLDivElement;
-                                            el.style.background = 'rgba(74,222,128,0.05)';
-                                            el.style.borderColor = 'rgba(74,222,128,0.18)';
+                                            el.style.background = 'rgba(34,197,94,0.08)';
+                                            el.style.borderColor = 'rgba(34,197,94,0.2)';
                                             el.style.transform = 'translateX(3px)';
                                         }}
                                         onMouseLeave={(e) => {
                                             const el = e.currentTarget as HTMLDivElement;
-                                            el.style.background = 'rgba(255,255,255,0.02)';
-                                            el.style.borderColor = 'rgba(255,255,255,0.06)';
+                                            el.style.background = 'rgba(0,0,0,0.02)';
+                                            el.style.borderColor = 'rgba(0,0,0,0.08)';
                                             el.style.transform = 'translateX(0)';
                                         }}
                                     >
                                         <span className="text-sm" style={{ color: 'var(--green-bright)' }}>{item.icon}</span>
-                                        <span className="text-xs font-medium tracking-wide" style={{ color: 'rgba(255,255,255,0.62)' }}>{item.label}</span>
+                                        <span className="text-xs font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.65)' }}>{item.label}</span>
                                         <span className="ml-auto text-xs" style={{ color: 'var(--green-bright)', opacity: 0.3 }}>→</span>
                                     </motion.div>
                                 ))}
@@ -296,13 +296,13 @@ export default function Sciencesection() {
                             className="relative z-10 rounded-xl overflow-hidden"
                             style={{
                                 background: 'linear-gradient(135deg, rgba(74,222,128,0.06) 0%, transparent 100%)',
-                                border: '1px solid rgba(255,255,255,0.06)',
+                                border: '1px solid rgba(0,0,0,0.06)',
                             }}
                         >
                             <div className="absolute top-0 left-0 w-[2px] h-full" style={{ background: 'var(--green-bright)' }} />
                             <div className="p-5 pl-6">
-                                <span className="text-2xl font-black leading-none block mb-1" style={{ color: 'var(--green-bright)', opacity: 0.4 }}>"</span>
-                                <p className="text-xs italic font-medium leading-relaxed" style={{ color: 'rgba(255,255,255,0.48)' }}>
+                                <span className="text-2xl font-black leading-none block mb-1" style={{ color: 'var(--green-bright)', opacity: 0.4 }}>&quot;</span>
+                                <p className="text-xs italic font-medium leading-relaxed" style={{ color: 'rgba(0,0,0,0.55)' }}>
                                     Health is the absence of the unnecessary.
                                 </p>
                             </div>
@@ -319,12 +319,12 @@ export default function Sciencesection() {
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="mt-5 flex items-center justify-between px-1"
                 >
-                    <span className="text-[9px] uppercase tracking-[0.25em]" style={{ color: 'rgba(255,255,255,0.15)' }}>
+                            <span className="text-[9px] uppercase tracking-[0.25em]" style={{ color: 'rgba(0,0,0,0.35)' }}>
                         Backed by nutritional science
                     </span>
                     <div className="flex gap-2 items-center">
                         <span className="w-1 h-1 rounded-full" style={{ background: 'var(--green-bright)' }} />
-                        <span className="text-[9px] uppercase tracking-[0.25em]" style={{ color: 'rgba(255,255,255,0.15)' }}>
+                        <span className="text-[9px] uppercase tracking-[0.25em]" style={{ color: 'rgba(0,0,0,0.35)' }}>
                             Formulated for the Indian body
                         </span>
                     </div>

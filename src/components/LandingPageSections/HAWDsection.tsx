@@ -58,7 +58,7 @@ export default function HAWDsection() {
                             className="text-[var(--foreground)]/50 text-lg leading-relaxed mb-12"
                         >
                             The health industry is loud, but often empty. We chose to be silent but effective.
-                            While others focus on marketing 'superfoods', we focus on clinical data and dietary truth.
+                            While others focus on marketing &apos;superfoods&apos;, we focus on clinical data and dietary truth.
                         </motion.p>
                     </div>
 
@@ -78,7 +78,7 @@ export default function HAWDsection() {
                                 </div>
                                 <h3 className="text-xl font-bold mb-3">{item.title}</h3>
                                 <p className="text-sm text-[var(--foreground)]/40 leading-relaxed italic">
-                                    "{item.content}"
+                                    &quot;{item.content}&quot;
                                 </p>
                             </motion.div>
                         ))}

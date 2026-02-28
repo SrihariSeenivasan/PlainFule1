@@ -1,12 +1,4 @@
 import Navbar from '@/components/Navbar';
-import HeroExperience from '@/components/HeroExperience';
-import ChaosScroll from '@/components/ChaosScroll';
-import PhilosophyImpact from '@/components/PhilosophyImpact';
-import BalanceTransition from '@/components/BalanceTransition';
-import MacroOrbit from '@/components/MacroOrbit';
-import ProductShowcase from '@/components/ProductShowcase';
-import NotAnother from '@/components/NotAnother';
-import EfficiencyGrid from '@/components/EfficiencyGrid';
 import FinalCTA from '@/components/FinalCTA';
 import Herosection from '@/components/LandingPageSections/Herosection';
 import Blogsection from '@/components/LandingPageSections/Blogsection';
@@ -14,6 +6,7 @@ import Peoplesection from '@/components/LandingPageSections/Peoplesection';
 import HAWDsection from '@/components/LandingPageSections/HAWDsection';
 import Productsection from '@/components/LandingPageSections/Productsection';
 import Sciencesection from '@/components/LandingPageSections/Sciencesection';
+import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
 
 export default function Home() {
   return (
@@ -37,6 +30,7 @@ export default function Home() {
         <Blogsection />
         <Peoplesection />
         <HAWDsection />
+        <InsiderBundleSection />
         <FinalCTA />
       </div>
     </main>
