@@ -6,6 +6,7 @@ import Peoplesection from '@/components/LandingPageSections/Peoplesection';
 import HAWDsection from '@/components/LandingPageSections/HAWDsection';
 import Productsection from '@/components/LandingPageSections/Productsection';
 import Sciencesection from '@/components/LandingPageSections/Sciencesection';
+import MicronutrientGapSection from '@/components/LandingPageSections/MicronutrientGapSection';
 import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
 
 export default function Home() {
@@ -26,11 +27,13 @@ export default function Home() {
 
         <Herosection />
         <Sciencesection />
+        <MicronutrientGapSection />
         <Productsection />
-        <Blogsection />
-        <Peoplesection />
+        
         <HAWDsection />
         <InsiderBundleSection />
+        <Blogsection />
+        <Peoplesection />
         <FinalCTA />
       </div>
     </main>

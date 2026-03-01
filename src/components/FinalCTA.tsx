@@ -371,6 +371,34 @@ export default function FinalCTA() {
                   Your biology doesn&apos;t wait for the right moment. Start bridging the gap today with the only precision habit built for urban life.
                 </motion.p>
 
+                {/* Powerful Closing Line */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.25 }}
+                  style={{
+                    background: 'rgba(34, 197, 94, 0.08)',
+                    border: '2px solid #22c55e',
+                    borderRadius: 12,
+                    padding: '16px 20px',
+                    marginBottom: 32,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "'Permanent Marker',cursive",
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: '#1a1a1a',
+                      margin: 0,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    You shouldn&apos;t have to choose between <span style={{ color: '#22c55e' }}>taste, protein, and complete nutrition.</span>
+                  </p>
+                </motion.div>
+
                 {/* Price Card */}
                 <motion.div
                   initial={{ opacity: 0, y: 16, rotate: -1 }}

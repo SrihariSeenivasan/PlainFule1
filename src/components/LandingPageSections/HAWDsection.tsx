@@ -310,8 +310,8 @@ export default function HAWDsection() {
                                 viewport={{ once: true }}
                                 className="flex items-center gap-2 mb-4"
                             >
-                                <span className="text-base">✏️</span>
-                                <H className="text-sm font-bold tracking-wide" style={{ color: T.green }}>The Delta Edge</H>
+                                <span className="text-base">✨</span>
+                                <H className="text-sm font-bold tracking-wide" style={{ color: T.green }}>The Complete Solution</H>
                                 <WiggleLine color={T.green} className="w-14 h-3 opacity-50" />
                             </motion.div>
 
@@ -323,9 +323,9 @@ export default function HAWDsection() {
                                 className="font-playfair text-3xl md:text-5xl font-black mb-5 leading-tight"
                                 style={{ color: T.text }}
                             >
-                                How We{' '}
+                                One Scoop.{' '}
                                 <span className="relative inline-block">
-                                    <span className="gradient-text italic">Truly Differ.</span>
+                                    <span className="gradient-text italic">Complete Daily Support.</span>
                                     <svg viewBox="0 0 220 10" fill="none" className="absolute -bottom-1 left-0 w-full" aria-hidden="true">
                                         <path d="M2 6 C55 1,130 9,180 5 S208 1,218 6"
                                             stroke={T.green} strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.5" />
@@ -341,8 +341,8 @@ export default function HAWDsection() {
                                 className="text-sm leading-relaxed mb-8 max-w-sm"
                                 style={{ color: T.textMid }}
                             >
-                                The health industry is loud, but often empty. We chose to be silent but effective.
-                                While others market &apos;superfoods&apos;, we focus on clinical data and dietary truth.
+                                Designed for professionals, women, and busy parents. All 15+ essential micronutrients to bridge the gap between volume and vitality.
+                                Zero sugar, zero compromises.
                             </motion.p>
 
                             {/* ingredient panel */}

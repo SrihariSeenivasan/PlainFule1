@@ -817,8 +817,8 @@ function ProductCarousel({ revealDone }: { revealDone: boolean }) {
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 export default function Herosection() {
   const [revealDone, setRevealDone] = useState(false);
-  const words1 = ['The', 'Motto:'];
-  const words2 = ['Bridge', 'the', 'Gap.'];
+  const words1 = ['Why', 'Are', 'We', 'Still', 'Tired'];
+  const words2 = ['Despite', 'Eating', 'Every', 'Day?'];
 
   return (
     <>
@@ -1176,13 +1176,11 @@ export default function Herosection() {
                     position: 'relative',
                   }}
                 >
-                  We identified the precise nutritional deficits in the modern
-                  Indian diet. PlainFuel isn&apos;t just another supplement —
-                  it&apos;s the{' '}
+                  Modern meals fill the stomach. They don&apos;t always nourish the body. PlainFuel bridges the gap with{' '}
                   <span style={{ background: '#fef08a', padding: '0 3px' }}>
-                    missing piece
+                    precise nutrition
                   </span>{' '}
-                  of your daily nutrition.
+                  for the modern Indian lifestyle.
                 </p>
               </motion.div>
 
@@ -1246,7 +1244,7 @@ export default function Herosection() {
                 style={{ display: 'flex', alignItems: 'center', gap: 0, flexWrap: 'wrap' }}
               >
                 <a href="#" className="cta-btn-marker">
-                  EXPLORE OUR STORY
+                  SEE WHAT&apos;S MISSING
                   <motion.span
                     animate={{ x: [0, 6, 0] }}
                     transition={{
