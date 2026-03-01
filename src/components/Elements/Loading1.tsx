@@ -235,7 +235,7 @@ export function LogoReveal({ onDone }: { onDone: () => void }) {
         {/* Logo image */}
         <div style={{ position: 'relative', width: 280, height: 105 }}>
           <Image
-            src="/images/Plainfuel.jpeg"
+            src="/images/plainfuel.png"
             alt="Plainfuel"
             fill
             className="object-contain"
