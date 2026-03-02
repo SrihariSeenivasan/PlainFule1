@@ -26,8 +26,9 @@ export default function Home() {
         <Navbar />
 
         <Herosection />
-        <Sciencesection />
         <MicronutrientGapSection />
+        <Sciencesection />
+        
         <Productsection />
         
         <HAWDsection />

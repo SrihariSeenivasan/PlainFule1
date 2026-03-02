@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 // ── Inline SVG doodle helpers ────────────────────────────────────────────────
@@ -78,7 +79,7 @@ const NavLink = ({ href, children, accent = false, delay = 0 }: { href: string; 
         position: 'relative',
         fontFamily: "'Caveat', cursive",
         fontWeight: 700,
-        fontSize: 17,
+        fontSize: 16,
         letterSpacing: '0.06em',
         color: accent ? '#22c55e' : hovered ? '#22c55e' : 'rgba(0,0,0,0.55)',
         textDecoration: 'none',
@@ -111,66 +112,41 @@ const NavLink = ({ href, children, accent = false, delay = 0 }: { href: string; 
 // ── Logo ─────────────────────────────────────────────────────────────────────
 
 const DoodleLogo = () => {
-  const [hovered, setHovered] = useState(false);
+  const [, setHovered] = useState(false);
   return (
     <Link href="/"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: 'flex', alignItems: 'center', gap: 10,
+        display: 'flex', alignItems: 'center', gap: 6,
         textDecoration: 'none', flexShrink: 0,
       }}
     >
-      {/* Sketchy logo mark */}
-      <motion.div
+      {/* Colour Logo */}
+      {/* <motion.div
         animate={{ rotate: hovered ? [0, -8, 6, -3, 0] : 0 }}
         transition={{ duration: 0.5 }}
-        style={{ position: 'relative', width: 38, height: 38, flexShrink: 0 }}
+        style={{ position: 'relative', width: 40, height: 40, flexShrink: 0 }}
       >
-        {/* hand-drawn box */}
-        <svg viewBox="0 0 40 40" width={38} height={38} style={{ position: 'absolute', inset: 0 }}>
-          <path
-            d="M5,5 Q20,2 35,5 Q38,5 38,20 Q38,35 35,36 Q20,38 5,36 Q2,35 2,20 Q2,5 5,5 Z"
-            fill="rgba(34,197,94,0.15)"
-            stroke="#22c55e"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeDasharray={hovered ? 'none' : '200'}
-            strokeDashoffset="0"
-          />
-          <text
-            x="50%" y="54%" dominantBaseline="middle" textAnchor="middle"
-            style={{
-              fontFamily: "'Permanent Marker', cursive",
-              fontSize: 18, fill: '#16a34a', fontWeight: 900,
-            }}
-          >P</text>
-        </svg>
-      </motion.div>
+        <Image
+          src="/images/colourLogo.png"
+          alt="PlainFuel Logo"
+          width={40}
+          height={40}
+          priority
+          style={{ width: '100%', height: '100%' }}
+        />
+      </motion.div> */}
 
-      {/* wordmark */}
-      <span style={{
-        fontFamily: "'Permanent Marker', cursive",
-        fontSize: 22,
-        color: '#1a1a1a',
-        letterSpacing: '0.02em',
-        position: 'relative',
-      }}>
-        Plainfuel
-        {hovered && (
-          <motion.span
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            style={{
-              position: 'absolute', bottom: -3, left: 0,
-              width: '100%', height: 3,
-              background: '#22c55e',
-              borderRadius: 2,
-              transformOrigin: 'left',
-            }}
-          />
-        )}
-      </span>
+      {/* wordmark - Plainfuel image */}
+      <Image
+        src="/images/plainfuel.png"
+        alt="PlainFuel"
+        width={75}
+        height={18}
+        priority
+        style={{ height: 'auto' }}
+      />
 
       {/* tiny star accent */}
       <StarDoodle size={14} rotate={15} style={{ opacity: 0.6, marginLeft: -4 }} />
@@ -195,11 +171,11 @@ const DoodleCTA = ({ delay = 0 }: { delay?: number }) => {
         display: 'inline-flex',
         alignItems: 'center',
         gap: 6,
-        padding: '9px 22px',
+        padding: '6px 16px',
         background: hovered ? '#15803d' : '#22c55e',
         color: '#fff',
         fontFamily: "'Permanent Marker', cursive",
-        fontSize: 14,
+        fontSize: 13,
         letterSpacing: '0.06em',
         textDecoration: 'none',
         borderRadius: 12,
@@ -343,7 +319,7 @@ export default function Navbar() {
           top: 0,
           left: 0, right: 0,
           zIndex: 100,
-          padding: scrolled ? '8px 0' : '14px 0',
+          padding: scrolled ? '1px 0' : '2px 0',
           transition: 'padding 0.4s',
         }}
       >
@@ -377,11 +353,11 @@ export default function Navbar() {
           <div style={{
             maxWidth: 1200,
             margin: '0 auto',
-            padding: '10px 24px',
+            padding: '1px 24px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 24,
+            gap: 16,
           }}>
 
             {/* Logo */}
