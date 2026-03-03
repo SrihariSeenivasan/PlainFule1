@@ -39,6 +39,7 @@ import {
   Star,
   type LucideIcon,
 } from 'lucide-react';
+import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
 /* ── font vars ── */
 const FD = "'Permanent Marker', 'Segoe Print', cursive";   /* Display — chunky black marker (like screenshot 'The Modern Diet.') */
@@ -88,7 +89,7 @@ const PRODUCTS: Product[] = [
     duration: '7 Days',
     price: '₹1,500',
     image: '/images/product.png',
-    accent: '#22c55e',
+    accent: '#15803d',
     accentGlow: 'rgba(34,197,94,0.22)',
     accentSoft: 'rgba(34,197,94,0.09)',
     desc: 'We consume more than ever, yet our cells are starving. Seven precise pouches calibrated for first-cycle adaptation.',
@@ -112,9 +113,9 @@ const PRODUCTS: Product[] = [
     duration: '15 Days',
     price: '₹2,500',
     image: '/images/Pack1.png',
-    accent: '#22c55e',
-    accentGlow: 'rgba(34,197,94,0.22)',
-    accentSoft: 'rgba(34,197,94,0.09)',
+    accent: '#15803d',
+    accentGlow: 'rgba(21,128,61,0.22)',
+    accentSoft: 'rgba(21,128,61,0.09)',
     desc: 'Supplements shouldn\'t be a scattergun approach of generic fillers. We match bio-identical nutrients to your unique biological context.',
     badges: ['15-Day Cycle', 'Balanced Formula', 'Priority Shipping'],
     icon: Shield,
@@ -136,9 +137,9 @@ const PRODUCTS: Product[] = [
     duration: '30 Days',
     price: '₹4,500',
     image: '/images/Pack2.png',
-    accent: '#22c55e',
-    accentGlow: 'rgba(34,197,94,0.22)',
-    accentSoft: 'rgba(34,197,94,0.09)',
+    accent: '#15803d',
+    accentGlow: 'rgba(21,128,61,0.22)',
+    accentSoft: 'rgba(21,128,61,0.09)',
     desc: 'Full commitment. Maximum transformation. The complete monthly protocol — we bridge the specific Delta within your thali.',
     badges: ['30-Day Protocol', 'Premium Formula', 'Exclusive Access'],
     icon: Star,

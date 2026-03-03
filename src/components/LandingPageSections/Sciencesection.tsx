@@ -2,76 +2,16 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useMemo } from 'react';
+import { StarDoodle, Scribble, ArrowDoodle } from '@/components/Elements/SvgDoodles';
 
-// ── Inline SVG doodle elements ──────────────────────────────────────────────
-
-// WobblyBorder component - kept for potential future use
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const WobblyBorder = ({ className = '', color = '#22c55e', strokeWidth = 2.5 }: { className?: string; color?: string; strokeWidth?: number }) => (
-  <svg viewBox="0 0 400 200" preserveAspectRatio="none" className={className} aria-hidden>
-    <path
-      d="M8,8 C60,4 140,12 200,7 C260,2 340,14 392,8 L392,192 C340,196 260,188 200,193 C140,198 60,186 8,192 Z"
-      fill="none"
-      stroke={color}
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeDasharray="6,3"
-    />
-  </svg>
-);
-
-const Scribble = ({ style = {} }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 120 24" style={style} aria-hidden>
-    <path
-      d="M4,18 Q20,6 36,14 Q52,22 68,10 Q84,2 100,12 Q108,16 116,8"
-      fill="none"
-      stroke="#22c55e"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-    />
-  </svg>
-);
-
-const ArrowDoodle = ({ style = {} }: { style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 48 24" style={style} aria-hidden>
-    <path
-      d="M2,12 Q12,8 28,12 Q38,15 44,10"
-      fill="none"
-      stroke="#22c55e"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-    />
-    <path
-      d="M38,6 L44,10 L40,16"
-      fill="none"
-      stroke="#22c55e"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const StarDoodle = ({ size = 28, rotate = 0, style = {} }: { size?: number; rotate?: number; style?: React.CSSProperties }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} style={{ transform: `rotate(${rotate}deg)`, ...style }} aria-hidden>
-    <path
-      d="M12,2 L13.5,9 L20,8 L15,13 L17,20 L12,16 L7,20 L9,13 L4,8 L10.5,9 Z"
-      fill="none"
-      stroke="#22c55e"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+// ── Local SVG Components ──────────────────────────────────────────────────────
 
 const CircleDoodle = ({ size = 40, style = {} }: { size?: number; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 44 44" width={size} height={size} style={style} aria-hidden>
     <path
       d="M22,4 C32,3 41,12 41,22 C41,32 32,41 22,41 C12,41 3,32 3,22 C3,12 12,3 22,4 Z"
       fill="none"
-      stroke="#22c55e"
+      stroke="#15803d"
       strokeWidth="2"
       strokeLinecap="round"
       strokeDasharray="4,2"
@@ -84,7 +24,7 @@ const ZigZag = ({ style = {} }: { style?: React.CSSProperties }) => (
     <polyline
       points="0,8 20,2 40,14 60,2 80,14 100,2 120,14 140,2 160,14 180,2 200,8"
       fill="none"
-      stroke="rgba(34,197,94,0.3)"
+      stroke="rgba(21,128,61,0.3)"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -92,12 +32,14 @@ const ZigZag = ({ style = {} }: { style?: React.CSSProperties }) => (
   </svg>
 );
 
+// ── Local SVG Components ──────────────────────────────────────────────────────
+
 const HighlightSvg = ({ style = {} }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 180 18" preserveAspectRatio="none" style={style} aria-hidden>
     <path
       d="M4,14 Q45,4 90,8 Q135,12 176,6"
       fill="none"
-      stroke="rgba(34,197,94,0.5)"
+      stroke="rgba(21,128,61,0.5)"
       strokeWidth="8"
       strokeLinecap="round"
     />
@@ -124,7 +66,7 @@ const StatPill = ({ value, label, delay = 0 }: { value: string; label: string; d
         borderRadius: '12px',
         cursor: 'default',
         boxShadow: hovered
-          ? '4px 5px 0px #22c55e'
+          ? '4px 5px 0px #15803d'
           : '3px 3px 0px rgba(0,0,0,0.15)',
         transform: `rotate(${hovered ? 1 : -1}deg)`,
         transition: 'transform 0.2s, box-shadow 0.2s',
@@ -139,7 +81,7 @@ const StatPill = ({ value, label, delay = 0 }: { value: string; label: string; d
         <path
           d="M5,5 C40,2 120,6 175,4 L175,76 C120,78 40,74 5,76 Z"
           fill="none"
-          stroke={hovered ? '#22c55e' : '#333'}
+          stroke={hovered ? '#15803d' : '#333'}
           strokeWidth="2"
           strokeLinecap="round"
           strokeDasharray={hovered ? 'none' : '5,2'}
@@ -150,7 +92,7 @@ const StatPill = ({ value, label, delay = 0 }: { value: string; label: string; d
         fontSize: '1.75rem',
         fontWeight: 900,
         fontFamily: "'Caveat', cursive",
-        color: '#22c55e',
+        color: '#15803d',
         lineHeight: 1,
       }}>{value}</span>
       <span style={{
@@ -191,15 +133,15 @@ const PillarRow = ({ icon, label, delay }: { icon: string; label: string; delay:
         gap: 12,
         padding: '10px 14px',
         borderRadius: 10,
-        background: hovered ? 'rgba(34,197,94,0.08)' : 'rgba(255,254,245,0.7)',
-        border: `2px ${hovered ? 'solid' : 'dashed'} ${hovered ? '#22c55e' : 'rgba(0,0,0,0.2)'}`,
+        background: hovered ? 'rgba(21,128,61,0.08)' : 'rgba(255,254,245,0.7)',
+        border: `2px ${hovered ? 'solid' : 'dashed'} ${hovered ? '#15803d' : 'rgba(0,0,0,0.2)'}`,
         cursor: 'default',
         transform: hovered ? 'translateX(5px) rotate(0.5deg)' : 'rotate(0)',
         transition: 'all 0.2s ease',
-        boxShadow: hovered ? '3px 3px 0 #22c55e' : 'none',
+        boxShadow: hovered ? '3px 3px 0 #15803d' : 'none',
       }}
     >
-      <span style={{ color: '#22c55e', fontSize: 16 }}>{icon}</span>
+      <span style={{ color: '#15803d', fontSize: 16 }}>{icon}</span>
       <span style={{
         fontFamily: "'Caveat', cursive",
         fontWeight: 700,
@@ -208,7 +150,7 @@ const PillarRow = ({ icon, label, delay }: { icon: string; label: string; delay:
         letterSpacing: '0.03em',
       }}>{label}</span>
       {hovered && (
-        <span style={{ marginLeft: 'auto', fontSize: 13, color: '#22c55e' }}>✓</span>
+        <span style={{ marginLeft: 'auto', fontSize: 13, color: '#15803d' }}>✓</span>
       )}
     </motion.div>
   );
@@ -238,7 +180,7 @@ const QuoteBox = ({ text, delay }: { text: string; delay: number }) => (
       left: 20,
       width: 48,
       height: 18,
-      background: 'rgba(34,197,94,0.25)',
+      background: 'rgba(21,128,61,0.25)',
       borderRadius: 3,
       transform: 'rotate(-2deg)',
     }} />
@@ -249,7 +191,7 @@ const QuoteBox = ({ text, delay }: { text: string; delay: number }) => (
       top: 0,
       bottom: 0,
       width: 4,
-      background: 'repeating-linear-gradient(to bottom, #22c55e 0px, #22c55e 8px, transparent 8px, transparent 12px)',
+      background: 'repeating-linear-gradient(to bottom, #15803d 0px, #15803d 8px, transparent 8px, transparent 12px)',
       borderRadius: '12px 0 0 12px',
     }} />
     <span style={{
@@ -258,7 +200,7 @@ const QuoteBox = ({ text, delay }: { text: string; delay: number }) => (
       fontWeight: 900,
       lineHeight: 0.5,
       display: 'block',
-      color: '#22c55e',
+      color: '#15803d',
       opacity: 0.5,
       marginBottom: 6,
     }}>&quot;</span>
@@ -337,8 +279,8 @@ export default function Sciencesection() {
           background-image: repeating-linear-gradient(
             transparent,
             transparent 27px,
-            rgba(34,197,94,0.08) 27px,
-            rgba(34,197,94,0.08) 28px
+            rgba(21,128,61,0.08) 27px,
+            rgba(21,128,61,0.08) 28px
           );
           pointer-events: none;
           border-radius: inherit;
@@ -428,17 +370,17 @@ export default function Sciencesection() {
           >
             {/* sticky note style label */}
             <div style={{
-              background: 'rgba(34,197,94,0.15)',
-              border: '2px dashed #22c55e',
+              background: 'rgba(21,128,61,0.15)',
+              border: '2px dashed #15803d',
               borderRadius: 8,
               padding: '6px 20px',
               transform: 'rotate(-1.5deg)',
-              boxShadow: '3px 3px 0 rgba(34,197,94,0.2)',
+              boxShadow: '3px 3px 0 rgba(21,128,61,0.2)',
             }}>
               <span style={{
                 fontFamily: "'Permanent Marker', cursive",
                 fontSize: 13,
-                color: '#16a34a',
+                color: '#15803d',
                 letterSpacing: '0.08em',
               }}>
                 ✦ The Science of Sufficiency ✦
@@ -454,7 +396,7 @@ export default function Sciencesection() {
                 margin: 0,
                 lineHeight: 1.1,
               }}>
-                What&apos;s <span style={{ color: '#22c55e' }}>Actually</span> in your food?
+                What&apos;s <span style={{ color: '#15803d' }}>Actually</span> in your food?
               </h1>
               <HighlightSvg style={{
                 position: 'absolute',
@@ -514,7 +456,7 @@ export default function Sciencesection() {
                   fontFamily: "'Permanent Marker', cursive",
                   fontSize: 'clamp(80px,12vw,140px)',
                   lineHeight: 1,
-                  color: '#22c55e',
+                  color: '#15803d',
                   opacity: 0.05,
                   userSelect: 'none',
                   pointerEvents: 'none',
@@ -529,19 +471,26 @@ export default function Sciencesection() {
                 style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}
               >
                 <div style={{
-                  background: '#fef08a',
-                  border: '1.5px solid rgba(0,0,0,0.15)',
-                  borderRadius: 6,
-                  padding: '3px 10px',
-                  transform: 'rotate(1deg)',
-                  fontFamily: "'Caveat', cursive",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  color: 'rgba(0,0,0,0.65)',
-                  letterSpacing: '0.05em',
-                  boxShadow: '2px 2px 0 rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  background: 'rgba(21,128,61,0.09)',
+                  border: '2px dashed #15803d',
+                  borderRadius: 8,
+                  padding: '8px 16px',
+                  transform: 'rotate(-1.5deg)',
                 }}>
-                  ⚠️ The Market Problem
+                  <StarDoodle size={14} color="#15803d" />
+                  <span style={{
+                    fontFamily: "'Caveat', cursive",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: '#15803d',
+                    letterSpacing: '0.05em',
+                  }}>
+                    The Science of Sufficiency
+                  </span>
+                  <StarDoodle size={14} color="#15803d" />
                 </div>
               </motion.div>
 
@@ -561,7 +510,7 @@ export default function Sciencesection() {
                 }}
               >
                 The Modern Diet.<br />
-                <span style={{ color: '#22c55e', position: 'relative' }}>
+                <span style={{ color: '#15803d', position: 'relative' }}>
                   An Invisible
                   <Scribble style={{ position: 'absolute', bottom: -8, left: 0, width: '100%', height: 20 }} />
                 </span>
@@ -642,7 +591,7 @@ export default function Sciencesection() {
               className="doodle-card notebook-lines"
               style={{
                 padding: '36px 32px',
-                boxShadow: '6px 8px 0 rgba(34,197,94,0.2)',
+                boxShadow: '6px 8px 0 rgba(21,128,61,0.2)',
                 transform: 'rotate(1deg)',
               }}
             >
@@ -653,7 +602,7 @@ export default function Sciencesection() {
                 right: 0,
                 width: 32,
                 height: 32,
-                background: 'linear-gradient(135deg, transparent 50%, rgba(34,197,94,0.12) 50%)',
+                background: 'linear-gradient(135deg, transparent 50%, rgba(21,128,61,0.12) 50%)',
                 borderRadius: '0 0 18px 0',
               }} />
 
@@ -671,7 +620,7 @@ export default function Sciencesection() {
                   fontFamily: "'Permanent Marker', cursive",
                   fontSize: 'clamp(80px,12vw,140px)',
                   lineHeight: 1,
-                  color: '#22c55e',
+                  color: '#15803d',
                   opacity: 0.07,
                   userSelect: 'none',
                   pointerEvents: 'none',
@@ -686,18 +635,18 @@ export default function Sciencesection() {
                 style={{ marginBottom: 20 }}
               >
                 <div style={{
-                  background: 'rgba(34,197,94,0.15)',
-                  border: '1.5px solid #22c55e',
+                  background: 'rgba(21,128,61,0.15)',
+                  border: '1.5px solid #15803d',
                   borderRadius: 6,
                   padding: '3px 10px',
                   transform: 'rotate(-1deg)',
                   fontFamily: "'Caveat', cursive",
                   fontWeight: 700,
                   fontSize: 13,
-                  color: '#16a34a',
+                  color: '#15803d',
                   letterSpacing: '0.05em',
                   display: 'inline-block',
-                  boxShadow: '2px 2px 0 rgba(34,197,94,0.2)',
+                  boxShadow: '2px 2px 0 rgba(21,128,61,0.2)',
                 }}>
                   ✨ The Reframe
                 </div>
@@ -719,7 +668,7 @@ export default function Sciencesection() {
                 }}
               >
                 Precision.{' '}
-                <span style={{ color: '#22c55e', position: 'relative' }}>
+                <span style={{ color: '#15803d', position: 'relative' }}>
                   Truly
                   <Scribble style={{ position: 'absolute', bottom: -8, left: 0, width: '100%', height: 20 }} />
                 </span>
@@ -756,8 +705,8 @@ export default function Sciencesection() {
                   alignItems: 'center',
                   gap: 12,
                   marginBottom: 24,
-                  background: 'rgba(34,197,94,0.06)',
-                  border: '1.5px dashed rgba(34,197,94,0.4)',
+                  background: 'rgba(21,128,61,0.06)',
+                  border: '1.5px dashed rgba(21,128,61,0.4)',
                   borderRadius: 10,
                   padding: '10px 14px',
                   transform: 'rotate(-0.5deg)',
@@ -819,12 +768,12 @@ export default function Sciencesection() {
             </div>
 
             <div style={{
-              background: 'rgba(34,197,94,0.08)',
-              border: '1.5px solid rgba(34,197,94,0.3)',
+              background: 'rgba(21,128,61,0.08)',
+              border: '1.5px solid rgba(21,128,61,0.3)',
               borderRadius: 8,
               padding: '6px 16px',
               transform: 'rotate(0.8deg)',
-              boxShadow: '2px 2px 0 rgba(34,197,94,0.15)',
+              boxShadow: '2px 2px 0 rgba(21,128,61,0.15)',
               display: 'flex',
               alignItems: 'center',
               gap: 8,
@@ -833,7 +782,7 @@ export default function Sciencesection() {
                 width: 8,
                 height: 8,
                 borderRadius: '50%',
-                background: '#22c55e',
+                background: '#15803d',
                 display: 'inline-block',
                 flexShrink: 0,
               }} />
@@ -842,7 +791,7 @@ export default function Sciencesection() {
                 fontSize: 13,
                 fontWeight: 700,
                 letterSpacing: '0.08em',
-                color: '#16a34a',
+                color: '#15803d',
                 textTransform: 'uppercase',
               }}>🇮🇳 Formulated for the Indian body</span>
             </div>

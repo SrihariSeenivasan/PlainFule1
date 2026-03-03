@@ -2,49 +2,23 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import { WiggleLine, Sparkle, CircleDoodle as DoodleCircle } from "@/components/Elements/SvgDoodles";
 
-/* ── SVG DOODLE ATOMS ── */
-function WiggleLine({ color = "#22c55e", className = "" }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 200 10" fill="none" className={className} aria-hidden="true">
-            <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5 S180 9,200 5"
-                stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
-        </svg>
-    );
-}
-
-function Sparkle({ color = "#22c55e", className = "" }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-            <path d="M12 2 L13.5 10 L22 12 L13.5 14 L12 22 L10.5 14 L2 12 L10.5 10 Z"
-                stroke={color} strokeWidth="1.5" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-
-function DoodleCircle({ color = "#22c55e", className = "" }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 60 60" fill="none" className={className} aria-hidden="true">
-            <path d="M30 6 C46 5,55 16,54 30 S44 55,29 55 S5 44,5 29 S14 5,30 6Z"
-                stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-function DoodleArrow({ color = "#22c55e", className = "" }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 40 24" fill="none" className={className} aria-hidden="true">
-            <path d="M2 12 C12 4,26 4,36 11" stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
-            <path d="M28 5 L37 12 L28 18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-
-function DoodleStar({ color = "#22c55e", className = "" }: { color?: string; className?: string }) {
+/* ── Local SVG Helper ── */
+function DoodleStar({ color = "#15803d", className = "" }: { color?: string; className?: string }) {
     return (
         <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
             <path d="M12 3 L13.5 8.5 L19 8.5 L14.8 11.8 L16.2 17.5 L12 14.2 L7.8 17.5 L9.2 11.8 L5 8.5 L10.5 8.5 Z"
                 stroke={color} strokeWidth="1.5" strokeLinejoin="round" fill={color} />
+        </svg>
+    );
+}
+
+function DoodleArrow({ color = "#15803d", className = "" }: { color?: string; className?: string }) {
+    return (
+        <svg viewBox="0 0 40 24" fill="none" className={className} aria-hidden="true">
+            <path d="M2 12 C12 4,26 4,36 11" stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
+            <path d="M28 5 L37 12 L28 18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
     );
 }
@@ -91,7 +65,7 @@ function StatPill({ label, value, accent }: { label: string; value: string; acce
 function StarIcon({ delay }: { delay: number }) {
     return (
         <DoodleStar
-            color="#22c55e"
+            color="#15803d"
             className="w-5 h-5"
             // inline animation via style trick
         />
@@ -182,7 +156,7 @@ export default function InsiderBundleSection() {
                 .insider-btn::after {
                     content:'';
                     position:absolute; inset:0;
-                    background: linear-gradient(105deg,transparent 35%,rgba(34,197,94,0.15) 50%,transparent 65%);
+                    background: linear-gradient(105deg,transparent 35%,rgba(21,128,61,0.15) 50%,transparent 65%);
                     background-size:200% 100%;
                     opacity:0; transition:opacity 0.3s;
                 }
@@ -204,7 +178,7 @@ export default function InsiderBundleSection() {
                 <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.03] z-0" aria-hidden="true">
                     <defs>
                         <pattern id="dotgrid2" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                            <circle cx="2" cy="2" r="1.5" fill="#22c55e" />
+                            <circle cx="2" cy="2" r="1.5" fill="#15803d" />
                         </pattern>
                     </defs>
                     <rect width="100%" height="100%" fill="url(#dotgrid2)" />
@@ -214,31 +188,31 @@ export default function InsiderBundleSection() {
                 <div className="absolute pointer-events-none z-0" style={{
                     top: '50%', right: '-5%', width: '600px', height: '600px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 68%)',
+                    background: 'radial-gradient(circle, rgba(21,128,61,0.07) 0%, transparent 68%)',
                     transform: 'translateY(-50%)',
                     animation: 'pulseGlow 5s ease-in-out infinite',
                 }} />
                 <div className="absolute pointer-events-none z-0" style={{
                     bottom: '-20%', left: '-10%', width: '450px', height: '450px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 65%)',
+                    background: 'radial-gradient(circle, rgba(21,128,61,0.05) 0%, transparent 65%)',
                     animation: 'pulseGlow 7s ease-in-out 1.5s infinite',
                 }} />
 
                 {/* rotating doodle rings */}
                 <div className="absolute pointer-events-none z-0" style={{
                     top: '50%', right: '2%', width: '480px', height: '480px',
-                    borderRadius: '50%', border: '1.5px dashed rgba(34,197,94,0.1)',
+                    borderRadius: '50%', border: '1.5px dashed rgba(21,128,61,0.1)',
                     animation: 'rotateSlow 30s linear infinite',
                 }} />
                 <div className="absolute pointer-events-none z-0" style={{
                     top: '50%', right: '8%', width: '320px', height: '320px',
-                    borderRadius: '50%', border: '1px dashed rgba(34,197,94,0.07)',
+                    borderRadius: '50%', border: '1px dashed rgba(21,128,61,0.07)',
                     animation: 'rotateSlow2 20s linear infinite',
                 }} />
 
                 {/* ambient sparkles */}
-                <Sparkle color="#22c55e" className="absolute top-10 left-[3%] w-6 h-6 opacity-20 rotate-12 pointer-events-none z-0" />
+                <Sparkle color="#15803d" className="absolute top-10 left-[3%] w-6 h-6 opacity-20 rotate-12 pointer-events-none z-0" />
                 <DoodleCircle color="#f59e0b" className="absolute bottom-10 left-[8%] w-8 h-8 opacity-15 pointer-events-none z-0" />
                 <Sparkle color="#8b5cf6" className="absolute top-1/3 left-[1%] w-4 h-4 opacity-10 pointer-events-none z-0" />
                 <Sparkle color="#ec4899" className="absolute bottom-1/4 right-[5%] w-5 h-5 opacity-10 pointer-events-none z-0" />
@@ -264,16 +238,16 @@ export default function InsiderBundleSection() {
                             <div className="relative inline-flex items-center gap-2 px-4 py-1.5">
                                 <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 120 36" fill="none" aria-hidden="true">
                                     <path d="M4 8 C25 2,90 2,116 7 S120 14,118 26 S114 34,90 35 S22 36,4 32 S0 25,1 18 S2 12,4 8Z"
-                                        stroke="rgba(34,197,94,0.5)" strokeWidth="1.5" fill="rgba(34,197,94,0.08)" strokeLinecap="round" />
+                                        stroke="rgba(21,128,61,0.5)" strokeWidth="1.5" fill="rgba(21,128,61,0.08)" strokeLinecap="round" />
                                 </svg>
                                 <span style={{
                                     width: 7, height: 7, borderRadius: '50%',
-                                    background: '#22c55e',
-                                    boxShadow: '0 0 8px rgba(34,197,94,0.6)',
+                                    background: '#15803d',
+                                    boxShadow: '0 0 8px rgba(21,128,61,0.6)',
                                     animation: 'dotPulse 1.8s ease-in-out infinite',
                                     flexShrink: 0, display: 'inline-block',
                                 }} />
-                                <H className="text-xs font-bold uppercase tracking-widest relative z-10" style={{ color: '#22c55e' }}>
+                                <H className="text-xs font-bold uppercase tracking-widest relative z-10" style={{ color: '#15803d' }}>
                                     Best Value
                                 </H>
                             </div>
@@ -303,7 +277,7 @@ export default function InsiderBundleSection() {
                                     style={{
                                         fontSize: 'clamp(56px, 8vw, 96px)',
                                         lineHeight: 0.92,
-                                        background: 'linear-gradient(90deg, #22c55e 0%, #16a34a 55%, #22c55e 100%)',
+                                        background: 'linear-gradient(90deg, #15803d 0%, #15803d 55%, #15803d 100%)',
                                         backgroundSize: '200% auto',
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
@@ -319,14 +293,14 @@ export default function InsiderBundleSection() {
                                     <path
                                         className="doodle-underline"
                                         d="M3 8 C50 2,150 12,220 7 S250 3,257 8"
-                                        stroke="#22c55e" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.5"
+                                        stroke="#15803d" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.5"
                                     />
                                 </svg>
                             </div>
                         </div>
 
                         {/* wiggle accent line */}
-                        <WiggleLine color="#22c55e" className="w-24 h-3 opacity-60" />
+                        <WiggleLine color="#15803d" className="w-24 h-3 opacity-60" />
 
                         {/* description — Caveat */}
                         <div className="max-w-sm">
@@ -340,7 +314,7 @@ export default function InsiderBundleSection() {
 
                         {/* stats — doodle style */}
                         <div className="flex flex-wrap gap-3">
-                            <StatPill label="Flavors" value="6+" accent="#22c55e" />
+                            <StatPill label="Flavors" value="6+" accent="#15803d" />
                             <StatPill label="Reviews" value="2.4k" accent="#f59e0b" />
                             <StatPill label="You Save" value="30%" accent="#ec4899" />
                         </div>
@@ -348,7 +322,7 @@ export default function InsiderBundleSection() {
                         {/* perks list */}
                         <div className="flex flex-col gap-2">
                             {[
-                                { text: 'Free shipping on all orders', accent: '#22c55e' },
+                                { text: 'Free shipping on all orders', accent: '#15803d' },
                                 { text: 'No commitment, cancel anytime', accent: '#f59e0b' },
                                 { text: '0 fillers, 100% active ingredients', accent: '#8b5cf6' },
                             ].map((p, i) => (
@@ -375,7 +349,7 @@ export default function InsiderBundleSection() {
                                     preserveAspectRatio="none" viewBox="0 0 200 54" fill="none" aria-hidden="true">
                                     <path
                                         d="M6 10 C52 2,148 2,194 9 S200 20,198 40 S192 52,155 53 S44 54,8 51 S1 43,2 27 S4 15,6 10Z"
-                                        fill={btnHover ? '#16a34a' : '#22c55e'}
+                                        fill={btnHover ? '#15803d' : '#15803d'}
                                         style={{ transition: 'fill 0.3s' }}
                                     />
                                 </svg>
@@ -400,19 +374,19 @@ export default function InsiderBundleSection() {
                         {/* ping rings */}
                         <div className="absolute pointer-events-none" style={{
                             top: '50%', left: '50%', width: '340px', height: '340px',
-                            borderRadius: '50%', border: '1px dashed rgba(34,197,94,0.15)',
+                            borderRadius: '50%', border: '1px dashed rgba(21,128,61,0.15)',
                             animation: 'ringExpand 3s ease-out infinite',
                         }} />
                         <div className="absolute pointer-events-none" style={{
                             top: '50%', left: '50%', width: '340px', height: '340px',
-                            borderRadius: '50%', border: '1px dashed rgba(34,197,94,0.1)',
+                            borderRadius: '50%', border: '1px dashed rgba(21,128,61,0.1)',
                             animation: 'ringExpand 3s ease-out 1.1s infinite',
                         }} />
 
                         {/* glow blob */}
                         <div className="absolute pointer-events-none" style={{
                             width: '60%', height: '60%', borderRadius: '50%',
-                            background: 'radial-gradient(circle, rgba(34,197,94,0.14) 0%, transparent 70%)',
+                            background: 'radial-gradient(circle, rgba(21,128,61,0.14) 0%, transparent 70%)',
                             filter: 'blur(28px)',
                             animation: 'pulseGlow 4s ease-in-out infinite',
                         }} />
@@ -437,7 +411,7 @@ export default function InsiderBundleSection() {
                             >
                                 <path
                                     d="M10 20 C120 6,380 6,510 16 S524 80,521 440 S510 534,400 536 S100 538,14 530 S2 460,3 270 S5 32,10 20Z"
-                                    stroke="rgba(34,197,94,0.35)"
+                                    stroke="rgba(21,128,61,0.35)"
                                     strokeWidth="2.5"
                                     fill="none"
                                     strokeDasharray="8 4"
@@ -449,7 +423,7 @@ export default function InsiderBundleSection() {
                             <div style={{
                                 borderRadius: '20px',
                                 overflow: 'hidden',
-                                border: '1px solid rgba(34,197,94,0.15)',
+                                border: '1px solid rgba(21,128,61,0.15)',
                                 boxShadow: '0 32px 64px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.04)',
                                 background: '#fff',
                                 position: 'relative',
@@ -464,7 +438,7 @@ export default function InsiderBundleSection() {
                                 />
                                 {/* shimmer */}
                                 <div className="absolute inset-0 pointer-events-none rounded-[20px]" style={{
-                                    background: 'linear-gradient(135deg, transparent 30%, rgba(34,197,94,0.05) 50%, transparent 70%)',
+                                    background: 'linear-gradient(135deg, transparent 30%, rgba(21,128,61,0.05) 50%, transparent 70%)',
                                     backgroundSize: '200% 100%',
                                     animation: 'shimmerMove 6s linear infinite',
                                 }} />
@@ -479,7 +453,7 @@ export default function InsiderBundleSection() {
                                     <svg className="absolute inset-0 w-full h-full pointer-events-none"
                                         preserveAspectRatio="none" viewBox="0 0 110 44" fill="none" aria-hidden="true">
                                         <path d="M5 8 C30 2,80 2,105 7 S110 16,108 34 S103 42,76 43 S20 44,5 40 S0 32,1 22 S3 12,5 8Z"
-                                            fill="#22c55e" />
+                                            fill="#15803d" />
                                     </svg>
                                     <H className="relative z-10 text-base font-bold block text-center" style={{ color: '#051a0b' }}>
                                         SAVE 30% 🔥
@@ -525,9 +499,9 @@ export default function InsiderBundleSection() {
                 {/* bottom wiggle divider */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-16 pb-8 -mt-2">
                     <div className="flex items-center gap-4 max-w-screen-xl mx-auto">
-                        <WiggleLine color="rgba(34,197,94,0.2)" className="flex-1 h-3" />
+                        <WiggleLine color="rgba(21,128,61,0.2)" className="flex-1 h-3" />
                         <H className="text-xs whitespace-nowrap" style={{ color: '#bbb' }}>✦ fuel smarter every day ✦</H>
-                        <WiggleLine color="rgba(34,197,94,0.2)" className="flex-1 h-3" />
+                        <WiggleLine color="rgba(21,128,61,0.2)" className="flex-1 h-3" />
                     </div>
                 </div>
             </section>

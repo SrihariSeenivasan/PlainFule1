@@ -1,7 +1,7 @@
 /**
  * Color palette for PlainFuel
  * Primary: White (#F5F5F5)
- * Secondary: Green (#22c55e)
+ * Secondary: Green (#15803d)
  * Accent: Black
  */
 
@@ -10,7 +10,7 @@ export const colors = {
   white: '#F5F5F5',
   
   // Secondary - used for text and accent elements
-  green: '#22c55e',
+  green: '#15803d',
   
   // Accent - used for emphasis
   black: '#000000',

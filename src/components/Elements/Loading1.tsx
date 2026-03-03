@@ -9,53 +9,53 @@ import Image from 'next/image';
 const DoodleMg = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 64 64" fill="none" style={style}>
     <path d="M32 6 L54 19 L54 45 L32 58 L10 45 L10 19 Z"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    <text x="32" y="37" textAnchor="middle" fontSize="14" fontWeight="700" fill="#22c55e" fontFamily="serif">Mg</text>
-    <circle cx="56" cy="18" r="2" fill="#22c55e" opacity="0.5" />
+      stroke="#15803d" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <text x="32" y="37" textAnchor="middle" fontSize="14" fontWeight="700" fill="#15803d" fontFamily="serif">Mg</text>
+    <circle cx="56" cy="18" r="2" fill="#15803d" opacity="0.5" />
   </svg>
 );
 
 const DoodleCa = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 64 64" fill="none" style={style}>
-    <ellipse cx="18" cy="14" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="46" cy="14" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="18" cy="50" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <ellipse cx="46" cy="50" rx="8" ry="6" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <rect x="13" y="19" width="10" height="26" rx="3" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <rect x="41" y="19" width="10" height="26" rx="3" stroke="#16a34a" strokeWidth="2" fill="none" />
-    <text x="32" y="36" textAnchor="middle" fontSize="11" fontWeight="700" fill="#16a34a" fontFamily="serif">Ca</text>
+    <ellipse cx="18" cy="14" rx="8" ry="6" stroke="#15803d" strokeWidth="2" fill="none" />
+    <ellipse cx="46" cy="14" rx="8" ry="6" stroke="#15803d" strokeWidth="2" fill="none" />
+    <ellipse cx="18" cy="50" rx="8" ry="6" stroke="#15803d" strokeWidth="2" fill="none" />
+    <ellipse cx="46" cy="50" rx="8" ry="6" stroke="#15803d" strokeWidth="2" fill="none" />
+    <rect x="13" y="19" width="10" height="26" rx="3" stroke="#15803d" strokeWidth="2" fill="none" />
+    <rect x="41" y="19" width="10" height="26" rx="3" stroke="#15803d" strokeWidth="2" fill="none" />
+    <text x="32" y="36" textAnchor="middle" fontSize="11" fontWeight="700" fill="#15803d" fontFamily="serif">Ca</text>
   </svg>
 );
 
 const DoodleLeaf = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 64 64" fill="none" style={style}>
     <path d="M32 56 C32 56 12 40 14 22 C16 8 32 8 32 8 C32 8 48 8 50 22 C52 40 32 56 32 56Z"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
-    <path d="M32 56 L32 18" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" />
-    <path d="M32 38 L22 28" stroke="#22c55e" strokeWidth="1.4" strokeLinecap="round" />
-    <path d="M32 30 L42 22" stroke="#22c55e" strokeWidth="1.4" strokeLinecap="round" />
+      stroke="#15803d" strokeWidth="2.2" strokeLinecap="round" fill="rgba(21,128,61,0.1)" />
+    <path d="M32 56 L32 18" stroke="#15803d" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M32 38 L22 28" stroke="#15803d" strokeWidth="1.4" strokeLinecap="round" />
+    <path d="M32 30 L42 22" stroke="#15803d" strokeWidth="1.4" strokeLinecap="round" />
   </svg>
 );
 
 const DoodleStar = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 40 40" fill="none" style={style}>
     <path d="M20 4 L23 16 L36 16 L26 24 L30 36 L20 28 L10 36 L14 24 L4 16 L17 16 Z"
-      stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="rgba(34,197,94,0.1)" />
+      stroke="#15803d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="rgba(21,128,61,0.1)" />
   </svg>
 );
 
 const DoodleWave = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 80 30" fill="none" style={style}>
     <path d="M4 15 C12 5 20 25 28 15 C36 5 44 25 52 15 C60 5 68 25 76 15"
-      stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      stroke="#15803d" strokeWidth="2.2" strokeLinecap="round" fill="none" />
   </svg>
 );
 
 const DoodlePlant = ({ style }: { style?: React.CSSProperties }) => (
   <svg viewBox="0 0 50 70" fill="none" style={style}>
-    <path d="M25 65 L25 30" stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round" />
-    <path d="M25 50 C15 45 10 35 14 26 C20 18 30 22 30 30" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
-    <path d="M25 40 C35 35 40 25 36 16 C30 8 20 12 20 20" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="rgba(34,197,94,0.1)" />
+    <path d="M25 65 L25 30" stroke="#15803d" strokeWidth="2.2" strokeLinecap="round" />
+    <path d="M25 50 C15 45 10 35 14 26 C20 18 30 22 30 30" stroke="#15803d" strokeWidth="2" strokeLinecap="round" fill="rgba(21,128,61,0.1)" />
+    <path d="M25 40 C35 35 40 25 36 16 C30 8 20 12 20 20" stroke="#15803d" strokeWidth="2" strokeLinecap="round" fill="rgba(21,128,61,0.1)" />
   </svg>
 );
 
@@ -134,14 +134,14 @@ function DrawRing({ active }: { active: boolean }) {
     >
       <motion.ellipse
         cx="170" cy="70" rx="158" ry="60"
-        stroke="#22c55e" strokeWidth="2" strokeLinecap="round" fill="none" strokeDasharray="2 5"
+        stroke="#15803d" strokeWidth="2" strokeLinecap="round" fill="none" strokeDasharray="2 5"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={active ? { pathLength: 1, opacity: 0.5 } : { pathLength: 0, opacity: 0 }}
         transition={{ duration: 1.3, ease: 'easeInOut', delay: 0.2 }}
       />
       <motion.path
         d="M15 70 C25 18 315 12 325 70 C332 128 20 132 15 70"
-        stroke="#22c55e" strokeWidth="1.3" strokeLinecap="round" fill="none"
+        stroke="#15803d" strokeWidth="1.3" strokeLinecap="round" fill="none"
         initial={{ pathLength: 0, opacity: 0 }}
         animate={active ? { pathLength: 1, opacity: 0.22 } : { pathLength: 0, opacity: 0 }}
         transition={{ duration: 1.7, ease: 'easeInOut' }}
@@ -179,14 +179,14 @@ export function LogoReveal({ onDone }: { onDone: () => void }) {
       {/* Dot grid */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle, rgba(34,197,94,0.2) 1px, transparent 1px)',
+        backgroundImage: 'radial-gradient(circle, rgba(21,128,61,0.2) 1px, transparent 1px)',
         backgroundSize: '28px 28px', opacity: 0.6,
       }} />
 
       {/* Warm glow */}
       <motion.div style={{
         position: 'absolute', width: 500, height: 500, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 50%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(21,128,61,0.15) 0%, rgba(21,128,61,0.05) 50%, transparent 70%)',
         filter: 'blur(50px)', pointerEvents: 'none',
       }}
         animate={{ scale: phase === 'blank' ? 0.3 : 1.2, opacity: phase === 'blank' ? 0 : 1 }}
@@ -208,8 +208,8 @@ export function LogoReveal({ onDone }: { onDone: () => void }) {
           transition={{ delay: 0.15 + i * 0.08, duration: 0.4 }}
         >
           <path d={i % 2 === 0 ? 'M8 32 L8 8 L32 8' : 'M8 8 L32 8 L32 32'}
-            stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          <circle cx={i % 2 === 0 ? 8 : 32} cy={i < 2 ? 8 : 32} r="3" fill="#22c55e" />
+            stroke="#15803d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <circle cx={i % 2 === 0 ? 8 : 32} cy={i < 2 ? 8 : 32} r="3" fill="#15803d" />
         </motion.svg>
       ))}
 
@@ -263,7 +263,7 @@ export function LogoReveal({ onDone }: { onDone: () => void }) {
         <svg viewBox="0 0 150 8" style={{ width: 140, height: 8, marginTop: 4 }}>
           <motion.path
             d="M4 4 C30 2 80 6 146 4"
-            stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" fill="none"
+            stroke="#15803d" strokeWidth="1.8" strokeLinecap="round" fill="none"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: phase === 'hold' ? 1 : 0 }}
             transition={{ duration: 0.55, delay: 0.3, ease: 'easeOut' }}

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Target, Leaf, Sparkles, UserCheck } from 'lucide-react';
+import { StarDoodle, Sparkle, CircleDoodle } from '@/components/Elements/SvgDoodles';
 
 /* ── THEME: all colors tuned for light background ── */
 const T = {
@@ -9,7 +10,7 @@ const T = {
     textMid:     '#444444',
     textSoft:    '#777777',
     textFaint:   '#aaaaaa',
-    green:       '#22c55e',
+    green:       '#15803d',
     greenDark:   '#15803d',
     greenBg:     'rgba(34,197,94,0.08)',
     greenBorder: 'rgba(34,197,94,0.30)',
@@ -26,7 +27,7 @@ const differentiators = [
         stat: '21', statSuffix: ' ingredients',
         statLabel: 'calibrated for Indian diet',
         content: 'Our formula targets the specific dietary gaps in typical Indian meals — not generic Western bodies.',
-        accent: '#16a34a', accentBg: 'rgba(22,163,74,0.08)', accentBorder: 'rgba(22,163,74,0.25)',
+        accent: '#15803d', accentBg: 'rgba(21,128,61,0.08)', accentBorder: 'rgba(21,128,61,0.25)',
         rotate: '-rotate-1', note: 'no guesswork!',
     },
     {
@@ -71,21 +72,23 @@ const supplements = [
     { label: 'Whey Protein', cost: '₹4,000', pct: 100, accent: '#db2777' },
     { label: 'Omega-3',      cost: '₹1,500', pct: 37,  accent: '#d97706' },
     { label: 'Magnesium',    cost: '₹1,000', pct: 25,  accent: '#7c3aed' },
-    { label: 'Creatine',     cost: '₹800',   pct: 20,  accent: '#16a34a' },
+    { label: 'Creatine',     cost: '₹800',   pct: 20,  accent: '#15803d' },
 ];
 
 const rdaBars = [
-    { label: 'B12',   pct: 77, color: '#16a34a' },
+    { label: 'B12',   pct: 77, color: '#15803d' },
     { label: 'B6',    pct: 70, color: '#d97706' },
     { label: 'Folic', pct: 73, color: '#7c3aed' },
     { label: 'D3',    pct: 66, color: '#db2777' },
-    { label: 'Vit C', pct: 62, color: '#16a34a' },
+    { label: 'Vit C', pct: 62, color: '#15803d' },
     { label: 'B1',    pct: 61, color: '#d97706' },
     { label: 'Biotin',pct: 65, color: '#7c3aed' },
 ];
 
+
+
 /* ── SVG ATOMS ── */
-function WiggleLine({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
+function WiggleLine({ color = '#15803d', className = '' }: { color?: string; className?: string }) {
     return (
         <svg viewBox="0 0 200 10" fill="none" className={className} aria-hidden="true">
             <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5 S180 9,200 5"
@@ -93,23 +96,8 @@ function WiggleLine({ color = '#22c55e', className = '' }: { color?: string; cla
         </svg>
     );
 }
-function Sparkle2({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-            <path d="M12 2 L13.5 10 L22 12 L13.5 14 L12 22 L10.5 14 L2 12 L10.5 10 Z"
-                stroke={color} strokeWidth="1.5" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-function DoodleCircle({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 60 60" fill="none" className={className} aria-hidden="true">
-            <path d="M30 6 C46 5,55 16,54 30 S44 55,29 55 S5 44,5 29 S14 5,30 6Z"
-                stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-    );
-}
-function DoodleCheck({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
+
+function DoodleCheck({ color = '#15803d', className = '' }: { color?: string; className?: string }) {
     return (
         <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden="true">
             <path d="M3 11 L8 16 L17 5" stroke={color} strokeWidth="2.5"
@@ -292,10 +280,10 @@ export default function HAWDsection() {
             <section className="relative overflow-hidden bg-[var(--background)] py-16 md:py-24">
 
                 {/* ambient doodles */}
-                <Sparkle2 color="#22c55e" className="absolute top-10 left-[2%] w-6 h-6 opacity-20 rotate-12 pointer-events-none" />
-                <DoodleCircle color="#f59e0b" className="absolute top-20 right-[2%] w-10 h-10 opacity-15 -rotate-6 pointer-events-none" />
-                <Sparkle2 color="#8b5cf6" className="absolute bottom-16 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
-                <DoodleCircle color="#22c55e" className="absolute bottom-8 right-[3%] w-7 h-7 opacity-10 rotate-3 pointer-events-none" />
+                <Sparkle color="#15803d" className="absolute top-10 left-[2%] w-6 h-6 opacity-20 rotate-12 pointer-events-none" />
+                <CircleDoodle color="#f59e0b" className="absolute top-20 right-[2%] w-10 h-10 opacity-15 -rotate-6 pointer-events-none" />
+                <Sparkle color="#8b5cf6" className="absolute bottom-16 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
+                <CircleDoodle color="#15803d" className="absolute bottom-8 right-[3%] w-7 h-7 opacity-10 rotate-3 pointer-events-none" />
 
                 <div className="relative max-w-screen-xl mx-auto px-6 md:px-12 lg:px-16">
 
@@ -305,6 +293,36 @@ export default function HAWDsection() {
                         {/* LEFT */}
                         <div>
                             <motion.div
+                                initial={{ opacity: 0, y: 16, rotate: -2 }}
+                                whileInView={{ opacity: 1, y: 0, rotate: -1.5 }}
+                                viewport={{ once: true }}
+                                className="flex items-center gap-2 mb-4"
+                            >
+                                <div style={{
+                                    background: 'rgba(21,128,61,0.09)',
+                                    border: '2px dashed #15803d',
+                                    borderRadius: 10,
+                                    padding: '8px 18px',
+                                    transform: 'rotate(-1.5deg)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                }}>
+                                    <StarDoodle size={14} color="#15803d" />
+                                    <span style={{
+                                        fontFamily: "'Caveat', cursive",
+                                        fontSize: 15,
+                                        color: '#15803d',
+                                        fontWeight: 700,
+                                        letterSpacing: '0.05em',
+                                    }}>
+                                        What Sets Us Apart
+                                    </span>
+                                    <StarDoodle size={14} color="#15803d" />
+                                </div>
+                            </motion.div>
+
+                            <motion.div
                                 initial={{ opacity: 0, x: -14 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
@@ -312,7 +330,9 @@ export default function HAWDsection() {
                             >
                                 <span className="text-base">✨</span>
                                 <H className="text-sm font-bold tracking-wide" style={{ color: T.green }}>The Complete Solution</H>
-                                <WiggleLine color={T.green} className="w-14 h-3 opacity-50" />
+                                <svg viewBox="0 0 120 10" fill="none" className="w-14 h-3 opacity-50">
+                                    <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5" stroke={T.green} strokeWidth="2" strokeLinecap="round" fill="none" />
+                                </svg>
                             </motion.div>
 
                             <motion.h2

@@ -8,6 +8,7 @@
 import { useState, useEffect, useCallback, useRef, CSSProperties, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -351,8 +352,8 @@ const SCENES: Scene[] = [
     ctaText: 'START YOUR JOURNEY',
     ctaHref: '#order',
     accentColor: '#15803d',
-    glowColor: 'rgba(34,197,94,0.3)',
-    ringColor: '#22c55e',
+    glowColor: 'rgba(21,128,61,0.3)',
+    ringColor: '#15803d',
     starburst: { fill: '#dcfce7', label: 'Mg' },
     labels: [
       { emoji: 'Mg', text: 'Fully energized!', bg: '#fef08a', textColor: '#713f12', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
@@ -363,7 +364,7 @@ const SCENES: Scene[] = [
   },
 ];
 
-const AUTO_MS = 3000;
+const AUTO_MS = 8000;
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
 export default function HeroSection() {

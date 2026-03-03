@@ -8,7 +8,7 @@ import { useState } from 'react';
 // ── Inline SVG doodle helpers ────────────────────────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ScribbleUnderline = ({ color = '#22c55e', style = {} }: { color?: string; style?: React.CSSProperties }) => (
+const ScribbleUnderline = ({ color = '#15803d', style = {} }: { color?: string; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 80 8" preserveAspectRatio="none" aria-hidden
     style={{ position: 'absolute', bottom: -4, left: 0, width: '100%', height: 8, pointerEvents: 'none', ...style }}>
     <path
@@ -25,7 +25,7 @@ const WobblyPill = ({ children, style = {}, className = '' }: { children: React.
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
       <path
         d="M10,4 Q60,0 110,4 Q118,4 118,18 Q118,32 110,32 Q60,36 10,32 Q2,32 2,18 Q2,4 10,4 Z"
-        fill="rgba(34,197,94,0.12)" stroke="#22c55e" strokeWidth="2"
+        fill="rgba(21,128,61,0.12)" stroke="#15803d" strokeWidth="2"
         strokeLinecap="round" strokeDasharray="5,2"
       />
     </svg>
@@ -38,7 +38,7 @@ const StarDoodle = ({ size = 16, rotate = 0, style = {} }: { size?: number; rota
     style={{ transform: `rotate(${rotate}deg)`, flexShrink: 0, ...style }}>
     <path
       d="M12,2 L13.2,9 L20,9 L14.6,13.4 L16.6,20 L12,15.8 L7.4,20 L9.4,13.4 L4,9 L10.8,9 Z"
-      fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+      fill="none" stroke="#15803d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
     />
   </svg>
 );
@@ -55,7 +55,7 @@ const MenuDoodleIcon = ({ open }: { open: boolean }) => (
     ) : (
       <>
         <path d="M2,4 Q10,2 18,5 Q22,6 26,4" fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" />
-        <path d="M2,11 Q12,9 22,12 Q24,12.5 26,11" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M2,11 Q12,9 22,12 Q24,12.5 26,11" fill="none" stroke="#15803d" strokeWidth="2.5" strokeLinecap="round" />
         <path d="M2,18 Q8,16 16,19 Q20,20 26,18" fill="none" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" />
       </>
     )}
@@ -81,7 +81,7 @@ const NavLink = ({ href, children, accent = false, delay = 0 }: { href: string; 
         fontWeight: 700,
         fontSize: 16,
         letterSpacing: '0.06em',
-        color: accent ? '#22c55e' : hovered ? '#22c55e' : 'rgba(0,0,0,0.55)',
+        color: accent ? '#15803d' : hovered ? '#15803d' : 'rgba(0,0,0,0.55)',
         textDecoration: 'none',
         padding: '2px 0',
         transition: 'color 0.2s',
@@ -99,7 +99,7 @@ const NavLink = ({ href, children, accent = false, delay = 0 }: { href: string; 
         }}>
         <motion.path
           d="M2,5 Q20,1 40,4 Q60,7 78,3"
-          fill="none" stroke="#22c55e" strokeWidth="2.2" strokeLinecap="round"
+          fill="none" stroke="#15803d" strokeWidth="2.2" strokeLinecap="round"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: hovered || accent ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -172,7 +172,7 @@ const DoodleCTA = ({ delay = 0 }: { delay?: number }) => {
         alignItems: 'center',
         gap: 6,
         padding: '6px 16px',
-        background: hovered ? '#15803d' : '#22c55e',
+        background: hovered ? '#15803d' : '#15803d',
         color: '#fff',
         fontFamily: "'Permanent Marker', cursive",
         fontSize: 13,
@@ -226,15 +226,15 @@ const MobileDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         background: '#fffef5',
         borderRadius: 16,
         padding: '20px 24px',
-        border: '2px dashed rgba(34,197,94,0.4)',
-        boxShadow: '6px 8px 0 rgba(34,197,94,0.15)',
+          border: '2px dashed rgba(21,128,61,0.4)',
+        boxShadow: '6px 8px 0 rgba(21,128,61,0.15)',
         zIndex: 200,
       }}
     >
       {/* notebook lines */}
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden', pointerEvents: 'none',
-        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(34,197,94,0.1) 27px, rgba(34,197,94,0.1) 28px)',
+        backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(21,128,61,0.1) 27px, rgba(21,128,61,0.1) 28px)',
       }} />
 
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -274,7 +274,7 @@ const MobileDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             marginTop: 16,
             display: 'block',
             textAlign: 'center',
-            background: '#22c55e',
+            background: '#15803d',
             color: '#fff',
             fontFamily: "'Permanent Marker', cursive",
             fontSize: 16,
@@ -331,8 +331,8 @@ export default function Navbar() {
             borderRadius: 20,
             background: scrolled ? 'rgba(255,254,245,0.96)' : 'transparent',
             backdropFilter: scrolled ? 'blur(20px)' : 'none',
-            boxShadow: scrolled ? '4px 5px 0 rgba(34,197,94,0.18), 0 2px 24px rgba(0,0,0,0.07)' : 'none',
-            border: scrolled ? '2px dashed rgba(34,197,94,0.3)' : '2px solid transparent',
+            boxShadow: scrolled ? '4px 5px 0 rgba(21,128,61,0.18), 0 2px 24px rgba(0,0,0,0.07)' : 'none',
+            border: scrolled ? '2px dashed rgba(21,128,61,0.3)' : '2px solid transparent',
             transition: 'all 0.45s ease',
           }}
         >

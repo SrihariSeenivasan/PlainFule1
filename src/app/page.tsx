@@ -8,6 +8,7 @@ import Productsection from '@/components/LandingPageSections/Productsection';
 import Sciencesection from '@/components/LandingPageSections/Sciencesection';
 import MicronutrientGapSection from '@/components/LandingPageSections/MicronutrientGapSection';
 import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
+import DoctorsReview from '@/components/LandingPageSections/DoctorsReview';
 
 export default function Home() {
   return (
@@ -35,6 +36,7 @@ export default function Home() {
         <InsiderBundleSection />
         <Blogsection />
         <Peoplesection />
+        <DoctorsReview />
         <FinalCTA />
       </div>
     </main>

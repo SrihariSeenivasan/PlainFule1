@@ -4,10 +4,11 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { Instagram, Mail, Twitter } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
 // ─── Doodle SVG Primitives ────────────────────────────────────────────────────
 
-const ScribbleUnderline = ({ color = '#22c55e', delay = 0, style = {} }: { color?: string; delay?: number; style?: React.CSSProperties }) => (
+const ScribbleUnderline = ({ color = '#15803d', delay = 0, style = {} }: { color?: string; delay?: number; style?: React.CSSProperties }) => (
   <motion.svg
     viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden
     style={{ position: 'absolute', bottom: -6, left: 0, width: '100%', height: 12, pointerEvents: 'none', ...style }}
@@ -23,7 +24,7 @@ const ScribbleUnderline = ({ color = '#22c55e', delay = 0, style = {} }: { color
   </motion.svg>
 );
 
-const DoodleCircle = ({ delay = 0, style = {}, color = '#22c55e' }: { delay?: number; style?: React.CSSProperties; color?: string }) => (
+const DoodleCircle = ({ delay = 0, style = {}, color = '#15803d' }: { delay?: number; style?: React.CSSProperties; color?: string }) => (
   <motion.svg
     viewBox="0 0 120 56" preserveAspectRatio="none" aria-hidden
     style={{ position: 'absolute', inset: '-12px -16px', width: 'calc(100% + 32px)', height: 'calc(100% + 24px)', pointerEvents: 'none', ...style }}
@@ -39,7 +40,7 @@ const DoodleCircle = ({ delay = 0, style = {}, color = '#22c55e' }: { delay?: nu
   </motion.svg>
 );
 
-const StarBurst = ({ size = 28, rotate = 0, color = '#22c55e', style = {} }: { size?: number; rotate?: number; color?: string; style?: React.CSSProperties }) => (
+const StarBurst = ({ size = 28, rotate = 0, color = '#15803d', style = {} }: { size?: number; rotate?: number; color?: string; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden
     style={{ transform: `rotate(${rotate}deg)`, ...style }}>
     <path
@@ -99,8 +100,8 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
         borderRadius: 16,
         padding: '20px 22px',
         cursor: 'pointer',
-        border: `2px ${open ? 'solid' : 'dashed'} ${open ? '#22c55e' : 'rgba(0,0,0,0.15)'}`,
-        boxShadow: open ? '5px 6px 0 rgba(34,197,94,0.2)' : '3px 4px 0 rgba(0,0,0,0.08)',
+        border: `2px ${open ? 'solid' : 'dashed'} ${open ? '#15803d' : 'rgba(0,0,0,0.15)'}`,
+        boxShadow: open ? '5px 6px 0 rgba(21,128,61,0.2)' : '3px 4px 0 rgba(0,0,0,0.08)',
         transition: 'all 0.3s ease',
         transform: `rotate(${open ? 0 : rotations[index]}deg)`,
       }}
@@ -108,7 +109,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       {/* notebook lines */}
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden', pointerEvents: 'none',
-        backgroundImage: 'repeating-linear-gradient(transparent,transparent 27px,rgba(34,197,94,0.07) 27px,rgba(34,197,94,0.07) 28px)',
+        backgroundImage: 'repeating-linear-gradient(transparent,transparent 27px,rgba(21,128,61,0.07) 27px,rgba(21,128,61,0.07) 28px)',
       }} />
 
       {/* corner dog-ear */}
@@ -128,7 +129,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
           transition={{ duration: 0.25 }}
           style={{
             fontFamily: "'Caveat', cursive",
-            fontSize: 22, color: '#22c55e', fontWeight: 900,
+            fontSize: 22, color: '#15803d', fontWeight: 900,
             lineHeight: 1, flexShrink: 0,
           }}
         >+</motion.span>
@@ -210,10 +211,10 @@ export default function FinalCTA() {
             >
               <svg viewBox="0 0 90 90" width={72} height={72} aria-hidden>
                 <path id="spin-text-path" d="M45,45 m-30,0 a30,30 0 1,1 60,0 a30,30 0 1,1 -60,0" fill="none" />
-                <text style={{ fontFamily: "'Caveat',cursive", fontSize: 9, fill: '#22c55e', fontWeight: 700 }}>
+                <text style={{ fontFamily: "'Caveat',cursive", fontSize: 9, fill: '#15803d', fontWeight: 700 }}>
                   <textPath href="#spin-text-path">✦ LAUNCH PRICE ✦ LIMITED ✦ 33% OFF ✦</textPath>
                 </text>
-                <circle cx="45" cy="45" r="18" fill="#22c55e" />
+                <circle cx="45" cy="45" r="18" fill="#15803d" />
                 <text x="45" y="50" textAnchor="middle" style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 10, fill: '#fff' }}>NEW!</text>
               </svg>
             </motion.div>
@@ -229,14 +230,14 @@ export default function FinalCTA() {
               style={{ display: 'flex', justifyContent: 'center', marginBottom: 56 }}
             >
               <div style={{
-                background: 'rgba(34,197,94,0.12)',
-                border: '2px dashed #22c55e',
+                background: 'rgba(21,128,61,0.12)',
+                border: '2px dashed #15803d',
                 borderRadius: 8,
                 padding: '6px 20px',
                 transform: 'rotate(-1.5deg)',
-                boxShadow: '3px 3px 0 rgba(34,197,94,0.2)',
+                boxShadow: '3px 3px 0 rgba(21,128,61,0.2)',
               }}>
-                <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 14, color: '#16a34a', letterSpacing: '0.06em' }}>
+                <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 14, color: '#15803d', letterSpacing: '0.06em' }}>
                   ✦ The New Protocol ✦
                 </span>
               </div>
@@ -260,7 +261,7 @@ export default function FinalCTA() {
                       style={{ position: 'absolute', inset: '-20px', width: 'calc(100% + 40px)', height: 'calc(100% + 40px)', pointerEvents: 'none', zIndex: 2 }}>
                       <path
                         d="M14,14 Q80,8 160,12 Q240,8 306,14 L306,406 Q240,412 160,408 Q80,412 14,406 Z"
-                        fill="none" stroke="#22c55e" strokeWidth="2.5"
+                        fill="none" stroke="#15803d" strokeWidth="2.5"
                         strokeLinecap="round" strokeDasharray="10,4"
                       />
                     </svg>
@@ -272,7 +273,7 @@ export default function FinalCTA() {
                     {/* Glow blob */}
                     <div style={{
                       position: 'absolute', inset: '-20%',
-                      background: 'radial-gradient(circle, rgba(34,197,94,0.18) 0%, transparent 70%)',
+                      background: 'radial-gradient(circle, rgba(21,128,61,0.18) 0%, transparent 70%)',
                       borderRadius: '50%', pointerEvents: 'none',
                     }} />
 
@@ -295,14 +296,14 @@ export default function FinalCTA() {
                     style={{
                       position: 'absolute', left: -70, top: '30%',
                       background: '#fffef5',
-                      border: '1.5px dashed rgba(34,197,94,0.5)',
+                      border: '1.5px dashed rgba(21,128,61,0.5)',
                       borderRadius: 8, padding: '5px 10px',
-                      boxShadow: '3px 3px 0 rgba(34,197,94,0.15)',
+                      boxShadow: '3px 3px 0 rgba(21,128,61,0.15)',
                       transform: 'rotate(-2deg)',
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: '#22c55e' }}>Zero fillers ✓</span>
+                    <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: '#15803d' }}>Zero fillers ✓</span>
                   </motion.div>
 
                   <motion.div
@@ -313,14 +314,14 @@ export default function FinalCTA() {
                     style={{
                       position: 'absolute', right: -65, top: '55%',
                       background: '#fffef5',
-                      border: '1.5px dashed rgba(34,197,94,0.5)',
+                      border: '1.5px dashed rgba(21,128,61,0.5)',
                       borderRadius: 8, padding: '5px 10px',
-                      boxShadow: '3px 3px 0 rgba(34,197,94,0.15)',
+                      boxShadow: '3px 3px 0 rgba(21,128,61,0.15)',
                       transform: 'rotate(1.5deg)',
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: '#22c55e' }}>FSSAI cert ✓</span>
+                    <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: '#15803d' }}>FSSAI cert ✓</span>
                   </motion.div>
                 </div>
               </motion.div>
@@ -347,7 +348,7 @@ export default function FinalCTA() {
                   }}
                 >
                   Begin the{' '}
-                  <span style={{ position: 'relative', display: 'inline-block', color: '#22c55e' }}>
+                  <span style={{ position: 'relative', display: 'inline-block', color: '#15803d' }}>
                     Completion.
                     <DoodleCircle delay={0.8} />
                   </span>
@@ -378,8 +379,8 @@ export default function FinalCTA() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.25 }}
                   style={{
-                    background: 'rgba(34, 197, 94, 0.08)',
-                    border: '2px solid #22c55e',
+                    background: 'rgba(21,128,61,0.08)',
+                    border: '2px solid #15803d',
                     borderRadius: 12,
                     padding: '16px 20px',
                     marginBottom: 32,
@@ -395,7 +396,7 @@ export default function FinalCTA() {
                       lineHeight: 1.4,
                     }}
                   >
-                    You shouldn&apos;t have to choose between <span style={{ color: '#22c55e' }}>taste, protein, and complete nutrition.</span>
+                    You shouldn&apos;t have to choose between <span style={{ color: '#15803d' }}>taste, protein, and complete nutrition.</span>
                   </p>
                 </motion.div>
 
@@ -408,19 +409,19 @@ export default function FinalCTA() {
                   style={{
                     position: 'relative',
                     background: '#fffef5',
-                    border: '2.5px dashed rgba(34,197,94,0.5)',
+                    border: '2.5px dashed rgba(21,128,61,0.5)',
                     borderRadius: 18,
                     padding: '24px 28px',
                     marginBottom: 28,
                     transform: 'rotate(-0.5deg)',
-                    boxShadow: '5px 6px 0 rgba(34,197,94,0.15)',
+                    boxShadow: '5px 6px 0 rgba(21,128,61,0.15)',
                   }}
                 >
                   <TapeStrip rotate={-1.5} style={{ top: -11, left: 24 }} />
                   {/* notebook lines */}
                   <div style={{
                     position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden', pointerEvents: 'none',
-                    backgroundImage: 'repeating-linear-gradient(transparent,transparent 27px,rgba(34,197,94,0.08) 27px,rgba(34,197,94,0.08) 28px)',
+                    backgroundImage: 'repeating-linear-gradient(transparent,transparent 27px,rgba(21,128,61,0.08) 27px,rgba(21,128,61,0.08) 28px)',
                   }} />
 
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 16, marginBottom: 10, flexWrap: 'wrap' }}>
@@ -434,7 +435,7 @@ export default function FinalCTA() {
                       animate={{ rotate: [-2, 2, -2] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                       style={{
-                        background: '#22c55e',
+                        background: '#15803d',
                         color: '#fff',
                         fontFamily: "'Permanent Marker',cursive",
                         fontSize: 11,
@@ -449,11 +450,11 @@ export default function FinalCTA() {
                     </motion.span>
                   </div>
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <StarBurst size={14} color="#22c55e" />
+                    <StarBurst size={14} color="#15803d" />
                     <span style={{
                       fontFamily: "'Caveat',cursive",
                       fontSize: 14, fontWeight: 700,
-                      color: '#22c55e', letterSpacing: '0.06em',
+                      color: '#15803d', letterSpacing: '0.06em',
                     }}>30 Servings • Free Shipping • Launch Price</span>
                   </div>
                 </motion.div>
@@ -472,7 +473,7 @@ export default function FinalCTA() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: 12,
-                    background: '#22c55e',
+                    background: '#15803d',
                     color: '#fff',
                     fontFamily: "'Permanent Marker',cursive",
                     fontSize: 16,
@@ -629,10 +630,10 @@ export default function FinalCTA() {
                 <svg viewBox="0 0 40 40" width={34} height={34}>
                   <path
                     d="M5,5 Q20,2 35,5 Q38,5 38,20 Q38,35 35,36 Q20,38 5,36 Q2,35 2,20 Q2,5 5,5 Z"
-                    fill="rgba(34,197,94,0.15)" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeDasharray="6,2"
+                    fill="rgba(21,128,61,0.15)" stroke="#15803d" strokeWidth="2" strokeLinecap="round" strokeDasharray="6,2"
                   />
                   <text x="50%" y="56%" dominantBaseline="middle" textAnchor="middle"
-                    style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 16, fill: '#16a34a', fontWeight: 900 }}>P</text>
+                    style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 16, fill: '#15803d', fontWeight: 900 }}>P</text>
                 </svg>
               </div>
               <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 20, color: '#1a1a1a', letterSpacing: '0.02em' }}>
@@ -671,8 +672,8 @@ export default function FinalCTA() {
                     transition: 'color 0.2s, border-color 0.2s',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#22c55e';
-                    e.currentTarget.style.borderColor = 'rgba(34,197,94,0.4)';
+                    e.currentTarget.style.color = '#15803d';
+                    e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.color = 'rgba(0,0,0,0.45)';

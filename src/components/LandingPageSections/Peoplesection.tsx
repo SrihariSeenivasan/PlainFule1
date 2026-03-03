@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { StarDoodle, Sparkle, CircleDoodle as DoodleCircle, WiggleLine } from '@/components/Elements/SvgDoodles';
 
 /* ── IMAGES grouped by category ── */
 const CATEGORIES: Record<string, { src: string; alt: string }[]> = {
@@ -65,49 +66,13 @@ const SLOT_CATEGORIES = [
 ];
 
 const SLOT_ACCENTS = [
-    '#22c55e', '#f59e0b', '#ec4899',
-    '#22c55e', '#8b5cf6', '#f59e0b',
-    '#22c55e', '#f59e0b', '#ec4899',
-    '#8b5cf6', '#22c55e', '#f59e0b',
+    '#15803d', '#f59e0b', '#ec4899',
+    '#15803d', '#8b5cf6', '#f59e0b',
+    '#15803d', '#f59e0b', '#ec4899',
+    '#8b5cf6', '#15803d', '#f59e0b',
 ];
 
-/* ── SVG DOODLE ATOMS ── */
-function WiggleLine({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 200 10" fill="none" className={className} aria-hidden="true">
-            <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5 S180 9,200 5"
-                stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
-        </svg>
-    );
-}
-
-function Sparkle({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-            <path d="M12 2 L13.5 10 L22 12 L13.5 14 L12 22 L10.5 14 L2 12 L10.5 10 Z"
-                stroke={color} strokeWidth="1.5" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-
-function DoodleCircle({ color = '#22c55e', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 60 60" fill="none" className={className} aria-hidden="true">
-            <path d="M30 6 C46 5,55 16,54 30 S44 55,29 55 S5 44,5 29 S14 5,30 6Z"
-                stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-function DoodleArrow({ color = '#f59e0b', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 40 24" fill="none" className={className} aria-hidden="true">
-            <path d="M2 12 C12 4,26 4,36 11" stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
-            <path d="M28 5 L37 12 L28 18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-
+/* ── Local SVG Helper ── */
 function DoodleBorderOverlay({ color }: { color: string }) {
     return (
         <svg
@@ -123,6 +88,15 @@ function DoodleBorderOverlay({ color }: { color: string }) {
                 stroke={color} strokeWidth="2.5" fill="none"
                 strokeDasharray="7 4" strokeLinecap="round" opacity="0.75"
             />
+        </svg>
+    );
+}
+
+function DoodleArrow({ color = '#f59e0b', className = '' }: { color?: string; className?: string }) {
+    return (
+        <svg viewBox="0 0 40 24" fill="none" className={className} aria-hidden="true">
+            <path d="M2 12 C12 4,26 4,36 11" stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
+            <path d="M28 5 L37 12 L28 18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </svg>
     );
 }
@@ -232,7 +206,7 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
 
 /* ── STATS ── */
 const stats = [
-    { value: '50K+', label: 'active users',  accent: '#22c55e' },
+    { value: '50K+', label: 'active users',  accent: '#15803d' },
     { value: '4.9★', label: 'avg rating',    accent: '#f59e0b' },
     { value: '21',   label: 'ingredients',   accent: '#8b5cf6' },
     { value: '0',    label: 'fillers added', accent: '#ec4899' },
@@ -291,17 +265,17 @@ export default function PeopleSection() {
                 <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.03]" aria-hidden="true">
                     <defs>
                         <pattern id="dotgrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
-                            <circle cx="2" cy="2" r="1.5" fill="#22c55e" />
+                            <circle cx="2" cy="2" r="1.5" fill="#15803d" />
                         </pattern>
                     </defs>
                     <rect width="100%" height="100%" fill="url(#dotgrid)" />
                 </svg>
 
                 {/* ambient decorations */}
-                <Sparkle  color="#22c55e" className="absolute top-10 left-[2%] w-7 h-7 opacity-20 rotate-12 pointer-events-none" />
+                <Sparkle  color="#15803d" className="absolute top-10 left-[2%] w-7 h-7 opacity-20 rotate-12 pointer-events-none" />
                 <DoodleCircle color="#f59e0b" className="absolute top-24 right-[2%] w-12 h-12 opacity-15 -rotate-6 pointer-events-none" />
                 <Sparkle  color="#8b5cf6" className="absolute bottom-24 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
-                <DoodleCircle color="#22c55e" className="absolute bottom-10 right-[4%] w-9 h-9 opacity-10 rotate-3 pointer-events-none" />
+                <DoodleCircle color="#15803d" className="absolute bottom-10 right-[4%] w-9 h-9 opacity-10 rotate-3 pointer-events-none" />
 
                 <div className="relative max-w-screen-xl mx-auto px-6 md:px-12 lg:px-16">
 
@@ -315,11 +289,11 @@ export default function PeopleSection() {
                     >
                         {/* eyebrow */}
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            <WiggleLine color="#22c55e" className="w-14 h-3 opacity-50" />
-                            <H className="text-base font-bold tracking-wide" style={{ color: '#22c55e' }}>
+                            <StarDoodle size={14} color="#15803d" />
+                            <H className="text-base font-bold tracking-wide" style={{ color: '#15803d' }}>
                                 Real People · Real Results
                             </H>
-                            <WiggleLine color="#22c55e" className="w-14 h-3 opacity-50" />
+                            <StarDoodle size={14} color="#15803d" />
                         </div>
 
                         {/* main heading — Caveat, large */}
@@ -329,13 +303,13 @@ export default function PeopleSection() {
                         >
                             Put health in{' '}
                             <span className="relative inline-block">
-                                <span style={{ color: '#22c55e', fontStyle: 'italic' }}>your hands.</span>
+                                <span style={{ color: '#15803d', fontStyle: 'italic' }}>your hands.</span>
                                 {/* hand-drawn underline */}
                                 <svg viewBox="0 0 280 14" fill="none" className="absolute -bottom-1 left-0 w-full" aria-hidden="true">
                                     <path d="M2 8 C55 2,150 12,220 7 S265 2,278 8"
-                                        stroke="#22c55e" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.45" />
+                                        stroke="#15803d" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.45" />
                                     <path d="M10 11 C70 7,160 13,240 10"
-                                        stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.2" />
+                                        stroke="#15803d" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.2" />
                                 </svg>
                             </span>
                         </H>
@@ -448,9 +422,9 @@ export default function PeopleSection() {
                         className="mt-14 text-center"
                     >
                         <div className="flex items-center gap-4 mb-7 max-w-xs mx-auto">
-                            <WiggleLine color="rgba(34,197,94,0.25)" className="flex-1 h-3" />
+                            <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
                             <H className="text-sm whitespace-nowrap" style={{ color: '#aaa' }}>✦ join the movement ✦</H>
-                            <WiggleLine color="rgba(34,197,94,0.25)" className="flex-1 h-3" />
+                            <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
                         </div>
 
                         <H className="block text-lg mb-5" style={{ color: '#777' }}>
@@ -466,7 +440,7 @@ export default function PeopleSection() {
                                 <svg className="absolute inset-0 w-full h-full pointer-events-none"
                                     preserveAspectRatio="none" viewBox="0 0 210 56" fill="none" aria-hidden="true">
                                     <path d="M6 10 C58 2,152 2,204 9 S210 22,208 42 S202 54,162 55 S46 56,9 53 S1 44,2 28 S4 16,6 10Z"
-                                        fill="#22c55e" />
+                                        fill="#15803d" />
                                 </svg>
                                 <H className="relative z-10 text-xl font-bold" style={{ color: '#000' }}>
                                     Start Your Cycle 🚀
@@ -475,7 +449,7 @@ export default function PeopleSection() {
 
                             <div className="flex items-center gap-2">
                                 <StickyNote text="no commitment!" rotate="rotate-1" />
-                                <DoodleArrow color="#22c55e" className="w-7 h-4 -rotate-12" />
+                                <DoodleArrow color="#15803d" className="w-7 h-4 -rotate-12" />
                             </div>
                         </div>
                     </motion.div>
