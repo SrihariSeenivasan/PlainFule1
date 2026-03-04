@@ -142,10 +142,10 @@ const DoodleLogo = () => {
       <Image
         src="/images/plainfuel.png"
         alt="PlainFuel"
-        width={75}
-        height={18}
+        width={110}
+        height={28}
         priority
-        style={{ height: 'auto' }}
+        style={{ height: 'auto', maxWidth: 140 }}
       />
 
       {/* tiny star accent */}
