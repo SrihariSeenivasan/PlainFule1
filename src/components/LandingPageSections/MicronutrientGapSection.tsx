@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, type ReactNode } from 'react';
-import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
 const PRODUCT_ROUTES = {
   b12: '/products/vitamin-b-complex',
@@ -26,6 +25,8 @@ const T = {
   teal: '#0e8a72',
   red: '#c0392b',
 };
+
+// ─── SVG helpers ──────────────────────────────────────────────────────────────
 
 function WatercolorBlob({ color, opacity = 0.12, size = 300, style }: { color: string; opacity?: number; size?: number; style?: React.CSSProperties }) {
   return (
@@ -118,24 +119,334 @@ function FloatingDoodle({ children, style, delay = 0 }: { children: ReactNode; s
   );
 }
 
+// ─── NEW: Video Frame Side Decorations ────────────────────────────────────────
+
+
+
+/** Hand-drawn arrow pointing left */
+function ArrowLeft({ color = T.green, size = 60 }: { color?: string; size?: number }) {
+  return (
+    <svg width={size} height={size * 0.5} viewBox="0 0 80 40" fill="none">
+      <path d="M76 20 C60 18, 36 16, 18 20" stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none" />
+      <path d="M25 10 L8 20 L25 30" stroke={color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+
+/** Squiggly bracket / brace decoration */
+function SquigglyBrace({ color = T.green, height = 120, side = 'left' }: { color?: string; height?: number; side?: 'left' | 'right' }) {
+  const w = 24;
+  const mid = height / 2;
+  const path = side === 'left'
+    ? `M${w} 8 C${w * 0.3} 8, 4 ${mid * 0.3}, 4 ${mid} C4 ${mid * 1.7}, ${w * 0.3} ${height - 8}, ${w} ${height - 8}`
+    : `M4 8 C${w * 0.7} 8, ${w} ${mid * 0.3}, ${w} ${mid} C${w} ${mid * 1.7}, ${w * 0.7} ${height - 8}, 4 ${height - 8}`;
+  return (
+    <svg width={w + 4} height={height} viewBox={`0 0 ${w + 4} ${height}`} fill="none">
+      <path d={path} stroke={color} strokeWidth="2.5" strokeLinecap="round" fill="none" strokeDasharray="5 3" />
+    </svg>
+  );
+}
+
+/** Nutrition fact pill badge */
+function FactBadge({ emoji, text, color, rotate = 0 }: { emoji: string; text: string; color: string; rotate?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.7, rotate: rotate - 10 }}
+      whileInView={{ opacity: 1, scale: 1, rotate }}
+      viewport={{ once: true }}
+      transition={{ type: 'spring', bounce: 0.5, duration: 0.7 }}
+      whileHover={{ scale: 1.08, rotate: 0 }}
+      style={{
+        background: `${color}15`,
+        border: `2px solid ${color}`,
+        borderRadius: 12,
+        padding: '8px 12px',
+        display: 'flex', alignItems: 'center', gap: 6,
+        boxShadow: `3px 3px 0 ${color}30`,
+        transform: `rotate(${rotate}deg)`,
+        cursor: 'default',
+      }}
+    >
+      <span style={{ fontSize: 18 }}>{emoji}</span>
+      <span style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 12, fontWeight: 600, color, lineHeight: 1.3 }}>{text}</span>
+    </motion.div>
+  );
+}
+
+/** Dotted vertical connector line */
+function DottedLine({ color = T.green, height = 40 }: { color?: string; height?: number }) {
+  return (
+    <svg width="12" height={height} viewBox={`0 0 12 ${height}`} fill="none" style={{ margin: '0 auto', display: 'block' }}>
+      <line x1="6" y1="0" x2="6" y2={height} stroke={color} strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/** Small leaf/botanical doodle */
+function LeafDoodle({ color = T.green, size = 40, flip = false }: { color?: string; size?: number; flip?: boolean }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 50 50" fill="none" style={{ transform: flip ? 'scaleX(-1)' : undefined }}>
+      <path d="M10 40 C12 25, 25 10, 40 8 C38 23, 25 38, 10 40Z" stroke={color} strokeWidth="2" fill={`${color}15`} strokeLinecap="round" />
+      <path d="M10 40 C18 32, 28 22, 40 8" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+/** Sparkle / twinkling star */
+function Sparkle({ color = T.amber, size = 28 }: { color?: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+      <path d="M16 2 L17.5 14 L29 16 L17.5 18 L16 30 L14.5 18 L3 16 L14.5 14 Z" stroke={color} strokeWidth="1.8" fill={`${color}20`} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Handwritten-style annotation text */
+function HandwrittenNote({ text, color, rotate = 0, style }: { text: string; color: string; rotate?: number; style?: React.CSSProperties }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      style={{
+        fontFamily: "'Caveat', cursive",
+        fontSize: 15,
+        fontWeight: 600,
+        color,
+        transform: `rotate(${rotate}deg)`,
+        lineHeight: 1.3,
+        ...style,
+      }}
+    >
+      {text}
+    </motion.div>
+  );
+}
+
+/** Chapter 1 video — LEFT side decoration column */
+function Ch1VideoLeft() {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', gap: 12, padding: '16px 8px',
+      minWidth: 72,
+    }}>
+      <motion.div
+        animate={{ rotate: [0, 8, -8, 0], scale: [1, 1.05, 1] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <LeafDoodle color={T.green} size={44} />
+      </motion.div>
+
+      <DottedLine color={T.green} height={28} />
+
+      <FactBadge emoji="☀️" text="Morning" color={T.amber} rotate={-4} />
+
+      <DottedLine color={T.amber} height={28} />
+
+      <FactBadge emoji="⚡" text="Energy Dip" color={T.orange} rotate={3} />
+
+      <DottedLine color={T.orange} height={28} />
+
+      <FactBadge emoji="💧" text="1 Sachet" color={T.teal} rotate={-3} />
+
+      <DottedLine color={T.teal} height={28} />
+
+      <FactBadge emoji="🌙" text="Steady" color={T.blue} rotate={4} />
+
+      <DottedLine color={T.green} height={20} />
+
+      <motion.div
+        animate={{ rotate: [-5, 5, -5], y: [0, -6, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <Sparkle color={T.amber} size={32} />
+      </motion.div>
+    </div>
+  );
+}
+
+/** Chapter 1 video — RIGHT side decoration column */
+function Ch1VideoRight() {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', gap: 14, padding: '16px 8px',
+      minWidth: 80,
+    }}>
+      {/* Wavy annotation + arrow */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+        <HandwrittenNote text="Real story→" color={T.green} rotate={-6} />
+        <ArrowLeft color={T.green} size={52} />
+      </div>
+
+      <div style={{ height: 8 }} />
+
+      {/* Dashed brace */}
+      <SquigglyBrace color={T.orange} height={100} side="right" />
+
+      <HandwrittenNote text="Yours too?" color={T.orange} rotate={5} style={{ textAlign: 'center' }} />
+
+      <div style={{ height: 8 }} />
+
+      {/* Rotating starburst */}
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}>
+        <DoodleStarburst color={T.amber} size={46} />
+      </motion.div>
+
+      <div style={{ height: 4 }} />
+
+      {/* Leaf */}
+      <motion.div
+        animate={{ rotate: [5, -5, 5], scale: [1, 1.08, 1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <LeafDoodle color={T.teal} size={40} flip />
+      </motion.div>
+
+      {/* Small sticky-style note */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, rotate: 6 }}
+        whileInView={{ opacity: 1, scale: 1, rotate: 6 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', bounce: 0.4, duration: 0.6 }}
+        style={{
+          background: '#fef08a',
+          border: `1.5px dashed ${T.amber}`,
+          borderRadius: 6,
+          padding: '7px 10px',
+          fontFamily: "'Caveat', cursive",
+          fontSize: 13,
+          fontWeight: 600,
+          color: T.inkLight,
+          transform: 'rotate(6deg)',
+          boxShadow: '2px 3px 8px rgba(0,0,0,0.12)',
+          textAlign: 'center',
+          lineHeight: 1.4,
+        }}
+      >
+        📍 Sounds<br />familiar?
+      </motion.div>
+    </div>
+  );
+}
+
+/** Chapter 3 video — decorations rendered as absolute overlays outside the frame */
+function Ch3VideoDecorations() {
+  // All decorations live in the top (paddingTop ~38px) and bottom (paddingBottom ~36px)
+  // padding zones of the wrapper. Nothing goes left or right outside the video width.
+  return (
+    <>
+      {/* ══ TOP ZONE (above the video frame) ══ */}
+
+      {/* Left starburst — top-left of padding zone */}
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 13, repeat: Infinity, ease: 'linear' }}
+        style={{ position: 'absolute', top: 4, left: 8, pointerEvents: 'none', opacity: 0.7, zIndex: 5 }}>
+        <DoodleStarburst color={T.green} size={26} />
+      </motion.div>
+
+      {/* "🔥 60% heat loss" pill — top-centre-left */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        style={{
+          position: 'absolute', top: 6, left: '18%',
+          background: `${T.orange}18`, border: `1.5px solid ${T.orange}`,
+          borderRadius: 20, padding: '3px 11px',
+          fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: T.orange,
+          pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-2deg)',
+          boxShadow: `2px 2px 0 ${T.orange}22`, zIndex: 5,
+        }}
+      >🔥 60% heat loss</motion.div>
+
+      {/* "🧠 Brain fog" pill — top-centre-right */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.18 }}
+        style={{
+          position: 'absolute', top: 6, right: '12%',
+          background: `${T.green}18`, border: `1.5px solid ${T.green}`,
+          borderRadius: 20, padding: '3px 11px',
+          fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: T.green,
+          pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(2deg)',
+          boxShadow: `2px 2px 0 ${T.green}22`, zIndex: 5,
+        }}
+      >🧠 Brain fog</motion.div>
+
+      {/* Right starburst — top-right */}
+      <motion.div animate={{ rotate: -360 }} transition={{ duration: 17, repeat: Infinity, ease: 'linear' }}
+        style={{ position: 'absolute', top: 4, right: 8, pointerEvents: 'none', opacity: 0.65, zIndex: 5 }}>
+        <DoodleStarburst color={T.teal} size={22} />
+      </motion.div>
+
+      {/* ══ BOTTOM ZONE (below the video frame) ══ */}
+
+      {/* Left sparkle */}
+      <motion.div animate={{ scale: [1, 1.4, 1], opacity: [0.55, 1, 0.55] }} transition={{ duration: 2.4, repeat: Infinity }}
+        style={{ position: 'absolute', bottom: 5, left: 8, pointerEvents: 'none', zIndex: 5 }}>
+        <Sparkle color={T.amber} size={22} />
+      </motion.div>
+
+      {/* "😴 Tired & low energy" pill — bottom-centre-left */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.26 }}
+        style={{
+          position: 'absolute', bottom: 6, left: '14%',
+          background: `${T.blue}18`, border: `1.5px solid ${T.blue}`,
+          borderRadius: 20, padding: '3px 11px',
+          fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: T.blue,
+          pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-1.5deg)',
+          boxShadow: `2px 2px 0 ${T.blue}22`, zIndex: 5,
+        }}
+      >😴 Tired & low energy</motion.div>
+
+      {/* "🥦 50% nutrient loss" pill — bottom-centre-right */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.34 }}
+        style={{
+          position: 'absolute', bottom: 6, right: '10%',
+          background: `${T.teal}18`, border: `1.5px solid ${T.teal}`,
+          borderRadius: 20, padding: '3px 11px',
+          fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: T.teal,
+          pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(1.5deg)',
+          boxShadow: `2px 2px 0 ${T.teal}22`, zIndex: 5,
+        }}
+      >🥦 50% nutrient loss</motion.div>
+
+      {/* Right sparkle */}
+      <motion.div animate={{ scale: [1, 1.4, 1], opacity: [0.55, 1, 0.55] }} transition={{ duration: 3, repeat: Infinity, delay: 0.8 }}
+        style={{ position: 'absolute', bottom: 5, right: 8, pointerEvents: 'none', zIndex: 5 }}>
+        <Sparkle color={T.orange} size={18} />
+      </motion.div>
+    </>
+  );
+}
+
+
+// ─── Main section ─────────────────────────────────────────────────────────────
+
 export default function MicronutrientGapSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
 
   const gapItems = [
-    { id: 'b12', icon: '🧠', badge: 'ENERGY', title: 'Vitamin B Complex', values: 'B6 · B9 · B12', desc: 'Powers every cell. Low B12 & B6 = brain fog, fatigue, mood swings. Most Indians are quietly deficient.', color: T.green, rotate: -1.5 },
-    { id: 'calcium', icon: '🦴', badge: 'BONES', title: 'Calcium + Magnesium', values: '300mg Ca · 132mg Mg', desc: "Mg controls 300+ enzyme reactions. Without it: poor sleep, cramps, anxiety. Diet rarely covers it.", color: T.blue, rotate: 1.5 },
-    { id: 'zinc', icon: '🛡️', badge: 'IMMUNITY', title: 'Zinc + Selenium', values: '6.8mg Zn · 28mcg Se', desc: "Soil depletion means your vegetables can't carry these minerals. Immunity suffers silently.", color: T.orange, rotate: -1 },
-    { id: 'vitaminc', icon: '🍊', badge: 'ANTIOXIDANT', title: 'Vitamin C', values: '50mg · Antioxidant', desc: 'Destroyed entirely by high-heat cooking. Every tadka, every roti — Vitamin C evaporates.', color: T.amber, rotate: 1.5 },
-    { id: 'fiber', icon: '🌾', badge: 'GUT', title: 'Fiber + Enzymes', values: '6g Fiber · 100mg Enzymes', desc: "You may eat fiber, but without digestive enzymes your gut can't absorb the nutrients anyway.", color: T.teal, rotate: -1.5 },
+    { id: 'b12',      icon: '🧠', badge: 'ENERGY',      title: 'Vitamin B Complex',    values: 'B6 · B9 · B12',        desc: 'Powers every cell. Low B12 & B6 = brain fog, fatigue, mood swings. Most Indians are quietly deficient.',                color: T.green,  rotate: -1.5 },
+    { id: 'calcium',  icon: '🦴', badge: 'BONES',       title: 'Calcium + Magnesium',  values: '300mg Ca · 132mg Mg',   desc: 'Mg controls 300+ enzyme reactions. Without it: poor sleep, cramps, anxiety. Diet rarely covers it.',                 color: T.blue,   rotate:  1.5 },
+    { id: 'zinc',     icon: '🛡️', badge: 'IMMUNITY',    title: 'Zinc + Selenium',      values: '6.8mg Zn · 28mcg Se',   desc: "Soil depletion means your vegetables can't carry these minerals. Immunity suffers silently.",                        color: T.orange, rotate: -1   },
+    { id: 'vitaminc', icon: '🍊', badge: 'ANTIOXIDANT', title: 'Vitamin C',            values: '50mg · Antioxidant',    desc: 'Destroyed entirely by high-heat cooking. Every tadka, every roti — Vitamin C evaporates.',                          color: T.amber,  rotate:  1.5 },
+    { id: 'fiber',    icon: '🌾', badge: 'GUT',         title: 'Fiber + Enzymes',      values: '6g Fiber · 100mg Enzymes', desc: "You may eat fiber, but without digestive enzymes your gut can't absorb the nutrients anyway.",                    color: T.teal,   rotate: -1.5 },
   ];
 
   const statItems = [
-    { num: '75%', label: '3 out of 4 people are running low on key nutrients', sublabel: "You're probably one of them.", color: T.green, rotate: -1.5 },
-    { num: '60%', label: 'of vitamins B & C are lost to high-heat cooking', sublabel: 'You cook it. Heat strips it.', color: T.orange, rotate: 1 },
-    { num: '50%', label: 'nutrient loss in produce within just 3 days of harvest', sublabel: "It looks fresh. It isn't.", color: T.blue, rotate: -1 },
-    { num: '1', label: "scoop closes all 5 gaps. Every single day.", sublabel: 'Soil weak + heat destroys + storage depletes = you need this.', color: T.teal, rotate: 1.5 },
+    { num: '75%', label: '3 out of 4 people are running low on key nutrients',       sublabel: "You're probably one of them.",                                       color: T.green,  rotate: -1.5 },
+    { num: '60%', label: 'of vitamins B & C are lost to high-heat cooking',          sublabel: 'You cook it. Heat strips it.',                                       color: T.blue,   rotate:  1   },
+    { num: '50%', label: 'nutrient loss in produce within just 3 days of harvest',   sublabel: "It looks fresh. It isn't.",                                          color: T.orange, rotate: -1   },
+    { num: '40%', label: "of adults don't meet basic micronutrient intake.",          sublabel: 'Even full plates can miss key nutrients.',                           color: T.amber,  rotate:  1.5 },
+    { num: '1',   label: 'scoop closes all 5 gaps. Every single day.',               sublabel: 'Busy lives + repetitive meals + cooking losses = hidden nutrient gaps.', color: T.teal,  rotate:  1   },
   ];
 
   return (
@@ -170,7 +481,6 @@ export default function MicronutrientGapSection() {
           align-items: start;
         }
 
-        /* Chapter 3 uses a 3-column layout: gaps | image | stats */
         .ch3-grid {
           display: grid;
           grid-template-columns: 1fr 0.85fr 1fr;
@@ -186,37 +496,90 @@ export default function MicronutrientGapSection() {
           transform-origin: center;
         }
 
+        /* Video frame wrapper with side decorations */
+        .video-with-deco {
+          display: flex;
+          align-items: stretch;
+          gap: 0;
+          width: 100%;
+        }
+
+        .video-deco-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-width: 72px;
+          max-width: 88px;
+          flex-shrink: 0;
+          padding: 8px 4px;
+        }
+
+        .video-deco-col.wide {
+          min-width: 80px;
+          max-width: 96px;
+        }
+
+        .video-main-col {
+          flex: 1;
+          min-width: 0;
+        }
+
+        /* Ch3 center column overflow visible for absolute deco bleed */
+        .ch3-center { overflow: visible !important; }
+
+        /* Deco overlay — fills padded wrapper, children overflow freely above/below */
+        .ch3-video-deco {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          overflow: visible;
+          z-index: 4;
+        }
+        /* The padded motion.div wrapper must not clip children */
+        .ch3-center > div:first-child {
+          overflow: visible !important;
+        }
+
         @media (max-width: 1100px) {
           .ch3-grid { grid-template-columns: 1fr 1fr; }
           .ch3-center { display: none; }
+          .video-deco-col { min-width: 52px; max-width: 64px; }
         }
 
         @media (max-width: 900px) {
           .story-2col { grid-template-columns: 1fr; }
           .ch3-grid { grid-template-columns: 1fr; }
           .ch3-center { display: block; }
+          .video-deco-col { min-width: 44px; max-width: 56px; }
+          .ch3-video-deco { display: none; }
+        }
+
+        @media (max-width: 600px) {
+          .video-deco-col { display: none; }
+          .ch3-video-deco { display: none; }
         }
       `}</style>
 
       <section className="mg-root py-24 px-4 md:px-8" ref={sectionRef}>
 
         <motion.div style={{ y: bgY, position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-          <WatercolorBlob color={T.green} opacity={0.07} size={520} style={{ top: '0%', left: '-6%' }} />
-          <WatercolorBlob color={T.amber} opacity={0.06} size={400} style={{ top: '28%', right: '-5%' }} />
-          <WatercolorBlob color={T.blue} opacity={0.05} size={360} style={{ bottom: '8%', left: '18%' }} />
-          <WatercolorBlob color={T.orange} opacity={0.06} size={280} style={{ top: '62%', right: '8%' }} />
+          <WatercolorBlob color={T.green}  opacity={0.07} size={520} style={{ top: '0%',  left: '-6%'  }} />
+          <WatercolorBlob color={T.amber}  opacity={0.06} size={400} style={{ top: '28%', right: '-5%' }} />
+          <WatercolorBlob color={T.blue}   opacity={0.05} size={360} style={{ bottom: '8%', left: '18%' }} />
+          <WatercolorBlob color={T.orange} opacity={0.06} size={280} style={{ top: '62%', right: '8%'  }} />
         </motion.div>
 
-        <FloatingDoodle style={{ top: '5%', left: '1%', opacity: 0.11, zIndex: 2 }} delay={0}><DoodleStarburst color={T.green} size={80} /></FloatingDoodle>
-        <FloatingDoodle style={{ top: '18%', right: '1.5%', opacity: 0.09, zIndex: 2 }} delay={1.5}>
+        <FloatingDoodle style={{ top: '5%',  left: '1%',   opacity: 0.11, zIndex: 2 }} delay={0}>  <DoodleStarburst color={T.green}  size={80} /></FloatingDoodle>
+        <FloatingDoodle style={{ top: '18%', right: '1.5%',opacity: 0.09, zIndex: 2 }} delay={1.5}>
           <svg width="88" height="88" viewBox="0 0 80 80" fill="none"><path d="M40 8 C58 6, 74 22, 74 40 C74 58, 58 72, 40 72 C22 72, 6 58, 6 40 C6 22, 22 6, 40 8 Z" stroke={T.blue} strokeWidth="2.5" strokeLinecap="round" fill="none" strokeDasharray="6 3" /></svg>
         </FloatingDoodle>
-        <FloatingDoodle style={{ bottom: '10%', left: '2%', opacity: 0.08, zIndex: 2 }} delay={2}><DoodleStarburst color={T.orange} size={62} /></FloatingDoodle>
-        <FloatingDoodle style={{ bottom: '22%', right: '2%', opacity: 0.08, zIndex: 2 }} delay={0.7}><DoodleStarburst color={T.amber} size={72} /></FloatingDoodle>
+        <FloatingDoodle style={{ bottom: '10%', left: '2%',  opacity: 0.08, zIndex: 2 }} delay={2}>  <DoodleStarburst color={T.orange} size={62} /></FloatingDoodle>
+        <FloatingDoodle style={{ bottom: '22%', right: '2%', opacity: 0.08, zIndex: 2 }} delay={0.7}><DoodleStarburst color={T.amber}  size={72} /></FloatingDoodle>
 
         <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 10 }}>
 
-          {/* ══ HERO TITLE ═══════════════════════════════════════════════════════ */}
+          {/* ══ HERO TITLE ══════════════════════════════════════════════════════ */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }} style={{ textAlign: 'center', marginBottom: 88 }}>
             <motion.div
               initial={{ rotate: -4, y: 12 }} whileInView={{ rotate: -4, y: 0 }} viewport={{ once: true }}
@@ -249,27 +612,39 @@ export default function MicronutrientGapSection() {
             </motion.p>
           </motion.div>
 
-          {/* ══ CH. 1: YOUR TYPICAL DAY ══════════════════════════════════════════ */}
+          {/* ══ CH. 1: YOUR TYPICAL DAY ════════════════════════════════════════ */}
           <ChapterLabel chapter="CHAPTER 1" title="Your Typical Day 🍽️" color={T.green} />
 
-          <div className="story-2col" style={{ marginBottom: 80 }}>
+          <div className="story-2col" style={{ marginBottom: 80, alignItems: 'start' }}>
+
+            {/* ── Chapter 1 video with side decorations ── */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65 }}
-              style={{ background: T.paper, border: `3px solid ${T.green}`, borderRadius: 22, padding: 18, boxShadow: `6px 7px 0 ${T.green}28`, position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(0,0,0,0.025) 31px, rgba(0,0,0,0.025) 32px)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', left: 22, top: 0, bottom: 0, width: 1.5, background: `${T.green}22` }} />
-              <div className="tape" style={{ top: -7, left: '18%', width: 62, transform: 'rotate(-2deg)' }} />
-              <div className="tape" style={{ top: -6, right: '22%', width: 52, transform: 'rotate(3deg)' }} />
-              <div style={{ position: 'relative', width: '100%', height: 400 }}>
-                <Image src="/images/DoodleImages/YourTypicalDay.png" alt="Your Typical Day" fill style={{ objectFit: 'contain' }} />
+              className="video-with-deco"
+              style={{ borderRadius: 12, overflow: 'visible', background: 'transparent' }}>
+
+              {/* LEFT decoration column */}
+              <div className="video-deco-col">
+                <Ch1VideoLeft />
+              </div>
+
+              {/* Video */}
+              <div className="video-main-col" style={{ borderRadius: 12, overflow: 'hidden', background: T.paperDark, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+                <video src="/videos/YourTypicalDay.mp4" autoPlay muted loop playsInline controls
+                  style={{ width: '100%', height: 'auto', maxHeight: 620, objectFit: 'contain', display: 'block' }} />
+              </div>
+
+              {/* RIGHT decoration column */}
+              <div className="video-deco-col wide">
+                <Ch1VideoRight />
               </div>
             </motion.div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { icon: '☀️', step: '1', label: 'MORNING', title: 'You eat breakfast', color: T.amber, rotate: -2, desc: 'Paratha + chai + fruit. Feels wholesome. But already 40% less nutrients than it looks.' },
-                { icon: '🔥', step: '2', label: 'MID-MORNING', title: "You're still hungry", color: T.orange, rotate: 1.5, desc: 'You just ate. But by 11 AM, your stomach growls again. Energy dips. Cravings start. Something\'s missing.' },
-                { icon: '🌱', step: '3', label: 'YOU ADD PLAINFUEL', title: 'One sachet. That\'s it.', color: T.teal, rotate: -1, desc: 'You mix one sachet with water. No cooking. No sugar crash. Just clean, complete nutrition.' },
-                { icon: '😴', step: '4', label: 'EVENING', title: 'You feel steady & energetic', color: T.blue, rotate: 2, desc: 'No brain fog. No random hunger spikes. Stable energy. Better focus. Lighter body. You end the day strong.' },
+                { icon: '☀️', step: '1', label: 'MORNING',         title: 'You eat breakfast',          color: T.amber,  rotate: -2,   desc: 'Paratha + chai + fruit. Feels wholesome. But already 40% less nutrients than it looks.' },
+                { icon: '🔥', step: '2', label: 'MID-MORNING',     title: "You're still hungry",         color: T.orange, rotate:  1.5, desc: "You just ate. But by 11 AM, your stomach growls again. Energy dips. Cravings start. Something's missing." },
+                { icon: '🌱', step: '3', label: 'YOU ADD PLAINFUEL',title: "One sachet. That's it.",     color: T.teal,   rotate: -1,   desc: 'You mix one sachet with water. No cooking. No sugar crash. Just clean, complete nutrition.' },
+                { icon: '😴', step: '4', label: 'EVENING',         title: 'You feel steady & energetic', color: T.blue,   rotate:  2,   desc: 'No brain fog. No random hunger spikes. Stable energy. Better focus. Lighter body. You end the day strong.' },
               ].map((item, i) => (
                 <motion.div key={i}
                   initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -294,16 +669,16 @@ export default function MicronutrientGapSection() {
             </div>
           </div>
 
-          {/* ══ CH. 2: UNCOMFORTABLE TRUTH ═══════════════════════════════════════ */}
+          {/* ══ CH. 2: UNCOMFORTABLE TRUTH ═════════════════════════════════════ */}
           <ChapterLabel chapter="CHAPTER 2" title="The Uncomfortable Truth ⚠️" color={T.orange} />
 
           <div className="story-2col" style={{ marginBottom: 80 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { icon: '👥', stat: '3 in 4', label: 'Indians have at least ONE micronutrient deficiency', color: T.orange, rotate: -2 },
-                { icon: '🍳', stat: '60%', label: 'of B-vitamins disappear when cooking at high heat', color: T.green, rotate: 1.5 },
-                { icon: '🥦', stat: '50%', label: 'nutrient loss in vegetables within 3 days of harvest', color: T.blue, rotate: -1 },
-                { icon: '😶', stat: '0', label: 'obvious symptoms — just "normal" fatigue and fog', color: T.amber, rotate: 2 },
+                { icon: '👥', stat: '3 in 4', label: 'Indians have at least ONE micronutrient deficiency',              color: T.orange, rotate: -2   },
+                { icon: '🍳', stat: '60%',    label: 'of B-vitamins disappear when cooking at high heat',               color: T.green,  rotate:  1.5 },
+                { icon: '🥦', stat: '50%',    label: 'nutrient loss in vegetables within 3 days of harvest',            color: T.blue,   rotate: -1   },
+                { icon: '😶', stat: '0',      label: 'obvious symptoms — just "normal" fatigue and fog',                color: T.amber,  rotate:  2   },
               ].map((item, i) => (
                 <motion.div key={i}
                   initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
@@ -326,18 +701,12 @@ export default function MicronutrientGapSection() {
             </div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65 }}
-              style={{ background: T.paper, border: `3px solid ${T.orange}`, borderRadius: 22, padding: 18, boxShadow: `6px 7px 0 ${T.orange}28`, position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(0,0,0,0.025) 31px, rgba(0,0,0,0.025) 32px)', pointerEvents: 'none' }} />
-              <div style={{ position: 'absolute', left: 22, top: 0, bottom: 0, width: 1.5, background: `${T.orange}18` }} />
-              <div className="tape" style={{ top: -6, left: '28%', width: 56, transform: 'rotate(2deg)' }} />
-              <div className="tape" style={{ top: -5, right: '18%', width: 44, transform: 'rotate(-3deg)' }} />
-              <div style={{ position: 'relative', width: '100%', height: 400 }}>
-                <Image src="/images/DoodleImages/TheUncomfortableTruth.png" alt="The Uncomfortable Truth" fill style={{ objectFit: 'contain' }} />
-              </div>
+              style={{ position: 'relative', width: '100%', height: 400 }}>
+              <Image src="/images/DoodleImages/TheUncomfortableTruth.png" alt="The Uncomfortable Truth" fill style={{ objectFit: 'contain' }} />
             </motion.div>
           </div>
 
-          {/* ══ DIVIDER ═══════════════════════════════════════════════════════════ */}
+          {/* ══ DIVIDER ══════════════════════════════════════════════════════════ */}
           <motion.div initial={{ opacity: 0, scaleX: 0 }} whileInView={{ opacity: 1, scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
             style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 80 }}>
             <div style={{ flex: 1, height: 2.5, background: `linear-gradient(to right, transparent, ${T.green}55)` }} />
@@ -348,8 +717,8 @@ export default function MicronutrientGapSection() {
             <div style={{ flex: 1, height: 2.5, background: `linear-gradient(to left, transparent, ${T.green}55)` }} />
           </motion.div>
 
-          {/* ══ CH. 3: 5 GAPS + NUMBERS — SINGLE SCREEN 3-COLUMN LAYOUT ══════════ */}
-          <ChapterLabel chapter="CHAPTER 3" title="5 Critical Gaps & The Numbers 🕳️📊" color={T.blue} />
+          {/* ══ CH. 3: 5 GAPS + NUMBERS ════════════════════════════════════════ */}
+          <ChapterLabel chapter="CHAPTER 3" title="The Hidden Nutrient Gaps in Everyday Diets" color={T.blue} />
 
           <div className="ch3-grid" style={{ marginBottom: 20 }}>
 
@@ -379,39 +748,87 @@ export default function MicronutrientGapSection() {
               ))}
             </div>
 
-            {/* CENTER COLUMN: image + The Fix card */}
+            {/* ══ CENTER COLUMN: video + milk card ═════════════════════════════ */}
             <div className="ch3-center" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <motion.div initial={{ opacity: 0, scale: 0.92 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.65 }}
-                style={{ background: T.paper, border: `3px solid ${T.blue}`, borderRadius: 22, padding: 16, boxShadow: `6px 7px 0 ${T.blue}28`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(0,0,0,0.025) 31px, rgba(0,0,0,0.025) 32px)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', left: 20, top: 0, bottom: 0, width: 1.5, background: `${T.blue}22` }} />
-                <div className="tape" style={{ top: -6, left: '25%', width: 52, transform: 'rotate(-2deg)' }} />
-                <div className="tape" style={{ top: -5, right: '20%', width: 40, transform: 'rotate(3deg)' }} />
-                <div style={{ position: 'relative', width: '100%', height: 340 }}>
-                  <Image src="/images/DoodleImages/ADayRunningOnGaps.png" alt="A Day Running on Gaps" fill style={{ objectFit: 'contain' }} />
+
+              {/* ▶ "Everyday Diets" video with corner/edge decorations */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.92 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.65 }}
+                style={{ position: 'relative', width: '100%', paddingTop: 38, paddingBottom: 36 }}
+              >
+                {/* Decorations — corner starbursts, top/bottom pill labels, leaf accents */}
+                <div className="ch3-video-deco">
+                  <Ch3VideoDecorations />
+                </div>
+
+                {/* Video — full width, clips cleanly */}
+                <div style={{ height: 320, borderRadius: 12, overflow: 'hidden', background: T.paperDark }}>
+                  <video
+                    src="/videos/Everyday Diets.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                  />
                 </div>
               </motion.div>
 
-              {/* The Fix card */}
+              {/* ── 3 Cups of Milk = 1 Sachet card ── */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2, type: 'spring', bounce: 0.3 }}
+                initial={{ opacity: 0, y: 24, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.25, type: 'spring', bounce: 0.35 }}
                 whileHover={{ scale: 1.03, rotate: 0 }}
-                style={{ background: 'linear-gradient(145deg, #f0fdf4, #dcfce7)', borderRadius: 18, padding: '20px 18px', border: `3px dashed ${T.green}`, boxShadow: `6px 6px 0 ${T.green}38`, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', transform: 'rotate(1deg)', position: 'relative', overflow: 'hidden' }}>
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 14, repeat: Infinity, ease: 'linear' }} style={{ marginBottom: 8 }}>
-                  <DoodleStarburst color={T.green} size={44} />
-                </motion.div>
-                <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 20, fontWeight: 700, color: T.ink, marginBottom: 6 }}>The Fix ✨</h3>
-                <p style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 14, color: T.green, fontWeight: 600, lineHeight: 1.55 }}>
-                  One Scoop. All 5 gaps closed.<br />Precision dosing. Every day.
-                </p>
-                <motion.div whileHover={{ scale: 1.08 }} style={{ marginTop: 12, padding: '6px 20px', borderRadius: 24, background: T.green, color: '#fff', fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 13, fontWeight: 600, boxShadow: `3px 3px 0 ${T.green}55`, cursor: 'pointer' }}>
-                  Shop Now →
-                </motion.div>
+                style={{
+                  background: 'linear-gradient(145deg, #f0f9ff, #e0f2fe)',
+                  borderRadius: 18, padding: '20px 18px',
+                  border: `3px dashed ${T.blue}`,
+                  boxShadow: `6px 6px 0 ${T.blue}38`,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  textAlign: 'center', transform: 'rotate(-1deg)',
+                  position: 'relative', overflow: 'hidden',
+                }}
+              >
+                <div style={{ position: 'absolute', top: -7, left: '30%', width: 50, height: 16, background: 'rgba(253,230,138,0.80)', borderRadius: 3, transform: 'rotate(-2deg)' }} />
+                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 13, color: T.blue, letterSpacing: '0.08em', marginBottom: 10, marginTop: 4 }}>
+                  DID YOU KNOW?
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                  {['🥛', '🥛', '🥛'].map((cup, i) => (
+                    <motion.span key={i}
+                      initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.12 }}
+                      style={{ fontSize: 32, lineHeight: 1 }}>
+                      {cup}
+                    </motion.span>
+                  ))}
+                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 22, color: T.blue, margin: '0 6px' }}>=</span>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }} transition={{ delay: 0.6, type: 'spring', bounce: 0.5 }}
+                    style={{ position: 'relative', width: 76, height: 100 }}>
+                    <Image src="/images/Products/orangepack.png" alt="PlainFuel Sachet" fill style={{ objectFit: 'contain' }} />
+                  </motion.div>
+                </div>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 20, color: T.blue }}>1 Sachet of PlainFuel</span>
+                  <div style={{ position: 'absolute', bottom: -2, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+                    <InkUnderline color={T.blue} width={170} wobble={1.5} />
+                  </div>
+                </div>
+                <div style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 11, color: '#888', fontStyle: 'italic', marginTop: 10 }}>
+                  …minus the calories, the bloat, the hassle. ✨
+                </div>
               </motion.div>
             </div>
 
-            {/* RIGHT COLUMN: stat cards + numbers image */}
+            {/* RIGHT COLUMN: stat cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 11, fontWeight: 700, color: T.amber, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 4, paddingLeft: 4 }}>
                 — The Numbers
@@ -431,24 +848,71 @@ export default function MicronutrientGapSection() {
                   </div>
                 </motion.div>
               ))}
-
-              {/* Numbers image */}
-              <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65, delay: 0.3 }}
-                style={{ background: T.paper, border: `3px solid ${T.amber}`, borderRadius: 18, padding: 14, boxShadow: `6px 7px 0 ${T.amber}28`, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(0,0,0,0.025) 31px, rgba(0,0,0,0.025) 32px)', pointerEvents: 'none' }} />
-                <div className="tape" style={{ top: -6, left: '22%', width: 50, transform: 'rotate(2deg)' }} />
-                <div className="tape" style={{ top: -5, right: '18%', width: 42, transform: 'rotate(-3deg)' }} />
-                <div style={{ position: 'relative', width: '100%', height: 220 }}>
-                  <Image src="/images/DoodleImages/TheNumbersDontLie.png" alt="The Numbers Don't Lie" fill style={{ objectFit: 'contain' }} />
-                </div>
-              </motion.div>
-
-              <StickyNote color="#fffbeb" rotate={-2} style={{ border: `1.5px dashed ${T.amber}` }}>
-                ✏️ <strong>1 Scoop. 5 Gaps Closed.</strong><br />That&apos;s the only math that matters.
-              </StickyNote>
             </div>
 
           </div>
+
+          {/* ══ THE FIX ══════════════════════════════════════════════════════════ */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2, type: 'spring', bounce: 0.3 }}
+            style={{ marginTop: 32, marginBottom: 0 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.015 }}
+              style={{
+                background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%)',
+                borderRadius: 24, padding: '32px 40px',
+                border: `3px dashed ${T.green}`,
+                boxShadow: `8px 8px 0 ${T.green}38`,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                gap: 32, flexWrap: 'wrap',
+                position: 'relative', overflow: 'hidden',
+              }}
+            >
+              <div style={{ position: 'absolute', top: -7, left: '20%', width: 64, height: 18, background: 'rgba(253,230,138,0.80)', borderRadius: 3, transform: 'rotate(-2deg)' }} />
+              <div style={{ position: 'absolute', top: -6, right: '25%', width: 50, height: 16, background: 'rgba(253,230,138,0.75)', borderRadius: 3, transform: 'rotate(3deg)' }} />
+              <WatercolorBlob color={T.green} opacity={0.08} size={260} style={{ top: '-20%', right: '-4%' }} />
+
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 14, repeat: Infinity, ease: 'linear' }} style={{ flexShrink: 0 }}>
+                <DoodleStarburst color={T.green} size={56} />
+              </motion.div>
+
+              <div style={{ flex: 1, minWidth: 200, textAlign: 'center' }}>
+                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 13, color: T.green, letterSpacing: '0.1em', marginBottom: 8 }}>✨ THE FIX IS SIMPLE</div>
+                <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 700, color: T.ink, lineHeight: 1.2, marginBottom: 10 }}>
+                  One Scoop. All 5 Gaps Closed.
+                </h3>
+                <InkUnderline color={T.green} width={220} wobble={2} />
+                <p style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 15, color: T.green, fontWeight: 600, lineHeight: 1.6, marginTop: 10 }}>
+                  Precision dosing. Zero compromise. Every single day.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start', flexShrink: 0 }}>
+                {['No cooking needed', 'No sugar crash', 'All 5 nutrients', 'One sachet daily'].map((point, i) => (
+                  <motion.div key={i}
+                    initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.09 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <CheckMark color={T.green} size={22} />
+                    <span style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 14, color: T.inkLight, fontWeight: 500 }}>{point}</span>
+                  </motion.div>
+                ))}
+                <motion.div
+                  whileHover={{ scale: 1.08, y: -2 }} whileTap={{ scale: 0.97 }}
+                  style={{
+                    marginTop: 8, padding: '12px 32px', borderRadius: 30,
+                    background: T.green, color: '#fff',
+                    fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 15, fontWeight: 700,
+                    boxShadow: `4px 4px 0 ${T.green}66`, cursor: 'pointer', letterSpacing: '0.04em',
+                  }}
+                >
+                  Shop Now →
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
 
         </div>
       </section>

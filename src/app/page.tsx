@@ -7,7 +7,7 @@ import HAWDsection from '@/components/LandingPageSections/HAWDsection';
 import Productsection from '@/components/LandingPageSections/Productsection';
 import Sciencesection from '@/components/LandingPageSections/Sciencesection';
 import MicronutrientGapSection from '@/components/LandingPageSections/MicronutrientGapSection';
-import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
+// import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
 import DoctorsReview from '@/components/LandingPageSections/DoctorsReview';
 
 export default function Home() {
@@ -33,7 +33,7 @@ export default function Home() {
         <Productsection />
         
         <HAWDsection />
-        <InsiderBundleSection />
+        {/* <InsiderBundleSection /> */}
         <Blogsection />
         <Peoplesection />
         <DoctorsReview />

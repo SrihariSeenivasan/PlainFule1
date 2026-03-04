@@ -1,87 +1,34 @@
 'use client';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PlainFuel – Story Carousel Hero  (TypeScript / Next.js)
-// 5-scene narrative: Tired → Discovery → Action → Consuming → Transformed
-// ─────────────────────────────────────────────────────────────────────────────
-
 import { useState, useEffect, useCallback, useRef, CSSProperties, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-interface SvgProps {
-  color?: string;
-  style?: CSSProperties;
-}
-
-interface CheckboxProps {
-  checked?: boolean;
-  color?: string;
-  size?: number;
-  style?: CSSProperties;
-}
-
-interface StarBurstProps {
-  size?: number;
-  fill?: string;
-  label?: string;
-  style?: CSSProperties;
-}
-
-interface NotePaperProps {
-  children: ReactNode;
-  rotate?: number;
-  style?: CSSProperties;
-}
-
-interface LabelItem {
-  icon: 'check' | 'x' | 'star' | 'dot';
-  label: string;
-}
-
+interface SvgProps { color?: string; style?: CSSProperties; }
+interface CheckboxProps { checked?: boolean; color?: string; size?: number; style?: CSSProperties; }
+interface StarBurstProps { size?: number; fill?: string; label?: string; style?: CSSProperties; }
+interface NotePaperProps { children: ReactNode; rotate?: number; style?: CSSProperties; }
+interface LabelItem { icon: 'check' | 'x' | 'star' | 'dot'; label: string; }
 interface FloatingLabel {
-  emoji?: string;
-  text: string;
-  bg: string;
-  textColor: string;
-  rotate: number;
-  position: { top?: string; bottom?: string; left?: string; right?: string };
-  floatClass: string;
-  dotTrail?: boolean;
-  items?: LabelItem[];
+  emoji?: string; text: string; bg: string; textColor: string;
+  rotate: number; position: { top?: string; bottom?: string; left?: string; right?: string };
+  floatClass: string; dotTrail?: boolean; items?: LabelItem[];
 }
-
-interface NoteItem {
-  text: string;
-  checked: boolean;
-}
-
+interface NoteItem { text: string; checked: boolean; }
 interface Scene {
-  id: number;
-  image: string;
-  alt: string;
-  badge: string;
-  badgeBg: string;
-  badgeColor: string;
-  headline1: string;
-  headline2: string;
-  headline2Color: string;
-  noteTitle: string;
-  noteItems: NoteItem[];
-  bodyCopy: ReactNode;
-  ctaText: string;
-  ctaHref: string;
-  accentColor: string;
-  glowColor: string;
-  ringColor: string;
+  id: number; image: string; alt: string;
+  badge: string; badgeBg: string; badgeColor: string;
+  headline1: string; headline2: string; headline2Color: string;
+  noteTitle: string; noteItems: NoteItem[];
+  bodyCopy: ReactNode; ctaText: string; ctaHref: string;
+  accentColor: string; glowColor: string; ringColor: string;
   starburst: { fill: string; label: string };
   labels: FloatingLabel[];
+  flavorTag: string;
+  flavorTagBg: string;
+  charImage?: string;
+  charCaption?: string;
 }
-
-// ── SVG Doodle Primitives ─────────────────────────────────────────────────────
 
 function DoodleArrow({ color = '#1a1a1a', style = {} }: SvgProps) {
   return (
@@ -91,7 +38,6 @@ function DoodleArrow({ color = '#1a1a1a', style = {} }: SvgProps) {
     </svg>
   );
 }
-
 function DoodleCircle({ color = '#15803d', style = {} }: SvgProps) {
   return (
     <svg viewBox="0 0 100 100" style={{ display: 'block', ...style }}>
@@ -99,7 +45,6 @@ function DoodleCircle({ color = '#15803d', style = {} }: SvgProps) {
     </svg>
   );
 }
-
 function DoodleWiggle({ color = '#15803d', style = {} }: SvgProps) {
   return (
     <svg viewBox="0 0 120 24" style={{ display: 'block', ...style }}>
@@ -107,7 +52,6 @@ function DoodleWiggle({ color = '#15803d', style = {} }: SvgProps) {
     </svg>
   );
 }
-
 function DoodleUnderline({ color = '#15803d', style = {} }: SvgProps) {
   return (
     <svg viewBox="0 0 300 16" preserveAspectRatio="none"
@@ -117,7 +61,6 @@ function DoodleUnderline({ color = '#15803d', style = {} }: SvgProps) {
     </svg>
   );
 }
-
 function DoodleCheckbox({ checked = true, color = '#15803d', size = 20, style = {} }: CheckboxProps) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} style={style} aria-hidden>
@@ -126,15 +69,6 @@ function DoodleCheckbox({ checked = true, color = '#15803d', size = 20, style = 
     </svg>
   );
 }
-
-function DoodleX({ size = 14, color = '#ef4444' }: { size?: number; color?: string }) {
-  return (
-    <svg viewBox="0 0 22 22" width={size} height={size} aria-hidden>
-      <path d="M3,3 L19,19 M19,3 L3,19" stroke={color} strokeWidth="3" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function StarBurst({ size = 80, fill = '#fef08a', label, style = {} }: StarBurstProps) {
   const pts = Array.from({ length: 20 }, (_, i) => {
     const a = (i * Math.PI) / 10;
@@ -153,7 +87,6 @@ function StarBurst({ size = 80, fill = '#fef08a', label, style = {} }: StarBurst
     </svg>
   );
 }
-
 function NotePaper({ children, rotate = 0, style = {} }: NotePaperProps) {
   return (
     <div style={{
@@ -169,8 +102,6 @@ function NotePaper({ children, rotate = 0, style = {} }: NotePaperProps) {
     </div>
   );
 }
-
-// ── Scene Progress Dots ───────────────────────────────────────────────────────
 
 function SceneDots({ count, active, onDotClick, accentColor }: {
   count: number; active: number; onDotClick: (i: number) => void; accentColor: string;
@@ -195,20 +126,63 @@ function SceneDots({ count, active, onDotClick, accentColor }: {
   );
 }
 
-// ── Scene Data ────────────────────────────────────────────────────────────────
+// ── Nav Arrow Button ────────────────────────────────────────────────────────
+function NavButton({ direction, onClick, accentColor, disabled }: {
+  direction: 'prev' | 'next'; onClick: () => void; accentColor: string; disabled?: boolean;
+}) {
+  const isNext = direction === 'next';
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={!disabled ? { scale: 1.08, x: isNext ? 3 : -3 } : {}}
+      whileTap={!disabled ? { scale: 0.94 } : {}}
+      style={{
+        width: 52, height: 52,
+        borderRadius: 6,
+        background: disabled ? '#e5e5e0' : accentColor,
+        border: '3.5px solid #1a1a1a',
+        boxShadow: disabled ? '2px 2px 0 #1a1a1a' : '5px 5px 0 #1a1a1a',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+        transition: 'background 0.3s',
+        opacity: disabled ? 0.45 : 1,
+      }}
+      aria-label={isNext ? 'Next scene' : 'Previous scene'}
+    >
+      <svg viewBox="0 0 28 28" width={22} height={22} fill="none">
+        {isNext
+          ? <path d="M8,14 L20,14 M14,8 L20,14 L14,20" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          : <path d="M20,14 L8,14 M14,8 L8,14 L14,20" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        }
+      </svg>
+    </motion.button>
+  );
+}
+
+// ── Scene Data — colors matched to real product images ───────────────────────
+// Scene 1 → limepack   (lime/yellow-green)
+// Scene 2 → orangepack (bright orange)
+// Scene 3 → redpack    (berry/crimson)
+// Scene 4 → brownpack  (dark coffee brown)
+// Scene 5 → product    (dark olive/black bag)
 
 const SCENES: Scene[] = [
-  // SCENE 1 — Low Energy / Problem
   {
     id: 1,
-    image: '/images/DoodleImages/hero1.png',
-    alt: 'Tired boy sitting at a table with food, looking exhausted with fog clouds above',
+    image: '/images/Products/limepack.png',
+    charImage: '/images/DoodleImages/hero1.png',
+    charCaption: 'Still tired after eating?',
+    alt: 'PlainFuel Lemon Lime sachet',
+    flavorTag: 'Lemon Lime',
+    flavorTagBg: '#d4e52f',
     badge: 'THE PROBLEM',
-    badgeBg: '#fee2e2',
-    badgeColor: '#991b1b',
+    badgeBg: '#eefb6a',
+    badgeColor: '#4a5a00',
     headline1: 'Why Are We Still Tired',
     headline2: 'Despite Eating Every Day?',
-    headline2Color: '#dc2626',
+    headline2Color: '#6b7c00',
     noteTitle: 'DAILY REALITY CHECK:',
     noteItems: [
       { text: 'Eat 3 full meals a day', checked: true },
@@ -216,32 +190,33 @@ const SCENES: Scene[] = [
       { text: 'Brain fog by 3 PM', checked: true },
       { text: 'Getting enough nutrients?', checked: false },
     ],
-    bodyCopy: <>Modern meals fill the stomach.<br />They don&apos;t always <span style={{ background: '#fef08a', padding: '1px 4px', borderRadius: 2 }}>nourish the body.</span><br />Something vital is being left out every single day.</>,
+    bodyCopy: <>Modern meals fill the stomach.<br />They don&apos;t always <span style={{ background: '#eefb6a', padding: '1px 4px', borderRadius: 2 }}>nourish the body.</span><br />Something vital is being left out every single day.</>,
     ctaText: "SEE WHAT'S MISSING",
     ctaHref: '#missing',
-    accentColor: '#dc2626',
-    glowColor: 'rgba(239,68,68,0.18)',
-    ringColor: '#dc2626',
-    starburst: { fill: '#fee2e2', label: 'Mg' },
+    accentColor: '#7a9200',
+    glowColor: 'rgba(180,210,0,0.22)',
+    ringColor: '#a8c400',
+    starburst: { fill: '#eefb6a', label: 'Mg' },
     labels: [
-      { emoji: 'Mg', text: 'Why am I tired?', bg: '#fef08a', textColor: '#1a1a1a', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
+      { emoji: 'Mg', text: 'Why am I tired?', bg: '#eefb6a', textColor: '#4a5a00', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
       { text: 'WHAT HE EATS:', bg: '#bbf7d0', textColor: '#14532d', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'check', label: 'Dal' }, { icon: 'check', label: 'Rice' }, { icon: 'check', label: 'Roti' }, { icon: 'check', label: 'Sabzi' }] },
-      { text: 'STILL MISSING:', bg: '#fee2e2', textColor: '#991b1b', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'x', label: 'Magnesium' }, { icon: 'x', label: 'Vitamin D' }, { icon: 'x', label: 'B12' }, { icon: 'x', label: 'Zinc' }] },
-      { emoji: '💤', text: 'Low energy daily', bg: '#e0e7ff', textColor: '#3730a3', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
+      { text: 'STILL MISSING:', bg: '#d9f99d', textColor: '#365314', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'x', label: 'Magnesium' }, { icon: 'x', label: 'Vitamin D' }, { icon: 'x', label: 'B12' }, { icon: 'x', label: 'Zinc' }] },
+      { emoji: '💤', text: 'Low energy daily', bg: '#ecfccb', textColor: '#3f6212', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
     ],
   },
-
-  // SCENE 2 — Discovery / Lightbulb
   {
     id: 2,
-    image: '/images/DoodleImages/hero2.png',
-    alt: 'Boy with hopeful smile and a lightbulb, thinking about PlainFuel sachets',
+    image: '/images/Products/orangepack.png',
+    charImage: '/images/DoodleImages/hero2.png',
+    alt: 'PlainFuel Orange Citrus sachet',
+    flavorTag: 'Orange Citrus',
+    flavorTagBg: '#f97316',
     badge: 'THE DISCOVERY',
-    badgeBg: '#fef08a',
-    badgeColor: '#92400e',
+    badgeBg: '#ffedd5',
+    badgeColor: '#7c2d12',
     headline1: 'Wait… What If the Answer',
     headline2: 'Was Always This Simple?',
-    headline2Color: '#d97706',
+    headline2Color: '#c2410c',
     noteTitle: 'THE LIGHTBULB MOMENT:',
     noteItems: [
       { text: 'Food alone isn\'t enough', checked: true },
@@ -249,32 +224,34 @@ const SCENES: Scene[] = [
       { text: 'PlainFuel fills the gap', checked: true },
       { text: 'Science-backed formula', checked: true },
     ],
-    bodyCopy: <>Most people eat right but still fall short.<br />The missing link? <span style={{ background: '#fef08a', padding: '1px 4px', borderRadius: 2 }}>Micronutrients.</span><br />PlainFuel was built to fix exactly this — simply.</>,
+    bodyCopy: <>Most people eat right but still fall short.<br />The missing link? <span style={{ background: '#fed7aa', padding: '1px 4px', borderRadius: 2 }}>Micronutrients.</span><br />PlainFuel was built to fix exactly this — simply.</>,
     ctaText: 'DISCOVER PLAINFUEL',
     ctaHref: '#discover',
-    accentColor: '#d97706',
-    glowColor: 'rgba(251,191,36,0.25)',
-    ringColor: '#f59e0b',
-    starburst: { fill: '#fef08a', label: 'Zn' },
+    accentColor: '#ea580c',
+    glowColor: 'rgba(249,115,22,0.26)',
+    ringColor: '#f97316',
+    starburst: { fill: '#ffedd5', label: 'Zn' },
     labels: [
-      { emoji: 'Zn', text: 'Eureka moment!', bg: '#fef08a', textColor: '#92400e', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
-      { text: 'THE SOLUTION:', bg: '#dcfce7', textColor: '#14532d', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'star', label: 'PlainFuel box' }, { icon: 'star', label: 'Color sachets' }, { icon: 'star', label: '5 nutrients' }, { icon: 'star', label: '1 daily dose' }] },
-      { text: 'WHY IT WORKS:', bg: '#e0f2fe', textColor: '#075985', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'check', label: 'Lab tested' }, { icon: 'check', label: 'No fillers' }, { icon: 'check', label: 'Easy sachets' }] },
+      { emoji: 'Zn', text: 'Eureka moment!', bg: '#fed7aa', textColor: '#7c2d12', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
+      { text: 'THE SOLUTION:', bg: '#fef3c7', textColor: '#78350f', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'star', label: 'PlainFuel box' }, { icon: 'star', label: 'Color sachets' }, { icon: 'star', label: '5 nutrients' }, { icon: 'star', label: '1 daily dose' }] },
+      { text: 'WHY IT WORKS:', bg: '#ffedd5', textColor: '#9a3412', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'check', label: 'Lab tested' }, { icon: 'check', label: 'No fillers' }, { icon: 'check', label: 'Easy sachets' }] },
       { emoji: '✨', text: 'Hope restored!', bg: '#fef9c3', textColor: '#713f12', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
     ],
   },
-
-  // SCENE 3 — Taking Action
   {
     id: 3,
-    image: '/images/DoodleImages/hero3.png',
-    alt: 'Boy holding a PlainFuel red sachet confidently, ready to take action',
+    image: '/images/Products/redpack.png',
+    charImage: '/images/DoodleImages/hero3.png',
+    charCaption: 'One sachet. One change.',
+    alt: 'PlainFuel Berry Blast sachet',
+    flavorTag: 'Berry Blast',
+    flavorTagBg: '#e11d48',
     badge: 'TAKING ACTION',
-    badgeBg: '#dbeafe',
-    badgeColor: '#1e40af',
+    badgeBg: '#ffe4e6',
+    badgeColor: '#881337',
     headline1: 'He Made a Choice.',
     headline2: 'One Sachet. One Change.',
-    headline2Color: '#2563eb',
+    headline2Color: '#be123c',
     noteTitle: "WHAT'S INSIDE:",
     noteItems: [
       { text: 'Magnesium for muscles', checked: true },
@@ -282,32 +259,33 @@ const SCENES: Scene[] = [
       { text: 'Vitamin D for immunity', checked: true },
       { text: 'Zinc for cell recovery', checked: true },
     ],
-    bodyCopy: <>One small red sachet.<br /><span style={{ background: '#dbeafe', padding: '1px 4px', borderRadius: 2 }}>Packed with what your meals miss.</span><br />No pills. No routines. Just PlainFuel.</>,
+    bodyCopy: <>One small red sachet.<br /><span style={{ background: '#fecdd3', padding: '1px 4px', borderRadius: 2 }}>Packed with what your meals miss.</span><br />No pills. No routines. Just PlainFuel.</>,
     ctaText: 'SEE INGREDIENTS',
     ctaHref: '#ingredients',
-    accentColor: '#2563eb',
-    glowColor: 'rgba(59,130,246,0.2)',
-    ringColor: '#3b82f6',
-    starburst: { fill: '#dbeafe', label: 'Ca' },
+    accentColor: '#e11d48',
+    glowColor: 'rgba(225,29,72,0.22)',
+    ringColor: '#f43f5e',
+    starburst: { fill: '#ffe4e6', label: 'Ca' },
     labels: [
-      { emoji: 'Ca', text: 'Ready to change!', bg: '#dbeafe', textColor: '#1e40af', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
-      { text: 'IN THE SACHET:', bg: '#dcfce7', textColor: '#14532d', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'dot', label: 'Magnesium' }, { icon: 'dot', label: 'Calcium' }, { icon: 'dot', label: 'Vitamin D3' }, { icon: 'dot', label: 'B-Complex' }] },
-      { text: 'ZERO JUNK:', bg: '#fee2e2', textColor: '#991b1b', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'x', label: 'Fillers' }, { icon: 'x', label: 'Sugar' }, { icon: 'x', label: 'Artificial colour' }] },
-      { emoji: '🔬', text: 'FSSAI Certified', bg: '#dcfce7', textColor: '#14532d', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
+      { emoji: 'Ca', text: 'Ready to change!', bg: '#fecdd3', textColor: '#881337', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
+      { text: 'IN THE SACHET:', bg: '#ffe4e6', textColor: '#9f1239', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'dot', label: 'Magnesium' }, { icon: 'dot', label: 'Calcium' }, { icon: 'dot', label: 'Vitamin D3' }, { icon: 'dot', label: 'B-Complex' }] },
+      { text: 'ZERO JUNK:', bg: '#fda4af', textColor: '#881337', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'x', label: 'Fillers' }, { icon: 'x', label: 'Sugar' }, { icon: 'x', label: 'Artificial colour' }] },
+      { emoji: '🔬', text: 'FSSAI Certified', bg: '#ffe4e6', textColor: '#881337', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
     ],
   },
-
-  // SCENE 4 — Consuming
   {
     id: 4,
-    image: '/images/DoodleImages/hero4.png',
-    alt: 'Boy pouring PlainFuel powder into a glass of water with an energy swirl effect',
+    image: '/images/Products/brownpack.png',
+    charImage: '/images/DoodleImages/hero4.png',
+    alt: 'PlainFuel Cold Coffee sachet',
+    flavorTag: 'Cold Coffee',
+    flavorTagBg: '#78350f',
     badge: 'THE RITUAL',
-    badgeBg: '#ffedd5',
-    badgeColor: '#9a3412',
+    badgeBg: '#fef3e2',
+    badgeColor: '#5c3317',
     headline1: 'Just Mix. Just Drink.',
     headline2: "That's Your Daily Ritual.",
-    headline2Color: '#ea580c',
+    headline2Color: '#92400e',
     noteTitle: 'HOW EASY IS IT:',
     noteItems: [
       { text: 'Tear open one sachet', checked: true },
@@ -315,26 +293,26 @@ const SCENES: Scene[] = [
       { text: 'Stir for 10 seconds', checked: true },
       { text: 'Done. Feel the shift.', checked: true },
     ],
-    bodyCopy: <>No measuring. No tablets. No guesswork.<br /><span style={{ background: '#ffedd5', padding: '1px 4px', borderRadius: 2 }}>One sachet a day</span> — your body gets what it needs.<br />The swirl dissolves. The energy builds.</>,
+    bodyCopy: <>No measuring. No tablets. No guesswork.<br /><span style={{ background: '#fde68a', padding: '1px 4px', borderRadius: 2 }}>One sachet a day</span> — your body gets what it needs.<br />The swirl dissolves. The energy builds.</>,
     ctaText: 'TRY YOUR FIRST BOX',
     ctaHref: '#order',
-    accentColor: '#ea580c',
-    glowColor: 'rgba(249,115,22,0.22)',
-    ringColor: '#f97316',
-    starburst: { fill: '#ffedd5', label: 'B' },
+    accentColor: '#92400e',
+    glowColor: 'rgba(146,64,14,0.2)',
+    ringColor: '#b45309',
+    starburst: { fill: '#fef3e2', label: 'B' },
     labels: [
-      { emoji: 'B', text: 'Mix & drink!', bg: '#ffedd5', textColor: '#9a3412', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
-      { text: 'ENERGY SWIRL:', bg: '#fef9c3', textColor: '#713f12', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'star', label: 'Dissolves fast' }, { icon: 'star', label: 'Great taste' }, { icon: 'star', label: 'Clear colour' }, { icon: 'star', label: 'No residue' }] },
-      { text: 'JUST 30 SECS:', bg: '#dcfce7', textColor: '#14532d', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'check', label: 'Tear sachet' }, { icon: 'check', label: 'Add water' }, { icon: 'check', label: 'Stir & drink' }] },
-      { emoji: '⚡', text: 'Energy incoming!', bg: '#fef08a', textColor: '#713f12', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
+      { emoji: 'B', text: 'Mix & drink!', bg: '#fef3e2', textColor: '#78350f', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
+      { text: 'ENERGY SWIRL:', bg: '#fef9c3', textColor: '#713f12', rotate: 3, position: { right: '-6%', top: '26%' }, floatClass: 'label-float-b', items: [{ icon: 'star', label: 'Dissolves fast' }, { icon: 'star', label: 'Coffee taste' }, { icon: 'star', label: 'Clear colour' }, { icon: 'star', label: 'No residue' }] },
+      { text: 'JUST 30 SECS:', bg: '#fde68a', textColor: '#78350f', rotate: -3, position: { bottom: '8%', left: '-8%' }, floatClass: 'label-float-c', items: [{ icon: 'check', label: 'Tear sachet' }, { icon: 'check', label: 'Add water' }, { icon: 'check', label: 'Stir & drink' }] },
+      { emoji: '⚡', text: 'Energy incoming!', bg: '#fef3e2', textColor: '#78350f', rotate: 2, position: { bottom: '4%', right: '-2%' }, floatClass: 'label-float-d' },
     ],
   },
-
-  // SCENE 5 — Transformation
   {
     id: 5,
-    image: '/images/DoodleImages/hero5.png',
-    alt: 'Boy energetic and happy, standing with raised fist and golden glow, nutrient icons floating around',
+    image: '/images/Products/product.png',
+    alt: 'PlainFuel Meal Completer full bag',
+    flavorTag: 'Meal Completer',
+    flavorTagBg: '#1a2e1a',
     badge: 'THE RESULT ✨',
     badgeBg: '#dcfce7',
     badgeColor: '#14532d',
@@ -352,8 +330,8 @@ const SCENES: Scene[] = [
     ctaText: 'START YOUR JOURNEY',
     ctaHref: '#order',
     accentColor: '#15803d',
-    glowColor: 'rgba(21,128,61,0.3)',
-    ringColor: '#15803d',
+    glowColor: 'rgba(21,128,61,0.28)',
+    ringColor: '#16a34a',
     starburst: { fill: '#dcfce7', label: 'Mg' },
     labels: [
       { emoji: 'Mg', text: 'Fully energized!', bg: '#fef08a', textColor: '#713f12', rotate: -4, position: { top: '4%', left: '-4%' }, floatClass: 'label-float-a', dotTrail: true },
@@ -366,7 +344,6 @@ const SCENES: Scene[] = [
 
 const AUTO_MS = 8000;
 
-// ─── Main Export ──────────────────────────────────────────────────────────────
 export default function HeroSection() {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [sceneIdx, setSceneIdx] = useState<number>(0);
@@ -400,52 +377,18 @@ export default function HeroSection() {
     tickRef.current = Date.now();
   }, []);
 
+  const goPrev = useCallback(() => {
+    setSceneIdx((i) => (i - 1 + SCENES.length) % SCENES.length);
+    tickRef.current = Date.now();
+  }, []);
+
+  const goNext = useCallback(() => {
+    setSceneIdx((i) => (i + 1) % SCENES.length);
+    tickRef.current = Date.now();
+  }, []);
+
   const scene = SCENES[sceneIdx];
   const sp = { type: 'spring' as const, damping: 14, stiffness: 180 };
-
-  function renderLabel(label: FloatingLabel, idx: number) {
-    return (
-      <AnimatePresence key={`${sceneIdx}-lbl-${idx}`} mode="wait">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.7 }}
-          transition={{ delay: 0.55 + idx * 0.14, ...sp }}
-          style={{ position: 'absolute', zIndex: 10, ...label.position }}
-        >
-          <div className={label.floatClass} style={{
-            background: label.bg, border: '3px solid #1a1a1a',
-            borderRadius: 6, boxShadow: '4px 4px 0 #1a1a1a',
-            padding: '8px 14px', transform: `rotate(${label.rotate}deg)`, whiteSpace: 'nowrap',
-          }}>
-            <div style={{
-              fontFamily: "'Permanent Marker',cursive", fontSize: 11, color: label.textColor,
-              letterSpacing: '0.1em', marginBottom: label.items ? 6 : 0,
-              display: 'flex', alignItems: 'center', gap: 5,
-            }}>
-              {label.emoji && <span style={{ fontSize: 15 }}>{label.emoji}</span>}
-              {label.text}
-            </div>
-            {label.items?.map((item, ii) => (
-              <div key={ii} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                {item.icon === 'check' && <DoodleCheckbox checked size={14} color="#15803d" />}
-                {item.icon === 'x' && <DoodleX size={14} />}
-                {item.icon === 'star' && <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 11, color: scene.accentColor }}>★</span>}
-                {item.icon === 'dot' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: scene.accentColor, border: '1.5px solid #1a1a1a', flexShrink: 0 }} />}
-                <span style={{ fontFamily: "'Kalam',cursive", fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>{item.label}</span>
-              </div>
-            ))}
-          </div>
-          {label.dotTrail && (
-            <>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: label.bg, border: '2px solid #1a1a1a', margin: '4px 0 0 20px' }} />
-              <div style={{ width: 5, height: 5, borderRadius: '50%', background: label.bg, border: '2px solid #1a1a1a', margin: '3px 0 0 28px' }} />
-            </>
-          )}
-        </motion.div>
-      </AnimatePresence>
-    );
-  }
 
   return (
     <>
@@ -506,7 +449,7 @@ export default function HeroSection() {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {/* Auto-advance progress strip */}
+        {/* Progress strip */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, zIndex: 20, background: 'rgba(0,0,0,0.07)' }}>
           {!paused && (
             <motion.div
@@ -530,7 +473,7 @@ export default function HeroSection() {
           pointerEvents: 'none', zIndex: 0, letterSpacing: '-0.04em',
         }}>PLAINFUEL</div>
 
-        {/* Scene number watermark stamp */}
+        {/* Scene stamp */}
         <AnimatePresence mode="wait">
           <motion.div
             key={`stamp-${sceneIdx}`}
@@ -555,12 +498,9 @@ export default function HeroSection() {
           <DoodleWiggle color="#15803d" style={{ position: 'absolute', top: '10%', right: '5%', width: 100, opacity: 0.12, transform: 'rotate(-15deg)' }} />
           <DoodleWiggle color="#1a1a1a" style={{ position: 'absolute', bottom: '18%', left: '3%', width: 70, opacity: 0.07, transform: 'rotate(8deg)' }} />
           <DoodleCircle color="#15803d" style={{ position: 'absolute', top: '5%', left: '8%', width: 60, opacity: 0.06 }} />
-          {([[8,20],[90,30],[15,75],[85,65],[50,90]] as [number,number][]).map(([l,t],i) => (
-            <div key={i} style={{ position: 'absolute', left:`${l}%`, top:`${t}%`, width:8+i*3, height:8+i*3, borderRadius:'50%', background:'#1a1a1a', opacity:0.04 }} />
-          ))}
         </div>
 
-        {/* ══════════ MAIN GRID ══════════ */}
+        {/* ══ MAIN GRID ══ */}
         <div className="pf-grid" style={{
           display: 'grid', gridTemplateColumns: '1fr 1fr',
           gap: 'clamp(24px,4vw,64px)',
@@ -569,10 +509,10 @@ export default function HeroSection() {
           position: 'relative', zIndex: 2, alignItems: 'center',
         }}>
 
-          {/* ────── LEFT: Text ────── */}
+          {/* ── LEFT: Text ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
 
-            {/* Scene badge */}
+            {/* Badge */}
             <AnimatePresence mode="wait">
               <motion.div key={`badge-${sceneIdx}`}
                 initial={{ opacity: 0, x: -28 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
@@ -614,7 +554,7 @@ export default function HeroSection() {
               </AnimatePresence>
             </div>
 
-            {/* Notepad checklist */}
+            {/* Notepad */}
             <AnimatePresence mode="wait">
               <motion.div key={`note-${sceneIdx}`}
                 initial={{ opacity: 0, y: 18, rotate: -2 }} animate={{ opacity: 1, y: 0, rotate: -1.5 }} exit={{ opacity: 0, y: -10 }}
@@ -654,7 +594,7 @@ export default function HeroSection() {
               </motion.div>
             </AnimatePresence>
 
-            {/* CTA + dots */}
+            {/* CTA + Nav */}
             <AnimatePresence mode="wait">
               <motion.div key={`cta-${sceneIdx}`}
                 initial={{ opacity: 0, scale: 0.82 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
@@ -673,8 +613,8 @@ export default function HeroSection() {
                   </div>
                 </div>
 
-                {/* Scene nav dots */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* Dots + Nav buttons row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 10, color: '#1a1a1a', opacity: 0.45, letterSpacing: '0.1em' }}>THE STORY</span>
                   <SceneDots count={SCENES.length} active={sceneIdx} onDotClick={goToScene} accentColor={scene.accentColor} />
                   <span style={{ fontFamily: "'Kalam',cursive", fontSize: 11, fontWeight: 700, color: '#1a1a1a', opacity: 0.4 }}>{sceneIdx + 1}/{SCENES.length}</span>
@@ -683,24 +623,24 @@ export default function HeroSection() {
             </AnimatePresence>
           </div>
 
-          {/* ────── RIGHT: Illustration ────── */}
+          {/* ── RIGHT: Illustration ── */}
           <div className="pf-illus-col" style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 520 }}>
 
-            {/* Orbit ring — color animates */}
+            {/* Orbit ring */}
             <motion.div
               animate={{ borderColor: scene.ringColor }}
               transition={{ duration: 0.5 }}
               style={{ position: 'absolute', width: 'clamp(300px,38vw,500px)', height: 'clamp(300px,38vw,500px)', borderRadius: '50%', border: '5px dashed', opacity: 0.2 }}
             />
 
-            {/* Glow — color animates */}
+            {/* Glow */}
             <motion.div
               animate={{ background: `radial-gradient(circle, ${scene.glowColor} 0%, transparent 70%)` }}
               transition={{ duration: 0.6 }}
               style={{ position: 'absolute', width: '70%', height: '70%', borderRadius: '50%', filter: 'blur(44px)', pointerEvents: 'none' }}
             />
 
-            {/* THE ILLUSTRATION — slides between scenes */}
+            {/* Illustration */}
             <AnimatePresence mode="wait">
               <motion.div key={`img-${sceneIdx}`}
                 initial={{ opacity: 0, scale: 0.86, x: 60 }}
@@ -721,6 +661,33 @@ export default function HeroSection() {
               </motion.div>
             </AnimatePresence>
 
+            {/* Flavor tag */}
+            <AnimatePresence mode="wait">
+              <motion.div key={`flavor-${sceneIdx}`}
+                initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ delay: 0.3, type: 'spring', damping: 12, stiffness: 200 }}
+                style={{
+                  position: 'absolute', bottom: '6%', left: '50%',
+                  transform: 'translateX(-50%) rotate(-2deg)',
+                  background: scene.flavorTagBg,
+                  border: '3px solid #1a1a1a',
+                  borderRadius: 6,
+                  padding: '6px 18px',
+                  boxShadow: '4px 4px 0 #1a1a1a',
+                  fontFamily: "'Permanent Marker',cursive",
+                  fontSize: 13,
+                  color: '#fff',
+                  letterSpacing: '0.08em',
+                  whiteSpace: 'nowrap',
+                  zIndex: 10,
+                }}
+              >
+                {scene.flavorTag}
+              </motion.div>
+            </AnimatePresence>
+
             {/* Starburst */}
             <AnimatePresence mode="wait">
               <motion.div key={`star-${sceneIdx}`}
@@ -733,10 +700,91 @@ export default function HeroSection() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Floating annotation labels */}
-            {scene.labels.map((label, idx) => renderLabel(label, idx))}
+            {/* Floating character PNG — bottom-right, frameless */}
+            {scene.charImage && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`char-${sceneIdx}`}
+                  initial={{ opacity: 0, scale: 0.6, x: 40, y: 60, rotate: 12 }}
+                  animate={{ opacity: 1, scale: 1, x: 0, y: 0, rotate: 3 }}
+                  exit={{ opacity: 0, scale: 0.7, x: 30, y: 40, rotate: 8 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.3,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  style={{
+                    position: 'absolute',
+                    bottom: '12%',
+                    right: '-4%',
+                    zIndex: 12,
+                    pointerEvents: 'none',
+                    transformOrigin: 'bottom center',
+                  }}
+                >
+                  {/* Subtle bounce after entrance */}
+                  <motion.div
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.9 }}
+                  >
+                    <Image
+                      src={scene.charImage}
+                      alt={scene.charCaption || ''}
+                      width={310}
+                      height={310}
+                      style={{
+                        width: 'clamp(130px,15vw,200px)',
+                        height: 'auto',
+                        display: 'block',
+                        objectFit: 'contain',
+                        filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.22))',
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
+            )}
 
-            {/* Decorative arrows */}
+                        {/* Side nav arrows — on the illustration column */}
+            <motion.button
+              onClick={goPrev}
+              whileHover={{ scale: 1.1, x: -3 }}
+              whileTap={{ scale: 0.92 }}
+              style={{
+                position: 'absolute', left: -20, top: '50%', transform: 'translateY(-50%)',
+                width: 46, height: 46, borderRadius: 6,
+                background: scene.accentColor,
+                border: '3.5px solid #1a1a1a', boxShadow: '4px 4px 0 #1a1a1a',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', zIndex: 20,
+              }}
+              aria-label="Previous"
+            >
+              <svg viewBox="0 0 28 28" width={20} height={20} fill="none">
+                <path d="M18,6 L10,14 L18,22" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.button>
+
+            <motion.button
+              onClick={goNext}
+              whileHover={{ scale: 1.1, x: 3 }}
+              whileTap={{ scale: 0.92 }}
+              style={{
+                position: 'absolute', right: -20, top: '50%', transform: 'translateY(-50%)',
+                width: 46, height: 46, borderRadius: 6,
+                background: scene.accentColor,
+                border: '3.5px solid #1a1a1a', boxShadow: '4px 4px 0 #1a1a1a',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', zIndex: 20,
+              }}
+              aria-label="Next"
+            >
+              <svg viewBox="0 0 28 28" width={20} height={20} fill="none">
+                <path d="M10,6 L18,14 L10,22" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.button>
+
+            {/* Deco arrows */}
             <motion.div animate={{ opacity: loaded ? 0.38 : 0 }} transition={{ delay: 0.9 }}
               style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 9 }}>
               <DoodleArrow color={scene.accentColor} style={{ position: 'absolute', top: '12%', left: '8%', width: 40, opacity: 0.35, transform: 'rotate(30deg)' }} />

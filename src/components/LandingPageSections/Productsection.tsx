@@ -1,19 +1,16 @@
 'use client';
 
 /*
- * FONT SYSTEM — matching screenshot exactly:
+ * FONT SYSTEM:
  *
- *  F_DISPLAY  =  "Permanent Marker"  →  chunky black marker headlines ("The Modern Diet.", "Precision.")  — like screenshot
- *               thick marker strokes, rough edges, very dark #1a1a1a
+ *  F_DISPLAY  =  "Playfair Display"  →  editorial serif headlines, product names, large stat figures
+ *                bold/black weight, italic variant for accent phrases
  *
- *  F_SCRIPT   =  "Caveat"         →  green handwritten italic accent  ("An Invisible", "Truly", "01")
- *               flowing, loose, slightly slanted marker feel
- *
- *  F_BODY     =  "Caveat"         →  gray italic body copy  ("We consume more than ever…")
- *               same font, lighter weight, muted color, italic
+ *  F_BODY     =  "DM Sans"           →  all UI copy, labels, badges, nav, descriptions, CTAs
+ *                clean humanist sans, weights 400–700
  *
  *  Add to global CSS:
- *  @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;600;700&display=swap');
+ *  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@400;500;600;700&display=swap');
  */
 
 import {
@@ -39,11 +36,11 @@ import {
   Star,
   type LucideIcon,
 } from 'lucide-react';
-import { StarDoodle } from '@/components/Elements/SvgDoodles';
+// import { StarDoodle } from '@/components/Elements/SvgDoodles';
 
 /* ── font vars ── */
-const FD = "'Permanent Marker', 'Segoe Print', cursive";   /* Display — chunky black marker (like screenshot 'The Modern Diet.') */
-const FS = "'Caveat', cursive";                                        /* Script  — green handwritten */
+const FD = "'Playfair Display', Georgia, serif";   /* Display — editorial serif headlines */
+const FS = "'DM Sans', 'Helvetica Neue', sans-serif"; /* Body/UI — clean humanist sans */
 
 /* ─────────────────────────────────────
    TYPES
@@ -57,9 +54,9 @@ interface Nutrient {
 interface Product {
   id: number;
   name: string;
-  headline: string;         /* e.g. "Begin"   — displayed in FD black */
-  accentWord: string;       /* e.g. "Fast."   — displayed in FS green italic */
-  grayWord: string;         /* e.g. "Always." — displayed in FS gray italic */
+  headline: string;
+  accentWord: string;
+  grayWord: string;
   sub: string;
   tag: string;
   duration: string;
@@ -275,8 +272,7 @@ function DoodleParticles({ accent }: { accent: string }) {
 }
 
 /* ─────────────────────────────────────
-   SKETCHY PILL — like "⚡ The Market Problem"
-   Uses the dashed wobbly border from screenshot
+   SKETCHY PILL
 ───────────────────────────────────── */
 function SketchPill({ children, accent, accentSoft }: { children: ReactNode; accent: string; accentSoft: string }) {
   return (
@@ -295,7 +291,7 @@ function SketchPill({ children, accent, accentSoft }: { children: ReactNode; acc
 }
 
 /* ─────────────────────────────────────
-   WOBBLY BADGE (like "7-Day Trial" pills in screenshot)
+   WOBBLY BADGE — DM Sans label
 ───────────────────────────────────── */
 function WobblyBadge({ label, accent, accentSoft, delay }: { label: string; accent: string; accentSoft: string; delay: number }) {
   return (
@@ -312,9 +308,9 @@ function WobblyBadge({ label, accent, accentSoft, delay }: { label: string; acce
           transition={{ duration: 5 + delay, repeat: Infinity, ease: 'linear' }}
         />
       </svg>
-      {/* Badge label in Caveat script — like screenshot */}
+      {/* Badge label — DM Sans semibold */}
       <span className="relative px-3 py-1.5 inline-block"
-        style={{ fontFamily: FS, fontSize: '14px', fontWeight: 600, color: accent, fontStyle: 'italic' }}>
+        style={{ fontFamily: FS, fontSize: '13px', fontWeight: 600, color: accent }}>
         {label}
       </span>
     </motion.div>
@@ -322,7 +318,7 @@ function WobblyBadge({ label, accent, accentSoft, delay }: { label: string; acce
 }
 
 /* ─────────────────────────────────────
-   SKETCH BUTTON — ORDER NOW
+   SKETCH BUTTON — DM Sans
 ───────────────────────────────────── */
 function SketchButton({ accent, accentGlow, children }: { accent: string; accentGlow: string; children: ReactNode }) {
   return (
@@ -346,9 +342,9 @@ function SketchButton({ accent, accentGlow, children }: { accent: string; accent
         animate={{ x: ['-140%', '200%'] }}
         transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
       />
-      {/* Button label in Caveat */}
+      {/* Button label — DM Sans bold */}
       <span className="relative z-10 flex items-center gap-2"
-        style={{ fontFamily: FS, fontSize: '17px', fontWeight: 700, color: '#111', letterSpacing: '0.04em' }}>
+        style={{ fontFamily: FS, fontSize: '15px', fontWeight: 700, color: '#fff', letterSpacing: '0.02em' }}>
         {children}
       </span>
     </motion.button>
@@ -356,7 +352,7 @@ function SketchButton({ accent, accentGlow, children }: { accent: string; accent
 }
 
 /* ─────────────────────────────────────
-   SKETCH NAV BUTTON
+   SKETCH NAV BUTTON — DM Sans numbers
 ───────────────────────────────────── */
 function SketchNavBtn({ index, isActive, accent, onClick }: { index: number; isActive: boolean; accent: string; onClick: () => void }) {
   return (
@@ -379,9 +375,9 @@ function SketchNavBtn({ index, isActive, accent, onClick }: { index: number; isA
           />
         )}
       </svg>
-      {/* Nav number in Caveat like "01" "02" */}
+      {/* Nav number — DM Sans bold */}
       <span className="relative z-10"
-        style={{ fontFamily: FS, fontSize: '15px', fontWeight: 700, color: isActive ? accent : 'rgba(0,0,0,0.28)' }}>
+        style={{ fontFamily: FS, fontSize: '13px', fontWeight: 700, color: isActive ? accent : 'rgba(0,0,0,0.28)' }}>
         {String(index + 1).padStart(2, '0')}
       </span>
     </motion.button>
@@ -389,7 +385,7 @@ function SketchNavBtn({ index, isActive, accent, onClick }: { index: number; isA
 }
 
 /* ─────────────────────────────────────
-   PRICE TICKER
+   PRICE TICKER — Playfair Display
 ───────────────────────────────────── */
 function PriceTicker({ price }: { price: string }) {
   return (
@@ -400,8 +396,8 @@ function PriceTicker({ price }: { price: string }) {
         exit={{ y: -24, opacity: 0, rotate: 2 }}
         transition={{ duration: 0.34, type: 'spring', stiffness: 280 }}
       >
-        {/* Price in Caveat — big handwritten number */}
-        <span style={{ fontFamily: FS, fontSize: 'clamp(2.2rem, 5.5vw, 3.4rem)', fontWeight: 700, color: '#1a1a1a', lineHeight: 1 }}>
+        {/* Price — Playfair Display, big editorial number */}
+        <span style={{ fontFamily: FD, fontSize: 'clamp(2.2rem, 5.5vw, 3.4rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1 }}>
           {price}
         </span>
       </motion.div>
@@ -471,8 +467,9 @@ function HexGrid({ accent }: { accent: string }) {
 
 /* ─────────────────────────────────────
    NUTRIENT ANNOTATIONS
-   Lines from product right edge → cards
-   Card label uses: Permanent Marker for label name, Caveat green for value
+   value  → Playfair Display italic green (big)
+   sub    → DM Sans uppercase tiny
+   label  → DM Sans uppercase small caps style
 ───────────────────────────────────── */
 function NutrientAnnotations({
   accent, accentSoft, nutrients, activeIdx,
@@ -501,7 +498,6 @@ function NutrientAnnotations({
 
             return (
               <motion.g key={n.label}>
-                {/* Dashed line */}
                 <motion.line x1={dotX} y1={lineY} x2={CARD_X - 4} y2={lineY}
                   stroke={accent} strokeWidth="1.5" strokeDasharray="5 4" strokeLinecap="round"
                   filter="url(#lineGlow)"
@@ -510,7 +506,6 @@ function NutrientAnnotations({
                   animate={{ pathLength: 1, opacity: 0.7 }}
                   transition={{ duration: 0.5, delay: i * 0.11 + 0.1, ease: 'easeOut' }}
                 />
-                {/* Dot on product */}
                 <motion.circle cx={dotX} cy={lineY} r={4} fill={accent} opacity={0.92}
                   initial={{ scale: 0 }} animate={{ scale: [0, 1.8, 1] }}
                   transition={{ duration: 0.38, delay: i * 0.11 + 0.42, ease: 'backOut' }}
@@ -519,7 +514,6 @@ function NutrientAnnotations({
                   animate={{ r: [4, 13], opacity: [0.5, 0] }}
                   transition={{ duration: 2, delay: i * 0.11 + 0.6, repeat: Infinity, ease: 'easeOut' }}
                 />
-                {/* Card with sketchy doodle border */}
                 <motion.g initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.34, delay: i * 0.1 + 0.18 }}
                 >
@@ -532,24 +526,23 @@ function NutrientAnnotations({
                     animate={{ scale: [1, 1.4, 1] }}
                     transition={{ duration: 2.2, delay: i * 0.3, repeat: Infinity }}
                   />
-                  {/* Value — Caveat green, big */}
+                  {/* Value — Playfair Display italic green, big */}
                   <text x={CARD_X + 16} y={cardY + 22}
-                    fill={accent} fontSize="18" fontWeight="700" fontFamily={FS} fontStyle="italic">
+                    fill={accent} fontSize="18" fontWeight="700" fontFamily={FD} fontStyle="italic">
                     {n.value}
                   </text>
-                  {/* Sub — small Caveat */}
+                  {/* Sub — DM Sans uppercase tiny */}
                   <text x={CARD_X + 16 + Math.max(n.value.length * 9, 26)} y={cardY + 21}
                     fill={accent} fontSize="8" fontWeight="600" letterSpacing="1.2" opacity={0.55}
                     fontFamily={FS} style={{ textTransform: 'uppercase' }}>
                     {n.sub}
                   </text>
-                  {/* Label — Permanent Marker display, small caps style */}
+                  {/* Label — DM Sans uppercase small */}
                   <text x={CARD_X + 16} y={cardY + 38}
-                    fill="rgba(0,0,0,0.5)" fontSize="9" fontWeight="400" letterSpacing="1.8"
-                    fontFamily={FD} style={{ textTransform: 'uppercase' }}>
+                    fill="rgba(0,0,0,0.5)" fontSize="9" fontWeight="600" letterSpacing="1.8"
+                    fontFamily={FS} style={{ textTransform: 'uppercase' }}>
                     {n.label}
                   </text>
-                  {/* Animated bar */}
                   <motion.rect x={CARD_X + 16} y={cardY + 44} height={2} rx={1}
                     fill={accent} opacity={0.28}
                     initial={{ width: 0 }} animate={{ width: 126 }}
@@ -579,7 +572,6 @@ function ProductStage({ activeIdx, mouseX, mouseY }: {
 
   return (
     <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: STAGE_W, height: STAGE_H }}>
-      {/* Blob */}
       <motion.div className="absolute pointer-events-none" style={{ width: 330, height: 330 }}
         animate={{ rotate: [0, 360] }} transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}>
         <svg viewBox="-120 -120 240 240" width="100%" height="100%">
@@ -602,12 +594,10 @@ function ProductStage({ activeIdx, mouseX, mouseY }: {
 
       <HexGrid accent={product.accent} />
 
-      {/* Brackets */}
       <div className="absolute" style={{ left: IMG_LEFT - 14, top: IMG_TOP - 14, width: IMG_W + 28, height: IMG_H + 28 }}>
         <SketchBrackets accent={product.accent} w={IMG_W + 28} h={IMG_H + 28} />
       </div>
 
-      {/* Scan sweep */}
       <div className="absolute overflow-hidden pointer-events-none" style={{ width: IMG_W, height: IMG_H, left: IMG_LEFT, top: IMG_TOP }}>
         <motion.div className="absolute inset-x-0"
           style={{ background: `linear-gradient(180deg, transparent 0%, ${product.accent}1e 50%, transparent 100%)`, height: '28%' }}
@@ -616,14 +606,12 @@ function ProductStage({ activeIdx, mouseX, mouseY }: {
         />
       </div>
 
-      {/* Ground shadow */}
       <motion.div className="absolute rounded-full blur-2xl"
         animate={{ backgroundColor: product.accent, scaleX: [1, 1.2, 1], opacity: [0.18, 0.28, 0.18] }}
         transition={{ backgroundColor: { duration: 0.7 }, scaleX: { duration: 3, repeat: Infinity }, opacity: { duration: 3, repeat: Infinity } }}
         style={{ width: 190, height: 24, bottom: 20 }}
       />
 
-      {/* Product image */}
       <AnimatePresence mode="wait">
         <motion.div key={`img-${activeIdx}`}
           initial={{ opacity: 0, scale: 0.35, y: 48, rotateY: -38, filter: 'blur(14px)' }}
@@ -651,7 +639,6 @@ function ProductStage({ activeIdx, mouseX, mouseY }: {
         </motion.div>
       </AnimatePresence>
 
-      {/* Dashed ring pulses */}
       {[1, 2, 3].map((ring) => (
         <motion.div key={ring} className="absolute rounded-full pointer-events-none"
           style={{ border: `1.5px dashed ${product.accent}` }}
@@ -660,7 +647,6 @@ function ProductStage({ activeIdx, mouseX, mouseY }: {
         />
       ))}
 
-      {/* Annotations */}
       <NutrientAnnotations
         accent={product.accent} accentSoft={product.accentSoft} accentGlow={product.accentGlow}
         nutrients={product.nutrients} activeIdx={activeIdx}
@@ -756,39 +742,39 @@ export default function ProductSection() {
           {/* ══════ HEADER ══════ */}
           <div style={{ flexShrink: 0 }} className="relative z-20 flex items-start justify-between px-6 sm:px-10 md:px-14 pt-6 sm:pt-8">
             <div>
-              {/* Sketch pill — like "⚡ The Market Problem" */}
+              {/* Sketch pill */}
               <SketchPill accent={product.accent} accentSoft={product.accentSoft}>
                 <motion.div className="w-1.5 h-1.5 rounded-full"
                   animate={{ backgroundColor: product.accent, scale: [1, 1.7, 1] }}
                   transition={{ duration: 1.4, repeat: Infinity }} />
-                {/* Pill text in Caveat italic */}
-                <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 600, color: product.accent, fontStyle: 'italic' }}>
+                {/* Pill text — DM Sans medium */}
+                <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 500, color: product.accent, letterSpacing: '0.04em' }}>
                   The Shop
                 </span>
               </SketchPill>
 
-              {/* Title block — Permanent Marker black + Caveat green italic */}
+              {/* Title block */}
               <div className="mt-3">
                 <div className="flex items-center gap-2 mb-0.5">
                   <svg width="18" height="9" viewBox="0 0 18 9" fill="none">
                     <path d="M1 4.5 Q9 2 17 4.5" stroke={product.accent} strokeWidth="1.5" strokeLinecap="round" filter="url(#sk)" opacity="0.45" />
                   </svg>
-                  {/* "Select Your" — Caveat muted */}
-                  <span style={{ fontFamily: FS, fontSize: '12px', color: 'rgba(0,0,0,0.36)', letterSpacing: '0.22em', textTransform: 'uppercase', fontStyle: 'italic' }}>
+                  {/* "Select Your" — DM Sans muted uppercase */}
+                  <span style={{ fontFamily: FS, fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.36)', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
                     Select Your
                   </span>
                 </div>
 
-                {/* "Fuel" — Permanent Marker BLACK bold serif (like "What's" in screenshot) */}
-                {/* "Cycle."  — Caveat GREEN italic (like "ACTUALLY" in screenshot) */}
+                {/* "Fuel" — Playfair Display black */}
+                {/* "Cycle." — Playfair Display italic green */}
                 <div style={{ lineHeight: 1 }}>
-                  <span style={{ fontFamily: FD, fontSize: 'clamp(2.4rem, 6vw, 4.4rem)', color: '#1a1a1a', letterSpacing: '-0.01em' }}>
+                  <span style={{ fontFamily: FD, fontSize: 'clamp(2.4rem, 6vw, 4.4rem)', fontWeight: 900, color: '#1a1a1a', letterSpacing: '-0.02em' }}>
                     Fuel{' '}
                   </span>
                   <AnimatePresence mode="wait">
                     <motion.span key={`fctitle-${activeIdx}`}
                       initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                      style={{ fontFamily: FS, fontSize: 'clamp(2.5rem, 6.5vw, 4.6rem)', fontWeight: 700, color: product.accent, fontStyle: 'italic' }}
+                      style={{ fontFamily: FD, fontSize: 'clamp(2.5rem, 6.5vw, 4.6rem)', fontWeight: 700, color: product.accent, fontStyle: 'italic' }}
                     >
                       Cycle.
                     </motion.span>
@@ -820,7 +806,8 @@ export default function ProductSection() {
                     stroke={product.accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
                     animate={{ y: [0, 3, 0] }} transition={{ duration: 1.4, repeat: Infinity }} />
                 </svg>
-                <span style={{ fontFamily: FS, fontSize: '12px', color: 'rgba(0,0,0,0.34)', letterSpacing: '0.08em', fontStyle: 'italic' }}>scroll</span>
+                {/* "scroll" — DM Sans */}
+                <span style={{ fontFamily: FS, fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.34)', letterSpacing: '0.08em' }}>scroll</span>
               </div>
             </div>
           </div>
@@ -850,17 +837,17 @@ export default function ProductSection() {
                     </svg>
                     <Icon style={{ color: product.accent, width: 14, height: 14, position: 'relative', zIndex: 1 }} />
                   </div>
-                  {/* Tag text — Caveat italic */}
-                  <span style={{ fontFamily: FS, fontSize: '14px', fontWeight: 600, color: product.accent, letterSpacing: '0.08em', textTransform: 'uppercase', fontStyle: 'italic' }}>
+                  {/* Tag — DM Sans medium uppercase */}
+                  <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 600, color: product.accent, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                     {product.tag}
                   </span>
                 </motion.div>
               </AnimatePresence>
 
-              {/* ── THREE-LINE HEADLINE — matching screenshot exactly ──
-                  Line 1: "The Beginning."   →  Permanent Marker, #1a1a1a, large
-                  Line 2: "Just Start."      →  Caveat, green, italic, large
-                  Line 3: "Stay consistent." →  Caveat, gray, italic, slightly smaller
+              {/* ── THREE-LINE HEADLINE ──
+                  Line 1: "The Beginning."    → Playfair Display black #1a1a1a
+                  Line 2: "Just Start."       → Playfair Display italic green
+                  Line 3: "Stay consistent."  → DM Sans medium gray
               */}
               <div style={{ overflow: 'hidden', marginBottom: 6 }}>
                 <AnimatePresence mode="wait">
@@ -868,20 +855,21 @@ export default function ProductSection() {
                     initial={{ y: '110%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: '-110%', opacity: 0 }}
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {/* Line 1 — Permanent Marker BLACK (like "The Modern Diet." in screenshot) */}
+                    {/* Line 1 — Playfair Display 900, tight editorial */}
                     <div style={{
                       fontFamily: FD,
                       fontSize: 'clamp(1.9rem, 4.8vw, 3.2rem)',
+                      fontWeight: 900,
                       color: '#1a1a1a',
                       lineHeight: 1.05,
-                      letterSpacing: '0.01em',
+                      letterSpacing: '-0.02em',
                     }}>
                       {product.headline}
                     </div>
 
-                    {/* Line 2 — Caveat GREEN italic (like "An Invisible" in screenshot — the accent phrase) */}
+                    {/* Line 2 — Playfair Display italic, green accent */}
                     <div style={{
-                      fontFamily: FS,
+                      fontFamily: FD,
                       fontSize: 'clamp(1.9rem, 5vw, 3.2rem)',
                       fontWeight: 700,
                       color: product.accent,
@@ -892,14 +880,15 @@ export default function ProductSection() {
                       {product.accentWord}
                     </div>
 
-                    {/* Line 3 — Caveat GRAY italic (like "Depletion." in screenshot — the muted third line) */}
+                    {/* Line 3 — DM Sans medium, muted gray */}
                     <div style={{
                       fontFamily: FS,
-                      fontSize: 'clamp(1.4rem, 3.5vw, 2.2rem)',
-                      fontWeight: 600,
+                      fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
+                      fontWeight: 500,
                       color: 'rgba(0,0,0,0.32)',
-                      fontStyle: 'italic',
-                      lineHeight: 1.1,
+                      lineHeight: 1.2,
+                      marginTop: 4,
+                      letterSpacing: '0.01em',
                     }}>
                       {product.grayWord}
                     </div>
@@ -907,14 +896,13 @@ export default function ProductSection() {
                 </AnimatePresence>
               </div>
 
-              {/* Description — Caveat italic body copy (like screenshot paragraphs) */}
+              {/* Description — DM Sans regular body copy */}
               <AnimatePresence mode="wait">
                 <motion.div key={`desc-${activeIdx}`}
                   initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                   transition={{ duration: 0.36, delay: 0.08 }}
                   className="relative mb-5" style={{ maxWidth: 315 }}
                 >
-                  {/* Sketchy left border bar */}
                   <svg className="absolute" style={{ left: 0, top: 0, height: '100%' }} width="5" viewBox="0 0 5 100" preserveAspectRatio="none">
                     <motion.path d="M2.5 0 Q3.5 25 2.5 50 Q1.5 75 2.5 100"
                       stroke={product.accent} strokeWidth="2" strokeLinecap="round" fill="none"
@@ -924,13 +912,13 @@ export default function ProductSection() {
                     />
                   </svg>
                   <p className="pl-4"
-                    style={{ fontFamily: FS, fontSize: '15px', fontStyle: 'italic', color: 'rgba(0,0,0,0.5)', lineHeight: 1.6 }}>
+                    style={{ fontFamily: FS, fontSize: '14px', fontWeight: 400, color: 'rgba(0,0,0,0.5)', lineHeight: 1.65 }}>
                     {product.desc}
                   </p>
                 </motion.div>
               </AnimatePresence>
 
-              {/* Badges — Caveat italic inside wobbly dashed pills */}
+              {/* Badges */}
               <AnimatePresence mode="wait">
                 <motion.div key={`bdg-${activeIdx}`} className="flex flex-wrap gap-2 mb-5"
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.26 }}>
@@ -943,17 +931,17 @@ export default function ProductSection() {
               {/* Price + CTA */}
               <div className="flex flex-wrap items-end gap-5">
                 <div>
-                  {/* "PRICE" label — Permanent Marker small */}
+                  {/* "PRICE" label — DM Sans uppercase small */}
                   <div className="mb-0.5">
-                    <span style={{ fontFamily: FD, fontSize: '10px', color: 'rgba(0,0,0,0.36)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+                    <span style={{ fontFamily: FS, fontSize: '10px', fontWeight: 600, color: 'rgba(0,0,0,0.36)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
                       Price
                     </span>
                   </div>
-                  {/* Price number — Caveat big */}
+                  {/* Price number — Playfair Display */}
                   <PriceTicker price={product.price} />
-                  {/* "7 Days supply" — Caveat italic small */}
+                  {/* "7 Days supply" — DM Sans small */}
                   <div>
-                    <span style={{ fontFamily: FS, fontSize: '13px', color: 'rgba(0,0,0,0.38)', fontStyle: 'italic' }}>
+                    <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 400, color: 'rgba(0,0,0,0.38)' }}>
                       {product.duration} supply
                     </span>
                   </div>
@@ -971,8 +959,9 @@ export default function ProductSection() {
                     </motion.div>
                   </AnimatePresence>
 
+                  {/* "Details" — DM Sans */}
                   <motion.button className="flex items-center gap-1"
-                    style={{ fontFamily: FS, fontSize: '15px', color: 'rgba(0,0,0,0.38)', fontStyle: 'italic' }}
+                    style={{ fontFamily: FS, fontSize: '14px', fontWeight: 500, color: 'rgba(0,0,0,0.38)' }}
                     whileHover={{ x: 5 }} transition={{ type: 'spring', stiffness: 300 }}>
                     Details
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1007,9 +996,10 @@ export default function ProductSection() {
                         />
                       </svg>
                     </motion.div>
+                    {/* Vertical label — DM Sans uppercase */}
                     <motion.span animate={{ opacity: i === activeIdx ? 1 : 0.24, color: i === activeIdx ? p.accent : '#000' }}
                       transition={{ duration: 0.3 }}
-                      style={{ writingMode: 'vertical-rl', letterSpacing: '0.14em', fontFamily: FS, fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', fontStyle: 'italic' }}>
+                      style={{ writingMode: 'vertical-rl', letterSpacing: '0.14em', fontFamily: FS, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase' }}>
                       {p.name}
                     </motion.span>
                   </button>
@@ -1021,13 +1011,13 @@ export default function ProductSection() {
           {/* ══════ BOTTOM PROGRESS ══════ */}
           <div style={{ flexShrink: 0 }} className="relative z-20 px-6 sm:px-10 md:px-14 pb-5 sm:pb-6">
             <div className="flex items-center justify-between mb-2">
-              {/* Progress label — Caveat italic */}
-              <span style={{ fontFamily: FS, fontSize: '13px', color: 'rgba(0,0,0,0.34)', fontStyle: 'italic' }}>
+              {/* Progress counter — DM Sans */}
+              <span style={{ fontFamily: FS, fontSize: '12px', fontWeight: 500, color: 'rgba(0,0,0,0.34)', letterSpacing: '0.06em' }}>
                 {String(activeIdx + 1).padStart(2, '0')} / 03
               </span>
-              {/* Product name — Permanent Marker */}
+              {/* Product name — Playfair Display italic */}
               <motion.span
-                style={{ fontFamily: FD, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase' }}
+                style={{ fontFamily: FD, fontSize: '12px', fontWeight: 700, fontStyle: 'italic', letterSpacing: '0.04em' }}
                 animate={{ color: product.accent }} transition={{ duration: 0.4 }}>
                 {product.name}
               </motion.span>

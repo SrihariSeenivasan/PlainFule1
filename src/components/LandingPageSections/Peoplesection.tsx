@@ -6,41 +6,71 @@ import { StarDoodle, Sparkle, CircleDoodle as DoodleCircle, WiggleLine } from '@
 
 /* ── IMAGES grouped by category ── */
 const CATEGORIES: Record<string, { src: string; alt: string }[]> = {
-    'Athletes 💪': [
+    'Doctors 👨‍⚕️': [
+        { src: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&q=80', alt: 'Doctor consulting' },
+        { src: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600&q=80', alt: 'Healthcare professional' },
+        { src: 'https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=600&q=80', alt: 'Medical consultation' },
+        { src: 'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=600&q=80', alt: 'Doctor patient care' },
+    ],
+    'Gym 💪': [
         { src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80', alt: 'Gym workout' },
         { src: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80', alt: 'Weight training' },
-        { src: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&q=80', alt: 'Boxing' },
-        { src: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80', alt: 'Crossfit' },
+        { src: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80', alt: 'Boxing' },
+        { src: 'https://images.unsplash.com/photo-1581009146145-b5ef050c149a?w=600&q=80', alt: 'Crossfit' },
+    ],
+    'Yoga 🧘': [
+        { src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80', alt: 'Yoga practice' },
+        { src: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80', alt: 'Meditation' },
+        { src: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=600&q=80', alt: 'Stretching' },
+        { src: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&q=80', alt: 'Wellness' },
+    ],
+    'Parents 👨‍👩‍👧': [
+        { src: 'https://images.unsplash.com/photo-1597245363058-7e2e0e8bfc01?w=600&q=80', alt: 'Family time' },
+        { src: 'https://images.unsplash.com/photo-1602526432604-029a709e131c?w=600&q=80', alt: 'Parenting' },
+        { src: 'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=600&q=80', alt: 'Family activity' },
+        { src: 'https://images.unsplash.com/photo-1491013516836-7db643ee125a?w=600&q=80', alt: 'Parent child bond' },
+    ],
+    'Couples 💑': [
+        { src: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600&q=80', alt: 'Couple wellness' },
+        { src: 'https://images.unsplash.com/photo-1609852234838-147db6815968?w=600&q=80', alt: 'Couple exercising' },
+        { src: 'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80', alt: 'Couple hiking' },
+        { src: 'https://images.unsplash.com/photo-1522163182402-834f871fd851?w=600&q=80', alt: 'Couple portrait' },
+    ],
+    'Business 💼': [
+        { src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&q=80', alt: 'Business professional' },
+        { src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80', alt: 'Business meeting' },
+        { src: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80', alt: 'Entrepreneur' },
+        { src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80', alt: 'Corporate team' },
+    ],
+    'Office 🖥️': [
+        { src: 'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=600&q=80', alt: 'Office worker' },
+        { src: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&q=80', alt: 'Desk work' },
+        { src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80', alt: 'Computer work' },
+        { src: 'https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=600&q=80', alt: 'Office environment' },
     ],
     'Runners 🏃': [
         { src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80', alt: 'Running' },
         { src: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=600&q=80', alt: 'Morning run' },
-        { src: 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&q=80', alt: 'Hiking' },
-        { src: 'https://images.unsplash.com/photo-1577221084712-45b0445d2b00?w=600&q=80', alt: 'Outdoor workout' },
+        { src: 'https://images.unsplash.com/photo-1461897104016-0b3b00b1f082?w=600&q=80', alt: 'Sprint' },
+        { src: 'https://images.unsplash.com/photo-1594911772125-07fc7a2d8d9f?w=600&q=80', alt: 'Trail running' },
     ],
-    'Parents 🥗': [
-        { src: 'https://images.unsplash.com/photo-1547919307-1ecb10702e6f?w=600&q=80', alt: 'Family meal' },
-        { src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80', alt: 'Healthy food' },
-        { src: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=600&q=80', alt: 'Meal prep' },
-        { src: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&q=80', alt: 'Smoothie' },
+    'Seniors 👴': [
+        { src: 'https://images.unsplash.com/photo-1447005497901-b3e9ee359928?w=600&q=80', alt: 'Senior wellness' },
+        { src: 'https://images.unsplash.com/photo-1556889882-733f5e428b66?w=600&q=80', alt: 'Active seniors' },
+        { src: 'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?w=600&q=80', alt: 'Senior health' },
+        { src: 'https://images.unsplash.com/photo-1475503572774-15a45e5d60b9?w=600&q=80', alt: 'Older people' },
     ],
-    'Yogis 🧘': [
-        { src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=80', alt: 'Yoga' },
-        { src: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80', alt: 'Meditation' },
-        { src: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=600&q=80', alt: 'Stretching' },
-        { src: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80', alt: 'Dance workout' },
-    ],
-    'Cyclists 🚴': [
-        { src: 'https://images.unsplash.com/photo-1594737625785-a6cbdabd333c?w=600&q=80', alt: 'Cycling' },
-        { src: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&q=80', alt: 'Group fitness' },
-        { src: 'https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=600&q=80', alt: 'Swimming' },
-        { src: 'https://images.unsplash.com/photo-1548690312-e3b507d8c110?w=600&q=80', alt: 'Athlete' },
+    'Patients 🏥': [
+        { src: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80', alt: 'Healthcare' },
+        { src: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80', alt: 'Recovery' },
+        { src: 'https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=600&q=80', alt: 'Treatment' },
+        { src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80', alt: 'Medical care' },
     ],
     'Everyday 🌟': [
-        { src: 'https://images.unsplash.com/photo-1607962837359-5e7e89f86776?w=600&q=80', alt: 'Nutrition' },
-        { src: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=600&q=80', alt: 'Supplement' },
-        { src: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80', alt: 'Active' },
-        { src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80', alt: 'Lifestyle' },
+        { src: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80', alt: 'Nutrition' },
+        { src: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=600&q=80', alt: 'Healthy living' },
+        { src: 'https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=600&q=80', alt: 'Daily wellness' },
+        { src: 'https://images.unsplash.com/photo-1493770348161-369560ae357d?w=600&q=80', alt: 'Lifestyle' },
     ],
 };
 
@@ -51,25 +81,25 @@ const ALL_IMAGES = Object.entries(CATEGORIES).flatMap(([cat, imgs]) =>
 
 /* 12 slots, each pre-assigned a category */
 const SLOT_CATEGORIES = [
-    'Athletes 💪',  // 0  tall
-    'Runners 🏃',   // 1
-    'Parents 🥗',   // 2
-    'Cyclists 🚴',  // 3  tall
-    'Yogis 🧘',     // 4
-    'Everyday 🌟',  // 5
-    'Athletes 💪',  // 6
-    'Runners 🏃',   // 7
-    'Parents 🥗',   // 8
-    'Yogis 🧘',     // 9  wide
-    'Cyclists 🚴',  // 10
-    'Everyday 🌟',  // 11
+    'Doctors 👨‍⚕️',   // 0  tall
+    'Gym 💪',        // 1
+    'Parents 👨‍👩‍👧', // 2
+    'Couples 💑',    // 3  tall
+    'Yoga 🧘',       // 4
+    'Business 💼',   // 5
+    'Gym 💪',        // 6
+    'Runners 🏃',    // 7
+    'Office 🖥️',     // 8
+    'Yoga 🧘',       // 9  wide
+    'Seniors 👴',    // 10
+    'Patients 🏥',   // 11
 ];
 
 const SLOT_ACCENTS = [
-    '#15803d', '#f59e0b', '#ec4899',
-    '#15803d', '#8b5cf6', '#f59e0b',
-    '#15803d', '#f59e0b', '#ec4899',
-    '#8b5cf6', '#15803d', '#f59e0b',
+    '#ef4444', '#22c55e', '#f59e0b',
+    '#ec4899', '#8b5cf6', '#3b82f6',
+    '#22c55e', '#f59e0b', '#06b6d4',
+    '#8b5cf6', '#a16207', '#06b6d4',
 ];
 
 /* ── Local SVG Helper ── */
