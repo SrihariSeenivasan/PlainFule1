@@ -261,7 +261,7 @@ export default function Blogsection() {
         <>
             <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');`}</style>
 
-            <section className="relative overflow-hidden bg-[var(--background)] py-16 md:py-24">
+            <section className="relative overflow-hidden bg-[var(--background)] pt-16 md:pt-24 pb-6 md:pb-10">
 
                 {/* ambient decorations */}
                 <Sparkle color="#7ee8a2" className="absolute top-10 left-[2%] w-5 h-5 opacity-20 rotate-12 pointer-events-none" />

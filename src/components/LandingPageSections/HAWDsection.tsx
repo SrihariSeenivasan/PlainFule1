@@ -495,7 +495,7 @@ function TrainCarousel({ sectionBg }: { sectionBg: string }) {
                         animate={{ backgroundPositionX: ['0px', '-34px'] }}
                         transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
                     />
-                    <span style={{ fontFamily: SANS, fontSize: 10, color: 'rgba(0,0,0,0.22)', letterSpacing: '0.18em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                    <span style={{ fontFamily: SANS, fontSize: 14, color: 'rgb(0, 0, 0)', letterSpacing: '0.18em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                         ✦ what sets us apart ✦
                     </span>
                     <motion.div
@@ -606,7 +606,7 @@ export default function HAWDsection() {
                                 className="flex items-center gap-2 mb-4"
                             >
                                 <span className="text-base">✨</span>
-                                <H className="text-sm font-bold tracking-wide" style={{ color: T.green }}>The Complete Solution</H>
+                                <H className="text-lg font-bold tracking-wide" style={{ color: T.green }}>The Complete Solution</H>
                                 <svg viewBox="0 0 120 10" fill="none" className="w-14 h-3 opacity-50">
                                     <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5" stroke={T.green} strokeWidth="2" strokeLinecap="round" fill="none" />
                                 </svg>
@@ -705,7 +705,7 @@ export default function HAWDsection() {
                                     <div className="rounded-xl p-4 text-center"
                                         style={{ background: 'rgba(219,39,119,0.07)', border: '1.5px dashed rgba(219,39,119,0.3)' }}>
                                         <span className="block text-2xl font-bold" style={{ fontFamily: SERIF, color: '#be185d' }}>₹7,300</span>
-                                        <span className="text-[10px] block mt-0.5" style={{ fontFamily: SANS, color: T.textSoft }}>/ month separately</span>
+                                        <span className="text-[13px] block mt-0.5" style={{ fontFamily: SANS, color: T.text }}>/ month separately</span>
                                     </div>
 
                                     <div className="rounded-xl p-4 text-center relative"
@@ -717,11 +717,11 @@ export default function HAWDsection() {
                                                 stroke={T.green} strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
                                         </svg>
                                         <span className="block text-2xl font-bold italic" style={{ fontFamily: SERIF, color: T.greenDark }}>All-in-1</span>
-                                        <span className="text-[10px] block mt-0.5" style={{ fontFamily: SANS, color: T.textSoft }}>Plainfuel blend</span>
+                                        <span className="text-[13px] block mt-0.5" style={{ fontFamily: SANS, color: T.text }}>Plainfuel blend</span>
                                     </div>
                                 </div>
 
-                                <span className="block text-center text-[11px] mt-4 italic" style={{ fontFamily: SANS, color: T.textFaint }}>
+                                <span className="block text-center text-[15px] mt-4 italic " style={{ fontFamily: SANS, color: T.text }}>
                                     Recommended intake vs available income.
                                 </span>
                             </motion.div>

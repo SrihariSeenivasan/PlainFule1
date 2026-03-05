@@ -135,7 +135,7 @@ const QuoteStrip = ({ text, delay }: { text: string; delay: number }) => (
     <span style={{
       fontFamily: "'Playfair Display', Georgia, serif",
       fontSize: 13.5, fontWeight: 500, fontStyle: 'italic',
-      color: 'rgba(0,0,0,0.58)', lineHeight: 1.55, display: 'block',
+      color: 'rgb(0, 0, 0)', lineHeight: 1.55, display: 'block',
     }}>
       &ldquo;{text}&rdquo;
     </span>
@@ -578,7 +578,7 @@ export default function Sciencesection() {
               <span style={{
                 fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
                 fontSize: 10.5, fontWeight: 600,
-                letterSpacing: '0.1em', color: 'rgba(0,0,0,0.45)',
+                letterSpacing: '0.1em', color: 'rgb(0, 0, 0)',
                 textTransform: 'uppercase',
               }}>
                 📖 Backed by nutritional science

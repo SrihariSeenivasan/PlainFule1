@@ -355,7 +355,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', top: 5, left: '16%',
           background: `${T.orange}18`, border: `1.5px solid ${T.orange}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 11, fontWeight: 700, color: T.orange,
+          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.orange,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-2deg)',
           zIndex: 5,
         }}
@@ -368,7 +368,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', top: 5, right: '10%',
           background: `${T.green}18`, border: `1.5px solid ${T.green}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 11, fontWeight: 700, color: T.green,
+          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.green,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(2deg)',
           zIndex: 5,
         }}
@@ -391,7 +391,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', bottom: 5, left: '12%',
           background: `${T.blue}18`, border: `1.5px solid ${T.blue}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 11, fontWeight: 700, color: T.blue,
+          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.blue,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-1.5deg)',
           zIndex: 5,
         }}
@@ -404,7 +404,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', bottom: 5, right: '8%',
           background: `${T.teal}18`, border: `1.5px solid ${T.teal}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 11, fontWeight: 700, color: T.teal,
+          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.teal,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(1.5deg)',
           zIndex: 5,
         }}
@@ -617,7 +617,7 @@ export default function MicronutrientGapSection() {
             {/* RIGHT: 4 step cards + sticky note */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{
-                fontFamily: "'Caveat', cursive", fontSize: 18, fontWeight: 700,
+                fontFamily: "'Caveat', cursive", fontSize: 24, fontWeight: 700,
                 color: T.green, letterSpacing: '0.06em', marginBottom: 2,
                 display: 'flex', alignItems: 'center', gap: 6,
               }}>
