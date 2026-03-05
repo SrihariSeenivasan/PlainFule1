@@ -264,7 +264,7 @@ export default function ProblemSection() {
               <br />
               <em style={{ color: "#6b7280" }}>Despite Eating Every Day?</em>
             </h2>
-            <p style={{ fontSize: 15, color: "#9ca3af", lineHeight: 1.75, maxWidth: 400, margin: 0 }}>
+            <p style={{ fontSize: 15, color: "#1a1a1a", lineHeight: 1.75, maxWidth: 400, margin: 0 }}>
               Modern meals fill the stomach. They don&apos;t always nourish the body.
               Something vital is missing every single day.
             </p>

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Instagram, Mail, Twitter } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -256,20 +257,15 @@ export default function FinalCTA() {
               style={{ display: 'flex', alignItems: 'center', gap: 10 }}
             >
               <div style={{
-                position: 'relative', width: 34, height: 34, flexShrink: 0,
+                position: 'relative', width: 480, height: 160, flexShrink: 0,
               }}>
-                <svg viewBox="0 0 40 40" width={34} height={34}>
-                  <path
-                    d="M5,5 Q20,2 35,5 Q38,5 38,20 Q38,35 35,36 Q20,38 5,36 Q2,35 2,20 Q2,5 5,5 Z"
-                    fill="rgba(21,128,61,0.15)" stroke="#15803d" strokeWidth="2" strokeLinecap="round" strokeDasharray="6,2"
-                  />
-                  <text x="50%" y="56%" dominantBaseline="middle" textAnchor="middle"
-                    style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 16, fill: '#15803d', fontWeight: 900 }}>P</text>
-                </svg>
+                <Image 
+                  src="/images/plainfuel.png" 
+                  alt="Plainfuel" 
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
               </div>
-              <span style={{ fontFamily: "'Permanent Marker',cursive", fontSize: 20, color: '#1a1a1a', letterSpacing: '0.02em' }}>
-                Plainfuel
-              </span>
               <StarBurst size={12} style={{ opacity: 0.5 }} />
             </motion.div>
 
