@@ -218,7 +218,7 @@ function CarouselSlideMobile({ doctor }: { doctor: typeof DOCTORS[0] }) {
           <StarDoodle size={15} style={{ position: 'absolute', bottom: 8, right: 10, opacity: 0.22 }} />
         </motion.div>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.44 }}
-          style={{ fontSize: 11, color: 'rgba(0,0,0,0.38)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
+          style={{ fontSize: 11, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
           Verified medical professional · Independently reviewed
         </motion.p>
       </div>
@@ -302,7 +302,7 @@ function CarouselSlide({ doctor, direction, isMobile }: { doctor: typeof DOCTORS
           <WavyLine width={200} />
         </motion.div>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.44 }}
-          style={{ fontSize: 12.5, color: 'rgba(0,0,0,0.42)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
+          style={{ fontSize: 12.5, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
           Verified medical professional · Independently reviewed
         </motion.p>
       </div>
@@ -536,12 +536,7 @@ export default function DoctorsReview() {
               <NavBtn onClick={next} dir="next" disabled={isAnimating} />
             </div>
 
-            <motion.p
-              className="hint-text"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-              style={{ textAlign: 'center', marginTop: 12, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.04em' }}>
-              ← click arrows or dots to explore · hover to pause auto-play →
-            </motion.p>
+            
             {isMobile && (
               <p style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.03em' }}>
                 swipe left or right to explore
@@ -564,11 +559,11 @@ export default function DoctorsReview() {
                 <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }} style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: isMobile ? '1.6rem' : 'clamp(26px,4vw,38px)', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, color: '#15803d', lineHeight: 1, marginBottom: 4 }}>{stat.num}</div>
                   <div style={{ fontSize: isMobile ? 12 : 14, fontWeight: 600, color: '#111', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{stat.label}</div>
-                  <div style={{ fontSize: isMobile ? 11 : 12, color: 'rgba(0,0,0,0.45)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
+                  <div style={{ fontSize: isMobile ? 11 : 12, color: 'rgb(0, 0, 0)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </motion.div> 
 
           {/* Trust badges */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: isMobile ? 16 : 28 }}>

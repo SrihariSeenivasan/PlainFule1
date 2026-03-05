@@ -104,7 +104,7 @@ function Annotation({ text }: { text: string }) {
         <div className="flex flex-col items-end gap-0 pointer-events-none select-none">
             <span
                 style={{ fontFamily: "'Caveat', cursive", background: '#fef08a', color: '#713f12' }}
-                className="text-[11px] font-bold px-2.5 py-0.5 rounded rotate-2 shadow-md"
+                className="text-sm font-bold px-2.5 py-0.5 rounded rotate-2 shadow-md"
             >
                 {text}
             </span>
@@ -164,7 +164,7 @@ function FeaturedCard({ blog }: { blog: Blog }) {
                 <div className="absolute top-3 left-3 z-20">
                     <span
                         style={{ fontFamily: "'Caveat', cursive", background: blog.accent, color: '#1a1a1a' }}
-                        className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full -rotate-2 shadow"
+                        className="inline-block text-sm font-bold px-2.5 py-0.5 rounded-full -rotate-2 shadow"
                     >
                         #{blog.tag}
                     </span>
@@ -178,16 +178,16 @@ function FeaturedCard({ blog }: { blog: Blog }) {
 
             {/* meta */}
             <div className="flex items-center gap-2 mb-2.5">
-                <Calendar className="w-3 h-3 text-[var(--green-bright)]" />
-                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-xs font-bold">{blog.date}</span>
+                <Calendar className="w-4 h-4 text-[var(--green-bright)]" />
+                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-base font-bold">{blog.date}</span>
                 <span className="w-1 h-1 rounded-full bg-white/20" />
-                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-white/35 text-xs font-bold">Research Paper</span>
+                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--foreground)] text-base font-bold">Research Paper</span>
             </div>
 
-            <h3 className="text-lg md:text-xl font-bold leading-snug mb-2 group-hover:text-[var(--green-bright)] transition-colors">
+            <h3 className="text-xl md:text-2xl font-bold leading-snug mb-2 group-hover:text-[var(--green-bright)] transition-colors">
                 {blog.title}
             </h3>
-            <p className="text-[var(--foreground)]/40 text-sm leading-relaxed mb-4">{blog.excerpt}</p>
+            <p className="text-[var(--foreground)] text-base leading-relaxed mb-4">{blog.excerpt}</p>
 
             <WiggleLine color={blog.accent} className="w-full h-3 opacity-25 group-hover:opacity-60 transition-opacity" />
         </motion.article>
@@ -229,22 +229,22 @@ function SmallCard({ blog, index }: { blog: Blog; index: number }) {
                 <div className="flex items-center gap-1.5 mb-1.5">
                     <span
                         style={{ fontFamily: "'Caveat', cursive", background: blog.accent, color: '#1a1a1a' }}
-                        className="inline-block text-[9px] font-bold px-2 py-0.5 rounded-full -rotate-1 shadow-sm"
+                        className="inline-block text-xl font-bold px-2 py-0.5 rounded-full -rotate-1 shadow-sm"
                     >
                         #{blog.tag}
                     </span>
                 </div>
 
-                <h3 className="text-sm font-bold leading-snug mb-1.5 group-hover:text-[var(--green-bright)] transition-colors line-clamp-2">
+                <h3 className="text-base font-bold leading-snug mb-1.5 group-hover:text-[var(--green-bright)] transition-colors line-clamp-2">
                     {blog.title}
                 </h3>
-                <p className="text-[var(--foreground)]/35 text-xs leading-relaxed line-clamp-2 mb-2">
+                <p className="text-[var(--foreground)] text-sm leading-relaxed line-clamp-2 mb-2">
                     {blog.excerpt}
                 </p>
 
                 <div className="flex items-center gap-1.5">
-                    <Calendar className="w-2.5 h-2.5 text-[var(--green-bright)]" />
-                    <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-[10px] font-bold">{blog.date}</span>
+                    <Calendar className="w-3.5 h-3.5 text-[var(--green-bright)]" />
+                    <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-lg font-bold">{blog.date}</span>
                 </div>
 
                 <WiggleLine color={blog.accent} className="w-full h-2 mt-2 opacity-20 group-hover:opacity-50 transition-opacity" />
@@ -281,7 +281,7 @@ export default function Blogsection() {
                                 className="flex items-center gap-2 mb-3"
                             >
                                 <BookOpen className="w-3.5 h-3.5 text-[var(--green-bright)]" />
-                                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-sm font-bold tracking-wide">
+                                <span style={{ fontFamily: "'Caveat', cursive" }} className="text-[var(--green-bright)] text-base font-bold tracking-wide">
                                     The Library
                                 </span>
                                 <WiggleLine color="var(--green-bright)" className="w-16 h-3 opacity-50" />
@@ -296,7 +296,7 @@ export default function Blogsection() {
                             >
                                 Deep Dives{' '}
                                 <span className="relative inline-block">
-                                    <span className="text-[var(--foreground)]/25">&amp; Discoveries.</span>
+                                    <span className="text-[var(--foreground)]">&amp; Discoveries.</span>
                                     <svg viewBox="0 0 240 10" fill="none" className="absolute -bottom-1 left-0 w-full" aria-hidden="true">
                                         <path d="M2 6 C50 1,120 9,170 5 S210 1,238 6" stroke="var(--green-bright)" strokeWidth="2.5" strokeLinecap="round" fill="none" className="opacity-40" />
                                     </svg>
@@ -314,7 +314,7 @@ export default function Blogsection() {
                         >
                             <Link
                                 href="/blog"
-                                className="group relative inline-flex items-center gap-2 px-7 py-3.5 font-black text-[10px] uppercase tracking-widest transition-transform hover:scale-105"
+                                className="group relative inline-flex items-center gap-2 px-7 py-3.5 font-black text-xs uppercase tracking-widest transition-transform hover:scale-105"
                             >
                                 <svg
                                     className="absolute inset-0 w-full h-full pointer-events-none"
@@ -357,7 +357,7 @@ export default function Blogsection() {
                                 <WiggleLine color="var(--green-bright)" className="flex-1 h-3 opacity-15" />
                                 <span
                                     style={{ fontFamily: "'Caveat', cursive" }}
-                                    className="text-white/20 text-xs tracking-wide whitespace-nowrap"
+                                    className="text-[var(--foreground)] text-xl tracking-wide whitespace-nowrap"
                                 >
                                     ✦ more stories soon ✦
                                 </span>

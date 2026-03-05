@@ -74,25 +74,14 @@ const CATEGORIES: Record<string, { src: string; alt: string }[]> = {
     ],
 };
 
-/* flatten for cycling */
 const ALL_IMAGES = Object.entries(CATEGORIES).flatMap(([cat, imgs]) =>
     imgs.map(img => ({ ...img, category: cat }))
 );
 
-/* 12 slots, each pre-assigned a category */
 const SLOT_CATEGORIES = [
-    'Doctors 👨‍⚕️',   // 0  tall
-    'Gym 💪',        // 1
-    'Parents 👨‍👩‍👧', // 2
-    'Couples 💑',    // 3  tall
-    'Yoga 🧘',       // 4
-    'Business 💼',   // 5
-    'Gym 💪',        // 6
-    'Runners 🏃',    // 7
-    'Office 🖥️',     // 8
-    'Yoga 🧘',       // 9  wide
-    'Seniors 👴',    // 10
-    'Patients 🏥',   // 11
+    'Doctors 👨‍⚕️', 'Gym 💪', 'Parents 👨‍👩‍👧', 'Couples 💑', 'Yoga 🧘',
+    'Business 💼', 'Gym 💪', 'Runners 🏃', 'Office 🖥️', 'Yoga 🧘',
+    'Seniors 👴', 'Patients 🏥',
 ];
 
 const SLOT_ACCENTS = [
@@ -102,7 +91,6 @@ const SLOT_ACCENTS = [
     '#8b5cf6', '#a16207', '#06b6d4',
 ];
 
-/* ── Local SVG Helper ── */
 function DoodleBorderOverlay({ color }: { color: string }) {
     return (
         <svg
@@ -131,7 +119,6 @@ function DoodleArrow({ color = '#f59e0b', className = '' }: { color?: string; cl
     );
 }
 
-/* Caveat handwritten wrapper */
 function H({ children, className = '', style = {} }: {
     children: React.ReactNode; className?: string; style?: React.CSSProperties;
 }) {
@@ -144,14 +131,14 @@ function H({ children, className = '', style = {} }: {
 
 function StickyNote({ text, rotate = 'rotate-2' }: { text: string; rotate?: string }) {
     return (
-        <span style={{ fontFamily: "'Caveat', cursive", background: '#fef08a', color: '#713f12' }}
-            className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded shadow-md ${rotate} select-none whitespace-nowrap border border-yellow-300/60`}>
+        <span
+            className={`inline-block font-bold px-3 py-1 rounded shadow-md ${rotate} select-none whitespace-nowrap border border-yellow-300/60`}
+            style={{ fontFamily: "'Caveat', cursive", background: '#fef08a', color: '#1a1a1a', fontSize: '22px', fontWeight: 800 }}>
             {text}
         </span>
     );
 }
 
-/* ── IMAGE CELL ── */
 interface CellProps {
     imageIndex: number;
     isChanging: boolean;
@@ -166,7 +153,6 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
 
     return (
         <div style={{ ...style, position: 'relative' }} className="group">
-            {/* image + transitions */}
             <div style={{ position: 'absolute', inset: 0, borderRadius: 14, overflow: 'hidden' }}>
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -180,7 +166,6 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={img.src} alt={img.alt}
                             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        {/* gradient for label readability */}
                         <div style={{
                             position: 'absolute', inset: 0,
                             background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.25) 100%)',
@@ -188,7 +173,6 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
                     </motion.div>
                 </AnimatePresence>
 
-                {/* swap flash */}
                 <AnimatePresence>
                     {isChanging && (
                         <motion.div
@@ -200,21 +184,20 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
                 </AnimatePresence>
             </div>
 
-            {/* doodle border on hover */}
             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <DoodleBorderOverlay color={accent} />
             </div>
 
-            {/* category label — always visible on image */}
+            {/* category label — bigger and bolder */}
             <div className="absolute top-2 left-2 z-20">
                 <span
                     style={{
                         fontFamily: "'Caveat', cursive",
                         background: accent,
                         color: '#1a1a1a',
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        padding: '2px 8px',
+                        fontSize: '14px',
+                        fontWeight: 800,
+                        padding: '3px 10px',
                         borderRadius: 999,
                         display: 'inline-block',
                         transform: 'rotate(-1.5deg)',
@@ -226,15 +209,13 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
                 </span>
             </div>
 
-            {/* bottom label — image alt on hover */}
             <div className="absolute bottom-2 left-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <H className="text-[10px] font-bold" style={{ color: 'rgba(255,255,255,0.85)' }}>{img.alt}</H>
+                <H style={{ fontSize: '13px', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{img.alt}</H>
             </div>
         </div>
     );
 }
 
-/* ── STATS ── */
 const stats = [
     { value: '50K+', label: 'active users',  accent: '#15803d' },
     { value: '4.9★', label: 'avg rating',    accent: '#f59e0b' },
@@ -244,7 +225,6 @@ const stats = [
 
 const SLOT_COUNT = 12;
 
-/* ── MAIN ── */
 export default function PeopleSection() {
     const [slots, setSlots] = useState<number[]>(() =>
         Array.from({ length: SLOT_COUNT }, (_, i) => {
@@ -287,11 +267,10 @@ export default function PeopleSection() {
 
     return (
         <>
-            <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');`}</style>
+            <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700;900&display=swap');`}</style>
 
             <section className="relative overflow-hidden bg-[var(--background)] py-20 md:py-28">
 
-                {/* dot grid texture */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.03]" aria-hidden="true">
                     <defs>
                         <pattern id="dotgrid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -301,7 +280,6 @@ export default function PeopleSection() {
                     <rect width="100%" height="100%" fill="url(#dotgrid)" />
                 </svg>
 
-                {/* ambient decorations */}
                 <Sparkle  color="#15803d" className="absolute top-10 left-[2%] w-7 h-7 opacity-20 rotate-12 pointer-events-none" />
                 <DoodleCircle color="#f59e0b" className="absolute top-24 right-[2%] w-12 h-12 opacity-15 -rotate-6 pointer-events-none" />
                 <Sparkle  color="#8b5cf6" className="absolute bottom-24 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
@@ -309,7 +287,7 @@ export default function PeopleSection() {
 
                 <div className="relative max-w-screen-xl mx-auto px-6 md:px-12 lg:px-16">
 
-                    {/* ── HEADING — all Caveat ── */}
+                    {/* ── HEADING ── */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -317,24 +295,23 @@ export default function PeopleSection() {
                         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
                         className="text-center mb-12"
                     >
-                        {/* eyebrow */}
+                        {/* eyebrow — bigger */}
                         <div className="flex items-center justify-center gap-3 mb-4">
-                            <StarDoodle size={14} color="#15803d" />
-                            <H className="text-base font-bold tracking-wide" style={{ color: '#15803d' }}>
+                            <StarDoodle size={18} color="#15803d" />
+                            <H style={{ fontSize: '20px', fontWeight: 800, color: '#15803d' }}>
                                 Real People · Real Results
                             </H>
-                            <StarDoodle size={14} color="#15803d" />
+                            <StarDoodle size={18} color="#15803d" />
                         </div>
 
-                        {/* main heading — Caveat, large */}
+                        {/* main heading */}
                         <H
-                            className="block font-bold leading-tight mb-3"
-                            style={{ fontSize: 'clamp(2.8rem, 6vw, 5rem)', color: '#1a1a1a', lineHeight: 1.05 }}
+                            className="block font-bold leading-tight mb-4"
+                            style={{ fontSize: 'clamp(2.8rem, 6vw, 5rem)', color: '#0a0a0a', lineHeight: 1.05 }}
                         >
                             Put health in{' '}
                             <span className="relative inline-block">
                                 <span style={{ color: '#15803d', fontStyle: 'italic' }}>your hands.</span>
-                                {/* hand-drawn underline */}
                                 <svg viewBox="0 0 280 14" fill="none" className="absolute -bottom-1 left-0 w-full" aria-hidden="true">
                                     <path d="M2 8 C55 2,150 12,220 7 S265 2,278 8"
                                         stroke="#15803d" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.45" />
@@ -344,19 +321,19 @@ export default function PeopleSection() {
                             </span>
                         </H>
 
-                        {/* sub text — Caveat */}
+                        {/* subtext — bigger, black, bold */}
                         <H
-                            className="block text-xl mb-5 max-w-lg mx-auto leading-snug"
-                            style={{ color: '#666' }}
+                            className="block font-bold mb-6 max-w-xl mx-auto leading-snug"
+                            style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)', color: '#1a1a1a' }}
                         >
                             From first-time cyclists to firefighters, parents to athletes —
                             Plainfuel fits every lifestyle.
                         </H>
 
-                        {/* sticky annotation */}
+                        {/* sticky note — bigger */}
                         <div className="flex items-center justify-center gap-2">
                             <StickyNote text="50,000+ people & counting 🎉" rotate="-rotate-1" />
-                            <DoodleArrow color="#f59e0b" className="w-9 h-5 rotate-12" />
+                            <DoodleArrow color="#f59e0b" className="w-10 h-6 rotate-12" />
                         </div>
                     </motion.div>
 
@@ -372,20 +349,22 @@ export default function PeopleSection() {
                             <motion.div
                                 key={i}
                                 whileHover={{ y: -4 }}
-                                className="text-center rounded-2xl py-4 px-3 border border-dashed transition-all cursor-default"
+                                className="text-center rounded-2xl py-5 px-3 border border-dashed transition-all cursor-default"
                                 style={{
                                     background: `${s.accent}08`,
                                     borderColor: `${s.accent}35`,
                                     transform: `rotate(${i % 2 === 0 ? -0.8 : 0.8}deg)`,
                                 }}
                             >
-                                <H className="text-3xl font-bold block" style={{ color: s.accent }}>{s.value}</H>
-                                <H className="text-xs font-bold block mt-0.5" style={{ color: '#888' }}>{s.label}</H>
+                                {/* stat value — big */}
+                                <H style={{ fontSize: '2.4rem', fontWeight: 900, color: s.accent, display: 'block', lineHeight: 1 }}>{s.value}</H>
+                                {/* stat label — bigger and dark */}
+                                <H style={{ fontSize: '16px', fontWeight: 800, color: '#1a1a1a', display: 'block', marginTop: '6px' }}>{s.label}</H>
                             </motion.div>
                         ))}
                     </motion.div>
 
-                    {/* ── CATEGORY KEY ── */}
+                    {/* ── CATEGORY KEY — bigger pills ── */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
@@ -400,10 +379,10 @@ export default function PeopleSection() {
                                     fontFamily: "'Caveat', cursive",
                                     background: `${SLOT_ACCENTS[i % SLOT_ACCENTS.length]}18`,
                                     color: SLOT_ACCENTS[i % SLOT_ACCENTS.length],
-                                    border: `1px dashed ${SLOT_ACCENTS[i % SLOT_ACCENTS.length]}50`,
-                                    fontSize: '11px',
-                                    fontWeight: 700,
-                                    padding: '3px 10px',
+                                    border: `1.5px dashed ${SLOT_ACCENTS[i % SLOT_ACCENTS.length]}70`,
+                                    fontSize: '18px',
+                                    fontWeight: 800,
+                                    padding: '4px 14px',
                                     borderRadius: 999,
                                     transform: `rotate(${i % 2 === 0 ? -1 : 1}deg)`,
                                     display: 'inline-block',
@@ -412,7 +391,7 @@ export default function PeopleSection() {
                                 {cat}
                             </span>
                         ))}
-                        <H className="text-xs self-center ml-1" style={{ color: '#aaa' }}>— images cycle automatically ✦</H>
+                       
                     </motion.div>
 
                     {/* ── IMAGE GRID ── */}
@@ -453,11 +432,12 @@ export default function PeopleSection() {
                     >
                         <div className="flex items-center gap-4 mb-7 max-w-xs mx-auto">
                             <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
-                            <H className="text-sm whitespace-nowrap" style={{ color: '#aaa' }}>✦ join the movement ✦</H>
+                            <H style={{ fontSize: '25px', fontWeight: 700, color: '#333', whiteSpace: 'nowrap' }}>✦ join the movement ✦</H>
                             <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
                         </div>
 
-                        <H className="block text-lg mb-5" style={{ color: '#777' }}>
+                        {/* CTA subtext — bigger and dark */}
+                        <H style={{ display: 'block', fontSize: '1.35rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '20px' }}>
                             Join thousands who fuel smarter 🚀
                         </H>
 
@@ -472,7 +452,7 @@ export default function PeopleSection() {
                                     <path d="M6 10 C58 2,152 2,204 9 S210 22,208 42 S202 54,162 55 S46 56,9 53 S1 44,2 28 S4 16,6 10Z"
                                         fill="#15803d" />
                                 </svg>
-                                <H className="relative z-10 text-xl font-bold" style={{ color: '#000' }}>
+                                <H style={{ position: 'relative', zIndex: 10, fontSize: '2rem', fontWeight: 900, color: '#fff' }}>
                                     Start Your Cycle 🚀
                                 </H>
                             </motion.button>

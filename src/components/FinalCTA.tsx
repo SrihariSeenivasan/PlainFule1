@@ -23,8 +23,6 @@ const ScribbleUnderline = ({ color = '#15803d', delay = 0, style = {} }: { color
   </motion.svg>
 );
 
-
-
 const StarBurst = ({ size = 28, rotate = 0, color = '#15803d', style = {} }: { size?: number; rotate?: number; color?: string; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden
     style={{ transform: `rotate(${rotate}deg)`, ...style }}>
@@ -53,8 +51,6 @@ const ZigZag = ({ width = 160, style = {} }: { width?: number; style?: React.CSS
     />
   </svg>
 );
-
-
 
 // ─── FAQ Item ─────────────────────────────────────────────────────────────────
 
@@ -97,7 +93,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
         <p style={{
           fontFamily: "'Permanent Marker', cursive",
-          fontSize: 15, color: '#1a1a1a', margin: 0, lineHeight: 1.4, flex: 1,
+          fontSize: 18, color: '#0a0a0a', margin: 0, lineHeight: 1.4, flex: 1,
         }}>{q}</p>
         <motion.span
           animate={{ rotate: open ? 45 : 0 }}
@@ -119,7 +115,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
         <div style={{ paddingTop: 10, borderTop: '1.5px dashed rgba(34,197,94,0.3)', marginTop: 12 }}>
           <p style={{
             fontFamily: "'Caveat', cursive",
-            fontSize: 16, fontWeight: 600, color: 'rgba(0,0,0,0.6)', lineHeight: 1.6, margin: 0,
+            fontSize: 20, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.6, margin: 0,
           }}>{a}</p>
         </div>
       </motion.div>
@@ -140,7 +136,6 @@ const faqs = [
 
 export default function FinalCTA() {
   const sectionRef = useRef(null);
-
 
   return (
     <>
@@ -166,8 +161,6 @@ export default function FinalCTA() {
 
       <section id="buy" ref={sectionRef} style={{ position: 'relative', overflow: 'hidden' }}>
 
-        {/* ── CTA BLOCK ─────────────────────────────────────────────────────── */}
-        
         {/* ── FAQ BLOCK ─────────────────────────────────────────────────────── */}
         <div style={{
           background: '#fffef5',
@@ -204,7 +197,7 @@ export default function FinalCTA() {
                 transform: 'rotate(-1deg)',
                 boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
               }}>
-                <span style={{ fontFamily: "'Caveat',cursive", fontSize: 13, fontWeight: 700, color: 'rgba(0,0,0,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                <span style={{ fontFamily: "'Caveat',cursive", fontSize: 17, fontWeight: 700, color: '#1a1a1a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                   🧠 Biological Logic
                 </span>
               </div>
@@ -213,7 +206,7 @@ export default function FinalCTA() {
                 <h3 style={{
                   fontFamily: "'Permanent Marker',cursive",
                   fontSize: 'clamp(2rem,4vw,3rem)',
-                  color: '#1a1a1a',
+                  color: '#0a0a0a',
                   margin: 0,
                   lineHeight: 1.1,
                 }}>Common Questions</h3>
@@ -249,19 +242,23 @@ export default function FinalCTA() {
             alignItems: 'center', justifyContent: 'space-between', gap: 20,
           }}>
 
-            {/* Logo */}
+            {/* Logo — permanently tilted upward */}
             <motion.div
               initial={{ opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              style={{ display: 'flex', alignItems: 'center', gap: 10 }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 24 }}
             >
-              <div style={{
-                position: 'relative', width: 480, height: 160, flexShrink: 0,
-              }}>
-                <Image 
-                  src="/images/plainfuel.png" 
-                  alt="Plainfuel" 
+              <div
+                style={{
+                  position: 'relative', width: 480, height: 160, flexShrink: 0,
+                  transform: 'rotate(-8deg)',
+                  transformOrigin: 'left center',
+                }}
+              >
+                <Image
+                  src="/images/plainfuel.png"
+                  alt="Plainfuel"
                   fill
                   style={{ objectFit: 'contain' }}
                 />
@@ -288,8 +285,8 @@ export default function FinalCTA() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                     fontFamily: "'Caveat',cursive",
-                    fontSize: 14, fontWeight: 700,
-                    color: 'rgba(0,0,0,0.45)',
+                    fontSize: 18, fontWeight: 700,
+                    color: '#1a1a1a',
                     textDecoration: 'none',
                     background: '#fffef5',
                     border: '1.5px dashed rgba(0,0,0,0.15)',
@@ -303,7 +300,7 @@ export default function FinalCTA() {
                     e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'rgba(0,0,0,0.45)';
+                    e.currentTarget.style.color = '#1a1a1a';
                     e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
                   }}
                 >
@@ -329,8 +326,8 @@ export default function FinalCTA() {
             >
               <p style={{
                 fontFamily: "'Caveat',cursive",
-                fontSize: 12, fontWeight: 700,
-                color: 'rgba(0,0,0,0.3)',
+                fontSize: 15, fontWeight: 700,
+                color: '#1a1a1a',
                 margin: 0,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
@@ -342,4 +339,4 @@ export default function FinalCTA() {
       </section>
     </>
   );
-}
+} 

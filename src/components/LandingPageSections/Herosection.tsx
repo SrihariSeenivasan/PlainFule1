@@ -82,7 +82,7 @@ function StarBurst({ size = 80, fill = BRAND_LIGHT, label, style = {} }: StarBur
       return `${50 + r * Math.cos(a)},${50 + r * Math.sin(a)}`;
     }).join(' ');
   return (
-    <svg viewBox="0 0 100 100" width={size} height={size} style={style} aria-hidden>
+    <svg viewBox="0 0 100 100" width={size} height={size} style={style} aria-hidden suppressHydrationWarning>
       <defs>
         <radialGradient id="sbGrad" cx="38%" cy="32%" r="68%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
