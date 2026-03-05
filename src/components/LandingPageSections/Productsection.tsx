@@ -1,669 +1,372 @@
 'use client';
 
 /*
- * FONT SYSTEM:
- *
- *  F_DISPLAY  =  "Playfair Display"  →  editorial serif headlines, product names, large stat figures
- *                bold/black weight, italic variant for accent phrases
- *
- *  F_BODY     =  "DM Sans"           →  all UI copy, labels, badges, nav, descriptions, CTAs
- *                clean humanist sans, weights 400–700
- *
- *  Add to global CSS:
- *  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@400;500;600;700&display=swap');
+ * FONTS — add to global CSS / _app.tsx:
+ * @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;600;700&display=swap');
  */
 
 import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  type ReactNode,
+  useEffect, useRef, useState, useCallback, type ReactNode,
 } from 'react';
 import {
-  motion,
-  AnimatePresence,
-  useSpring,
-  useMotionValue,
-  useTransform,
+  motion, AnimatePresence,
+  useSpring, useMotionValue, useTransform,
   type MotionValue,
 } from 'framer-motion';
-import {
-  ShoppingCart,
-  ArrowRight,
-  Zap,
-  Shield,
-  Star,
-  type LucideIcon,
-} from 'lucide-react';
-// import { StarDoodle } from '@/components/Elements/SvgDoodles';
+import { ShoppingCart, ArrowRight, Zap, Shield, Star, type LucideIcon } from 'lucide-react';
 
-/* ── font vars ── */
-const FD = "'Playfair Display', Georgia, serif";   /* Display — editorial serif headlines */
-const FS = "'DM Sans', 'Helvetica Neue', sans-serif"; /* Body/UI — clean humanist sans */
+/* ── theme ── */
+const FD = "'Playfair Display', Georgia, serif";
+const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
+const FH = "'Caveat', cursive";
+const G  = '#15803d';
+const GG = 'rgba(21,128,61,0.24)';
+const GS = 'rgba(21,128,61,0.09)';
 
-/* ─────────────────────────────────────
-   TYPES
-───────────────────────────────────── */
-interface Nutrient {
-  label: string;
-  value: string;
-  sub: string;
-  yRatio: number;
-}
+/* ─────────────────────── TYPES ─────────────────────────── */
+interface Nutrient { label: string; friendly: string; emoji: string; }
 interface Product {
-  id: number;
-  name: string;
-  headline: string;
-  accentWord: string;
-  grayWord: string;
-  sub: string;
-  tag: string;
-  duration: string;
-  price: string;
-  image: string;
-  accent: string;
-  accentGlow: string;
-  accentSoft: string;
-  desc: string;
-  badges: string[];
-  icon: LucideIcon;
-  nutrients: Nutrient[];
+  id: number; name: string;
+  headline: string; accentWord: string; grayWord: string;
+  tag: string; duration: string; price: string; origPrice: string;
+  image: string; persuade: string; desc: string; badges: string[];
+  icon: LucideIcon; nutrients: Nutrient[];
+  tagline: string; highlight: string; savePct: string;
 }
 
-/* ─────────────────────────────────────
-   DATA
-───────────────────────────────────── */
+/* ─────────────────────── DATA ──────────────────────────── */
 const PRODUCTS: Product[] = [
   {
-    id: 0,
-    name: 'Starter Pack',
-    headline:    'The Beginning.',
-    accentWord:  'Just Start.',
-    grayWord:    'Stay consistent.',
-    sub: 'Delta',
-    tag: 'Trial · 7 Pouches',
-    duration: '7 Days',
-    price: '₹1,500',
+    id: 0, name: 'Starter Pack',
+    headline: 'The Beginning.', accentWord: 'Just Start.', grayWord: 'Stay consistent.',
+    tag: 'Trial · 7 Pouches', duration: '7 Days', price: '₹1,500', origPrice: '₹2,000',
     image: '/images/product.png',
-    accent: '#15803d',
-    accentGlow: 'rgba(34,197,94,0.22)',
-    accentSoft: 'rgba(34,197,94,0.09)',
-    desc: 'We consume more than ever, yet our cells are starving. Seven precise pouches calibrated for first-cycle adaptation.',
+    persuade: 'Have it anywhere.',
+    desc: 'One pouch. Bag, desk, gym locker. No mixing. No measuring. Just your body getting what it actually needs.',
     badges: ['7-Day Trial', 'Starter Formula', 'Free Delivery'],
-    icon: Zap,
+    icon: Zap, tagline: 'Drop it in your bag. Done.', savePct: 'Save 25%',
+    highlight: 'Most people feel it in 3 days.',
     nutrients: [
-      { label: 'Protein',     value: '18g',   sub: 'per pouch', yRatio: 0.18 },
-      { label: 'Vitamin C',   value: '80mg',  sub: '100% DV',   yRatio: 0.37 },
-      { label: 'Zinc',        value: '11mg',  sub: 'Immune+',   yRatio: 0.58 },
-      { label: 'Vitamin B12', value: '2.4µg', sub: 'Energy',    yRatio: 0.77 },
+      { label: 'Protein',   friendly: 'Builds & repairs', emoji: '🥩' },
+      { label: 'Vitamin C', friendly: 'Immunity shield',  emoji: '🍊' },
+      { label: 'Zinc',      friendly: 'Energy spark',     emoji: '⚡' },
+      { label: 'Vitamin B', friendly: 'Brain clarity',    emoji: '🧠' },
     ],
   },
   {
-    id: 1,
-    name: 'Balanced',
-    headline:    'The Balance.',
-    accentWord:  'Truly Yours.',
-    grayWord:    'Sustained.',
-    sub: 'Delta',
-    tag: 'Subscription · 15 Pouches',
-    duration: '15 Days',
-    price: '₹2,500',
+    id: 1, name: 'Balanced',
+    headline: 'The Balance.', accentWord: 'Truly Yours.', grayWord: 'Sustained.',
+    tag: 'Subscription · 15 Pouches', duration: '15 Days', price: '₹2,500', origPrice: '₹3,200',
     image: '/images/Pack1.png',
-    accent: '#15803d',
-    accentGlow: 'rgba(21,128,61,0.22)',
-    accentSoft: 'rgba(21,128,61,0.09)',
-    desc: 'Supplements shouldn\'t be a scattergun approach of generic fillers. We match bio-identical nutrients to your unique biological context.',
+    persuade: 'Fits your lifestyle.',
+    desc: 'Morning commute, late nights, post-gym? Your nutrition doesn\'t care about your schedule — but ours does.',
     badges: ['15-Day Cycle', 'Balanced Formula', 'Priority Shipping'],
-    icon: Shield,
+    icon: Shield, tagline: 'Your body. Balanced.', savePct: 'Save 22%',
+    highlight: 'Bioidentical nutrients. Matched to you.',
     nutrients: [
-      { label: 'Protein',   value: '24g',    sub: 'per pouch',  yRatio: 0.18 },
-      { label: 'Omega-3',   value: '500mg',  sub: 'Brain fuel', yRatio: 0.37 },
-      { label: 'Magnesium', value: '200mg',  sub: 'Recovery',   yRatio: 0.58 },
-      { label: 'Vitamin D', value: '1000IU', sub: 'Daily dose', yRatio: 0.77 },
+      { label: 'Protein',   friendly: 'Muscle support',  emoji: '💪' },
+      { label: 'Omega-3',   friendly: 'Brain fuel',      emoji: '🐟' },
+      { label: 'Magnesium', friendly: 'Deep recovery',   emoji: '🦴' },
+      { label: 'Vitamin D', friendly: 'Daily essential', emoji: '☀️' },
     ],
   },
   {
-    id: 2,
-    name: 'Monthly',
-    headline:    'The Protocol.',
-    accentWord:  'Fully Committed.',
-    grayWord:    'Dominate.',
-    sub: 'Delta',
-    tag: 'Full Cycle · 30 Pouches',
-    duration: '30 Days',
-    price: '₹4,500',
+    id: 2, name: 'Monthly',
+    headline: 'The Protocol.', accentWord: 'Fully Committed.', grayWord: 'Dominate.',
+    tag: 'Full Cycle · 30 Pouches', duration: '30 Days', price: '₹4,500', origPrice: '₹6,000',
     image: '/images/Pack2.png',
-    accent: '#15803d',
-    accentGlow: 'rgba(21,128,61,0.22)',
-    accentSoft: 'rgba(21,128,61,0.09)',
-    desc: 'Full commitment. Maximum transformation. The complete monthly protocol — we bridge the specific Delta within your thali.',
+    persuade: 'One month. Total shift.',
+    desc: 'Real change needs commitment. 30 days of precision nutrition — gut, cells, performance. All of it.',
     badges: ['30-Day Protocol', 'Premium Formula', 'Exclusive Access'],
-    icon: Star,
+    icon: Star, tagline: 'No shortcuts. Real results.', savePct: 'Save 25%',
+    highlight: 'The full protocol. Nothing missing.',
     nutrients: [
-      { label: 'Protein',   value: '30g',  sub: 'per pouch',   yRatio: 0.18 },
-      { label: 'Creatine',  value: '3g',   sub: 'Strength',    yRatio: 0.37 },
-      { label: 'Vitamin E', value: '15mg', sub: 'Antioxidant', yRatio: 0.58 },
-      { label: 'Iron',      value: '18mg', sub: 'Endurance',   yRatio: 0.77 },
+      { label: 'Protein', friendly: 'Peak performance', emoji: '🥩' },
+      { label: 'Calcium', friendly: 'Bone strength',    emoji: '💪' },
+      { label: 'Iron',    friendly: 'Endurance++',      emoji: '🔋' },
+      { label: 'Fiber',   friendly: 'Gut health',       emoji: '🌿' },
     ],
   },
 ];
 
-/* ─────────────────────────────────────
-   GLOBAL SVG FILTERS
-───────────────────────────────────── */
-function DoodleFilters() {
+/* ─────────────────── SVG FILTERS ──────────────────── */
+function Filters() {
   return (
-    <svg width="0" height="0" style={{ position: 'absolute', top: 0, left: 0 }}>
+    <svg width="0" height="0" style={{ position:'absolute', pointerEvents:'none' }}>
       <defs>
-        <filter id="sk" x="-5%" y="-5%" width="110%" height="110%">
-          <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="3" result="noise" seed="7" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+        <filter id="sk">
+          <feTurbulence type="turbulence" baseFrequency="0.042" numOctaves="3" seed="9" result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="skHeavy" x="-8%" y="-8%" width="116%" height="116%">
-          <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="2" result="noise" seed="3" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-        <filter id="lineGlow" x="-30%" y="-200%" width="160%" height="500%">
-          <feGaussianBlur stdDeviation="1.6" result="b" />
-          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        <filter id="stkShadow">
+          <feDropShadow dx="1" dy="3" stdDeviation="4" floodColor="rgba(0,0,0,0.13)" />
         </filter>
       </defs>
     </svg>
   );
 }
 
-/* ─────────────────────────────────────
-   BACKGROUND DOODLES
-───────────────────────────────────── */
-const FLOAT_SHAPES = [
-  { x: '82%', y: '14%', ch: '○', sz: 22, d: 0    },
-  { x: '6%',  y: '46%', ch: '△', sz: 18, d: 0.9  },
-  { x: '89%', y: '68%', ch: '◇', sz: 20, d: 0.4  },
-  { x: '13%', y: '17%', ch: '×', sz: 16, d: 1.4  },
-  { x: '76%', y: '82%', ch: '+', sz: 18, d: 0.7  },
-] as const;
-
-const STAR_COORDS = [
-  { x: '81%', y: '11%', s: 18 },
-  { x: '94%', y: '46%', s: 14 },
-  { x: '3%',  y: '30%', s: 16 },
-  { x: '7%',  y: '72%', s: 12 },
-] as const;
-
-function BgDoodles({ accent }: { accent: string }) {
+/* ─────────────────── NOTEBOOK BG ──────────────────── */
+function NotebookBg() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.09 }}>
-        <motion.path
-          d="M0 25% Q25% 22% 50% 25% Q75% 28% 100% 25%"
-          fill="none" stroke={accent} strokeWidth="1.5" strokeLinecap="round"
-          animate={{ d: ['M0 25% Q25% 22% 50% 25% Q75% 28% 100% 25%', 'M0 25% Q25% 28% 50% 25% Q75% 22% 100% 25%'] }}
-          transition={{ duration: 6, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-        />
-        <motion.path
-          d="M0 76% Q30% 72% 60% 76% Q90% 80% 110% 76%"
-          fill="none" stroke={accent} strokeWidth="1.2" strokeLinecap="round"
-          animate={{ d: ['M0 76% Q30% 72% 60% 76% Q90% 80% 110% 76%', 'M0 76% Q30% 80% 60% 76% Q90% 72% 110% 76%'] }}
-          transition={{ duration: 7, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 1 }}
-        />
-        {STAR_COORDS.map((st, i) => (
-          <motion.text key={i} x={st.x} y={st.y} fontSize={st.s} fill={accent} textAnchor="middle"
-            animate={{ opacity: [0.3, 0.9, 0.3], rotate: [0, 18, 0] }}
-            transition={{ duration: 3 + i * 0.6, delay: i * 0.5, repeat: Infinity }}
-          >
-            ✦
-          </motion.text>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex:0 }}>
+      <div className="absolute inset-0" style={{ background:'#fdfaf3' }} />
+      <div className="absolute inset-0" style={{
+        opacity: 0.035,
+        backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundSize:'256px',
+      }} />
+      <svg className="absolute inset-0 w-full h-full" style={{ opacity:0.11 }}>
+        {Array.from({ length:60 }, (_,i) => (
+          <line key={i} x1="0" y1={`${(i+1)*32}px`} x2="100%" y2={`${(i+1)*32}px`} stroke="#9ab0c8" strokeWidth="0.7" />
         ))}
-        <polyline points="2%,90% 4%,87% 6%,90% 8%,87% 10%,90% 12%,87%"
-          fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <motion.circle cx="90%" cy="9%" r="58" fill="none" stroke={accent}
-          strokeWidth="1.5" strokeDasharray="8 6"
-          animate={{ strokeDashoffset: [0, -56] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-        />
-        <circle cx="5%" cy="61%" r="26" fill="none" stroke={accent} strokeWidth="1.5" strokeDasharray="5 4" />
       </svg>
-      {FLOAT_SHAPES.map((item, i) => (
-        <motion.span key={i} className="absolute select-none"
-          style={{ left: item.x, top: item.y, fontSize: item.sz, color: accent, opacity: 0.14, fontFamily: 'cursive' }}
-          animate={{ y: [0, -10, 0], rotate: [0, 13, 0], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 4 + i * 0.5, delay: item.d, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          {item.ch}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   DOODLE PARTICLES
-───────────────────────────────────── */
-const PARTICLES = Array.from({ length: 15 }, (_, i) => ({
-  id: i,
-  x: (i * 37.3 + 11) % 100,
-  y: (i * 53.7 + 7) % 100,
-  size: (i % 3) + 1.5,
-  dur: 6 + (i % 5) * 1.5,
-  delay: (i % 7) * 0.8,
-  op: 0.08 + (i % 4) * 0.06,
-  dx: ((i % 5) - 2) * 9,
-  shape: i % 4,
-}));
-
-function DoodleParticles({ accent }: { accent: string }) {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {PARTICLES.map((p) => (
-        <motion.div key={p.id} className="absolute"
-          style={{ left: `${p.x}%`, top: `${p.y}%` }}
-          animate={{ y: [0, -30, 0], x: [0, p.dx, 0], opacity: [p.op, p.op * 2, p.op] }}
-          transition={{ duration: p.dur, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          {p.shape === 0 && <svg width={p.size * 4} height={p.size * 4} viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="none" stroke={accent} strokeWidth="1.4" strokeDasharray="2.5 2" /></svg>}
-          {p.shape === 1 && <svg width={p.size * 3} height={p.size * 3} viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke={accent} strokeWidth="1.6" strokeLinecap="round" /><line x1="6" y1="2" x2="6" y2="10" stroke={accent} strokeWidth="1.6" strokeLinecap="round" /></svg>}
-          {p.shape === 2 && <svg width={p.size * 3} height={p.size * 3} viewBox="0 0 12 12"><path d="M6 1L7.2 4.6L11 4.6L8 6.9L9.2 10.5L6 8.2L2.8 10.5L4 6.9L1 4.6L4.8 4.6Z" fill={accent} opacity={0.5} /></svg>}
-          {p.shape === 3 && <svg width={p.size * 3} height={p.size * 3} viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="none" stroke={accent} strokeWidth="1.4" strokeDasharray="2 2" transform="rotate(15 6 6)" /></svg>}
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   SKETCHY PILL
-───────────────────────────────────── */
-function SketchPill({ children, accent, accentSoft }: { children: ReactNode; accent: string; accentSoft: string }) {
-  return (
-    <div className="relative inline-flex items-center gap-2 px-3 py-1.5">
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-        <motion.rect x="1" y="1" width="98%" height="90%" rx="18" ry="18"
-          fill={accentSoft} stroke={accent} strokeWidth="1.5" strokeDasharray="5 3"
-          filter="url(#sk)"
-          animate={{ strokeDashoffset: [0, -28] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-        />
+      <div className="absolute top-0 bottom-0" style={{ left:46, width:1.5, background:'rgba(239,68,68,0.28)' }} />
+      <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-around items-center" style={{ width:20 }}>
+        {Array.from({ length:26 }, (_,i) => (
+          <div key={i} style={{ width:12, height:12, borderRadius:'50%', background:'#dfd5c4', border:'2px solid #c4b8a4', boxShadow:'inset 0 1px 2px rgba(0,0,0,0.12)', flexShrink:0 }} />
+        ))}
+      </div>
+      <div className="absolute top-0 left-0 right-0" style={{ height:52, background:`linear-gradient(135deg,${G}14,${G}05)`, borderBottom:`1.5px solid ${G}20` }} />
+      <motion.div className="absolute inset-0"
+        animate={{ background:`radial-gradient(ellipse 56% 50% at 62% 50%,${GG} 0%,transparent 68%)` }}
+        transition={{ duration:0.85 }} />
+      <svg className="absolute bottom-0 right-0" width="52" height="52">
+        <path d="M52 52 L52 16 Q32 32 16 52 Z" fill="#ede8d8" />
+        <path d="M52 16 L16 52" stroke="#d0c9b6" strokeWidth="0.9" />
       </svg>
-      <span className="relative z-10 flex items-center gap-1.5">{children}</span>
     </div>
   );
 }
 
-/* ─────────────────────────────────────
-   WOBBLY BADGE — DM Sans label
-───────────────────────────────────── */
-function WobblyBadge({ label, accent, accentSoft, delay }: { label: string; accent: string; accentSoft: string; delay: number }) {
+/* ─────────────────── PERSUADE TAG ──────────────────── */
+function PersuadeTag({ text }: { text: string }) {
   return (
-    <motion.div className="relative inline-block"
-      initial={{ opacity: 0, scale: 0.6, rotate: -7 }}
-      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-      transition={{ delay, type: 'spring', stiffness: 300, damping: 20 }}
+    <AnimatePresence mode="wait">
+      <motion.div key={text}
+        initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0 }}
+        transition={{ duration:0.3 }}
+        className="inline-flex items-center gap-3 px-6 py-3 rounded-full mb-6"
+        style={{ background:`${G}12`, border:`1.5px dashed ${G}50` }}
+      >
+        <motion.span style={{ width:11, height:11, borderRadius:'50%', background:G, display:'inline-block', flexShrink:0 }}
+          animate={{ scale:[1,1.8,1] }} transition={{ duration:1.4, repeat:Infinity }} />
+        <span style={{ fontFamily:FH, fontSize:24, fontWeight:700, color:G }}>{text}</span>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ─────────────────── HAND UNDERLINE ──────────────────── */
+function HandUnderline({ width=280 }: { width?: number }) {
+  return (
+    <svg width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" style={{ display:'block' }}>
+      <motion.path d={`M2 9 Q${width*.25} 2 ${width*.5} 9 Q${width*.75} 14 ${width-2} 7`}
+        stroke={G} strokeWidth="3.5" strokeLinecap="round" fill="none" filter="url(#sk)"
+        initial={{ pathLength:0 }} animate={{ pathLength:1 }} transition={{ duration:0.7 }} />
+    </svg>
+  );
+}
+
+/* ─────────────────── BADGE ──────────────────── */
+function NBadge({ label }: { label: string }) {
+  return (
+    <div style={{ background:'#fffde6', border:`1.5px solid ${G}50`, borderRadius:10, padding:'7px 18px', position:'relative', boxShadow:'1px 2px 6px rgba(0,0,0,0.07)' }}>
+      <div style={{ position:'absolute', top:-8, left:'50%', transform:'translateX(-50%)', width:30, height:12, background:`${G}25`, borderRadius:2, border:`1px solid ${G}28` }} />
+      <span style={{ fontFamily:FH, fontSize:19, fontWeight:700, color:G }}>{label}</span>
+    </div>
+  );
+}
+
+/* ─────────────────── SKETCH BUTTON ──────────────────── */
+function SketchBtn({ children }: { children: ReactNode }) {
+  return (
+    <motion.button className="relative overflow-hidden" style={{ padding:'18px 44px' }}
+      whileHover={{ scale:1.04, boxShadow:`0 8px 32px ${GG}` }}
+      whileTap={{ scale:0.96 }}
+      transition={{ type:'spring', stiffness:340, damping:22 }}
     >
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-        <motion.rect x="2" y="2" width="96%" height="88%" rx="16" ry="16"
-          fill={accentSoft} stroke={accent} strokeWidth="1.6" strokeDasharray="5 3"
-          filter="url(#sk)"
-          animate={{ strokeDashoffset: [0, -24] }}
-          transition={{ duration: 5 + delay, repeat: Infinity, ease: 'linear' }}
-        />
-      </svg>
-      {/* Badge label — DM Sans semibold */}
-      <span className="relative px-3 py-1.5 inline-block"
-        style={{ fontFamily: FS, fontSize: '13px', fontWeight: 600, color: accent }}>
-        {label}
-      </span>
-    </motion.div>
-  );
-}
-
-/* ─────────────────────────────────────
-   SKETCH BUTTON — DM Sans
-───────────────────────────────────── */
-function SketchButton({ accent, accentGlow, children }: { accent: string; accentGlow: string; children: ReactNode }) {
-  return (
-    <motion.button className="relative overflow-hidden" style={{ padding: '11px 26px' }}
-      whileHover={{ scale: 1.05, boxShadow: `0 6px 30px ${accentGlow}` }}
-      whileTap={{ scale: 0.96, rotate: -1 }}
-      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-    >
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-        <motion.rect x="1" y="1" width="98%" height="94%" rx="14" ry="14"
-          fill={accent} stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" filter="url(#sk)" />
-        <motion.rect x="4" y="4" width="92%" height="86%" rx="10" ry="10"
-          fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="7 5"
-          filter="url(#sk)"
-          animate={{ strokeDashoffset: [0, -38] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-        />
+      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" style={{ overflow:'visible' }}>
+        <motion.rect x="1" y="1" width="98%" height="94%" rx="14" ry="14" fill={G} filter="url(#sk)" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+        <motion.rect x="4" y="4" width="92%" height="86%" rx="10" ry="10" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" strokeDasharray="8 5" filter="url(#sk)"
+          animate={{ strokeDashoffset:[0,-42] }} transition={{ duration:3.2, repeat:Infinity, ease:'linear' }} />
       </svg>
       <motion.div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(110deg, transparent 22%, rgba(255,255,255,0.2) 50%, transparent 78%)' }}
-        animate={{ x: ['-140%', '200%'] }}
-        transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
-      />
-      {/* Button label — DM Sans bold */}
-      <span className="relative z-10 flex items-center gap-2"
-        style={{ fontFamily: FS, fontSize: '15px', fontWeight: 700, color: '#fff', letterSpacing: '0.02em' }}>
+        style={{ background:'linear-gradient(110deg,transparent 22%,rgba(255,255,255,0.18) 50%,transparent 78%)' }}
+        animate={{ x:['-140%','200%'] }} transition={{ duration:2.4, repeat:Infinity, repeatDelay:2.2, ease:'easeInOut' }} />
+      <span className="relative z-10 flex items-center gap-3"
+        style={{ fontFamily:FS, fontSize:20, fontWeight:700, color:'#fff' }}>
         {children}
       </span>
     </motion.button>
   );
 }
 
-/* ─────────────────────────────────────
-   SKETCH NAV BUTTON — DM Sans numbers
-───────────────────────────────────── */
-function SketchNavBtn({ index, isActive, accent, onClick }: { index: number; isActive: boolean; accent: string; onClick: () => void }) {
+/* ─────────────────── NAV DOT ──────────────────── */
+function NavDot({ index, isActive, onClick }: { index:number; isActive:boolean; onClick:()=>void }) {
   return (
-    <motion.button onClick={onClick} className="relative w-10 h-10 flex items-center justify-center"
-      whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.9 }}>
-      <svg className="absolute inset-0" width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <motion.circle cx="20" cy="20" r="17"
-          fill={isActive ? accent + '22' : 'transparent'}
-          stroke={isActive ? accent : 'rgba(0,0,0,0.14)'}
+    <motion.button onClick={onClick} className="relative flex items-center justify-center" style={{ width:48, height:48 }}
+      whileHover={{ scale:1.15 }} whileTap={{ scale:0.9 }}>
+      <svg className="absolute inset-0" width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <motion.circle cx="24" cy="24" r="19"
+          fill={isActive ? G+'22' : 'rgba(255,255,255,0.6)'}
+          stroke={isActive ? G : 'rgba(0,0,0,0.18)'}
           strokeWidth="1.8" strokeDasharray={isActive ? '0' : '5 3'}
-          filter="url(#sk)"
-          animate={{ opacity: [0.75, 1, 0.75] }}
-          transition={{ duration: 2.4, repeat: Infinity }}
-        />
+          filter="url(#sk)" />
         {isActive && (
-          <motion.circle cx="20" cy="20" r="19" fill="none"
-            stroke={accent} strokeWidth="1" strokeDasharray="4 4" opacity={0.4}
-            animate={{ strokeDashoffset: [0, -28] }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: 'linear' }}
-          />
+          <motion.circle cx="24" cy="24" r="21" fill="none" stroke={G} strokeWidth="1" strokeDasharray="4 4" opacity={0.45}
+            animate={{ strokeDashoffset:[0,-28] }} transition={{ duration:2.8, repeat:Infinity, ease:'linear' }} />
         )}
       </svg>
-      {/* Nav number — DM Sans bold */}
-      <span className="relative z-10"
-        style={{ fontFamily: FS, fontSize: '13px', fontWeight: 700, color: isActive ? accent : 'rgba(0,0,0,0.28)' }}>
-        {String(index + 1).padStart(2, '0')}
+      <span className="relative z-10" style={{ fontFamily:FH, fontSize:19, fontWeight:700, color:isActive?G:'rgba(0,0,0,0.35)' }}>
+        {index+1}
       </span>
     </motion.button>
   );
 }
 
-/* ─────────────────────────────────────
-   PRICE TICKER — Playfair Display
-───────────────────────────────────── */
-function PriceTicker({ price }: { price: string }) {
+/* ─────────────────── PRICE ──────────────────── */
+function Price({ price, orig, save }: { price:string; orig:string; save:string }) {
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={price}
-        initial={{ y: 24, opacity: 0, rotate: -2 }}
-        animate={{ y: 0, opacity: 1, rotate: 0 }}
-        exit={{ y: -24, opacity: 0, rotate: 2 }}
-        transition={{ duration: 0.34, type: 'spring', stiffness: 280 }}
-      >
-        {/* Price — Playfair Display, big editorial number */}
-        <span style={{ fontFamily: FD, fontSize: 'clamp(2.2rem, 5.5vw, 3.4rem)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1 }}>
-          {price}
-        </span>
+      <motion.div key={price} initial={{ y:18, opacity:0 }} animate={{ y:0, opacity:1 }} exit={{ y:-18, opacity:0 }} transition={{ duration:0.32 }}>
+        <div className="flex items-baseline gap-4">
+          <span style={{ fontFamily:FD, fontSize:'clamp(3rem,5.5vw,4.8rem)', fontWeight:900, color:'#1a1a1a', lineHeight:1 }}>{price}</span>
+          <span style={{ fontFamily:FS, fontSize:20, fontWeight:500, color:'rgba(0,0,0,0.36)', textDecoration:'line-through' }}>{orig}</span>
+          <span style={{ fontFamily:FH, fontSize:20, fontWeight:700, color:G, background:GS, border:`1px solid ${G}40`, borderRadius:20, padding:'4px 16px' }}>{save}</span>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
 }
 
-/* ─────────────────────────────────────
-   STAGE CONSTANTS
-───────────────────────────────────── */
-const STAGE_W   = 460;
-const STAGE_H   = 520;
-const IMG_W     = 268;
-const IMG_H     = 352;
-const IMG_LEFT  = (STAGE_W - IMG_W) / 2;
-const IMG_TOP   = (STAGE_H - IMG_H) / 2;
-const IMG_RIGHT = IMG_LEFT + IMG_W;
-
-/* ─────────────────────────────────────
-   SKETCH CORNER BRACKETS
-───────────────────────────────────── */
-function SketchBrackets({ accent, w, h }: { accent: string; w: number; h: number }) {
-  const sz = 26;
-  const paths = [
-    `M ${sz} 0 L 0 0 L 0 ${sz}`,
-    `M ${w - sz} 0 L ${w} 0 L ${w} ${sz}`,
-    `M ${w} ${h - sz} L ${w} ${h} L ${w - sz} ${h}`,
-    `M 0 ${h - sz} L 0 ${h} L ${sz} ${h}`,
-  ];
+/* ─────────────────── NUTRIENT GRID ──────────────────── */
+function NutrientGrid({ product }: { product: Product }) {
   return (
-    <svg className="absolute pointer-events-none" style={{ top: 0, left: 0 }} width={w} height={h} fill="none">
-      {paths.map((d, i) => (
-        <motion.path key={i} d={d} stroke={accent} strokeWidth="2.2" strokeLinecap="round"
-          filter="url(#sk)"
-          animate={{ opacity: [0.45, 0.95, 0.45] }}
-          transition={{ duration: 2.4, delay: i * 0.28, repeat: Infinity }}
-        />
-      ))}
-    </svg>
-  );
-}
-
-/* ─────────────────────────────────────
-   HEX GRID
-───────────────────────────────────── */
-const HEX_CELLS = Array.from({ length: 19 }, (_, i) => {
-  const col = i % 4, row = Math.floor(i / 4);
-  return { id: i, cx: col * 56 + (row % 2) * 28 - 84, cy: row * 48 - 96, delay: (col + row) * 0.14, ring: col + row };
-});
-
-function HexGrid({ accent }: { accent: string }) {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-      <svg width="380" height="380" viewBox="-190 -190 380 380" style={{ opacity: 0.1 }}>
-        {HEX_CELLS.map((c) => (
-          <motion.polygon key={c.id} points="0,-22 19,-11 19,11 0,22 -19,11 -19,-11"
-            fill="none" stroke={accent} strokeWidth="0.8" strokeDasharray="3 3"
-            transform={`translate(${c.cx},${c.cy})`}
-            animate={{ strokeOpacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 3.4 + (c.ring % 3) * 0.5, delay: c.delay, repeat: Infinity, ease: 'easeInOut' }}
-          />
+    <AnimatePresence mode="wait">
+      <motion.div key={`ng-${product.id}`} className="grid grid-cols-2 gap-4"
+        initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }} transition={{ duration:0.32 }}>
+        {product.nutrients.map((n,i) => (
+          <motion.div key={n.label} initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*.08+.08 }}
+            className="flex items-center gap-4 rounded-2xl px-5 py-4"
+            style={{ background:`${G}0b`, border:`1px solid ${G}2a` }}>
+            <span style={{ fontSize:30, lineHeight:1, flexShrink:0 }}>{n.emoji}</span>
+            <div>
+              <div style={{ fontFamily:FS, fontSize:13, fontWeight:700, color:'rgba(0,0,0,0.55)', letterSpacing:'0.1em', textTransform:'uppercase', lineHeight:1 }}>{n.label}</div>
+              <div style={{ fontFamily:FH, fontSize:18, fontWeight:700, color:G, lineHeight:1.3 }}>{n.friendly}</div>
+            </div>
+          </motion.div>
         ))}
-      </svg>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   NUTRIENT ANNOTATIONS
-   value  → Playfair Display italic green (big)
-   sub    → DM Sans uppercase tiny
-   label  → DM Sans uppercase small caps style
-───────────────────────────────────── */
-function NutrientAnnotations({
-  accent, accentSoft, nutrients, activeIdx,
-}: { accent: string; accentSoft: string; accentGlow: string; nutrients: Nutrient[]; activeIdx: number }) {
-  const SVG_W  = STAGE_W + 220;
-  const CARD_X = IMG_RIGHT + 28;
-
-  return (
-    <AnimatePresence mode="wait">
-      <motion.div key={`ann-${activeIdx}`} className="absolute inset-0 pointer-events-none"
-        style={{ width: SVG_W, height: STAGE_H }}
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        transition={{ duration: 0.38 }}
-      >
-        <svg width={SVG_W} height={STAGE_H} style={{ position: 'absolute', top: 0, left: 0, overflow: 'visible' }}>
-          <defs>
-            <marker id={`tip-${activeIdx}`} markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto">
-              <path d="M8 1.5 L1 4 L8 6.5" fill="none" stroke={accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </marker>
-          </defs>
-
-          {nutrients.map((n, i) => {
-            const dotX  = IMG_RIGHT;
-            const lineY = IMG_TOP + n.yRatio * IMG_H;
-            const cardY = lineY - 26;
-
-            return (
-              <motion.g key={n.label}>
-                <motion.line x1={dotX} y1={lineY} x2={CARD_X - 4} y2={lineY}
-                  stroke={accent} strokeWidth="1.5" strokeDasharray="5 4" strokeLinecap="round"
-                  filter="url(#lineGlow)"
-                  markerStart={`url(#tip-${activeIdx})`}
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 0.7 }}
-                  transition={{ duration: 0.5, delay: i * 0.11 + 0.1, ease: 'easeOut' }}
-                />
-                <motion.circle cx={dotX} cy={lineY} r={4} fill={accent} opacity={0.92}
-                  initial={{ scale: 0 }} animate={{ scale: [0, 1.8, 1] }}
-                  transition={{ duration: 0.38, delay: i * 0.11 + 0.42, ease: 'backOut' }}
-                />
-                <motion.circle cx={dotX} cy={lineY} r={4} fill="none" stroke={accent} strokeWidth="1.1"
-                  animate={{ r: [4, 13], opacity: [0.5, 0] }}
-                  transition={{ duration: 2, delay: i * 0.11 + 0.6, repeat: Infinity, ease: 'easeOut' }}
-                />
-                <motion.g initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.34, delay: i * 0.1 + 0.18 }}
-                >
-                  <rect x={CARD_X} y={cardY} width={160} height={54} rx={10}
-                    fill={accentSoft} stroke={accent} strokeWidth="1.6" strokeDasharray="5 3"
-                    filter="url(#sk)" opacity={0.95}
-                  />
-                  <motion.circle cx={CARD_X} cy={lineY} r={4.5}
-                    fill="white" stroke={accent} strokeWidth="2"
-                    animate={{ scale: [1, 1.4, 1] }}
-                    transition={{ duration: 2.2, delay: i * 0.3, repeat: Infinity }}
-                  />
-                  {/* Value — Playfair Display italic green, big */}
-                  <text x={CARD_X + 16} y={cardY + 22}
-                    fill={accent} fontSize="18" fontWeight="700" fontFamily={FD} fontStyle="italic">
-                    {n.value}
-                  </text>
-                  {/* Sub — DM Sans uppercase tiny */}
-                  <text x={CARD_X + 16 + Math.max(n.value.length * 9, 26)} y={cardY + 21}
-                    fill={accent} fontSize="8" fontWeight="600" letterSpacing="1.2" opacity={0.55}
-                    fontFamily={FS} style={{ textTransform: 'uppercase' }}>
-                    {n.sub}
-                  </text>
-                  {/* Label — DM Sans uppercase small */}
-                  <text x={CARD_X + 16} y={cardY + 38}
-                    fill="rgba(0,0,0,0.5)" fontSize="9" fontWeight="600" letterSpacing="1.8"
-                    fontFamily={FS} style={{ textTransform: 'uppercase' }}>
-                    {n.label}
-                  </text>
-                  <motion.rect x={CARD_X + 16} y={cardY + 44} height={2} rx={1}
-                    fill={accent} opacity={0.28}
-                    initial={{ width: 0 }} animate={{ width: 126 }}
-                    transition={{ duration: 0.5, delay: i * 0.1 + 0.38 }}
-                  />
-                </motion.g>
-              </motion.g>
-            );
-          })}
-        </svg>
       </motion.div>
     </AnimatePresence>
   );
 }
 
-/* ─────────────────────────────────────
-   PRODUCT STAGE
-───────────────────────────────────── */
-function ProductStage({ activeIdx, mouseX, mouseY }: {
-  activeIdx: number; mouseX: MotionValue<number>; mouseY: MotionValue<number>;
+/* ─────────────────── PROOF BOX ──────────────────── */
+function ProofBox({ product }: { product: Product }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div key={`pb-${product.id}`} initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }} transition={{ delay:0.35 }}
+        className="mt-6 p-6 rounded-2xl" style={{ background:`${G}09`, border:`1.5px dashed ${G}30` }}>
+        <p style={{ fontFamily:FH, fontSize:20, fontWeight:700, color:G, lineHeight:1.55, marginBottom:12 }}>
+          {product.tagline}
+        </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            {'★★★★★'.split('').map((s,i) => (
+              <span key={i} style={{ fontSize:20, color:'#f59e0b' }}>{s}</span>
+            ))}
+            <span style={{ fontFamily:FS, fontSize:15, color:'rgba(0,0,0,0.45)', fontWeight:500, marginLeft:8 }}>50k+ users</span>
+          </div>
+          <motion.span
+            style={{ fontFamily:FH, fontSize:17, fontWeight:700, color:G, background:GS, border:`1px solid ${G}35`, borderRadius:20, padding:'4px 14px' }}
+            animate={{ scale:[1,1.05,1] }} transition={{ duration:2.5, repeat:Infinity }}
+          >
+            {product.savePct}
+          </motion.span>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ─────────────────── PRODUCT IMAGE ──────────────────── */
+function ProductImg({ product, mouseX, mouseY }: {
+  product: Product; mouseX: MotionValue<number>; mouseY: MotionValue<number>;
 }) {
-  const product  = PRODUCTS[activeIdx];
-  const rotateX  = useTransform(mouseY, [-0.5, 0.5], [8, -8]);
-  const rotateY  = useTransform(mouseX, [-0.5, 0.5], [-11, 11]);
-  const springRX = useSpring(rotateX, { stiffness: 70, damping: 18 });
-  const springRY = useSpring(rotateY, { stiffness: 70, damping: 18 });
+  const rX = useSpring(useTransform(mouseY, [-0.5,0.5],[6,-6]), { stiffness:55, damping:14 });
+  const rY = useSpring(useTransform(mouseX, [-0.5,0.5],[-8,8]), { stiffness:55, damping:14 });
 
   return (
-    <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: STAGE_W, height: STAGE_H }}>
-      <motion.div className="absolute pointer-events-none" style={{ width: 330, height: 330 }}
-        animate={{ rotate: [0, 360] }} transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}>
-        <svg viewBox="-120 -120 240 240" width="100%" height="100%">
-          <defs>
-            <radialGradient id="bGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor={product.accent} stopOpacity="0.22" />
-              <stop offset="100%" stopColor={product.accent} stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          <motion.path fill="url(#bGrad)"
-            animate={{ d: [
-              'M55,-65C67,-52,70,-32,67,-13C64,6,55,24,41,42C27,60,9,78,-12,80C-33,82,-55,67,-68,46C-81,25,-83,-3,-74,-26Z',
-              'M50,-60C63,-48,70,-28,68,-10C66,8,55,25,41,43C27,61,9,79,-12,81C-33,83,-57,68,-70,46Z',
-              'M55,-65C67,-52,70,-32,67,-13C64,6,55,24,41,42C27,60,9,78,-12,80C-33,82,-55,67,-68,46C-81,25,-83,-3,-74,-26Z',
-            ]}}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </svg>
-      </motion.div>
-
-      <HexGrid accent={product.accent} />
-
-      <div className="absolute" style={{ left: IMG_LEFT - 14, top: IMG_TOP - 14, width: IMG_W + 28, height: IMG_H + 28 }}>
-        <SketchBrackets accent={product.accent} w={IMG_W + 28} h={IMG_H + 28} />
-      </div>
-
-      <div className="absolute overflow-hidden pointer-events-none" style={{ width: IMG_W, height: IMG_H, left: IMG_LEFT, top: IMG_TOP }}>
-        <motion.div className="absolute inset-x-0"
-          style={{ background: `linear-gradient(180deg, transparent 0%, ${product.accent}1e 50%, transparent 100%)`, height: '28%' }}
-          animate={{ top: ['-28%', '128%'] }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: 'linear', repeatDelay: 1.8 }}
-        />
-      </div>
-
-      <motion.div className="absolute rounded-full blur-2xl"
-        animate={{ backgroundColor: product.accent, scaleX: [1, 1.2, 1], opacity: [0.18, 0.28, 0.18] }}
-        transition={{ backgroundColor: { duration: 0.7 }, scaleX: { duration: 3, repeat: Infinity }, opacity: { duration: 3, repeat: Infinity } }}
-        style={{ width: 190, height: 24, bottom: 20 }}
-      />
+    <div className="relative w-full h-full flex items-center justify-center">
+      <motion.div className="absolute rounded-full blur-3xl pointer-events-none"
+        animate={{ background:`radial-gradient(circle,${G}42 0%,transparent 70%)`, scale:[1,1.1,1] }}
+        transition={{ scale:{ duration:4.2, repeat:Infinity, ease:'easeInOut' } }}
+        style={{ width:'72%', height:'72%', top:'14%', left:'14%' }} />
+      {[90,70].map((sz,i) => (
+        <motion.div key={i} className="absolute rounded-full pointer-events-none"
+          style={{ width:`${sz}%`, height:`${sz}%`, top:`${(100-sz)/2}%`, left:`${(100-sz)/2}%`,
+            border:`1px dashed ${G}${i===0?'22':'14'}` }}
+          animate={{ rotate:i%2===0?360:-360 }}
+          transition={{ duration:i===0?28:20, repeat:Infinity, ease:'linear' }} />
+      ))}
+      <motion.div className="absolute rounded-full blur-xl pointer-events-none"
+        animate={{ scaleX:[1,1.14,1], opacity:[0.18,0.28,0.18] }}
+        transition={{ duration:4.2, repeat:Infinity, ease:'easeInOut' }}
+        style={{ width:'52%', height:20, bottom:'4%', left:'24%', background:G }} />
 
       <AnimatePresence mode="wait">
-        <motion.div key={`img-${activeIdx}`}
-          initial={{ opacity: 0, scale: 0.35, y: 48, rotateY: -38, filter: 'blur(14px)' }}
-          animate={{ opacity: 1, scale: 1, y: 0, rotateY: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, scale: 0.38, y: -44, rotateY: 38, filter: 'blur(10px)' }}
-          transition={{ duration: 0.62, type: 'spring', bounce: 0.2 }}
+        <motion.div key={product.id}
+          initial={{ opacity:0, scale:0.5, y:40, filter:'blur(16px)' }}
+          animate={{ opacity:1, scale:1, y:0, filter:'blur(0px)' }}
+          exit={{ opacity:0, scale:0.5, y:-36, filter:'blur(14px)' }}
+          transition={{ duration:0.65, type:'spring', bounce:0.18 }}
           style={{
-            rotateX: springRX, rotateY: springRY,
-            transformStyle: 'preserve-3d', position: 'relative', zIndex: 10,
-            filter: [`drop-shadow(0 44px 52px ${product.accentGlow})`, `drop-shadow(0 0 22px ${product.accentGlow})`].join(' '),
+            rotateX:rX, rotateY:rY, transformStyle:'preserve-3d',
+            position:'relative', zIndex:12,
+            filter:`drop-shadow(0 36px 56px ${GG}) drop-shadow(0 10px 22px ${GG})`,
           }}
         >
-          <motion.div animate={{ y: [0, -18, 0], rotateZ: [-0.6, 0.6, -0.6] }}
-            transition={{ duration: 4.6, repeat: Infinity, ease: 'easeInOut' }}>
-            <div style={{ position: 'relative', width: IMG_W, height: IMG_H }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={product.image} alt={product.name} style={{ width: IMG_W, height: IMG_H, objectFit: 'contain', display: 'block' }} />
-              <motion.div
-                style={{ position: 'absolute', inset: 0, background: 'linear-gradient(115deg, transparent 22%, rgba(255,255,255,0.16) 50%, transparent 78%)', borderRadius: 8, pointerEvents: 'none' }}
-                animate={{ x: ['-120%', '180%'] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', repeatDelay: 3.2 }}
-              />
-            </div>
+          <motion.div animate={{ y:[0,-20,0], rotateZ:[-0.5,0.5,-0.5] }} transition={{ duration:5.2, repeat:Infinity, ease:'easeInOut' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={product.image} alt={product.name}
+              style={{
+                /* Significantly larger image */
+                width:'clamp(260px,38vw,500px)',
+                height:'clamp(340px,52vw,660px)',
+                objectFit:'contain', display:'block',
+              }} />
+            <motion.div style={{ position:'absolute', inset:0, borderRadius:12, pointerEvents:'none',
+              background:'linear-gradient(115deg,transparent 24%,rgba(255,255,255,0.18) 50%,transparent 76%)' }}
+              animate={{ x:['-130%','190%'] }} transition={{ duration:2.8, repeat:Infinity, ease:'easeInOut', repeatDelay:4 }} />
           </motion.div>
         </motion.div>
       </AnimatePresence>
 
-      {[1, 2, 3].map((ring) => (
-        <motion.div key={ring} className="absolute rounded-full pointer-events-none"
-          style={{ border: `1.5px dashed ${product.accent}` }}
-          animate={{ width: [50, 420], height: [50, 420], opacity: [0.32, 0] }}
-          transition={{ duration: 4, delay: ring * 1.25, repeat: Infinity, ease: 'easeOut' }}
-        />
+      {[{x:'10%',y:'12%',d:0},{x:'85%',y:'10%',d:.85},{x:'88%',y:'76%',d:1.7},{x:'7%',y:'80%',d:2.4}].map((dot,i)=>(
+        <motion.div key={i} className="absolute pointer-events-none rounded-full"
+          style={{ left:dot.x, top:dot.y, width:10, height:10, background:G, zIndex:20 }}
+          animate={{ scale:[0,1.6,0], opacity:[0,.75,0] }}
+          transition={{ duration:2.8, delay:dot.d, repeat:Infinity, ease:'easeInOut' }} />
       ))}
-
-      <NutrientAnnotations
-        accent={product.accent} accentSoft={product.accentSoft} accentGlow={product.accentGlow}
-        nutrients={product.nutrients} activeIdx={activeIdx}
-      />
+      {[{x:'16%',y:'7%',d:.3},{x:'78%',y:'82%',d:1.2}].map((s,i)=>(
+        <motion.span key={i} className="absolute pointer-events-none"
+          style={{ left:s.x, top:s.y, color:G, fontSize:28, fontFamily:FH, opacity:.55, zIndex:20 }}
+          animate={{ rotate:[0,22,0], scale:[1,1.35,1] }} transition={{ duration:3.2+i, delay:s.d, repeat:Infinity }}>✦</motion.span>
+      ))}
     </div>
   );
 }
 
-/* ─────────────────────────────────────
-   MAIN EXPORT
-───────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════════════════════ */
 export default function ProductSection() {
-  const wrapRef   = useRef<HTMLDivElement>(null);
-  const stageRef  = useRef<HTMLDivElement>(null);
+  const wrapRef  = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const rawProgress    = useMotionValue(0);
-  const smoothProgress = useSpring(rawProgress, { stiffness: 50, damping: 18 });
+  const rawProg    = useMotionValue(0);
+  const smoothProg = useSpring(rawProg, { stiffness:50, damping:18 });
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -671,42 +374,25 @@ export default function ProductSection() {
     function onScroll() {
       const wrap = wrapRef.current;
       if (!wrap) return;
-      const top      = wrap.getBoundingClientRect().top + window.scrollY;
-      const scrolled = window.scrollY - top;
-      const total    = window.innerHeight * 2;
-      const progress = Math.min(1, Math.max(0, scrolled / total));
-      rawProgress.set(progress);
-      if      (progress < 1 / 3) setActiveIdx(0);
-      else if (progress < 2 / 3) setActiveIdx(1);
-      else                        setActiveIdx(2);
+      const top = wrap.getBoundingClientRect().top + window.scrollY;
+      const p   = Math.min(1, Math.max(0, (window.scrollY - top) / (window.innerHeight * 2)));
+      rawProg.set(p);
+      setActiveIdx(p < 1/3 ? 0 : p < 2/3 ? 1 : 2);
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive:true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, [rawProgress]);
+  }, [rawProg]);
 
-  const bandStart    = activeIdx / 3;
-  const bandEnd      = (activeIdx + 1) / 3;
-  const fillProgress = useTransform(smoothProgress, [bandStart, bandEnd], [0, 1]);
-  const fillWidth    = useTransform(fillProgress, (v: number) =>
-    `${Math.round(Math.min(100, Math.max(0, v * 100)))}%`
+  const fillProg = useTransform(
+    useSpring(useTransform(smoothProg, [activeIdx/3,(activeIdx+1)/3],[0,1]), { stiffness:50, damping:18 }),
+    (v:number) => `${Math.round(Math.min(100,Math.max(0,v*100)))}%`
   );
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = stageRef.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    mouseX.set((e.clientX - r.left) / r.width  - 0.5);
-    mouseY.set((e.clientY - r.top)  / r.height - 0.5);
-  }, [mouseX, mouseY]);
-
-  const handleMouseLeave = useCallback(() => { mouseX.set(0); mouseY.set(0); }, [mouseX, mouseY]);
-
-  const scrollToProduct = useCallback((i: number) => {
+  const scrollTo = useCallback((i:number) => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const top = wrap.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: top + (i / 3) * window.innerHeight * 2, behavior: 'smooth' });
+    window.scrollTo({ top: wrap.getBoundingClientRect().top+window.scrollY+(i/3)*window.innerHeight*2, behavior:'smooth' });
   }, []);
 
   const product = PRODUCTS[activeIdx];
@@ -714,205 +400,138 @@ export default function ProductSection() {
 
   return (
     <>
-      <DoodleFilters />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;600;700&display=swap');
+      `}</style>
+      <Filters />
 
-      <div ref={wrapRef} style={{ height: '300vh', position: 'relative' }}>
+      <div ref={wrapRef} style={{ height:'300vh', position:'relative' }}>
+
         <div style={{
-          position: 'sticky', top: 0, height: '100vh', width: '100%',
-          overflow: 'hidden', background: '#f5f5ee',
-          display: 'flex', flexDirection: 'column',
+          position:'sticky', top:0,
+          height:'100vh', width:'100%',
+          overflow:'hidden',
+          display:'grid',
+          gridTemplateRows:'auto 1fr auto',
         }}>
-          {/* Atmosphere */}
-          <motion.div className="absolute inset-0 pointer-events-none"
-            animate={{ background: `radial-gradient(ellipse 65% 65% at 65% 52%, ${product.accentGlow} 0%, transparent 65%)` }}
-            transition={{ duration: 0.9 }} />
-          <motion.div className="absolute inset-0 pointer-events-none"
-            animate={{ background: `radial-gradient(ellipse 42% 44% at 8% 80%, ${product.accentSoft} 0%, transparent 72%)` }}
-            transition={{ duration: 0.9 }} />
+          <NotebookBg />
 
-          {/* Paper grain */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            opacity: 0.04,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }} />
+          {/* ══════ ROW 1: HEADER ══════ */}
+          <header className="relative flex items-center justify-between gap-4"
+            style={{
+              zIndex:20, flexShrink:0,
+              paddingLeft:'clamp(60px,7vw,96px)',
+              paddingRight:'clamp(20px,4vw,56px)',
+              paddingTop:'clamp(14px,2vh,28px)',
+              paddingBottom:'clamp(10px,1.4vh,22px)',
+            }}>
 
-          <BgDoodles accent={product.accent} />
-          <DoodleParticles accent={product.accent} />
-
-          {/* ══════ HEADER ══════ */}
-          <div style={{ flexShrink: 0 }} className="relative z-20 flex items-start justify-between px-6 sm:px-10 md:px-14 pt-6 sm:pt-8">
             <div>
-              {/* Sketch pill */}
-              <SketchPill accent={product.accent} accentSoft={product.accentSoft}>
-                <motion.div className="w-1.5 h-1.5 rounded-full"
-                  animate={{ backgroundColor: product.accent, scale: [1, 1.7, 1] }}
-                  transition={{ duration: 1.4, repeat: Infinity }} />
-                {/* Pill text — DM Sans medium */}
-                <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 500, color: product.accent, letterSpacing: '0.04em' }}>
-                  The Shop
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span style={{ fontFamily:FD, fontSize:'clamp(2.8rem,5.5vw,5.2rem)', fontWeight:900, color:'#1a1a1a', letterSpacing:'-0.022em', lineHeight:1 }}>
+                  Fuel{' '}
                 </span>
-              </SketchPill>
-
-              {/* Title block */}
-              <div className="mt-3">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <svg width="18" height="9" viewBox="0 0 18 9" fill="none">
-                    <path d="M1 4.5 Q9 2 17 4.5" stroke={product.accent} strokeWidth="1.5" strokeLinecap="round" filter="url(#sk)" opacity="0.45" />
-                  </svg>
-                  {/* "Select Your" — DM Sans muted uppercase */}
-                  <span style={{ fontFamily: FS, fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.36)', letterSpacing: '0.22em', textTransform: 'uppercase' }}>
-                    Select Your
-                  </span>
-                </div>
-
-                {/* "Fuel" — Playfair Display black */}
-                {/* "Cycle." — Playfair Display italic green */}
-                <div style={{ lineHeight: 1 }}>
-                  <span style={{ fontFamily: FD, fontSize: 'clamp(2.4rem, 6vw, 4.4rem)', fontWeight: 900, color: '#1a1a1a', letterSpacing: '-0.02em' }}>
-                    Fuel{' '}
-                  </span>
-                  <AnimatePresence mode="wait">
-                    <motion.span key={`fctitle-${activeIdx}`}
-                      initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                      style={{ fontFamily: FD, fontSize: 'clamp(2.5rem, 6.5vw, 4.6rem)', fontWeight: 700, color: product.accent, fontStyle: 'italic' }}
-                    >
-                      Cycle.
-                    </motion.span>
-                  </AnimatePresence>
-                </div>
-
-                {/* Squiggly underline */}
-                <svg width="260" height="12" viewBox="0 0 260 12" fill="none" style={{ display: 'block', marginTop: 3 }}>
-                  <motion.path
-                    d="M2 7 Q22 2 44 7 Q66 12 88 6 Q110 2 132 7 Q154 12 176 6 Q198 2 220 7 Q242 11 258 7"
-                    stroke={product.accent} strokeWidth="2.5" strokeLinecap="round" filter="url(#sk)"
-                    initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                    transition={{ duration: 0.9, ease: 'easeOut' }}
-                  />
-                </svg>
+                <AnimatePresence mode="wait">
+                  <motion.span key={`fc-${activeIdx}`}
+                    initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-6 }}
+                    style={{ fontFamily:FD, fontSize:'clamp(2.9rem,5.8vw,5.4rem)', fontWeight:700, color:G, fontStyle:'italic', lineHeight:1 }}>
+                    Cycle.
+                  </motion.span>
+                </AnimatePresence>
               </div>
+              <HandUnderline width={300} />
             </div>
 
-            {/* Step nav */}
-            <div className="hidden md:flex flex-col items-end gap-3">
-              <div className="flex items-center gap-1">
-                {PRODUCTS.map((_, i) => (
-                  <SketchNavBtn key={i} index={i} isActive={i === activeIdx} accent={product.accent} onClick={() => scrollToProduct(i)} />
-                ))}
+            <div className="flex flex-col items-end gap-3">
+              <div className="flex items-center gap-2">
+                {PRODUCTS.map((_,i) => <NavDot key={i} index={i} isActive={i===activeIdx} onClick={()=>scrollTo(i)} />)}
               </div>
-              <div className="flex items-center gap-1.5">
-                <svg width="12" height="18" viewBox="0 0 12 18" fill="none">
-                  <motion.path d="M6 1 L6 14 M2 11 L6 15 L10 11"
-                    stroke={product.accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
-                    animate={{ y: [0, 3, 0] }} transition={{ duration: 1.4, repeat: Infinity }} />
-                </svg>
-                {/* "scroll" — DM Sans */}
-                <span style={{ fontFamily: FS, fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.34)', letterSpacing: '0.08em' }}>scroll</span>
+              <div className="flex items-center gap-2">
+                <motion.span style={{ fontFamily:FH, fontSize:18, color:'rgba(0,0,0,0.38)', fontWeight:700 }}
+                  animate={{ y:[0,3,0] }} transition={{ duration:1.4, repeat:Infinity }}>↓</motion.span>
+                <span style={{ fontFamily:FH, fontSize:18, color:'rgba(0,0,0,0.38)', fontWeight:700 }}>scroll</span>
               </div>
             </div>
-          </div>
+          </header>
 
-          {/* ══════ BODY ══════ */}
-          <div className="relative z-10 flex flex-col lg:flex-row px-6 sm:px-10 md:px-14 gap-4 lg:gap-0"
-            style={{ flex: 1, minHeight: 0, alignItems: 'center', overflow: 'hidden' }}>
+          {/* ══════ ROW 2: BODY ══════ */}
+          <main
+            className="relative flex flex-col lg:flex-row items-stretch"
+            style={{
+              zIndex:10, overflow:'hidden',
+              paddingLeft:'clamp(60px,7vw,96px)',
+              paddingRight:'clamp(20px,4vw,56px)',
+              gap:'clamp(16px,3vw,48px)',
+            }}
+          >
+            {/* ── LEFT: COPY ── */}
+            <div className="flex flex-col justify-center order-1 w-full lg:flex-shrink-0"
+              style={{ maxWidth:520 }}>
 
-            {/* LEFT COPY */}
-            <div className="flex flex-col justify-center w-full lg:w-auto flex-shrink-0" style={{ maxWidth: 400 }}>
+              <PersuadeTag text={product.persuade} />
 
-              {/* Tag */}
+              {/* tag line with icon */}
               <AnimatePresence mode="wait">
                 <motion.div key={`tag-${activeIdx}`}
-                  initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 14 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center gap-2 mb-3"
-                >
-                  <div className="relative w-8 h-8 flex items-center justify-center">
-                    <svg className="absolute inset-0" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <motion.rect x="2" y="2" width="28" height="28" rx="8"
-                        fill={product.accentSoft} stroke={product.accent} strokeWidth="1.6" strokeDasharray="4 2.5"
-                        filter="url(#sk)"
-                        animate={{ strokeDashoffset: [0, -20] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                      />
+                  initial={{ opacity:0, x:-14 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0 }}
+                  transition={{ duration:0.28 }}
+                  className="flex items-center gap-4 mb-5">
+                  <div className="relative flex items-center justify-center flex-shrink-0" style={{ width:40, height:40 }}>
+                    <svg className="absolute inset-0" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <motion.rect x="2" y="2" width="36" height="36" rx="10" fill={`${G}12`} stroke={G} strokeWidth="1.5"
+                        strokeDasharray="4 2.5" filter="url(#sk)"
+                        animate={{ strokeDashoffset:[0,-22] }} transition={{ duration:4, repeat:Infinity, ease:'linear' }} />
                     </svg>
-                    <Icon style={{ color: product.accent, width: 14, height: 14, position: 'relative', zIndex: 1 }} />
+                    <Icon style={{ color:G, width:19, height:19, position:'relative', zIndex:1 }} />
                   </div>
-                  {/* Tag — DM Sans medium uppercase */}
-                  <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 600, color: product.accent, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                  <span style={{ fontFamily:FS, fontSize:16, fontWeight:600, color:G, letterSpacing:'0.12em', textTransform:'uppercase' }}>
                     {product.tag}
                   </span>
                 </motion.div>
               </AnimatePresence>
 
-              {/* ── THREE-LINE HEADLINE ──
-                  Line 1: "The Beginning."    → Playfair Display black #1a1a1a
-                  Line 2: "Just Start."       → Playfair Display italic green
-                  Line 3: "Stay consistent."  → DM Sans medium gray
-              */}
-              <div style={{ overflow: 'hidden', marginBottom: 6 }}>
+              {/* Headline */}
+              <div style={{ overflow:'hidden', marginBottom:16 }}>
                 <AnimatePresence mode="wait">
                   <motion.div key={`hl-${activeIdx}`}
-                    initial={{ y: '110%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: '-110%', opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {/* Line 1 — Playfair Display 900, tight editorial */}
-                    <div style={{
-                      fontFamily: FD,
-                      fontSize: 'clamp(1.9rem, 4.8vw, 3.2rem)',
-                      fontWeight: 900,
-                      color: '#1a1a1a',
-                      lineHeight: 1.05,
-                      letterSpacing: '-0.02em',
-                    }}>
+                    initial={{ y:'105%', opacity:0 }} animate={{ y:0, opacity:1 }} exit={{ y:'-105%', opacity:0 }}
+                    transition={{ duration:0.52, ease:[0.22,1,0.36,1] }}>
+                    <div style={{ fontFamily:FD, fontSize:'clamp(2.8rem,5.5vw,5rem)', fontWeight:900, color:'#1a1a1a', lineHeight:1.04, letterSpacing:'-0.022em' }}>
                       {product.headline}
                     </div>
-
-                    {/* Line 2 — Playfair Display italic, green accent */}
-                    <div style={{
-                      fontFamily: FD,
-                      fontSize: 'clamp(1.9rem, 5vw, 3.2rem)',
-                      fontWeight: 700,
-                      color: product.accent,
-                      fontStyle: 'italic',
-                      lineHeight: 1.05,
-                      textShadow: `0 0 40px ${product.accentGlow}`,
-                    }}>
+                    <div style={{ fontFamily:FD, fontSize:'clamp(2.8rem,5.8vw,5rem)', fontWeight:700, color:G, fontStyle:'italic', lineHeight:1.04 }}>
                       {product.accentWord}
                     </div>
-
-                    {/* Line 3 — DM Sans medium, muted gray */}
-                    <div style={{
-                      fontFamily: FS,
-                      fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
-                      fontWeight: 500,
-                      color: 'rgba(0,0,0,0.32)',
-                      lineHeight: 1.2,
-                      marginTop: 4,
-                      letterSpacing: '0.01em',
-                    }}>
+                    <div style={{ fontFamily:FH, fontSize:'clamp(1.4rem,2.5vw,2rem)', fontWeight:600, color:'rgba(0,0,0,0.36)', lineHeight:1.2, marginTop:6 }}>
                       {product.grayWord}
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Description — DM Sans regular body copy */}
+              {/* Highlight */}
               <AnimatePresence mode="wait">
-                <motion.div key={`desc-${activeIdx}`}
-                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                  transition={{ duration: 0.36, delay: 0.08 }}
-                  className="relative mb-5" style={{ maxWidth: 315 }}
-                >
-                  <svg className="absolute" style={{ left: 0, top: 0, height: '100%' }} width="5" viewBox="0 0 5 100" preserveAspectRatio="none">
-                    <motion.path d="M2.5 0 Q3.5 25 2.5 50 Q1.5 75 2.5 100"
-                      stroke={product.accent} strokeWidth="2" strokeLinecap="round" fill="none"
-                      filter="url(#sk)"
-                      initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                      transition={{ duration: 0.45 }}
-                    />
+                <motion.div key={`hi-${activeIdx}`}
+                  initial={{ opacity:0, scale:.94 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }}
+                  transition={{ duration:0.28 }}
+                  className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl mb-5"
+                  style={{ background:`${G}10`, border:`1.5px solid ${G}28`, alignSelf:'flex-start' }}>
+                  <span style={{ fontSize:24 }}>✨</span>
+                  <span style={{ fontFamily:FH, fontSize:22, fontWeight:700, color:G }}>{product.highlight}</span>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Description */}
+              <AnimatePresence mode="wait">
+                <motion.div key={`d-${activeIdx}`}
+                  initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+                  transition={{ delay:.06, duration:0.32 }}
+                  className="relative mb-7" style={{ maxWidth:460 }}>
+                  <svg className="absolute" style={{ left:0, top:0, height:'100%' }} width="5" viewBox="0 0 4 100" preserveAspectRatio="none">
+                    <motion.path d="M2 0 Q3 25 2 50 Q1 75 2 100" stroke={G} strokeWidth="2.5" strokeLinecap="round" fill="none" filter="url(#sk)"
+                      initial={{ pathLength:0 }} animate={{ pathLength:1 }} transition={{ duration:0.5 }} />
                   </svg>
-                  <p className="pl-4"
-                    style={{ fontFamily: FS, fontSize: '14px', fontWeight: 400, color: 'rgba(0,0,0,0.5)', lineHeight: 1.65 }}>
+                  <p className="pl-6" style={{ fontFamily:FS, fontSize:'clamp(15px,1.6vw,18px)', fontWeight:400, color:'rgba(0,0,0,0.52)', lineHeight:1.8 }}>
                     {product.desc}
                   </p>
                 </motion.div>
@@ -920,120 +539,143 @@ export default function ProductSection() {
 
               {/* Badges */}
               <AnimatePresence mode="wait">
-                <motion.div key={`bdg-${activeIdx}`} className="flex flex-wrap gap-2 mb-5"
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.26 }}>
-                  {product.badges.map((badge, i) => (
-                    <WobblyBadge key={badge} label={badge} accent={product.accent} accentSoft={product.accentSoft} delay={i * 0.07 + 0.1} />
-                  ))}
+                <motion.div key={`bdg-${activeIdx}`} className="flex flex-wrap gap-3 mb-7"
+                  initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}>
+                  {product.badges.map(b => <NBadge key={b} label={b} />)}
                 </motion.div>
               </AnimatePresence>
 
-              {/* Price + CTA */}
-              <div className="flex flex-wrap items-end gap-5">
-                <div>
-                  {/* "PRICE" label — DM Sans uppercase small */}
-                  <div className="mb-0.5">
-                    <span style={{ fontFamily: FS, fontSize: '10px', fontWeight: 600, color: 'rgba(0,0,0,0.36)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-                      Price
-                    </span>
-                  </div>
-                  {/* Price number — Playfair Display */}
-                  <PriceTicker price={product.price} />
-                  {/* "7 Days supply" — DM Sans small */}
-                  <div>
-                    <span style={{ fontFamily: FS, fontSize: '13px', fontWeight: 400, color: 'rgba(0,0,0,0.38)' }}>
-                      {product.duration} supply
-                    </span>
-                  </div>
-                </div>
+              {/* Nutrients — MOBILE only */}
+              <div className="block lg:hidden mb-7">
+                <span style={{ fontFamily:FH, fontSize:22, fontWeight:700, color:G, display:'block', marginBottom:14 }}>
+                  whats inside →
+                </span>
+                <NutrientGrid product={product} />
+              </div>
 
-                <div className="flex items-center gap-3">
+              {/* Price + CTA */}
+              <div className="flex flex-wrap items-end gap-7">
+                <div>
+                  <span style={{ fontFamily:FH, fontSize:17, fontWeight:700, color:'rgba(0,0,0,0.42)', display:'block', marginBottom:5 }}>
+                    price ↓
+                  </span>
+                  <Price price={product.price} orig={product.origPrice} save={product.savePct} />
+                  <span style={{ fontFamily:FS, fontSize:17, color:'rgba(0,0,0,0.42)', display:'block', marginTop:5 }}>
+                    {product.duration} supply
+                  </span>
+                </div>
+                <div className="flex items-center gap-6">
                   <AnimatePresence mode="wait">
                     <motion.div key={`cta-${activeIdx}`}
-                      initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.22 }}>
-                      <SketchButton accent={product.accent} accentGlow={product.accentGlow}>
-                        <ShoppingCart className="w-4 h-4" />
-                        Order Now
-                      </SketchButton>
+                      initial={{ opacity:0, scale:.84 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }}
+                      transition={{ duration:0.22 }}>
+                      <SketchBtn>
+                        <ShoppingCart className="w-6 h-6" /> Order Now
+                      </SketchBtn>
                     </motion.div>
                   </AnimatePresence>
-
-                  {/* "Details" — DM Sans */}
-                  <motion.button className="flex items-center gap-1"
-                    style={{ fontFamily: FS, fontSize: '14px', fontWeight: 500, color: 'rgba(0,0,0,0.38)' }}
-                    whileHover={{ x: 5 }} transition={{ type: 'spring', stiffness: 300 }}>
-                    Details
-                    <ArrowRight className="w-3.5 h-3.5" />
+                  <motion.button className="flex items-center gap-2"
+                    style={{ fontFamily:FS, fontSize:18, fontWeight:500, color:'rgba(0,0,0,0.42)' }}
+                    whileHover={{ x:5 }} transition={{ type:'spring', stiffness:300 }}>
+                    Details <ArrowRight className="w-5 h-5" />
                   </motion.button>
                 </div>
               </div>
             </div>
 
-            {/* CENTER / RIGHT: stage */}
-            <div ref={stageRef} className="flex items-center justify-center"
-              style={{ flex: 1, minWidth: 0, overflow: 'visible', perspective: '1200px' }}
-              onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-              <ProductStage activeIdx={activeIdx} mouseX={mouseX} mouseY={mouseY} />
+            {/* ── CENTER: PRODUCT IMAGE ── */}
+            <div
+              ref={stageRef}
+              className="flex items-center justify-center order-2 flex-1"
+              style={{
+                minHeight:'clamp(280px,50vh,680px)',
+                perspective:'1200px',
+                position:'relative', zIndex:15,
+              }}
+              onMouseMove={e => {
+                const r = stageRef.current?.getBoundingClientRect();
+                if (!r) return;
+                mouseX.set((e.clientX-r.left)/r.width-.5);
+                mouseY.set((e.clientY-r.top)/r.height-.5);
+              }}
+              onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
+            >
+              <ProductImg product={product} mouseX={mouseX} mouseY={mouseY} />
             </div>
 
-            {/* FAR-RIGHT vertical nav rail */}
-            <div className="hidden xl:flex flex-col items-center justify-center flex-shrink-0" style={{ width: 58 }}>
-              <div className="relative flex flex-col items-center">
+            {/* ── RIGHT: NUTRIENTS + PROOF (desktop) ── */}
+            <div className="hidden lg:flex flex-col justify-center order-3 flex-shrink-0"
+              style={{ width:'clamp(260px,26vw,360px)' }}>
+              <div className="flex items-center gap-3 mb-5">
+                <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
+                  <path d="M1 6 Q12 2 23 6" stroke={G} strokeWidth="2" strokeLinecap="round" opacity={0.5} filter="url(#sk)" />
+                </svg>
+                <span style={{ fontFamily:FH, fontSize:26, fontWeight:700, color:G }}>whats inside</span>
+              </div>
+              <NutrientGrid product={product} />
+              <ProofBox product={product} />
+            </div>
+
+            {/* ── FAR RIGHT: vertical nav rail (xl+) ── */}
+            <div className="hidden xl:flex flex-col items-center justify-center flex-shrink-0 order-4" style={{ width:60 }}>
+              <div className="relative flex flex-col items-center h-full justify-center">
                 <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2"
-                  style={{ width: 1, backgroundImage: `repeating-linear-gradient(to bottom, ${product.accent}35 0, ${product.accent}35 4px, transparent 4px, transparent 10px)` }} />
-                {PRODUCTS.map((p, i) => (
-                  <button key={i} onClick={() => scrollToProduct(i)} className="relative z-10 flex flex-col items-center gap-2 py-5">
-                    <motion.div animate={{ scale: i === activeIdx ? 1.5 : 1 }} transition={{ duration: 0.3 }}>
-                      <svg width="12" height="12" viewBox="0 0 12 12">
-                        <motion.circle cx="6" cy="6" r="4.5"
-                          fill={i === activeIdx ? p.accent : 'transparent'}
-                          stroke={i === activeIdx ? p.accent : 'rgba(0,0,0,0.2)'}
-                          strokeWidth="1.4" strokeDasharray={i === activeIdx ? '0' : '3 2'}
-                          filter="url(#sk)"
-                          animate={{ filter: i === activeIdx ? `drop-shadow(0 0 5px ${p.accent})` : 'none' }}
-                          transition={{ duration: 0.3 }}
-                        />
+                  style={{ width:1, backgroundImage:`repeating-linear-gradient(to bottom,${G}28 0,${G}28 4px,transparent 4px,transparent 10px)` }} />
+                {PRODUCTS.map((p,i) => (
+                  <button key={i} onClick={()=>scrollTo(i)} className="relative z-10 flex flex-col items-center gap-2 py-8">
+                    <motion.div animate={{ scale:i===activeIdx?1.5:1 }} transition={{ duration:0.3 }}>
+                      <svg width="15" height="15" viewBox="0 0 15 15">
+                        <motion.circle cx="7.5" cy="7.5" r="5.5"
+                          fill={i===activeIdx?G:'transparent'}
+                          stroke={i===activeIdx?G:'rgba(0,0,0,0.22)'}
+                          strokeWidth="1.4" strokeDasharray={i===activeIdx?'0':'3 2'}
+                          filter="url(#sk)" />
                       </svg>
                     </motion.div>
-                    {/* Vertical label — DM Sans uppercase */}
-                    <motion.span animate={{ opacity: i === activeIdx ? 1 : 0.24, color: i === activeIdx ? p.accent : '#000' }}
-                      transition={{ duration: 0.3 }}
-                      style={{ writingMode: 'vertical-rl', letterSpacing: '0.14em', fontFamily: FS, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase' }}>
+                    <motion.span animate={{ opacity:i===activeIdx?1:0.28, color:i===activeIdx?G:'#000' }} transition={{ duration:0.3 }}
+                      style={{ writingMode:'vertical-rl', letterSpacing:'0.15em', fontFamily:FH, fontSize:14, fontWeight:700, textTransform:'uppercase' }}>
                       {p.name}
                     </motion.span>
                   </button>
                 ))}
               </div>
             </div>
-          </div>
+          </main>
 
-          {/* ══════ BOTTOM PROGRESS ══════ */}
-          <div style={{ flexShrink: 0 }} className="relative z-20 px-6 sm:px-10 md:px-14 pb-5 sm:pb-6">
-            <div className="flex items-center justify-between mb-2">
-              {/* Progress counter — DM Sans */}
-              <span style={{ fontFamily: FS, fontSize: '12px', fontWeight: 500, color: 'rgba(0,0,0,0.34)', letterSpacing: '0.06em' }}>
-                {String(activeIdx + 1).padStart(2, '0')} / 03
+          {/* ══════ ROW 3: PROGRESS BAR ══════ */}
+          <footer className="relative"
+            style={{
+              zIndex:20, flexShrink:0,
+              paddingLeft:'clamp(60px,7vw,96px)',
+              paddingRight:'clamp(20px,4vw,56px)',
+              paddingBottom:'clamp(14px,2vh,28px)',
+              paddingTop:12,
+            }}>
+            <div className="flex items-center justify-between mb-3">
+              <span style={{ fontFamily:FH, fontSize:20, fontWeight:700, color:'rgba(0,0,0,0.38)' }}>
+                {String(activeIdx+1).padStart(2,'0')} / 03
               </span>
-              {/* Product name — Playfair Display italic */}
-              <motion.span
-                style={{ fontFamily: FD, fontSize: '12px', fontWeight: 700, fontStyle: 'italic', letterSpacing: '0.04em' }}
-                animate={{ color: product.accent }} transition={{ duration: 0.4 }}>
+              <motion.span style={{ fontFamily:FD, fontSize:20, fontWeight:700, fontStyle:'italic' }}
+                animate={{ color:G }} transition={{ duration:0.4 }}>
                 {product.name}
               </motion.span>
             </div>
-
-            {/* Doodle progress track */}
-            <div className="relative" style={{ height: 8 }}>
-              <svg className="absolute inset-0 w-full" height="8" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-                <path d="M0 4 Q50% 2 100% 4" fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="2.5" strokeLinecap="round" filter="url(#sk)" />
-              </svg>
+            <div className="relative" style={{ height:13 }}>
+              <div className="absolute inset-0 rounded-full"
+                style={{ background:'rgba(0,0,0,0.07)', border:'1px solid rgba(0,0,0,0.07)' }} />
               <motion.div style={{
-                position: 'absolute', top: 2, left: 0, height: 4, borderRadius: 999,
-                width: fillWidth, backgroundColor: product.accent, boxShadow: `0 0 12px ${product.accent}`,
+                position:'absolute', top:0, left:0, height:'100%', borderRadius:99,
+                width:fillProg,
+                background:`linear-gradient(90deg,${G}80,${G})`,
+                boxShadow:`0 0 16px ${GG}`,
               }} />
+              {[1,2].map(t=>(
+                <div key={t} className="absolute top-0 bottom-0"
+                  style={{ left:`${t*33.33}%`, width:1, background:'rgba(0,0,0,0.10)' }} />
+              ))}
             </div>
-          </div>
+          </footer>
+
         </div>
       </div>
     </>

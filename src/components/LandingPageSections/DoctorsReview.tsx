@@ -131,7 +131,7 @@ const DOCTORS = [
 
 function RatingStars({ rating }: { rating: number }) {
   return (
-    <div style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 3, alignItems: 'center', flexWrap: 'wrap' }}>
       {Array.from({ length: rating }).map((_, i) => (
         <motion.div key={i} initial={{ scale: 0, rotate: -30 }} animate={{ scale: 1, rotate: i * 15 - 30 }} transition={{ delay: i * 0.06, type: 'spring', stiffness: 320 }}>
           <StarDoodle size={16} />
@@ -149,13 +149,13 @@ function TrustBadge({ icon, label, sublabel, index }: { icon: ReactNode; label: 
     <motion.div
       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 + index * 0.1 }}
       whileHover={{ y: -5, boxShadow: '5px 7px 0 rgba(21,128,61,0.2)' }}
-      style={{ background: '#fffef5', border: '2px solid rgba(21,128,61,0.22)', borderRadius: 16, padding: '22px 18px', textAlign: 'center', boxShadow: '3px 4px 0 rgba(21,128,61,0.12)', cursor: 'default', position: 'relative', overflow: 'hidden', transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)' }}
+      style={{ background: '#fffef5', border: '2px solid rgba(21,128,61,0.22)', borderRadius: 16, padding: '18px 14px', textAlign: 'center', boxShadow: '3px 4px 0 rgba(21,128,61,0.12)', cursor: 'default', position: 'relative', overflow: 'hidden', transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)' }}
     >
-      <div style={{ width: 52, height: 52, background: 'rgba(21,128,61,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', fontSize: 26, border: '2px dashed rgba(21,128,61,0.3)' }}>
+      <div style={{ width: 46, height: 46, background: 'rgba(21,128,61,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', fontSize: 22, border: '2px dashed rgba(21,128,61,0.3)' }}>
         {icon}
       </div>
-      <p style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{label}</p>
-      {sublabel && <p style={{ fontSize: 12, color: '#15803d', margin: 0, fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>{sublabel}</p>}
+      <p style={{ fontSize: 13, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{label}</p>
+      {sublabel && <p style={{ fontSize: 11, color: '#15803d', margin: 0, fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>{sublabel}</p>}
       <StarDoodle size={14} style={{ position: 'absolute', top: 10, right: 10, opacity: 0.3 }} />
     </motion.div>
   );
@@ -163,13 +163,91 @@ function TrustBadge({ icon, label, sublabel, index }: { icon: ReactNode; label: 
 
 type Direction = 1 | -1;
 
-function CarouselSlide({ doctor, direction }: { doctor: typeof DOCTORS[0]; direction: Direction }) {
+// ── Mobile card layout (stacked vertically) ──
+function CarouselSlideMobile({ doctor }: { doctor: typeof DOCTORS[0] }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', background: '#fffef5', height: '100%' }}>
+      {/* Top profile section */}
+      <div style={{
+        background: `linear-gradient(160deg, ${doctor.accent} 0%, rgba(255,254,245,0.3) 100%)`,
+        borderBottom: '2px dashed rgba(21,128,61,0.18)',
+        display: 'flex', flexDirection: 'row', alignItems: 'center',
+        padding: '20px 20px 16px', gap: 16, position: 'relative', overflow: 'hidden', flexShrink: 0,
+      }}>
+        <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: 'rgba(21,128,61,0.06)' }} />
+        {/* Avatar */}
+        <motion.div initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.12, duration: 0.45 }} style={{ position: 'relative', flexShrink: 0 }}>
+          <div style={{ width: 72, height: 72, borderRadius: '50%', overflow: 'hidden', border: '2.5px solid #15803d', boxShadow: '3px 4px 0 rgba(21,128,61,0.2)', position: 'relative' }}>
+            <Image src={doctor.image} alt={doctor.name} fill style={{ objectFit: 'cover' }} />
+          </div>
+          <CircleScribble size={88} style={{ position: 'absolute', top: -8, left: -8, pointerEvents: 'none' }} />
+          <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 8 }} transition={{ delay: 0.3, type: 'spring', stiffness: 300 }}
+            style={{ position: 'absolute', bottom: 2, right: -2, background: '#15803d', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, boxShadow: '2px 2px 0 rgba(0,0,0,0.12)', border: '2px solid #fffef5', color: '#fff' }}>
+            ✓
+          </motion.div>
+        </motion.div>
+        {/* Name + title */}
+        <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.18, duration: 0.4 }} style={{ flex: 1, minWidth: 0 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.2 }}>{doctor.name}</h3>
+          <p style={{ fontSize: 12, fontWeight: 600, color: '#15803d', margin: '0 0 4px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}>✦ {doctor.title}</p>
+          <p style={{ fontSize: 11, color: 'rgba(0,0,0,0.5)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.35 }}>{doctor.specialization}</p>
+        </motion.div>
+      </div>
+
+      {/* Certs row */}
+      <div style={{ padding: '10px 20px', borderBottom: '1px solid rgba(21,128,61,0.1)', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+        {doctor.certifications.map((cert, i) => (
+          <motion.span key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.28 + i * 0.06 }}
+            style={{ fontSize: 10, background: 'rgba(21,128,61,0.1)', border: '1.5px solid rgba(21,128,61,0.3)', borderRadius: 7, padding: '3px 8px', color: '#15803d', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+            <span style={{ fontSize: 8 }}>✦</span> {cert}
+          </motion.span>
+        ))}
+      </div>
+
+      {/* Review section */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '16px 20px 16px', gap: 12, overflowY: 'auto' }}>
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.18, duration: 0.4 }}>
+          <RatingStars rating={doctor.rating} />
+        </motion.div>
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.26, duration: 0.5 }}
+          style={{ background: `linear-gradient(135deg, ${doctor.accent}, rgba(255,254,245,0.5))`, border: '1.5px dashed rgba(21,128,61,0.3)', borderRadius: 14, padding: '18px 16px 14px', position: 'relative' }}>
+          <QuoteOpen size={24} style={{ position: 'absolute', top: -12, left: 10 }} />
+          <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(0,0,0,0.72)', margin: 0, fontFamily: "'DM Sans', sans-serif", fontWeight: 400, paddingTop: 4 }}>
+            {doctor.review}
+          </p>
+          <StarDoodle size={15} style={{ position: 'absolute', bottom: 8, right: 10, opacity: 0.22 }} />
+        </motion.div>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.44 }}
+          style={{ fontSize: 11, color: 'rgba(0,0,0,0.38)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
+          Verified medical professional · Independently reviewed
+        </motion.p>
+      </div>
+
+      {/* Bottom accent bar */}
+      <div style={{ height: 5, background: `repeating-linear-gradient(90deg, ${doctor.accentStrong} 0px, ${doctor.accentStrong} 14px, transparent 14px, transparent 22px)`, opacity: 0.5, flexShrink: 0 }} />
+    </div>
+  );
+}
+
+function CarouselSlide({ doctor, direction, isMobile }: { doctor: typeof DOCTORS[0]; direction: Direction; isMobile: boolean }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const variants: any = {
     enter: (dir: Direction) => ({ x: dir > 0 ? 120 : -120, opacity: 0, rotate: dir > 0 ? 4 : -4, scale: 0.92, filter: 'blur(4px)' }),
     center: { x: 0, opacity: 1, rotate: 0, scale: 1, filter: 'blur(0px)' },
     exit: (dir: Direction) => ({ x: dir > 0 ? -100 : 100, opacity: 0, rotate: dir > 0 ? -3 : 3, scale: 0.94, filter: 'blur(3px)' }),
   };
+
+  if (isMobile) {
+    return (
+      <motion.div
+        key={doctor.id} custom={direction} variants={variants} initial="enter" animate="center" exit="exit"
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        style={{ position: 'absolute', inset: 0, background: '#fffef5', border: '2px solid rgba(21,128,61,0.22)', borderRadius: 20, overflow: 'hidden', boxShadow: '5px 8px 0 rgba(21,128,61,0.13)' }}
+      >
+        <CarouselSlideMobile doctor={doctor} />
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -247,9 +325,9 @@ function NavBtn({ onClick, dir, disabled }: { onClick: () => void; dir: 'prev' |
   const isNext = dir === 'next';
   return (
     <motion.button onClick={onClick} disabled={disabled} whileHover={disabled ? {} : { scale: 1.08, y: -2 }} whileTap={disabled ? {} : { scale: 0.93 }}
-      style={{ width: 52, height: 52, borderRadius: '50%', background: disabled ? 'rgba(0,0,0,0.04)' : '#fffef5', border: `2px solid ${disabled ? 'rgba(0,0,0,0.1)' : 'rgba(21,128,61,0.4)'}`, cursor: disabled ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: disabled ? 'none' : '3px 4px 0 rgba(21,128,61,0.18)', transition: 'all 0.2s', position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+      style={{ width: 46, height: 46, borderRadius: '50%', background: disabled ? 'rgba(0,0,0,0.04)' : '#fffef5', border: `2px solid ${disabled ? 'rgba(0,0,0,0.1)' : 'rgba(21,128,61,0.4)'}`, cursor: disabled ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: disabled ? 'none' : '3px 4px 0 rgba(21,128,61,0.18)', transition: 'all 0.2s', position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
       {!disabled && <motion.div whileHover={{ scale: 2.5, opacity: 0.12 }} style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: '#15803d', opacity: 0, transition: 'all 0.3s' }} />}
-      <svg viewBox="0 0 24 24" width={20} height={20} fill="none" style={{ transform: isNext ? 'none' : 'scaleX(-1)' }}>
+      <svg viewBox="0 0 24 24" width={18} height={18} fill="none" style={{ transform: isNext ? 'none' : 'scaleX(-1)' }}>
         <path d={isNext ? 'M5,12 C8,10 14,8 19,12 M14,7 L19,12 L14,17' : 'M19,12 C16,10 10,8 5,12 M10,7 L5,12 L10,17'}
           stroke={disabled ? 'rgba(0,0,0,0.25)' : '#15803d'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -268,7 +346,16 @@ export default function DoctorsReview() {
   const [direction, setDirection] = useState<Direction>(1);
   const [isAnimating, setIsAnimating] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const navigate = useCallback((idx: number, dir: Direction) => {
     if (isAnimating) return;
@@ -291,7 +378,17 @@ export default function DoctorsReview() {
     navigate((current + 1) % DOCTORS.length, 1);
   }, [current, navigate]);
 
-  // ── Auto-advance every 8 seconds ──
+  // Touch swipe support
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { if (diff > 0) next(); else prev(); }
+    touchStartX.current = null;
+  };
+
+  // Auto-advance every 8 seconds
   useEffect(() => {
     if (paused) {
       if (autoRef.current) clearInterval(autoRef.current);
@@ -301,66 +398,84 @@ export default function DoctorsReview() {
       setDirection(1);
       setCurrent((c) => (c + 1) % DOCTORS.length);
     }, 8000);
-    return () => {
-      if (autoRef.current) clearInterval(autoRef.current);
-    };
+    return () => { if (autoRef.current) clearInterval(autoRef.current); };
   }, [paused, current]);
+
+  // Dynamic carousel height
+  const carouselHeight = isMobile ? 420 : 360;
 
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
-        .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-        @media (max-width: 900px) { .trust-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .trust-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 680px) { .carousel-slide-inner { grid-template-columns: 1fr !important; } }
+        .trust-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+        }
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+        }
+        .hint-text { display: block; }
+
+        @media (max-width: 900px) {
+          .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        }
+        @media (max-width: 639px) {
+          .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+          .hint-text { display: none; }
+        }
       `}</style>
 
       <section
         ref={sectionRef}
-        style={{ position: 'relative', overflow: 'hidden', background: '#fafff6', paddingBottom: 100 }}
+        style={{ position: 'relative', overflow: 'hidden', background: '#fafff6', paddingBottom: isMobile ? 60 : 100 }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
         {/* BG doodles */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-          <motion.div style={{ position: 'absolute', top: '6%', left: '2%', y: floatY }}><StarDoodle size={52} style={{ opacity: 0.12, transform: 'rotate(22deg)' }} /></motion.div>
-          <motion.div style={{ position: 'absolute', top: '12%', right: '4%', y: floatY2 }}><StarDoodle size={38} style={{ opacity: 0.18, transform: 'rotate(-15deg)' }} /></motion.div>
-          <motion.div style={{ position: 'absolute', top: '35%', left: '1%', y: floatY }}><CircleScribble size={80} style={{ opacity: 0.6 }} /></motion.div>
-          <motion.div style={{ position: 'absolute', bottom: '25%', right: '2%', y: floatY2 }}><CircleScribble size={100} style={{ opacity: 0.5 }} /></motion.div>
-          <motion.div style={{ position: 'absolute', bottom: '10%', left: '4%', y: floatY }}><StarDoodle size={44} style={{ opacity: 0.14, transform: 'rotate(40deg)' }} /></motion.div>
+          <motion.div style={{ position: 'absolute', top: '6%', left: '2%', y: floatY }}><StarDoodle size={isMobile ? 32 : 52} style={{ opacity: 0.12, transform: 'rotate(22deg)' }} /></motion.div>
+          <motion.div style={{ position: 'absolute', top: '12%', right: '4%', y: floatY2 }}><StarDoodle size={isMobile ? 24 : 38} style={{ opacity: 0.18, transform: 'rotate(-15deg)' }} /></motion.div>
+          <motion.div style={{ position: 'absolute', top: '35%', left: '1%', y: floatY }}><CircleScribble size={isMobile ? 50 : 80} style={{ opacity: 0.6 }} /></motion.div>
+          <motion.div style={{ position: 'absolute', bottom: '25%', right: '2%', y: floatY2 }}><CircleScribble size={isMobile ? 60 : 100} style={{ opacity: 0.5 }} /></motion.div>
+          <motion.div style={{ position: 'absolute', bottom: '10%', left: '4%', y: floatY }}><StarDoodle size={isMobile ? 28 : 44} style={{ opacity: 0.14, transform: 'rotate(40deg)' }} /></motion.div>
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(21,128,61,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         </div>
 
-        <div style={{ maxWidth: 1000, margin: '0 auto', padding: '90px 24px 0', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '60px 16px 0' : '90px 24px 0', position: 'relative', zIndex: 1 }}>
 
           {/* Eyebrow */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'center', marginBottom: 36 }}>
-            <div style={{ background: 'rgba(21,128,61,0.09)', border: '2px dashed #15803d', borderRadius: 10, padding: '8px 22px', transform: 'rotate(-1.5deg)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <StarDoodle size={14} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#15803d', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trusted by Experts</span>
-              <StarDoodle size={14} />
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'center', marginBottom: isMobile ? 24 : 36 }}>
+            <div style={{ background: 'rgba(21,128,61,0.09)', border: '2px dashed #15803d', borderRadius: 10, padding: '7px 18px', transform: 'rotate(-1.5deg)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <StarDoodle size={13} />
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13, color: '#15803d', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trusted by Experts</span>
+              <StarDoodle size={13} />
             </div>
           </motion.div>
 
           {/* Heading */}
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 14 }}>
-            <h2 style={{ fontSize: 'clamp(2rem, 5.5vw, 3.6rem)', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, lineHeight: 1.1, color: '#111', margin: '0 0 4px 0', letterSpacing: '-0.03em' }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 14, padding: '0 8px' }}>
+            <h2 style={{ fontSize: isMobile ? '1.75rem' : 'clamp(2rem, 5.5vw, 3.6rem)', fontFamily: "'DM Sans', sans-serif", fontWeight: 700, lineHeight: 1.15, color: '#111', margin: '0 0 4px 0', letterSpacing: '-0.03em' }}>
               Endorsed by{' '}
               <span style={{ color: '#15803d', position: 'relative', display: 'inline-block' }}>
                 Medical Experts
-                <HandDrawnUnderline width={320} style={{ position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)' }} />
+                <HandDrawnUnderline width={isMobile ? 200 : 320} style={{ position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)' }} />
               </span>
             </h2>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scaleX: 0 }} whileInView={{ opacity: 1, scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.8 }} style={{ display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 20 }}>
-            <WavyLine width={200} />
+          <motion.div initial={{ opacity: 0, scaleX: 0 }} whileInView={{ opacity: 1, scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.8 }} style={{ display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 16 }}>
+            <WavyLine width={isMobile ? 140 : 200} />
           </motion.div>
 
           <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
-            style={{ fontSize: 'clamp(15px, 2vw, 17px)', fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.58)', textAlign: 'center', maxWidth: 580, margin: '0 auto 60px auto', lineHeight: 1.7, letterSpacing: '-0.005em' }}>
+            style={{ fontSize: isMobile ? 14 : 'clamp(15px, 2vw, 17px)', fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.58)', textAlign: 'center', maxWidth: 540, margin: `0 auto ${isMobile ? '36px' : '60px'} auto`, lineHeight: 1.7, letterSpacing: '-0.005em', padding: '0 8px' }}>
             Leading doctors, nutritionists, and scientists recommend PlainFuel for its precision, transparency, and evidence-based formulation.
           </motion.p>
 
@@ -368,16 +483,15 @@ export default function DoctorsReview() {
           <motion.div initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
 
             {/* Counter + auto-play indicator */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, padding: '0 4px' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: '#15803d', fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, padding: '0 2px' }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#15803d', fontWeight: 600 }}>
                 ✦ Expert {current + 1} of {DOCTORS.length}
               </span>
-              {/* Progress bar showing 8s countdown */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: 'rgba(0,0,0,0.35)', fontWeight: 500, letterSpacing: '0.05em' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: 'rgba(0,0,0,0.35)', fontWeight: 500, letterSpacing: '0.05em' }}>
                   {paused ? 'PAUSED' : 'AUTO'}
                 </span>
-                <div style={{ width: 80, height: 4, background: 'rgba(21,128,61,0.15)', borderRadius: 99, overflow: 'hidden' }}>
+                <div style={{ width: isMobile ? 56 : 80, height: 4, background: 'rgba(21,128,61,0.15)', borderRadius: 99, overflow: 'hidden' }}>
                   {!paused && (
                     <motion.div
                       key={current}
@@ -392,20 +506,29 @@ export default function DoctorsReview() {
             </div>
 
             {/* Stacked card frame */}
-            <div style={{ position: 'relative', paddingBottom: 18 }}>
-              <PeekCard offset={14} rotate={2.5} />
-              <PeekCard offset={8} rotate={-1.2} />
-              <div style={{ position: 'relative', height: 360, zIndex: 2, borderRadius: 24, overflow: 'visible' }}>
+            <div
+              style={{ position: 'relative', paddingBottom: isMobile ? 12 : 18 }}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <PeekCard offset={isMobile ? 10 : 14} rotate={2.5} />
+              <PeekCard offset={isMobile ? 5 : 8} rotate={-1.2} />
+              <div style={{ position: 'relative', height: carouselHeight, zIndex: 2, borderRadius: isMobile ? 20 : 24, overflow: 'visible' }}>
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                  <CarouselSlide key={DOCTORS[current].id} doctor={DOCTORS[current]} direction={direction} />
+                  <CarouselSlide
+                    key={DOCTORS[current].id}
+                    doctor={DOCTORS[current]}
+                    direction={direction}
+                    isMobile={isMobile}
+                  />
                 </AnimatePresence>
               </div>
             </div>
 
             {/* Controls row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 12 : 20, marginTop: isMobile ? 20 : 28 }}>
               <NavBtn onClick={prev} dir="prev" disabled={isAnimating} />
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {DOCTORS.map((_, i) => (
                   <InkDot key={i} active={i === current} index={i} onClick={() => goTo(i)} />
                 ))}
@@ -413,33 +536,42 @@ export default function DoctorsReview() {
               <NavBtn onClick={next} dir="next" disabled={isAnimating} />
             </div>
 
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-              style={{ textAlign: 'center', marginTop: 12, fontSize: 12, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.04em' }}>
+            <motion.p
+              className="hint-text"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+              style={{ textAlign: 'center', marginTop: 12, fontSize: 11.5, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.04em' }}>
               ← click arrows or dots to explore · hover to pause auto-play →
             </motion.p>
+            {isMobile && (
+              <p style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.03em' }}>
+                swipe left or right to explore
+              </p>
+            )}
           </motion.div>
 
           {/* Stats row */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            style={{ marginTop: 64, background: '#fffef5', border: '2px solid rgba(21,128,61,0.22)', borderRadius: 20, padding: '36px 40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 24, textAlign: 'center', boxShadow: '5px 7px 0 rgba(21,128,61,0.1)', position: 'relative', overflow: 'hidden' }}>
-            <StarDoodle size={40} style={{ position: 'absolute', top: 12, right: 16, opacity: 0.15, transform: 'rotate(20deg)' }} />
-            <StarDoodle size={28} style={{ position: 'absolute', bottom: 12, left: 16, opacity: 0.12, transform: 'rotate(-10deg)' }} />
-            {[
-              { num: '6+', label: 'Medical Experts', sub: 'and counting' },
-              { num: '100%', label: 'Third-Party Tested', sub: 'every batch' },
-              { num: '5.0', label: 'Expert Rating', sub: 'out of 5.0' },
-              { num: 'FSSAI', label: 'Certified', sub: 'India-approved' },
-            ].map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }}>
-                <div style={{ fontSize: 'clamp(26px,4vw,38px)', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, color: '#15803d', lineHeight: 1, marginBottom: 4 }}>{stat.num}</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#111', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{stat.label}</div>
-                <div style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
-              </motion.div>
-            ))}
+            style={{ marginTop: isMobile ? 40 : 64, background: '#fffef5', border: '2px solid rgba(21,128,61,0.22)', borderRadius: isMobile ? 16 : 20, padding: isMobile ? '24px 20px' : '36px 40px', boxShadow: '5px 7px 0 rgba(21,128,61,0.1)', position: 'relative', overflow: 'hidden' }}>
+            <StarDoodle size={isMobile ? 28 : 40} style={{ position: 'absolute', top: 12, right: 16, opacity: 0.15, transform: 'rotate(20deg)' }} />
+            <StarDoodle size={isMobile ? 20 : 28} style={{ position: 'absolute', bottom: 12, left: 16, opacity: 0.12, transform: 'rotate(-10deg)' }} />
+            <div className="stats-grid">
+              {[
+                { num: '6+', label: 'Medical Experts', sub: 'and counting' },
+                { num: '100%', label: 'Third-Party Tested', sub: 'every batch' },
+                { num: '5.0', label: 'Expert Rating', sub: 'out of 5.0' },
+                { num: 'FSSAI', label: 'Certified', sub: 'India-approved' },
+              ].map((stat, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }} style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: isMobile ? '1.6rem' : 'clamp(26px,4vw,38px)', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, color: '#15803d', lineHeight: 1, marginBottom: 4 }}>{stat.num}</div>
+                  <div style={{ fontSize: isMobile ? 12 : 14, fontWeight: 600, color: '#111', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{stat.label}</div>
+                  <div style={{ fontSize: isMobile ? 11 : 12, color: 'rgba(0,0,0,0.45)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
 
           {/* Trust badges */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: 28 }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: isMobile ? 16 : 28 }}>
             <div className="trust-grid">
               {[
                 { icon: '🔬', label: 'Third-Party Tested', sublabel: 'every single batch' },

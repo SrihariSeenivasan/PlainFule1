@@ -9,6 +9,7 @@ import Sciencesection from '@/components/LandingPageSections/Sciencesection';
 import MicronutrientGapSection from '@/components/LandingPageSections/MicronutrientGapSection';
 // import InsiderBundleSection from '@/components/LandingPageSections/Insiderbundlesection';
 import DoctorsReview from '@/components/LandingPageSections/DoctorsReview';
+import ProblemSection from '@/components/LandingPageSections/TheProblem';
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
         <Navbar />
 
         <Herosection />
+        <ProblemSection />
         <MicronutrientGapSection />
         <Sciencesection />
         
