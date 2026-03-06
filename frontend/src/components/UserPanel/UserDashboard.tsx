@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Package, CreditCard, Calendar } from 'lucide-react';
 import UserOrders from './UserOrders';
 import UserProfile from './UserProfile';
 
@@ -60,9 +61,9 @@ function OverviewTab() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Quick Stats */}
-      <StatsCard title="Total Orders" value="12" icon="📦" />
-      <StatsCard title="Total Spent" value="$2,499" icon="💳" />
-      <StatsCard title="Active Subscriptions" value="2" icon="📅" />
+      <StatsCard title="Total Orders" value="12" icon={Package} />
+      <StatsCard title="Total Spent" value="$2,499" icon={CreditCard} />
+      <StatsCard title="Active Subscriptions" value="2" icon={Calendar} />
 
       {/* Recent Activity */}
       <div className="md:col-span-3 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -88,10 +89,10 @@ function OverviewTab() {
 interface StatsCardProps {
   title: string;
   value: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
-function StatsCard({ title, value, icon }: StatsCardProps) {
+function StatsCard({ title, value, icon: Icon }: StatsCardProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <div className="flex items-center justify-between">
@@ -103,7 +104,7 @@ function StatsCard({ title, value, icon }: StatsCardProps) {
             {value}
           </p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <Icon className="w-10 h-10 text-blue-500" />
       </div>
     </div>
   );

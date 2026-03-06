@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { ShoppingCart, Check, Star, Minus, Plus, Truck, RotateCcw } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import { adminAPI, Product } from '@/lib/api';
 
 /* ── theme ── */
 const FD = "'Playfair Display', Georgia, serif";
@@ -43,7 +44,21 @@ const DoodleStar = ({ size = 24, style = {} }: { size?: number; style?: React.CS
   </svg>
 );
 
-/* ─── product data ─── */
+/* ─── product data interface ─── */
+interface ExtendedProduct extends Product {
+  variants?: ProductVariant[];
+  oneTimePrice?: number;
+  subscribePrice?: number;
+  origPrice?: number;
+  tag?: string;
+  duration?: string;
+  subtitle?: string;
+  rating?: number;
+  reviews?: number;
+  benefits?: string[];
+  nutrients?: { label: string; amount: string }[];
+}
+
 interface ProductVariant {
   id: string;
   name: string;
@@ -51,100 +66,96 @@ interface ProductVariant {
   image: string;
 }
 
-interface ProductData {
-  id: number;
-  name: string;
-  subtitle: string;
-  description: string;
-  rating: number;
-  reviews: number;
-  variants: ProductVariant[];
-  oneTimePrice: number;
-  subscribePrice: number;
-  origPrice: number;
-  tag: string;
-  duration: string;
-  benefits: string[];
-  nutrients: { label: string; amount: string }[];
-}
-
-const PRODUCTS: ProductData[] = [
-  {
-    id: 0,
-    name: 'PlainFuel Starter Pack',
-    subtitle: 'Your 7-day introduction to complete nutrition.',
-    description: 'One invisible scoop. 26 micronutrients. Drop it in your morning drink and forget about it — your body will remember.',
-    rating: 4.8, reviews: 2847,
-    variants: [
-      { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/brownpack.png' },
-      { id: 'lime', name: 'Lime', color: '#84cc16', image: '/images/Products/limepack.png' },
-      { id: 'orange', name: 'Orange', color: '#f97316', image: '/images/Products/orangepack.png' },
-      { id: 'red', name: 'Berry', color: '#ef4444', image: '/images/Products/redpack.png' },
-    ],
-    oneTimePrice: 1500, subscribePrice: 1200, origPrice: 2000,
-    tag: 'Trial · 7 Pouches', duration: '7 Days',
-    benefits: ['Zero sugar', 'No artificial colours', 'Vegan friendly', 'Lab tested'],
-    nutrients: [
-      { label: 'Vitamin C', amount: '80mg' },
-      { label: 'Zinc', amount: '11mg' },
-      { label: 'Vitamin B12', amount: '2.4μg' },
-      { label: 'Iron', amount: '18mg' },
-    ],
-  },
-  {
-    id: 1,
-    name: 'PlainFuel Balanced',
-    subtitle: 'The 15-day cycle for sustained energy.',
-    description: 'Morning commute, late nights, post-gym? Your nutrition doesn\'t care about your schedule — but ours does.',
-    rating: 4.9, reviews: 5213,
-    variants: [
-      { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/Pack1.png' },
-      { id: 'lime', name: 'Lime', color: '#84cc16', image: '/images/Products/limepack.png' },
-      { id: 'orange', name: 'Orange', color: '#f97316', image: '/images/Products/orangepack.png' },
-      { id: 'berry', name: 'Berry', color: '#ef4444', image: '/images/Products/redpack.png' },
-    ],
-    oneTimePrice: 2500, subscribePrice: 2100, origPrice: 3200,
-    tag: 'Subscription · 15 Pouches', duration: '15 Days',
-    benefits: ['Bioavailable formula', 'Gut-friendly', 'Priority shipping', 'Balanced nutrients'],
-    nutrients: [
-      { label: 'Omega-3', amount: '500mg' },
-      { label: 'Magnesium', amount: '400mg' },
-      { label: 'Vitamin D', amount: '600IU' },
-      { label: 'Protein', amount: '20g' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'PlainFuel Monthly Protocol',
-    subtitle: 'Full 30-day transformation cycle.',
-    description: 'Real change needs commitment. 30 days of precision nutrition — gut, cells, performance. All of it.',
-    rating: 4.9, reviews: 8941,
-    variants: [
-      { id: 'premium', name: 'Premium', color: '#15803d', image: '/images/Products/product_premium.png' },
-      { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/Pack2.png' },
-      { id: 'bundle', name: 'Bundle', color: '#eab308', image: '/images/Products/insidebundle.png' },
-    ],
-    oneTimePrice: 4500, subscribePrice: 3900, origPrice: 6000,
-    tag: 'Full Cycle · 30 Pouches', duration: '30 Days',
-    benefits: ['Premium formula', 'Exclusive access', 'Free shipping', 'Full protocol'],
-    nutrients: [
-      { label: 'Vitamin C', amount: '160mg' },
-      { label: 'Omega-3', amount: '1000mg' },
-      { label: 'Probiotics', amount: '10B CFU' },
-      { label: 'All 26 Micros', amount: '100% RDA' },
-    ],
-  },
-];
-
 /* ─── main component ─── */
 export default function Products({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+  const [products, setProducts] = useState<ExtendedProduct[]>([]);
   const [selectedProduct, setSelectedProduct] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [purchaseType, setPurchaseType] = useState<'onetime' | 'subscribe'>('onetime');
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const product = PRODUCTS[selectedProduct];
-  const variant = product.variants[selectedVariant];
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const fetchedProducts = await adminAPI.getProducts();
+        
+        // Enhance products with default variants and pricing
+        const enhancedProducts = (Array.isArray(fetchedProducts) ? fetchedProducts : []).map((product: Product, index: number) => {
+          const productImage = Array.isArray(product.images) && product.images.length > 0 
+            ? product.images[0] 
+            : '/images/Products/brownpack.png';
+          
+          return {
+            ...product,
+            variants: [
+              { id: 'original', name: 'Original', color: '#d4a574', image: productImage },
+              { id: 'lime', name: 'Lime', color: '#84cc16', image: productImage },
+            ],
+            oneTimePrice: product.price,
+            subscribePrice: Math.round(product.price * 0.85),
+            origPrice: Math.round(product.price * 1.3),
+            tag: `Product · ${product.stock} in stock`,
+            duration: '30 Days',
+            rating: 4.8,
+            reviews: 324,
+            benefits: ['Lab tested', 'Premium quality', 'Best value', 'Trusted'],
+            nutrients: [
+              { label: 'Quality', amount: 'Premium' },
+              { label: 'Stock', amount: `${product.stock}` },
+              { label: 'Category', amount: product.category },
+            ],
+            subtitle: product.description,
+          };
+        }) as ExtendedProduct[];
+        
+        setProducts(enhancedProducts.length > 0 ? enhancedProducts : getDefaultProducts());
+        setError('');
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+        setError('Failed to load products. Using sample data.');
+        setProducts(getDefaultProducts());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const getDefaultProducts = (): ExtendedProduct[] => [
+    {
+      id: 1,
+      name: 'PlainFuel Starter Pack',
+      description: 'One invisible scoop. 26 micronutrients. Drop it in your morning drink and forget about it — your body will remember.',
+      price: 1500,
+      stock: 50,
+      category: 'Starter',
+      images: ['/images/Products/brownpack.png'],
+      subtitle: 'Your 7-day introduction to complete nutrition.',
+      rating: 4.8,
+      reviews: 324,
+      variants: [
+        { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/brownpack.png' },
+        { id: 'lime', name: 'Lime', color: '#84cc16', image: '/images/Products/limepack.png' },
+      ],
+      oneTimePrice: 1500,
+      subscribePrice: 1200,
+      origPrice: 2000,
+      tag: 'Trial · 7 Pouches',
+      duration: '7 Days',
+      benefits: ['Zero sugar', 'No artificial colours', 'Vegan friendly', 'Lab tested'],
+      nutrients: [
+        { label: 'Vitamin C', amount: '80mg' },
+        { label: 'Zinc', amount: '11mg' },
+        { label: 'Vitamin B12', amount: '2.4μg' },
+        { label: 'Iron', amount: '18mg' },
+      ],
+    },
+  ];
 
   const handleProductChange = (idx: number) => {
     setSelectedProduct(idx);
@@ -152,7 +163,42 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
     setQuantity(1);
   };
 
-  const price = purchaseType === 'subscribe' ? product.subscribePrice : product.oneTimePrice;
+  const product = products[selectedProduct];
+  const variant = product?.variants?.[selectedVariant];
+
+  if (product && !product.variants) {
+    product.variants = [];
+  }
+  if (product && !product.oneTimePrice) {
+    product.oneTimePrice = product.price || 0;
+    product.subscribePrice = Math.round(product.price || 0 * 0.85);
+  }
+
+  const price = purchaseType === 'subscribe' ? (product?.subscribePrice || 0) : (product?.oneTimePrice || 0);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FS }}>
+        <p style={{ fontSize: 18, color: '#666' }}>Loading products...</p>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div style={{ minHeight: '100vh', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FS }}>
+        <p style={{ fontSize: 18, color: '#666' }}>No products available</p>
+      </div>
+    );
+  }
+
+  if (!product || !variant) {
+    return (
+      <div style={{ minHeight: '100vh', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FS }}>
+        <p style={{ fontSize: 18, color: '#666' }}>Failed to load product details</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
@@ -196,7 +242,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
 
         {/* ─── Product tabs ─── */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 40, flexWrap: 'wrap' }}>
-          {PRODUCTS.map((p, i) => (
+          {products.map((p, i) => (
             <motion.button
               key={p.id}
               whileHover={{ scale: 1.03 }}
@@ -286,7 +332,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
 
                   {/* Thumbnail strip */}
                   <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                    {product.variants.map((v, i) => (
+                    {(product.variants || []).map((v, i) => (
                       <motion.button
                         key={v.id}
                         whileHover={{ scale: 1.1 }}
@@ -322,11 +368,11 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                     <div style={{ display: 'flex', gap: 2 }}>
                       {[1, 2, 3, 4, 5].map(s => (
-                        <Star key={s} size={14} fill={s <= Math.round(product.rating) ? '#facc15' : 'none'} color="#facc15" />
+                        <Star key={s} size={14} fill={s <= Math.round(product.rating ?? 0) ? '#facc15' : 'none'} color="#facc15" />
                       ))}
                     </div>
                     <span style={{ fontFamily: FS, fontSize: 13, color: '#666' }}>
-                      {product.rating} · {product.reviews.toLocaleString()} Reviews
+                      {product.rating ?? 0} · {(product.reviews ?? 0).toLocaleString()} Reviews
                     </span>
                   </div>
 
@@ -344,7 +390,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                       Flavour: <span style={{ color: G }}>{variant.name}</span>
                     </p>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      {product.variants.map((v, i) => (
+                      {(product.variants || []).map((v, i) => (
                         <motion.button
                           key={v.id}
                           whileHover={{ scale: 1.05 }}
@@ -390,7 +436,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                         <span style={{ fontFamily: FS, fontSize: 14, fontWeight: 600 }}>One-Time Purchase</span>
                       </div>
                       <span style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: '#1a1a1a' }}>
-                        ₹{product.oneTimePrice.toLocaleString()}
+                        ₹{(product.oneTimePrice ?? 0).toLocaleString()}
                       </span>
                     </label>
 
@@ -415,12 +461,12 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                             BEST VALUE
                           </span>
                           <p style={{ fontFamily: FS, fontSize: 12, color: '#888', margin: '2px 0 0' }}>
-                            Deliver every {product.duration.replace(' Days', '')} days
+                            Deliver every {(product.duration ?? '30 Days').replace(' Days', '')} days
                           </p>
                         </div>
                       </div>
                       <span style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: G }}>
-                        ₹{product.subscribePrice.toLocaleString()}
+                        ₹{(product.subscribePrice ?? 0).toLocaleString()}
                       </span>
                     </label>
                   </div>
@@ -506,7 +552,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                     What makes it different
                   </h3>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {product.benefits.map((b) => (
+                    {(product.benefits || []).map((b) => (
                       <div key={b} style={{
                         display: 'flex', alignItems: 'center', gap: 8,
                         padding: '8px 12px', borderRadius: 8,
@@ -526,7 +572,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                     Key Nutrients
                   </h3>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {product.nutrients.map((n) => (
+                    {(product.nutrients || []).map((n) => (
                       <div key={n.label} style={{
                         padding: '10px 14px', borderRadius: 8,
                         background: '#fffde6', border: '1.5px solid rgba(21,128,61,0.12)',

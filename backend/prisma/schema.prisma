@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  firstName String?
+  lastName  String?
+  phone     String?
+  role      Role    @default(USER)
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  country   String?
+
+  orders Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Product {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String?
+  price          Decimal  @db.Decimal(10, 2)
+  category       String?
+  stock          Int      @default(0)
+
+  // Pricing
+  subscribePrice Decimal? @db.Decimal(10, 2)
+  origPrice      Decimal? @db.Decimal(10, 2)
+
+  // Display info
+  tag            String?
+  duration       String?
+  subtitle       String?
+  rating         Decimal? @db.Decimal(3, 1)
+  reviews        Int?
+
+  // Marketing copy (from Productsection)
+  headline       String?
+  accentWord     String?
+  grayWord       String?
+  persuade       String?
+  tagline        String?
+  highlight      String?
+  savePct        String?
+
+  // JSON arrays
+  benefits       Json?
+  badges         Json?
+  variants       Json?
+  nutrients      Json?
+  images         Json?
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+}
+
+model Order {
+  id              Int     @id @default(autoincrement())
+  orderNumber     String  @unique
+  totalAmount     Decimal @db.Decimal(10, 2)
+  status          OrderStatus @default(PENDING)
+  shippingAddress String?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items    OrderItem[]
+  payment  Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+
+  orderId   Int
+  order     Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Payment {
+  id              Int     @id @default(autoincrement())
+  amount          Decimal @db.Decimal(10, 2)
+  paymentMethod   String?
+  status          PaymentStatus @default(PENDING)
+  transactionId   String?
+
+  orderId Int @unique
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}

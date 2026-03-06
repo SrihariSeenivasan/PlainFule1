@@ -1,42 +1,54 @@
 'use client';
 
-export default function AdminUsers() {
-  const users = [
-    {
-      id: 'USR-001',
-      name: 'John Doe',
-      email: 'john@example.com',
-      joinDate: '2024-01-15',
-      status: 'Active',
-    },
-    {
-      id: 'USR-002',
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      joinDate: '2024-02-10',
-      status: 'Active',
-    },
-    {
-      id: 'USR-003',
-      name: 'Bob Johnson',
-      email: 'bob@example.com',
-      joinDate: '2024-03-05',
-      status: 'Inactive',
-    },
-  ];
+import { useEffect, useState } from 'react';
+import { adminAPI, User } from '@/lib/api';
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active':
+export default function AdminUsers() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const fetchedUsers = await adminAPI.getUsers();
+        setUsers(Array.isArray(fetchedUsers) ? fetchedUsers : []);
+        setError('');
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+        setError('Failed to load users');
+        setUsers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const getStatusColor = (role: string) => {
+    switch (role) {
+      case 'USER':
         return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'Inactive':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
-      case 'Suspended':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'ADMIN':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  if (loading) {
+    return <div className="p-6 text-gray-600">Loading users...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-600">{error}</div>;
+  }
+
+  if (users.length === 0) {
+    return <div className="p-6 text-gray-600">No users found</div>;
+  }
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
@@ -53,10 +65,10 @@ export default function AdminUsers() {
               Email
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-              Join Date
+              Phone
             </th>
             <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-              Status
+              Role
             </th>
           </tr>
         </thead>
@@ -67,21 +79,21 @@ export default function AdminUsers() {
                 {user.id}
               </td>
               <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                {user.name}
+                {user.firstName} {user.lastName}
               </td>
               <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
                 {user.email}
               </td>
               <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                {user.joinDate}
+                {user.phone}
               </td>
               <td className="px-6 py-3 text-sm">
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                    user.status
+                    user.role
                   )}`}
                 >
-                  {user.status}
+                  {user.role}
                 </span>
               </td>
             </tr>

@@ -7,6 +7,7 @@ interface ForgotPasswordProps {
   onSwitchView?: (view: 'login' | 'register' | 'forgot') => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);

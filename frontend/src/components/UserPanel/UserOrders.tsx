@@ -1,45 +1,60 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { userAPI, Order } from '@/lib/api';
+
 export default function UserOrders() {
-  const orders = [
-    {
-      id: 'ORD-001',
-      product: 'PlainFuel Basic (3-month)',
-      amount: '$89.97',
-      status: 'Delivered',
-      date: '2024-03-01',
-      trackingNumber: 'TRK-123456',
-    },
-    {
-      id: 'ORD-002',
-      product: 'PlainFuel Pro (Monthly)',
-      amount: '$49.99',
-      status: 'Processing',
-      date: '2024-03-15',
-      trackingNumber: 'TRK-789012',
-    },
-    {
-      id: 'ORD-003',
-      product: 'PlainFuel Bundle',
-      amount: '$199.99',
-      status: 'Pending',
-      date: '2024-03-20',
-      trackingNumber: 'TRK-345678',
-    },
-  ];
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const fetchedOrders = await userAPI.getOrders();
+        setOrders(Array.isArray(fetchedOrders) ? fetchedOrders : []);
+        setError('');
+      } catch (err) {
+        console.error('Failed to fetch orders:', err);
+        setError('Failed to load orders');
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Delivered':
+      case 'DELIVERED':
         return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'Processing':
+      case 'SHIPPED':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'Pending':
+      case 'PROCESSING':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      case 'PENDING':
         return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'CANCELLED':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  if (loading) {
+    return <div className="p-6 text-gray-600">Loading orders...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-600">{error}</div>;
+  }
+
+  if (orders.length === 0) {
+    return <div className="p-6 text-gray-600">No orders yet</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -72,13 +87,13 @@ export default function UserOrders() {
             {orders.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <td className="px-6 py-3 text-sm font-medium text-gray-900 dark:text-white">
-                  {order.id}
+                  {order.orderNumber}
                 </td>
                 <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                  {order.product}
+                  {order.items?.map((item) => item.name).join(', ')}
                 </td>
                 <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                  {order.amount}
+                  ₹{order.totalAmount}
                 </td>
                 <td className="px-6 py-3 text-sm">
                   <span
@@ -90,7 +105,7 @@ export default function UserOrders() {
                   </span>
                 </td>
                 <td className="px-6 py-3 text-sm text-gray-600 dark:text-gray-400">
-                  {order.date}
+                  {new Date(order.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-3 text-sm">
                   <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">

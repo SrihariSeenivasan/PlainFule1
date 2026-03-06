@@ -102,9 +102,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
           {/* Modal Content */}
           <div style={{ marginTop: currentView === 'login' ? 0 : '0' }}>
-            {currentView === 'login' && <LoginPage onSwitchView={handleSwitchView} />}
+            {currentView === 'login' && <LoginPage onSwitchView={handleSwitchView} onSuccess={handleClose} />}
 
-            {currentView === 'register' && <RegisterPage onSwitchView={handleSwitchView} />}
+            {currentView === 'register' && <RegisterPage onSwitchView={handleSwitchView} onSuccess={handleClose} />}
 
             {currentView === 'forgot' && <ForgotPassword onSwitchView={handleSwitchView} />}
           </div>

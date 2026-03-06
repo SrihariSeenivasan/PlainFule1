@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Package, DollarSign, Users, TrendingUp } from 'lucide-react';
 import AdminOrders from './AdminOrders';
 import AdminPayments from './AdminPayments';
 import AdminProducts from './AdminProducts';
@@ -70,25 +71,25 @@ function OverviewTab() {
         title="Total Orders"
         value="1,234"
         change="+12%"
-        icon="📦"
+        icon={Package}
       />
       <StatsCard
         title="Total Revenue"
         value="$45,231"
         change="+5%"
-        icon="💰"
+        icon={DollarSign}
       />
       <StatsCard
         title="Active Users"
         value="892"
         change="+2%"
-        icon="👥"
+        icon={Users}
       />
       <StatsCard
         title="Conversion Rate"
         value="3.24%"
         change="+0.5%"
-        icon="📈"
+        icon={TrendingUp}
       />
     </div>
   );
@@ -98,10 +99,10 @@ interface StatsCardProps {
   title: string;
   value: string;
   change: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
-function StatsCard({ title, value, change, icon }: StatsCardProps) {
+function StatsCard({ title, value, change, icon: Icon }: StatsCardProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
       <div className="flex items-center justify-between">
@@ -116,7 +117,7 @@ function StatsCard({ title, value, change, icon }: StatsCardProps) {
             {change} from last month
           </p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <Icon className="w-10 h-10 text-blue-500" />
       </div>
     </div>
   );
