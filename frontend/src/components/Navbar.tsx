@@ -4,6 +4,8 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import React from 'react';
+import AuthModal from './AuthModal';
 
 // ── Inline SVG doodle helpers ────────────────────────────────────────────────
 
@@ -38,12 +40,13 @@ const MenuDoodleIcon = ({ open }: { open: boolean }) => (
 
 // ── Nav Link ─────────────────────────────────────────────────────────────────
 
-const NavLink = ({ href, children, accent = false, delay = 0 }: { href: string; children: React.ReactNode; accent?: boolean; delay?: number }) => {
+const NavLink = ({ href, children, accent = false, delay = 0, onClick }: { href: string; children: React.ReactNode; accent?: boolean; delay?: number; onClick?: () => void }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <motion.a
-      href={href}
+      href={onClick ? undefined : href}
+      onClick={onClick ? (e: React.MouseEvent) => { e.preventDefault(); onClick(); } : undefined}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
@@ -111,7 +114,7 @@ const DoodleCTA = ({ delay = 0, mobile = false }: { delay?: number; mobile?: boo
   const [hovered, setHovered] = useState(false);
   return (
     <motion.a
-      href="#buy"
+      href="/user"
       initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
       animate={{ opacity: 1, scale: 1, rotate: hovered ? 1 : -1 }}
       transition={{ duration: 0.5, delay }}
@@ -154,15 +157,203 @@ const DoodleCTA = ({ delay = 0, mobile = false }: { delay?: number; mobile?: boo
   );
 };
 
+// ── Login Button ──────────────────────────────────────────────────────────────
+
+const LoginButton = ({ delay = 0, onClick }: { delay?: number; onClick?: () => void }) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
+      animate={{ opacity: 1, scale: 1, rotate: hovered ? 1 : -1 }}
+      transition={{ duration: 0.5, delay }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        padding: '8px 18px',
+        background: '#15803d',
+        color: '#fff',
+        fontFamily: "'Caveat', cursive",
+        fontSize: 16,
+        fontWeight: 700,
+        letterSpacing: '0.06em',
+        textDecoration: 'none',
+        borderRadius: 12,
+        border: '2px solid #15803d',
+        boxShadow: hovered
+          ? '4px 5px 0 rgba(21,100,50,0.4)'
+          : '2px 3px 0 rgba(21,100,50,0.3)',
+        transform: `rotate(${hovered ? 1 : -1}deg)`,
+        transition: 'all 0.2s ease',
+        flexShrink: 0,
+        cursor: 'pointer',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      Sign In
+    </motion.button>
+  );
+};
+
+// ── Profile Dropdown ──────────────────────────────────────────────────────────
+
+const ProfileDropdown = ({ open, onClose, userName = 'User' }: { open: boolean; onClose: () => void; userName?: string }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10, scaleY: 0.85 }}
+      animate={{ opacity: open ? 1 : 0, y: open ? 0 : -10, scaleY: open ? 1 : 0.85 }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        transformOrigin: 'top right',
+        pointerEvents: open ? 'auto' : 'none',
+        position: 'absolute',
+        top: 'calc(100% + 8px)',
+        right: 0,
+        background: '#fffef5',
+        borderRadius: 14,
+        padding: '12px 0',
+        border: '2px dashed rgba(21,128,61,0.4)',
+        boxShadow: '4px 5px 0 rgba(21,128,61,0.15)',
+        zIndex: 200,
+        minWidth: 200,
+      }}
+    >
+      {/* Divider style */}
+      <div style={{
+        paddingTop: 12,
+        paddingBottom: 12,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderBottom: '1.5px dashed rgba(21,128,61,0.2)',
+      }}>
+        <p style={{
+          margin: 0,
+          fontSize: 12,
+          color: '#999',
+          fontWeight: 600,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+        }}>
+          Profile
+        </p>
+        <p style={{
+          margin: '6px 0 0 0',
+          fontSize: 16,
+          fontWeight: 700,
+          color: '#1a1a1a',
+          fontFamily: "'Caveat', cursive",
+        }}>
+          {userName}
+        </p>
+      </div>
+
+      {/* Profile Link */}
+      <motion.a
+        href="/user"
+        onClick={onClose}
+        whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
+        style={{
+          display: 'block',
+          padding: '10px 16px',
+          textDecoration: 'none',
+          fontSize: 15,
+          fontWeight: 600,
+          color: '#1a1a1a',
+          transition: 'background 0.2s',
+          fontFamily: "'Caveat', cursive",
+        }}
+      >
+        📋 My Profile
+      </motion.a>
+
+      {/* Logout Button */}
+      <motion.button
+        onClick={() => {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userRole');
+          localStorage.removeItem('userName');
+          window.location.href = '/';
+          onClose();
+        }}
+        whileHover={{ backgroundColor: 'rgba(239,68,68,0.08)' }}
+        style={{
+          width: '100%',
+          padding: '10px 16px',
+          border: 'none',
+          background: 'transparent',
+          fontSize: 15,
+          fontWeight: 600,
+          color: '#ef4444',
+          cursor: 'pointer',
+          transition: 'background 0.2s',
+          textAlign: 'left',
+          fontFamily: "'Caveat', cursive",
+        }}
+      >
+        🔓 Logout
+      </motion.button>
+    </motion.div>
+  );
+};
+
+// ── Profile Icon Button ───────────────────────────────────────────────────────
+
+const ProfileIconButton = ({ onClick, delay = 0 }: { onClick: () => void; delay?: number }) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.button
+      onClick={onClick}
+      initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
+      animate={{ opacity: 1, scale: 1, rotate: hovered ? 1 : -1 }}
+      transition={{ duration: 0.5, delay }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        background: '#15803d',
+        color: '#fff',
+        border: '2px solid #15803d',
+        borderRadius: 12,
+        cursor: 'pointer',
+        boxShadow: hovered
+          ? '4px 5px 0 rgba(21,100,50,0.4)'
+          : '2px 3px 0 rgba(21,100,50,0.3)',
+        transform: `rotate(${hovered ? 1 : -1}deg)`,
+        transition: 'all 0.2s ease',
+        flexShrink: 0,
+        fontSize: 20,
+      }}
+      aria-label="Open profile menu"
+    >
+      👤
+    </motion.button>
+  );
+};
+
 // ── Mobile Drawer ─────────────────────────────────────────────────────────────
 
-const MobileDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const links = [
+const MobileDrawer = ({ open, onClose, onNavigate }: { open: boolean; onClose: () => void; onNavigate?: (view: string) => void }) => {
+  const defaultLinks = [
     { href: '#investigation', label: 'Investigation' },
     { href: '#inside', label: 'Inside' },
     { href: '#habit', label: 'Habit' },
     { href: '#buy', label: 'Order →', accent: true },
   ] as const;
+
+  const guestLinks = [
+    { label: 'Home', view: 'home' },
+    { label: 'Products', view: 'products' },
+  ];
 
   return (
     <motion.div
@@ -190,40 +381,72 @@ const MobileDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
       }} />
 
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 0 }}>
-        {links.slice(0, 3).map((l, i) => (
-          <motion.a
-            key={l.href}
-            href={l.href}
-            onClick={onClose}
-            initial={{ opacity: 0, x: -14 }}
-            animate={{ opacity: open ? 1 : 0, x: open ? 0 : -14 }}
-            transition={{ delay: 0.05 * i + 0.1 }}
-            style={{
-              fontFamily: "'Caveat', cursive",
-              fontWeight: 700,
-              fontSize: 26,
-              color: '#1a1a1a',
-              textDecoration: 'none',
-              padding: '14px 0',
-              borderBottom: '1.5px dashed rgba(0,0,0,0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-            }}
-          >
-            <StarDoodle size={16} rotate={i * 10} />
-            {l.label}
-          </motion.a>
-        ))}
+        {onNavigate ? (
+          <>
+            {guestLinks.map((l, i) => (
+              <motion.a
+                key={l.view}
+                href="#"
+                onClick={(e: React.MouseEvent) => { e.preventDefault(); onNavigate(l.view); onClose(); }}
+                initial={{ opacity: 0, x: -14 }}
+                animate={{ opacity: open ? 1 : 0, x: open ? 0 : -14 }}
+                transition={{ delay: 0.05 * i + 0.1 }}
+                style={{
+                  fontFamily: "'Caveat', cursive",
+                  fontWeight: 700,
+                  fontSize: 26,
+                  color: '#1a1a1a',
+                  textDecoration: 'none',
+                  padding: '14px 0',
+                  borderBottom: '1.5px dashed rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                }}
+              >
+                <StarDoodle size={16} rotate={i * 10} />
+                {l.label}
+              </motion.a>
+            ))}
+          </>
+        ) : (
+          <>
+            {defaultLinks.slice(0, 3).map((l, i) => (
+              <motion.a
+                key={l.href}
+                href={l.href}
+                onClick={onClose}
+                initial={{ opacity: 0, x: -14 }}
+                animate={{ opacity: open ? 1 : 0, x: open ? 0 : -14 }}
+                transition={{ delay: 0.05 * i + 0.1 }}
+                style={{
+                  fontFamily: "'Caveat', cursive",
+                  fontWeight: 700,
+                  fontSize: 26,
+                  color: '#1a1a1a',
+                  textDecoration: 'none',
+                  padding: '14px 0',
+                  borderBottom: '1.5px dashed rgba(0,0,0,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                }}
+              >
+                <StarDoodle size={16} rotate={i * 10} />
+                {l.label}
+              </motion.a>
+            ))}
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: open ? 1 : 0, y: open ? 0 : 8 }}
-          transition={{ delay: 0.3 }}
-          style={{ marginTop: 20 }}
-        >
-          <DoodleCTA mobile />
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: open ? 1 : 0, y: open ? 0 : 8 }}
+              transition={{ delay: 0.3 }}
+              style={{ marginTop: 20 }}
+            >
+              <DoodleCTA mobile />
+            </motion.div>
+          </>
+        )}
       </div>
     </motion.div>
   );
@@ -231,14 +454,29 @@ const MobileDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
 // ── Main Navbar ───────────────────────────────────────────────────────────────
 
-export default function Navbar() {
+export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('User');
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     setScrolled(y > 60);
   });
+
+  // Check auth status on mount
+  React.useEffect(() => {
+    setMounted(true);
+    const authToken = localStorage.getItem('authToken');
+    const storedUserName = localStorage.getItem('userName');
+    setIsLoggedIn(!!authToken);
+    if (storedUserName) setUserName(storedUserName);
+  }, []);
 
   return (
     <>
@@ -309,23 +547,47 @@ export default function Navbar() {
               }}
               className="desktop-nav"
             >
-              <NavLink href="#investigation" delay={0.2}>Investigation</NavLink>
-              <NavLink href="#inside" delay={0.3}>Inside</NavLink>
-              <NavLink href="#habit" delay={0.4}>Habit</NavLink>
+              {onNavigate ? (
+                <>
+                  <NavLink href="#" delay={0.2} onClick={() => onNavigate('home')}>Home</NavLink>
+                  <NavLink href="#" delay={0.3} onClick={() => onNavigate('products')}>Products</NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink href="#investigation" delay={0.2}>Investigation</NavLink>
+                  <NavLink href="#inside" delay={0.3}>Inside</NavLink>
+                  <NavLink href="#habit" delay={0.4}>Habit</NavLink>
 
-              {/* divider doodle */}
-              <svg viewBox="0 0 4 28" width={4} height={28} aria-hidden>
-                <line x1="2" y1="2" x2="2.5" y2="26" stroke="rgba(0,0,0,0.15)" strokeWidth="2" strokeLinecap="round" strokeDasharray="3,3" />
-              </svg>
+                  {/* divider doodle */}
+                  <svg viewBox="0 0 4 28" width={4} height={28} aria-hidden>
+                    <line x1="2" y1="2" x2="2.5" y2="26" stroke="rgba(0,0,0,0.15)" strokeWidth="2" strokeLinecap="round" strokeDasharray="3,3" />
+                  </svg>
 
-              <NavLink href="#buy" accent delay={0.5}>Order →</NavLink>
+                  <NavLink href="#buy" accent delay={0.5}>Order →</NavLink>
+                </>
+              )}
             </nav>
 
             {/* Right side */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              {/* Desktop CTA */}
-              <div className="desktop-cta">
+              {/* Desktop CTA / Auth Buttons */}
+              <div className="desktop-cta" style={{ display: 'flex', alignItems: 'center', gap: 12, position: 'relative' }}>
                 <DoodleCTA delay={0.6} />
+                {mounted && isLoggedIn ? (
+                  <>
+                    <ProfileIconButton 
+                      delay={0.65}
+                      onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    />
+                    <ProfileDropdown 
+                      open={profileDropdownOpen}
+                      onClose={() => setProfileDropdownOpen(false)}
+                      userName={userName}
+                    />
+                  </>
+                ) : mounted ? (
+                  <LoginButton delay={0.65} onClick={() => setAuthModalOpen(true)} />
+                ) : null}
               </div>
 
               {/* Mobile hamburger */}
@@ -354,7 +616,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile drawer */}
-          <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
+          <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} onNavigate={onNavigate} />
         </div>
       </motion.nav>
 
@@ -371,6 +633,9 @@ export default function Navbar() {
           .mobile-menu-btn { display: flex !important; }
         }
       `}</style>
+
+      {/* Auth Modal */}
+      <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </>
   );
 }

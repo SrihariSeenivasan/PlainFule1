@@ -93,9 +93,9 @@ function StarBurst({ size = 80, fill = BRAND_LIGHT, label, style = {} }: StarBur
         </filter>
       </defs>
       {/* Main shape */}
-      <polygon points={makePts(46, 30)} fill="url(#sbGrad)" stroke={BRAND} strokeWidth="3.5" strokeLinejoin="round" filter="url(#sbShadow)" />
+      <polygon points={makePts(46, 30)} fill="url(#sbGrad)" stroke={BRAND} strokeWidth="3.5" strokeLinejoin="round" filter="url(#sbShadow)" suppressHydrationWarning />
       {/* Inner accent ring */}
-      <polygon points={makePts(39, 25)} fill="none" stroke={BRAND} strokeWidth="1.2" strokeLinejoin="round" opacity="0.25" />
+      <polygon points={makePts(39, 25)} fill="none" stroke={BRAND} strokeWidth="1.2" strokeLinejoin="round" opacity="0.25" suppressHydrationWarning />
       {label && (
         <>
           <text x="50" y="43" textAnchor="middle" dominantBaseline="middle"

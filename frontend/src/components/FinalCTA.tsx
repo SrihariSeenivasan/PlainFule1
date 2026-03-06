@@ -134,7 +134,7 @@ const faqs = [
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function FinalCTA() {
+export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
   const sectionRef = useRef(null);
 
   return (
@@ -231,108 +231,228 @@ export default function FinalCTA() {
         <footer style={{
           background: '#fafaf2',
           borderTop: '2px dashed rgba(34,197,94,0.2)',
-          padding: '36px 0',
+          padding: '48px 0',
           position: 'relative',
         }}>
           <ZigZag width={200} style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', opacity: 0.3 }} />
 
           <div style={{
-            maxWidth: 1200, margin: '0 auto', padding: '0 24px',
-            display: 'flex', flexWrap: 'wrap',
-            alignItems: 'center', justifyContent: 'space-between', gap: 20,
+            maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1,
           }}>
+            {/* Top row: Logo + Links */}
+            <div style={{
+              display: 'flex', flexWrap: 'wrap',
+              alignItems: 'flex-start', justifyContent: 'space-between', gap: 40, marginBottom: 32,
+            }}>
 
-            {/* Logo — permanently tilted upward */}
-            <motion.div
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 24 }}
-            >
-              <div
-                style={{
-                  position: 'relative', width: 480, height: 160, flexShrink: 0,
-                  transform: 'rotate(-8deg)',
-                  transformOrigin: 'left center',
-                }}
+              {/* Logo — permanently tilted upward */}
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '0 0 auto' }}
               >
-                <Image
-                  src="/images/plainfuel.png"
-                  alt="Plainfuel"
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-              <StarBurst size={12} style={{ opacity: 0.5 }} />
-            </motion.div>
-
-            {/* Social links */}
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}
-            >
-              {[
-                { icon: Instagram, label: 'Instagram', href: '#' },
-                { icon: Twitter, label: 'Twitter', href: '#' },
-                { icon: Mail, label: 'Contact', href: '#' },
-              ].map(({ icon: Icon, label, href }, i) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                <div
                   style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    fontFamily: "'Caveat',cursive",
-                    fontSize: 18, fontWeight: 700,
-                    color: '#1a1a1a',
-                    textDecoration: 'none',
-                    background: '#fffef5',
-                    border: '1.5px dashed rgba(0,0,0,0.15)',
-                    borderRadius: 8,
-                    padding: '5px 12px',
-                    boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
-                    transition: 'color 0.2s, border-color 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = '#15803d';
-                    e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#1a1a1a';
-                    e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                    position: 'relative', width: 320, height: 120, flexShrink: 0,
+                    transform: 'rotate(-8deg)',
+                    transformOrigin: 'left center',
                   }}
                 >
-                  <Icon size={14} />
-                  {label}
-                </motion.a>
-              ))}
-            </motion.div>
+                  <Image
+                    src="/images/plainfuel.png"
+                    alt="Plainfuel"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
+                </div>
+                <StarBurst size={12} style={{ opacity: 0.5 }} />
+              </motion.div>
 
-            {/* Copyright */}
-            <motion.div
-              initial={{ opacity: 0, x: 12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              style={{
-                background: '#fffef5',
-                border: '1.5px dashed rgba(0,0,0,0.12)',
-                borderRadius: 8,
-                padding: '5px 14px',
-                transform: 'rotate(0.5deg)',
-                boxShadow: '2px 2px 0 rgba(0,0,0,0.05)',
-              }}
-            >
-              <p style={{
-                fontFamily: "'Caveat',cursive",
-                fontSize: 15, fontWeight: 700,
-                color: '#1a1a1a',
-                margin: 0,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-              }}>© 2026 Designed for Longevity ✦</p>
-            </motion.div>
+              {/* Links Section */}
+              <div style={{
+                display: 'flex', gap: 32, flexWrap: 'wrap', flex: '1 1 auto', justifyContent: 'flex-end', alignItems: 'flex-start',
+              }}>
+
+                {/* Quick Links */}
+                {onNavigate && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+                  >
+                    <p style={{
+                      fontFamily: "'Permanent Marker',cursive",
+                      fontSize: 14, fontWeight: 700,
+                      color: '#666', margin: '0 0 8px 0',
+                      textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>Quick Links</p>
+                    <motion.button
+                      onClick={() => onNavigate('products')}
+                      whileHover={{ rotate: -3, y: -2 }}
+                      style={{
+                        fontFamily: "'Caveat',cursive",
+                        fontSize: 16, fontWeight: 700,
+                        color: '#1a1a1a',
+                        background: '#fffef5',
+                        border: '1.5px dashed rgba(0,0,0,0.15)',
+                        borderRadius: 8,
+                        padding: '4px 10px',
+                        boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
+                        cursor: 'pointer',
+                        transition: 'color 0.2s, border-color 0.2s',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#15803d';
+                        e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#1a1a1a';
+                        e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                      }}
+                    >
+                      Products
+                    </motion.button>
+                  </motion.div>
+                )}
+
+                {/* Policy Links */}
+                {onNavigate && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+                  >
+                    <p style={{
+                      fontFamily: "'Permanent Marker',cursive",
+                      fontSize: 14, fontWeight: 700,
+                      color: '#666', margin: '0 0 8px 0',
+                      textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>Policies</p>
+                    {[
+                      { label: 'Shipping', view: 'shipping' },
+                      { label: 'Returns', view: 'return' },
+                      { label: 'Privacy', view: 'privacy' },
+                      { label: 'Terms', view: 'terms' },
+                    ].map(({ label, view }, i) => (
+                      <motion.button
+                        key={label}
+                        onClick={() => onNavigate(view)}
+                        whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                        style={{
+                          fontFamily: "'Caveat',cursive",
+                          fontSize: 16, fontWeight: 700,
+                          color: '#1a1a1a',
+                          background: '#fffef5',
+                          border: '1.5px dashed rgba(0,0,0,0.15)',
+                          borderRadius: 8,
+                          padding: '4px 10px',
+                          boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
+                          cursor: 'pointer',
+                          transition: 'color 0.2s, border-color 0.2s',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#15803d';
+                          e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#1a1a1a';
+                          e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                        }}
+                      >
+                        {label}
+                      </motion.button>
+                    ))}
+                  </motion.div>
+                )}
+
+                {/* Social links */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+                >
+                  <p style={{
+                    fontFamily: "'Permanent Marker',cursive",
+                    fontSize: 14, fontWeight: 700,
+                    color: '#666', margin: '0 0 8px 0',
+                    textTransform: 'uppercase', letterSpacing: '0.08em',
+                  }}>Follow Us</p>
+                  {[
+                    { icon: Instagram, label: 'Instagram', href: '#' },
+                    { icon: Twitter, label: 'Twitter', href: '#' },
+                    { icon: Mail, label: 'Contact', href: '#' },
+                  ].map(({ icon: Icon, label, href }, i) => (
+                    <motion.a
+                      key={label}
+                      href={href}
+                      whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        fontFamily: "'Caveat',cursive",
+                        fontSize: 16, fontWeight: 700,
+                        color: '#1a1a1a',
+                        textDecoration: 'none',
+                        background: '#fffef5',
+                        border: '1.5px dashed rgba(0,0,0,0.15)',
+                        borderRadius: 8,
+                        padding: '4px 10px',
+                        boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
+                        transition: 'color 0.2s, border-color 0.2s',
+                        whiteSpace: 'nowrap',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#15803d';
+                        e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#1a1a1a';
+                        e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                      }}
+                    >
+                      <Icon size={14} />
+                      {label}
+                    </motion.a>
+                  ))}
+                </motion.div>
+
+              </div>
+            </div>
+
+            {/* Bottom: Copyright */}
+            <div style={{
+              borderTop: '1.5px dashed rgba(0,0,0,0.12)',
+              paddingTop: 24,
+              textAlign: 'center',
+            }}>
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                style={{
+                  display: 'inline-block',
+                  background: '#fffef5',
+                  border: '1.5px dashed rgba(0,0,0,0.12)',
+                  borderRadius: 8,
+                  padding: '5px 14px',
+                  transform: 'rotate(0.5deg)',
+                  boxShadow: '2px 2px 0 rgba(0,0,0,0.05)',
+                }}
+              >
+                <p style={{
+                  fontFamily: "'Caveat',cursive",
+                  fontSize: 15, fontWeight: 700,
+                  color: '#1a1a1a',
+                  margin: 0,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                }}>© 2026 Designed for Longevity ✦</p>
+              </motion.div>
+            </div>
           </div>
         </footer>
 
