@@ -271,77 +271,30 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
 
               {/* Links Section */}
               <div style={{
-                display: 'flex', gap: 32, flexWrap: 'wrap', flex: '1 1 auto', justifyContent: 'flex-end', alignItems: 'flex-start',
+                display: 'flex', flexDirection: 'column', gap: 24, flex: '1 1 auto', alignItems: 'flex-end',
               }}>
+                {/* First Row: Quick Links + Follow Us */}
+                <div style={{
+                  display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'flex-start',
+                }}>
 
-                {/* Quick Links */}
-                {onNavigate && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
-                  >
-                    <p style={{
-                      fontFamily: "'Permanent Marker',cursive",
-                      fontSize: 14, fontWeight: 700,
-                      color: '#666', margin: '0 0 8px 0',
-                      textTransform: 'uppercase', letterSpacing: '0.08em',
-                    }}>Quick Links</p>
-                    <motion.button
-                      onClick={() => onNavigate('products')}
-                      whileHover={{ rotate: -3, y: -2 }}
-                      style={{
-                        fontFamily: "'Caveat',cursive",
-                        fontSize: 16, fontWeight: 700,
-                        color: '#1a1a1a',
-                        background: '#fffef5',
-                        border: '1.5px dashed rgba(0,0,0,0.15)',
-                        borderRadius: 8,
-                        padding: '4px 10px',
-                        boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
-                        cursor: 'pointer',
-                        transition: 'color 0.2s, border-color 0.2s',
-                        whiteSpace: 'nowrap',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#15803d';
-                        e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#1a1a1a';
-                        e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
-                      }}
+                  {/* Quick Links */}
+                  {onNavigate && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
                     >
-                      Products
-                    </motion.button>
-                  </motion.div>
-                )}
-
-                {/* Policy Links */}
-                {onNavigate && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
-                  >
-                    <p style={{
-                      fontFamily: "'Permanent Marker',cursive",
-                      fontSize: 14, fontWeight: 700,
-                      color: '#666', margin: '0 0 8px 0',
-                      textTransform: 'uppercase', letterSpacing: '0.08em',
-                    }}>Policies</p>
-                    {[
-                      { label: 'Shipping', view: 'shipping' },
-                      { label: 'Returns', view: 'return' },
-                      { label: 'Privacy', view: 'privacy' },
-                      { label: 'Terms', view: 'terms' },
-                    ].map(({ label, view }, i) => (
+                      <p style={{
+                        fontFamily: "'Permanent Marker',cursive",
+                        fontSize: 14, fontWeight: 700,
+                        color: '#666', margin: '0 0 8px 0',
+                        textTransform: 'uppercase', letterSpacing: '0.08em',
+                      }}>Quick Links</p>
                       <motion.button
-                        key={label}
-                        onClick={() => onNavigate(view)}
-                        whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                        onClick={() => onNavigate('products')}
+                        whileHover={{ rotate: -3, y: -2 }}
                         style={{
                           fontFamily: "'Caveat',cursive",
                           fontSize: 16, fontWeight: 700,
@@ -353,6 +306,7 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                           boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
                           cursor: 'pointer',
                           transition: 'color 0.2s, border-color 0.2s',
+                          whiteSpace: 'nowrap',
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.color = '#15803d';
@@ -363,63 +317,117 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                           e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
                         }}
                       >
-                        {label}
+                        Products
                       </motion.button>
+                    </motion.div>
+                  )}
+
+                  {/* Social links */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+                  >
+                    <p style={{
+                      fontFamily: "'Permanent Marker',cursive",
+                      fontSize: 14, fontWeight: 700,
+                      color: '#666', margin: '0 0 8px 0',
+                      textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>Follow Us</p>
+                    {[
+                      { icon: Instagram, label: 'Instagram', href: '#' },
+                      { icon: Twitter, label: 'Twitter', href: '#' },
+                      { icon: Mail, label: 'Contact', href: '#' },
+                    ].map(({ icon: Icon, label, href }, i) => (
+                      <motion.a
+                        key={label}
+                        href={href}
+                        whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          fontFamily: "'Caveat',cursive",
+                          fontSize: 16, fontWeight: 700,
+                          color: '#1a1a1a',
+                          textDecoration: 'none',
+                          background: '#fffef5',
+                          border: '1.5px dashed rgba(0,0,0,0.15)',
+                          borderRadius: 8,
+                          padding: '4px 10px',
+                          boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
+                          transition: 'color 0.2s, border-color 0.2s',
+                          whiteSpace: 'nowrap',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#15803d';
+                          e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#1a1a1a';
+                          e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                        }}
+                      >
+                        <Icon size={14} />
+                        {label}
+                      </motion.a>
                     ))}
                   </motion.div>
+                </div>
+
+                {/* Second Row: Policies - centered */}
+                {onNavigate && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}
+                  >
+                    <p style={{
+                      fontFamily: "'Permanent Marker',cursive",
+                      fontSize: 14, fontWeight: 700,
+                      color: '#666', margin: '0 0 8px 0',
+                      textTransform: 'uppercase', letterSpacing: '0.08em',
+                    }}>Policies</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+                      {[
+                        { label: 'Shipping', view: 'shipping' },
+                        { label: 'Returns', view: 'return' },
+                        { label: 'Privacy', view: 'privacy' },
+                        { label: 'Terms', view: 'terms' },
+                        { label: 'Cancellation', view: 'cancellation' },
+                        { label: 'Payment', view: 'payment' },
+                      ].map(({ label, view }, i) => (
+                        <motion.button
+                          key={label}
+                          onClick={() => onNavigate(view)}
+                          whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
+                          style={{
+                            fontFamily: "'Caveat',cursive",
+                            fontSize: 16, fontWeight: 700,
+                            color: '#1a1a1a',
+                            background: '#fffef5',
+                            border: '1.5px dashed rgba(0,0,0,0.15)',
+                            borderRadius: 8,
+                            padding: '4px 10px',
+                            boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
+                            cursor: 'pointer',
+                            transition: 'color 0.2s, border-color 0.2s',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = '#15803d';
+                            e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#1a1a1a';
+                            e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
+                          }}
+                        >
+                          {label}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
                 )}
-
-                {/* Social links */}
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
-                >
-                  <p style={{
-                    fontFamily: "'Permanent Marker',cursive",
-                    fontSize: 14, fontWeight: 700,
-                    color: '#666', margin: '0 0 8px 0',
-                    textTransform: 'uppercase', letterSpacing: '0.08em',
-                  }}>Follow Us</p>
-                  {[
-                    { icon: Instagram, label: 'Instagram', href: '#' },
-                    { icon: Twitter, label: 'Twitter', href: '#' },
-                    { icon: Mail, label: 'Contact', href: '#' },
-                  ].map(({ icon: Icon, label, href }, i) => (
-                    <motion.a
-                      key={label}
-                      href={href}
-                      whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        fontFamily: "'Caveat',cursive",
-                        fontSize: 16, fontWeight: 700,
-                        color: '#1a1a1a',
-                        textDecoration: 'none',
-                        background: '#fffef5',
-                        border: '1.5px dashed rgba(0,0,0,0.15)',
-                        borderRadius: 8,
-                        padding: '4px 10px',
-                        boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
-                        transition: 'color 0.2s, border-color 0.2s',
-                        whiteSpace: 'nowrap',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#15803d';
-                        e.currentTarget.style.borderColor = 'rgba(21,128,61,0.4)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#1a1a1a';
-                        e.currentTarget.style.borderColor = 'rgba(0,0,0,0.15)';
-                      }}
-                    >
-                      <Icon size={14} />
-                      {label}
-                    </motion.a>
-                  ))}
-                </motion.div>
-
               </div>
             </div>
 

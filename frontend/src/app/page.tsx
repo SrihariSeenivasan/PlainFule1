@@ -3,6 +3,8 @@
 import { useState, useSyncExternalStore, useEffect } from 'react';
 import LandingPage from '@/components/LandingPage/LandingPage';
 import Products from '@/components/LandingPage/Products';
+import CancellationPolicy from '@/components/Policies/CancellationPolicy';
+import PaymentPolicy from '@/components/Policies/PaymentPolicy';
 import PrivacyPolicy from '@/components/Policies/PrivacyPolicy';
 import ReturnPolicy from '@/components/Policies/Return';
 import ShippingPolicy from '@/components/Policies/ShippingPolicy';
@@ -22,7 +24,7 @@ import AdminSidebar from '@/components/AdminPanel/AdminSidebar';
 
 type UserPageView = 'dashboard' | 'orders' | 'profile';
 type AdminPageView = 'dashboard' | 'users' | 'orders' | 'products' | 'payments';
-type GuestPageView = 'home' | 'products' | 'privacy' | 'return' | 'shipping' | 'terms';
+type GuestPageView = 'home' | 'products' | 'cancellation' | 'payment' | 'privacy' | 'return' | 'shipping' | 'terms';
 
 const subscribe = () => () => {};
 const getAuthSnapshot = () => {
@@ -126,6 +128,10 @@ export default function Home() {
         return <LandingPage onNavigate={handleGuestNavigate} />;
       case 'products':
         return <Products onNavigate={handleGuestNavigate} />;
+      case 'cancellation':
+        return <CancellationPolicy onNavigate={handleGuestNavigate} />;
+      case 'payment':
+        return <PaymentPolicy onNavigate={handleGuestNavigate} />;
       case 'privacy':
         return <PrivacyPolicy onNavigate={handleGuestNavigate} />;
       case 'return':
