@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import LandingPage from '@/components/LandingPage/LandingPage';
-import Products from '@/components/LandingPage/Products';
+import ProductPage from '@/components/LandingPage/ProductPage';
 import CancellationPolicy from '@/components/Policies/CancellationPolicy';
 import PaymentPolicy from '@/components/Policies/PaymentPolicy';
 import PrivacyPolicy from '@/components/Policies/PrivacyPolicy';
@@ -21,9 +21,12 @@ export default function HomeContent() {
   const [currentGuestView, setCurrentGuestView] = useState<GuestPageView>('home');
   const hasRedirected = useRef(false);
 
-  // Redirect authenticated users to their dashboards
+  // Redirect authenticated users to their dashboards (but allow public pages like products, policies)
   useEffect(() => {
-    if (isAuthenticated && user && !hasRedirected.current) {
+    const view = searchParams.get('view');
+    const publicPages = ['home', 'products', 'cancellation', 'payment', 'privacy', 'return', 'shipping', 'terms'];
+    
+    if (isAuthenticated && user && !hasRedirected.current && !publicPages.includes(view || '')) {
       hasRedirected.current = true;
       if (user.role === 'ADMIN') {
         router.push('/admin/dashboard');
@@ -31,7 +34,7 @@ export default function HomeContent() {
         router.push('/dashboard');
       }
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, router, searchParams]);
 
   // Handle browser history navigation
   useEffect(() => {
@@ -45,8 +48,10 @@ export default function HomeContent() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Derive forceGuestView directly from URL
-  const forceGuestView = searchParams.get('view') === 'home' || isAuthenticated === false;
+  // Derive forceGuestView directly from URL - allow authenticated users to view public pages
+  const view = searchParams.get('view');
+  const publicPages = ['home', 'products', 'cancellation', 'payment', 'privacy', 'return', 'shipping', 'terms'];
+  const forceGuestView = publicPages.includes(view || '') || isAuthenticated === false;
 
   // If forceGuestView is set, show guest view even if authenticated
   if (forceGuestView) {
@@ -62,7 +67,7 @@ export default function HomeContent() {
         case 'home':
           return <LandingPage onNavigate={handleGuestNavigate} />;
         case 'products':
-          return <Products onNavigate={handleGuestNavigate} />;
+          return <ProductPage onNavigate={handleGuestNavigate} />;
         case 'cancellation':
           return <CancellationPolicy onNavigate={handleGuestNavigate} />;
         case 'payment':
@@ -97,7 +102,7 @@ export default function HomeContent() {
       case 'home':
         return <LandingPage onNavigate={handleGuestNavigate} />;
       case 'products':
-        return <Products onNavigate={handleGuestNavigate} />;
+        return <ProductPage onNavigate={handleGuestNavigate} />;
       case 'cancellation':
         return <CancellationPolicy onNavigate={handleGuestNavigate} />;
       case 'payment':

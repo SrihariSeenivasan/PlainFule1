@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, memo } from 'react';
 import { Plus, X, ChevronDown, ChevronUp, Pencil, Trash2, Copy, Download, Check, ImagePlus, Loader2 } from 'lucide-react';
 import { adminAPI, Product } from '@/lib/api';
 
@@ -32,6 +32,93 @@ const EMPTY_FORM: Omit<Product, 'id'> = {
 
 type FormData = Omit<Product, 'id'>;
 
+// Define these styles outside the component
+const inputStyle: React.CSSProperties = {
+  width: '100%', padding: '8px 12px', borderRadius: 8,
+  border: '1px solid #d1d5db', fontSize: 14,
+  backgroundColor: '#fff', color: '#111827', outline: 'none', boxSizing: 'border-box',
+};
+
+const labelStyle: React.CSSProperties = {
+  display: 'block', fontSize: 12, fontWeight: 600,
+  color: '#374151', marginBottom: 4,
+};
+
+const getSectionHeaderStyle = (): React.CSSProperties => ({
+  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+  padding: '10px 14px', background: '#f3f4f6', borderRadius: 8,
+  cursor: 'pointer', marginBottom: 8, fontWeight: 600, fontSize: 13, color: '#1f2937',
+});
+
+const PRODUCT_TEMPLATE = {
+  name: 'PlainFuel Starter Pack',
+  description: 'One pouch. No mixing. No measuring.',
+  price: 999,
+  stock: 100,
+  images: ['/uploads/products/example.jpg'],
+  category: 'Starter',
+  subscribePrice: 799,
+  origPrice: 1299,
+  savePct: 'Save 25%',
+  duration: '30 Days',
+  tag: 'Trial · 7 Pouches',
+  subtitle: 'Your 7-day intro to nutrition.',
+  rating: 4.8,
+  reviews: 324,
+  headline: 'The Beginning.',
+  accentWord: 'Just Start.',
+  grayWord: 'Stay consistent.',
+  persuade: 'Have it anywhere.',
+  tagline: 'Drop it in your bag. Done.',
+  highlight: 'Most people feel it in 3 days.',
+  benefits: ['Lab tested', 'No artificial colours', 'Vegan friendly'],
+  badges: ['7-Day Trial', 'Starter Formula', 'Free Delivery'],
+  variants: [
+    { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/brownpack.png' },
+    { id: 'lime', name: 'Lime Twist', color: '#84cc16', image: '/images/Products/limepack.png' },
+  ],
+  nutrients: [
+    { label: 'Vitamin C', amount: '80mg', friendly: 'Immunity shield', emoji: '🍊' },
+    { label: 'Zinc', amount: '11mg', friendly: 'Energy spark', emoji: '⚡' },
+    { label: 'Magnesium', amount: '150mg', friendly: 'Muscle recovery', emoji: '💪' },
+  ],
+};
+
+// Memoized Section component
+const Section = memo(({ id, title, children, isExpanded, onToggle }: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+  isExpanded: boolean;
+  onToggle: (id: string) => void;
+}) => (
+  <div style={{ marginBottom: 16 }}>
+    <div style={getSectionHeaderStyle()} onClick={() => onToggle(id)}>
+      <span>{title}</span>
+      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+    </div>
+    {isExpanded && (
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px', padding: '4px 2px' }}>
+        {children}
+      </div>
+    )}
+  </div>
+));
+Section.displayName = 'Section';
+
+// Memoized Field component
+const Field = memo(({ label, full, children }: {
+  label: string;
+  full?: boolean;
+  children: React.ReactNode;
+}) => (
+  <div style={{ gridColumn: full ? '1 / -1' : undefined }}>
+    <label style={labelStyle}>{label}</label>
+    {children}
+  </div>
+));
+Field.displayName = 'Field';
+
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +128,7 @@ export default function AdminProducts() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    basic: true, pricing: false, display: false, copy: false, arrays: false,
+    basic: true, pricing: false, display: false, copy: false, json: false,
   });
 
   const [form, setForm] = useState<FormData>({ ...EMPTY_FORM });
@@ -146,50 +233,17 @@ export default function AdminProducts() {
     }
   };
 
-  const removeImage = (idx: number) =>
-    setImageEntries(prev => prev.filter((_, i) => i !== idx));
+  const removeImage = useCallback((idx: number) =>
+    setImageEntries(prev => prev.filter((_, i) => i !== idx)), 
+  []);
 
-  const PRODUCT_TEMPLATE = {
-    name: 'PlainFuel Starter Pack',
-    description: 'One pouch. No mixing. No measuring.',
-    price: 999,
-    stock: 100,
-    images: ['/uploads/products/example.jpg'],
-    category: 'Starter',
-    subscribePrice: 799,
-    origPrice: 1299,
-    savePct: 'Save 25%',
-    duration: '30 Days',
-    tag: 'Trial · 7 Pouches',
-    subtitle: 'Your 7-day intro to nutrition.',
-    rating: 4.8,
-    reviews: 324,
-    headline: 'The Beginning.',
-    accentWord: 'Just Start.',
-    grayWord: 'Stay consistent.',
-    persuade: 'Have it anywhere.',
-    tagline: 'Drop it in your bag. Done.',
-    highlight: 'Most people feel it in 3 days.',
-    benefits: ['Lab tested', 'No artificial colours', 'Vegan friendly'],
-    badges: ['7-Day Trial', 'Starter Formula', 'Free Delivery'],
-    variants: [
-      { id: 'original', name: 'Original', color: '#d4a574', image: '/images/Products/brownpack.png' },
-      { id: 'lime', name: 'Lime Twist', color: '#84cc16', image: '/images/Products/limepack.png' },
-    ],
-    nutrients: [
-      { label: 'Vitamin C', amount: '80mg', friendly: 'Immunity shield', emoji: '🍊' },
-      { label: 'Zinc', amount: '11mg', friendly: 'Energy spark', emoji: '⚡' },
-      { label: 'Magnesium', amount: '150mg', friendly: 'Muscle recovery', emoji: '💪' },
-    ],
-  };
-
-  const handleCopyTemplate = async () => {
+  const handleCopyTemplate = useCallback(async () => {
     await navigator.clipboard.writeText(JSON.stringify(PRODUCT_TEMPLATE, null, 2));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, []);
 
-  const handleDownloadTemplate = () => {
+  const handleDownloadTemplate = useCallback(() => {
     const blob = new Blob([JSON.stringify(PRODUCT_TEMPLATE, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -197,7 +251,7 @@ export default function AdminProducts() {
     a.download = 'product-template.json';
     a.click();
     URL.revokeObjectURL(url);
-  };
+  }, []);
 
   const fetchProducts = async () => {
     try {
@@ -215,22 +269,24 @@ export default function AdminProducts() {
 
   useEffect(() => { fetchProducts(); }, []);
 
-  const toggleSection = (key: string) =>
-    setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
+  const toggleSection = useCallback((key: string) =>
+    setExpandedSections(prev => ({ ...prev, [key]: !prev[key] })), 
+  []);
 
-  const setField = (key: keyof FormData, value: unknown) =>
-    setForm(prev => ({ ...prev, [key]: value }));
+  const setField = useCallback((key: keyof FormData, value: unknown) =>
+    setForm(prev => ({ ...prev, [key]: value })), 
+  []);
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     setForm({ ...EMPTY_FORM });
     setBenefitsText(''); setBadgesText(''); setVariantsText(''); setNutrientsText('');
     setImageEntries([]);
     setEditingId(null); setFormError('');
-    setExpandedSections({ basic: true, pricing: false, display: false, copy: false, arrays: false });
+    setExpandedSections({ basic: true, pricing: false, display: false, copy: false, json: false });
     setShowForm(true);
-  };
+  }, []);
 
-  const openEdit = (product: Product) => {
+  const openEdit = useCallback((product: Product) => {
     const { id, ...rest } = product;
     setForm({ ...EMPTY_FORM, ...rest });
     setBenefitsText(JSON.stringify(product.benefits ?? [], null, 2));
@@ -241,9 +297,9 @@ export default function AdminProducts() {
     const existingUrls: string[] = Array.isArray(product.images) ? (product.images as string[]) : [];
     setImageEntries(existingUrls.map(url => ({ preview: url, url, uploading: false })));
     setEditingId(id); setFormError('');
-    setExpandedSections({ basic: true, pricing: true, display: true, copy: true, arrays: true });
+    setExpandedSections({ basic: true, pricing: true, display: true, copy: true, json: false });
     setShowForm(true);
-  };
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const parseJsonField = (text: string, fieldName: string): any[] | null => {
@@ -252,7 +308,7 @@ export default function AdminProducts() {
     catch { setFormError(`Invalid JSON in ${fieldName}`); return null; }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
 
@@ -281,9 +337,9 @@ export default function AdminProducts() {
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [form, benefitsText, badgesText, variantsText, nutrientsText, imageEntries, editingId]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = useCallback(async (id: number) => {
     if (!confirm('Delete this product?')) return;
     try {
       await adminAPI.deleteProduct(id);
@@ -291,43 +347,7 @@ export default function AdminProducts() {
     } catch {
       alert('Failed to delete product');
     }
-  };
-
-  const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '8px 12px', borderRadius: 8,
-    border: '1px solid #d1d5db', fontSize: 14,
-    backgroundColor: '#fff', color: '#111827', outline: 'none', boxSizing: 'border-box',
-  };
-  const labelStyle: React.CSSProperties = {
-    display: 'block', fontSize: 12, fontWeight: 600,
-    color: '#374151', marginBottom: 4,
-  };
-  const sectionHeaderStyle: React.CSSProperties = {
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '10px 14px', background: '#f3f4f6', borderRadius: 8,
-    cursor: 'pointer', marginBottom: 8, fontWeight: 600, fontSize: 13, color: '#1f2937',
-  };
-
-  const Section = ({ id, title, children }: { id: string; title: string; children: React.ReactNode }) => (
-    <div style={{ marginBottom: 16 }}>
-      <div style={sectionHeaderStyle} onClick={() => toggleSection(id)}>
-        <span>{title}</span>
-        {expandedSections[id] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </div>
-      {expandedSections[id] && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px', padding: '4px 2px' }}>
-          {children}
-        </div>
-      )}
-    </div>
-  );
-
-  const Field = ({ label, full, children }: { label: string; full?: boolean; children: React.ReactNode }) => (
-    <div style={{ gridColumn: full ? '1 / -1' : undefined }}>
-      <label style={labelStyle}>{label}</label>
-      {children}
-    </div>
-  );
+  }, []);
 
   const getStatusColor = (stock: number) =>
     stock > 0
@@ -356,254 +376,264 @@ export default function AdminProducts() {
       {showForm && (
         <div style={{
           position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-          zIndex: 1000, display: 'flex', alignItems: 'flex-start',
-          justifyContent: 'center', overflowY: 'auto', padding: '24px 16px',
+          zIndex: 1000, display: 'flex', alignItems: 'center',
+          justifyContent: 'center', padding: '24px 16px',
         }}>
           <div style={{
             background: '#fff', borderRadius: 14, width: '100%', maxWidth: 760,
-            padding: 24, position: 'relative', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+            position: 'relative', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+            display: 'flex', flexDirection: 'column', maxHeight: '90vh',
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>
-                {editingId !== null ? 'Edit Product' : 'Add New Product'}
-              </h3>
-              <button onClick={() => setShowForm(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}>
-                <X size={22} />
-              </button>
-            </div>
-
-            {/* Template download / copy bar */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              padding: '10px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0',
-              borderRadius: 8, marginBottom: 20,
-            }}>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 600, color: '#15803d' }}>Product template</p>
-                <p style={{ margin: 0, fontSize: 11, color: '#4b5563', marginTop: 2 }}>
-                  Download or copy the full JSON template with all fields and example values.
-                </p>
+            {/* Fixed Header */}
+            <div style={{ padding: 24, borderBottom: '1px solid #e5e7eb', flexShrink: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>
+                  {editingId !== null ? 'Edit Product' : 'Add New Product'}
+                </h3>
+                <button onClick={() => setShowForm(false)}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}>
+                  <X size={22} />
+                </button>
               </div>
-              <button type="button" onClick={handleCopyTemplate}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
-                  border: '1px solid #86efac', background: copied ? '#dcfce7' : '#fff',
-                  color: copied ? '#15803d' : '#374151', cursor: 'pointer', whiteSpace: 'nowrap',
-                }}>
-                {copied ? <Check size={13} /> : <Copy size={13} />}
-                {copied ? 'Copied!' : 'Copy JSON'}
-              </button>
-              <button type="button" onClick={handleDownloadTemplate}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 5,
-                  padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
-                  border: 'none', background: '#15803d', color: '#fff',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
-                }}>
-                <Download size={13} /> Download .json
-              </button>
-            </div>
 
-            {formError && (
-              <div style={{ padding: '10px 14px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 8, color: '#dc2626', fontSize: 13, marginBottom: 16 }}>
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              {/* ── BASIC INFO ── */}
-              <Section id="basic" title="Basic Information">
-                <Field label="Name *" full>
-                  <input style={inputStyle} value={form.name} required
-                    onChange={e => setField('name', e.target.value)} placeholder="PlainFuel Starter Pack" />
-                </Field>
-                <Field label="Description" full>
-                  <textarea style={{ ...inputStyle, minHeight: 72, resize: 'vertical' }}
-                    value={form.description ?? ''}
-                    onChange={e => setField('description', e.target.value)}
-                    placeholder="One pouch. No mixing. No measuring..." />
-                </Field>
-                <Field label="Price (₹) *">
-                  <input style={inputStyle} type="number" min={0} required value={form.price}
-                    onChange={e => setField('price', parseFloat(e.target.value) || 0)} />
-                </Field>
-                <Field label="Stock">
-                  <input style={inputStyle} type="number" min={0} value={form.stock}
-                    onChange={e => setField('stock', parseInt(e.target.value) || 0)} />
-                </Field>
-                <Field label="Category">
-                  <input style={inputStyle} value={form.category ?? ''}
-                    onChange={e => setField('category', e.target.value)} placeholder="Starter" />
-                </Field>
-              </Section>
-
-              {/* ── IMAGES ── */}
-              <div style={{ marginBottom: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f3f4f6', borderRadius: 8, marginBottom: 8, fontWeight: 600, fontSize: 13, color: '#1f2937' }}>
-                  <span>Product Images</span>
-                  <span style={{ fontSize: 11, fontWeight: 400, color: '#6b7280' }}>Up to 5 images </span>
+              {/* Template download / copy bar */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 14px', background: '#f0fdf4', border: '1px solid #bbf7d0',
+                borderRadius: 8, marginBottom: 20,
+              }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontSize: 12, fontWeight: 600, color: '#15803d' }}>Product template</p>
+                  <p style={{ margin: 0, fontSize: 11, color: '#4b5563', marginTop: 2 }}>
+                    Download or copy the full JSON template with all fields and example values.
+                  </p>
                 </div>
-                {/* Thumbnails */}
-                {imageEntries.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
-                    {imageEntries.map((entry, idx) => (
-                      <div key={idx} style={{ position: 'relative', width: 90, height: 90, borderRadius: 8, overflow: 'hidden', border: '2px solid #d1d5db', background: '#f9fafb', flexShrink: 0 }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={entry.preview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        {entry.uploading && (
-                          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Loader2 size={22} color="#fff" style={{ animation: 'spin 1s linear infinite' }} />
-                          </div>
-                        )}
-                        {entry.error && (
-                          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(220,38,38,0.85)', color: '#fff', fontSize: 9, padding: '2px 4px', textAlign: 'center' }}>
-                            Error
-                          </div>
-                        )}
-                        {!entry.uploading && (
-                          <button type="button" onClick={() => removeImage(idx)}
-                            style={{ position: 'absolute', top: 3, right: 3, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
-                            <X size={11} color="#fff" />
-                          </button>
-                        )}
-                        <div style={{ position: 'absolute', bottom: 3, left: 3, background: 'rgba(0,0,0,0.55)', borderRadius: 4, padding: '1px 5px', fontSize: 9, color: '#fff' }}>
-                          {idx + 1}
-                        </div>
-                      </div>
-                    ))}
-                    {imageEntries.length < 5 && (
-                      <label style={{ width: 90, height: 90, borderRadius: 8, border: '2px dashed #d1d5db', background: '#f9fafb', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: 4, flexShrink: 0 }}>
-                        <ImagePlus size={22} color="#9ca3af" />
-                        <span style={{ fontSize: 10, color: '#9ca3af' }}>Add</span>
-                        <input type="file" accept="image/*" multiple style={{ display: 'none' }}
-                          onChange={e => handleImageFiles(e.target.files)} />
-                      </label>
-                    )}
+                <button type="button" onClick={handleCopyTemplate}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                    border: '1px solid #86efac', background: copied ? '#dcfce7' : '#fff',
+                    color: copied ? '#15803d' : '#374151', cursor: 'pointer', whiteSpace: 'nowrap',
+                  }}>
+                  {copied ? <Check size={13} /> : <Copy size={13} />}
+                  {copied ? 'Copied!' : 'Copy JSON'}
+                </button>
+                <button type="button" onClick={handleDownloadTemplate}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                    border: 'none', background: '#15803d', color: '#fff',
+                    cursor: 'pointer', whiteSpace: 'nowrap',
+                  }}>
+                  <Download size={13} /> Download .json
+                </button>
+              </div>
+
+              {formError && (
+                <div style={{ padding: '10px 14px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 8, color: '#dc2626', fontSize: 13 }}>
+                  {formError}
+                </div>
+              )}
+            </div>
+
+            {/* Scrollable Content */}
+            <div style={{ overflowY: 'auto', flex: 1, padding: 24 }}>
+              <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
+                {/* ── BASIC INFO ── */}
+                <Section id="basic" title="Basic Information" isExpanded={expandedSections['basic']} onToggle={toggleSection}>
+                  <Field label="Name *" full>
+                    <input style={inputStyle} value={form.name} required
+                      onChange={e => setField('name', e.target.value)} placeholder="PlainFuel Starter Pack" />
+                  </Field>
+                  <Field label="Description" full>
+                    <textarea style={{ ...inputStyle, minHeight: 72, resize: 'vertical' }}
+                      value={form.description ?? ''}
+                      onChange={e => setField('description', e.target.value)}
+                      placeholder="One pouch. No mixing. No measuring..." />
+                  </Field>
+                  <Field label="Price (₹) *">
+                    <input style={inputStyle} type="number" min={0} required value={form.price}
+                      onChange={e => setField('price', parseFloat(e.target.value) || 0)} />
+                  </Field>
+                  <Field label="Stock">
+                    <input style={inputStyle} type="number" min={0} value={form.stock}
+                      onChange={e => setField('stock', parseInt(e.target.value) || 0)} />
+                  </Field>
+                  <Field label="Category">
+                    <input style={inputStyle} value={form.category ?? ''}
+                      onChange={e => setField('category', e.target.value)} placeholder="Starter" />
+                  </Field>
+                </Section>
+
+                {/* ── IMAGES ── */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f3f4f6', borderRadius: 8, marginBottom: 8, fontWeight: 600, fontSize: 13, color: '#1f2937' }}>
+                    <span>Product Images</span>
+                    <span style={{ fontSize: 11, fontWeight: 400, color: '#6b7280' }}>Up to 5 images </span>
                   </div>
-                )}
-                {/* Drop zone when empty */}
-                {imageEntries.length === 0 && (
-                  <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '28px 16px', border: '2px dashed #d1d5db', borderRadius: 10, cursor: 'pointer', background: '#fafafa', textAlign: 'center' }}>
-                    <ImagePlus size={32} color="#9ca3af" />
-                    <div>
-                      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#374151' }}>Click to upload images</p>
-                      <p style={{ margin: '2px 0 0', fontSize: 11, color: '#6b7280' }}>JPG, PNG, WebP · up to 5 files · 10 MB each</p>
+                  {/* Thumbnails */}
+                  {imageEntries.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
+                      {imageEntries.map((entry, idx) => (
+                        <div key={idx} style={{ position: 'relative', width: 90, height: 90, borderRadius: 8, overflow: 'hidden', border: '2px solid #d1d5db', background: '#f9fafb', flexShrink: 0 }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={entry.preview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                          {entry.uploading && (
+                            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <Loader2 size={22} color="#fff" style={{ animation: 'spin 1s linear infinite' }} />
+                            </div>
+                          )}
+                          {entry.error && (
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(220,38,38,0.85)', color: '#fff', fontSize: 9, padding: '2px 4px', textAlign: 'center' }}>
+                              Error
+                            </div>
+                          )}
+                          {!entry.uploading && (
+                            <button type="button" onClick={() => removeImage(idx)}
+                              style={{ position: 'absolute', top: 3, right: 3, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}>
+                              <X size={11} color="#fff" />
+                            </button>
+                          )}
+                          <div style={{ position: 'absolute', bottom: 3, left: 3, background: 'rgba(0,0,0,0.55)', borderRadius: 4, padding: '1px 5px', fontSize: 9, color: '#fff' }}>
+                            {idx + 1}
+                          </div>
+                        </div>
+                      ))}
+                      {imageEntries.length < 5 && (
+                        <label style={{ width: 90, height: 90, borderRadius: 8, border: '2px dashed #d1d5db', background: '#f9fafb', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: 4, flexShrink: 0 }}>
+                          <ImagePlus size={22} color="#9ca3af" />
+                          <span style={{ fontSize: 10, color: '#9ca3af' }}>Add</span>
+                          <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                            onChange={e => handleImageFiles(e.target.files)} />
+                        </label>
+                      )}
                     </div>
-                    <input type="file" accept="image/*" multiple style={{ display: 'none' }}
-                      onChange={e => handleImageFiles(e.target.files)} />
-                  </label>
-                )}
-              </div>
+                  )}
+                  {/* Drop zone when empty */}
+                  {imageEntries.length === 0 && (
+                    <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '28px 16px', border: '2px dashed #d1d5db', borderRadius: 10, cursor: 'pointer', background: '#fafafa', textAlign: 'center' }}>
+                      <ImagePlus size={32} color="#9ca3af" />
+                      <div>
+                        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#374151' }}>Click to upload images</p>
+                        <p style={{ margin: '2px 0 0', fontSize: 11, color: '#6b7280' }}>JPG, PNG, WebP · up to 5 files · 10 MB each</p>
+                      </div>
+                      <input type="file" accept="image/*" multiple style={{ display: 'none' }}
+                        onChange={e => handleImageFiles(e.target.files)} />
+                    </label>
+                  )}
+                </div>
 
-              {/* ── PRICING ── */}
-              <Section id="pricing" title="Pricing">
-                <Field label="Subscribe Price (₹)">
-                  <input style={inputStyle} type="number" min={0}
-                    value={form.subscribePrice ?? ''}
-                    onChange={e => setField('subscribePrice', e.target.value ? parseFloat(e.target.value) : undefined)} />
-                </Field>
-                <Field label="Original / Compare-at Price (₹)">
-                  <input style={inputStyle} type="number" min={0}
-                    value={form.origPrice ?? ''}
-                    onChange={e => setField('origPrice', e.target.value ? parseFloat(e.target.value) : undefined)} />
-                </Field>
-                <Field label="Save % Label">
-                  <input style={inputStyle} value={form.savePct ?? ''}
-                    onChange={e => setField('savePct', e.target.value)} placeholder="Save 25%" />
-                </Field>
-                <Field label="Duration">
-                  <input style={inputStyle} value={form.duration ?? ''}
-                    onChange={e => setField('duration', e.target.value)} placeholder="30 Days" />
-                </Field>
-              </Section>
+                {/* ── PRICING ── */}
+                <Section id="pricing" title="Pricing" isExpanded={expandedSections['pricing']} onToggle={toggleSection}>
+                  <Field label="Subscribe Price (₹)">
+                    <input style={inputStyle} type="number" min={0}
+                      value={form.subscribePrice ?? ''}
+                      onChange={e => setField('subscribePrice', e.target.value ? parseFloat(e.target.value) : undefined)} />
+                  </Field>
+                  <Field label="Original / Compare-at Price (₹)">
+                    <input style={inputStyle} type="number" min={0}
+                      value={form.origPrice ?? ''}
+                      onChange={e => setField('origPrice', e.target.value ? parseFloat(e.target.value) : undefined)} />
+                  </Field>
+                  <Field label="Save % Label">
+                    <input style={inputStyle} value={form.savePct ?? ''}
+                      onChange={e => setField('savePct', e.target.value)} placeholder="Save 25%" />
+                  </Field>
+                  <Field label="Duration">
+                    <input style={inputStyle} value={form.duration ?? ''}
+                      onChange={e => setField('duration', e.target.value)} placeholder="30 Days" />
+                  </Field>
+                </Section>
 
-              {/* ── DISPLAY INFO ── */}
-              <Section id="display" title="Display Info">
-                <Field label="Tag">
-                  <input style={inputStyle} value={form.tag ?? ''}
-                    onChange={e => setField('tag', e.target.value)} placeholder="Trial · 7 Pouches" />
-                </Field>
-                <Field label="Subtitle">
-                  <input style={inputStyle} value={form.subtitle ?? ''}
-                    onChange={e => setField('subtitle', e.target.value)} placeholder="Your 7-day intro to nutrition." />
-                </Field>
-                <Field label="Rating">
-                  <input style={inputStyle} type="number" min={0} max={5} step={0.1}
-                    value={form.rating ?? ''}
-                    onChange={e => setField('rating', e.target.value ? parseFloat(e.target.value) : undefined)} placeholder="4.8" />
-                </Field>
-                <Field label="Review Count">
-                  <input style={inputStyle} type="number" min={0}
-                    value={form.reviews ?? ''}
-                    onChange={e => setField('reviews', e.target.value ? parseInt(e.target.value) : undefined)} placeholder="324" />
-                </Field>
-              </Section>
+                {/* ── DISPLAY INFO ── */}
+                <Section id="display" title="Display Info" isExpanded={expandedSections['display']} onToggle={toggleSection}>
+                  <Field label="Tag">
+                    <input style={inputStyle} value={form.tag ?? ''}
+                      onChange={e => setField('tag', e.target.value)} placeholder="Trial · 7 Pouches" />
+                  </Field>
+                  <Field label="Subtitle">
+                    <input style={inputStyle} value={form.subtitle ?? ''}
+                      onChange={e => setField('subtitle', e.target.value)} placeholder="Your 7-day intro to nutrition." />
+                  </Field>
+                  <Field label="Rating">
+                    <input style={inputStyle} type="number" min={0} max={5} step={0.1}
+                      value={form.rating ?? ''}
+                      onChange={e => setField('rating', e.target.value ? parseFloat(e.target.value) : undefined)} placeholder="4.8" />
+                  </Field>
+                  <Field label="Review Count">
+                    <input style={inputStyle} type="number" min={0}
+                      value={form.reviews ?? ''}
+                      onChange={e => setField('reviews', e.target.value ? parseInt(e.target.value) : undefined)} placeholder="324" />
+                  </Field>
+                </Section>
 
-              {/* ── MARKETING COPY ── */}
-              <Section id="copy" title="Marketing Copy">
-                <Field label="Headline" full>
-                  <input style={inputStyle} value={form.headline ?? ''}
-                    onChange={e => setField('headline', e.target.value)} placeholder="The Beginning." />
-                </Field>
-                <Field label="Accent Word">
-                  <input style={inputStyle} value={form.accentWord ?? ''}
-                    onChange={e => setField('accentWord', e.target.value)} placeholder="Just Start." />
-                </Field>
-                <Field label="Gray Word">
-                  <input style={inputStyle} value={form.grayWord ?? ''}
-                    onChange={e => setField('grayWord', e.target.value)} placeholder="Stay consistent." />
-                </Field>
-                <Field label="Persuade">
-                  <input style={inputStyle} value={form.persuade ?? ''}
-                    onChange={e => setField('persuade', e.target.value)} placeholder="Have it anywhere." />
-                </Field>
-                <Field label="Tagline">
-                  <input style={inputStyle} value={form.tagline ?? ''}
-                    onChange={e => setField('tagline', e.target.value)} placeholder="Drop it in your bag. Done." />
-                </Field>
-                <Field label="Highlight">
-                  <input style={inputStyle} value={form.highlight ?? ''}
-                    onChange={e => setField('highlight', e.target.value)} placeholder="Most people feel it in 3 days." />
-                </Field>
-              </Section>
+                {/* ── MARKETING COPY ── */}
+                <Section id="copy" title="Marketing Copy" isExpanded={expandedSections['copy']} onToggle={toggleSection}>
+                  <Field label="Headline" full>
+                    <input style={inputStyle} value={form.headline ?? ''}
+                      onChange={e => setField('headline', e.target.value)} placeholder="The Beginning." />
+                  </Field>
+                  <Field label="Accent Word">
+                    <input style={inputStyle} value={form.accentWord ?? ''}
+                      onChange={e => setField('accentWord', e.target.value)} placeholder="Just Start." />
+                  </Field>
+                  <Field label="Gray Word">
+                    <input style={inputStyle} value={form.grayWord ?? ''}
+                      onChange={e => setField('grayWord', e.target.value)} placeholder="Stay consistent." />
+                  </Field>
+                  <Field label="Persuade">
+                    <input style={inputStyle} value={form.persuade ?? ''}
+                      onChange={e => setField('persuade', e.target.value)} placeholder="Have it anywhere." />
+                  </Field>
+                  <Field label="Tagline">
+                    <input style={inputStyle} value={form.tagline ?? ''}
+                      onChange={e => setField('tagline', e.target.value)} placeholder="Drop it in your bag. Done." />
+                  </Field>
+                  <Field label="Highlight">
+                    <input style={inputStyle} value={form.highlight ?? ''}
+                      onChange={e => setField('highlight', e.target.value)} placeholder="Most people feel it in 3 days." />
+                  </Field>
+                </Section>
 
-              {/* ── ARRAYS (JSON) ── */}
-              <Section id="arrays" title="Lists & Arrays (JSON)">
-                <Field label='Benefits — string[ ] e.g. ["Lab tested","Vegan"]' full>
-                  <textarea style={{ ...inputStyle, minHeight: 72, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }}
-                    value={benefitsText} onChange={e => setBenefitsText(e.target.value)}
-                    placeholder='["Lab tested", "No artificial colours", "Vegan friendly"]' />
-                </Field>
-                <Field label='Badges — string[ ] e.g. ["7-Day Trial","Free Delivery"]' full>
-                  <textarea style={{ ...inputStyle, minHeight: 72, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }}
-                    value={badgesText} onChange={e => setBadgesText(e.target.value)}
-                    placeholder='["7-Day Trial", "Starter Formula", "Free Delivery"]' />
-                </Field>
-                <Field label='Variants — [{id,name,color,image}]' full>
-                  <textarea style={{ ...inputStyle, minHeight: 88, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }}
-                    value={variantsText} onChange={e => setVariantsText(e.target.value)}
-                    placeholder={'[\n  {"id":"original","name":"Original","color":"#d4a574","image":"/images/Products/brownpack.png"},\n  {"id":"lime","name":"Lime","color":"#84cc16","image":"/images/Products/limepack.png"}\n]'} />
-                </Field>
-                <Field label='Nutrients — [{label,amount,friendly,emoji}]' full>
-                  <textarea style={{ ...inputStyle, minHeight: 88, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }}
-                    value={nutrientsText} onChange={e => setNutrientsText(e.target.value)}
-                    placeholder={'[\n  {"label":"Vitamin C","amount":"80mg","friendly":"Immunity shield","emoji":"🍊"},\n  {"label":"Zinc","amount":"11mg","friendly":"Energy spark","emoji":"⚡"}\n]'} />
-                </Field>
-              </Section>
+                {/* ── PASTE JSON ── */}
+                <Section id="json" title="Or Paste JSON" isExpanded={expandedSections['json']} onToggle={toggleSection}>
+                  <Field label='Paste your modified product JSON here' full>
+                    <textarea style={{ ...inputStyle, minHeight: 120, fontFamily: 'monospace', fontSize: 12, resize: 'vertical' }}
+                      placeholder={'Paste the downloaded/copied JSON template with your changes here...'}
+                      onBlur={(e) => {
+                        try {
+                          const data = JSON.parse(e.target.value);
+                          setForm(prev => ({ ...EMPTY_FORM, ...prev, ...data }));
+                          setBenefitsText(JSON.stringify(data.benefits ?? [], null, 2));
+                          setBadgesText(JSON.stringify(data.badges ?? [], null, 2));
+                          setVariantsText(JSON.stringify(data.variants ?? [], null, 2));
+                          setNutrientsText(JSON.stringify(data.nutrients ?? [], null, 2));
+                          if (data.images && Array.isArray(data.images)) {
+                            setImageEntries(data.images.map((url: string) => ({ preview: url, url, uploading: false })));
+                          }
+                          setFormError('');
+                          e.target.value = '';
+                        } catch (err) {
+                          setFormError(`Invalid JSON: ${err instanceof Error ? err.message : 'Parse error'}`);
+                        }
+                      }}
+                    />
+                  </Field>
+                </Section>
+              </form>
+            </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 8 }}>
-                <button type="button" onClick={() => setShowForm(false)}
-                  style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', fontSize: 14, cursor: 'pointer', color: '#374151' }}>
-                  Cancel
-                </button>
-                <button type="submit" disabled={submitting}
-                  style={{ padding: '9px 20px', borderRadius: 8, border: 'none', background: submitting ? '#86efac' : '#15803d', color: '#fff', fontSize: 14, fontWeight: 600, cursor: submitting ? 'not-allowed' : 'pointer' }}>
-                  {submitting ? 'Saving...' : editingId !== null ? 'Update Product' : 'Create Product'}
-                </button>
-              </div>
-            </form>
+            {/* Fixed Footer */}
+            <div style={{ padding: 24, borderTop: '1px solid #e5e7eb', display: 'flex', justifyContent: 'flex-end', gap: 10, flexShrink: 0 }}>
+              <button type="button" onClick={() => setShowForm(false)}
+                style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', fontSize: 14, cursor: 'pointer', color: '#374151', fontWeight: 600 }}>
+                Cancel
+              </button>
+              <button type="submit" disabled={submitting} onClick={handleSubmit}
+                style={{ padding: '9px 20px', borderRadius: 8, border: 'none', background: submitting ? '#86efac' : '#15803d', color: '#fff', fontSize: 14, fontWeight: 600, cursor: submitting ? 'not-allowed' : 'pointer' }}>
+                {submitting ? 'Saving...' : editingId !== null ? 'Update Product' : 'Create Product'}
+              </button>
+            </div>
           </div>
         </div>
       )}

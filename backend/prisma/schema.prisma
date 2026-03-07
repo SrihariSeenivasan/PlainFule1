@@ -24,7 +24,8 @@ model User {
   zip       String?
   country   String?
 
-  orders Order[]
+  orders   Order[]
+  reviews  Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -50,7 +51,7 @@ model Product {
   duration       String?
   subtitle       String?
   rating         Decimal? @db.Decimal(3, 1)
-  reviews        Int?
+  reviewCount    Int? @default(0)
 
   // Marketing copy (from Productsection)
   headline       String?
@@ -69,6 +70,8 @@ model Product {
   images         Json?
 
   orderItems OrderItem[]
+  reviews    Review[]
+  faqs       FAQ[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -127,6 +130,45 @@ model Payment {
   updatedAt DateTime @updatedAt
 
   @@index([orderId])
+}
+
+model Review {
+  id        Int     @id @default(autoincrement())
+  rating    Int     // 1-5 stars
+  text      String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model FAQ {
+  id        Int     @id @default(autoincrement())
+  question  String
+  answer    String
+  type      FAQType @default(PRODUCT)
+  
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([productId])
+}
+
+enum FAQType {
+  PRODUCT
+  COMMON
 }
 
 enum Role {

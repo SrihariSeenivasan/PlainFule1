@@ -63,9 +63,10 @@ export const Product = {
     id: number,
     productData: Partial<ProductInput>
   ): Promise<Product> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return prisma.product.update({
       where: { id },
-      data: productData,
+      data: productData as any,
     });
   },
 

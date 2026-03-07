@@ -183,6 +183,15 @@ export const orderAPI = {
     }),
 };
 
+// Product APIs (public)
+export const productAPI = {
+  getAll: () => apiRequest('/products'),
+  
+  getById: (id: number) => apiRequest(`/products/${id}`),
+  
+  getByCategory: (category: string) => apiRequest(`/products/category/${category}`),
+};
+
 // Admin APIs
 export const adminAPI = {
   getDashboard: () => apiRequest('/admin/dashboard'),

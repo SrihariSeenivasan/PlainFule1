@@ -11,6 +11,9 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import adminRoutes from './routes/adminRoutes';
 import orderRoutes from './routes/orderRoutes';
+import productRoutes from './routes/productRoutes';
+import faqRoutes from './routes/faqRoutes';
+import reviewRoutes from './routes/reviewRoutes';
 
 dotenv.config();
 
@@ -33,9 +36,12 @@ app.get('/health', (_req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/user', authMiddleware, userRoutes);
 app.use('/api/admin', authMiddleware, adminRoutes);
 app.use('/api/orders', authMiddleware, orderRoutes);
+app.use('/api/faqs', faqRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // 404 handler
 app.use((_req, res) => {

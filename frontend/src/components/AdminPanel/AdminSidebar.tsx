@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, CreditCard,
-  ShoppingBag, Users, Home, LogOut, MoreHorizontal, X,
+  ShoppingBag, Users, Home, LogOut, MoreHorizontal, X, Boxes, HelpCircle,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
@@ -26,7 +26,9 @@ export default function AdminSidebar() {
     { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
     { href: '/admin/payments',  icon: CreditCard,      label: 'Payments'  },
     { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
+    { href: '/admin/inventory', icon: Boxes,           label: 'Inventory' },
     { href: '/admin/users',     icon: Users,           label: 'Users'     },
+    { href: '/admin/faq',       icon: HelpCircle,      label: 'FAQs'      },
   ];
 
   // Bottom nav: 3 primary tabs always visible
@@ -39,7 +41,9 @@ export default function AdminSidebar() {
   // "More" drawer items
   const moreItems = [
     { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
+    { href: '/admin/inventory', icon: Boxes,     label: 'Inventory' },
     { href: '/admin/users',    icon: Users,      label: 'Users'    },
+    { href: '/admin/faq',      icon: HelpCircle, label: 'FAQs'     },
   ];
 
   const isActive = (href: string) => pathname === href;
