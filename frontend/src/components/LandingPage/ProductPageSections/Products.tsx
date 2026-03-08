@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { ShoppingCart, Check, Star, Minus, Plus, Truck, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Check, Star, Truck, RotateCcw, ChevronLeft, ChevronRight, Zap, BarChart3 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-import { productAPI, Product } from '@/lib/api';
+import { productAPI, Product, ProductNutrient } from '@/lib/api';
 import ProductFAQ from './ProductFAQ';
 import ReviewsSection from './ReviewsSection';
 
@@ -47,30 +47,13 @@ const DoodleStar = ({ size = 24, style = {} }: { size?: number; style?: React.CS
 );
 
 /* ─── product data interface ─── */
-interface ExtendedProduct extends Product {
-  packages: Package[];
-  rating?: number;
-  reviews?: number;
-  benefits?: string[];
-  nutrients?: { label: string; amount: string }[];
-}
-
-interface Package {
-  id: string;
-  duration: '7 days' | '15 days' | '30 days';
-  daysCount: 7 | 15 | 30;
-  pouches: number;
-  oneTimePrice: number;
-  subscribePrice: number;
-  origPrice: number;
-}
+// Products come directly from backend with packages
 
 /* ─── main component ─── */
 export default function Products({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
-  const [products, setProducts] = useState<ExtendedProduct[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<ExtendedProduct | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedPackage, setSelectedPackage] = useState(0);
-  const [purchaseType, setPurchaseType] = useState<'onetime' | 'subscribe'>('onetime');
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -84,53 +67,15 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
         setLoading(true);
         const fetchedProducts = await productAPI.getAll();
         
-        // Enhance products with packages
-        const enhancedProducts = (Array.isArray(fetchedProducts) ? fetchedProducts : []).map((product: Product) => {
-          const basePrice = product.price || 1500;
-          
-          return {
-            ...product,
-            packages: [
-              {
-                id: '7days',
-                duration: '7 days' as const,
-                daysCount: 7,
-                pouches: 7,
-                oneTimePrice: Math.round(basePrice * 0.5),
-                subscribePrice: Math.round(basePrice * 0.5 * 0.85),
-                origPrice: Math.round(basePrice * 0.7),
-              },
-              {
-                id: '15days',
-                duration: '15 days' as const,
-                daysCount: 15,
-                pouches: 15,
-                oneTimePrice: Math.round(basePrice * 1),
-                subscribePrice: Math.round(basePrice * 1 * 0.85),
-                origPrice: Math.round(basePrice * 1.3),
-              },
-              {
-                id: '30days',
-                duration: '30 days' as const,
-                daysCount: 30,
-                pouches: 30,
-                oneTimePrice: Math.round(basePrice * 1.8),
-                subscribePrice: Math.round(basePrice * 1.8 * 0.85),
-                origPrice: Math.round(basePrice * 2.4),
-              },
-            ],
-            rating: 4.8,
-            reviews: 324,
-            benefits: ['Lab tested', 'Premium quality', 'Best value', 'Trusted'],
-            nutrients: [
-              { label: 'Quality', amount: 'Premium' },
-              { label: 'Stock', amount: `${product.stock}` },
-              { label: 'Category', amount: product.category },
-            ],
-          };
-        }) as ExtendedProduct[];
+        // Use products directly from backend (they already have packages)
+        const productsWithData = (Array.isArray(fetchedProducts) ? fetchedProducts : []).map((product: Product) => ({
+          ...product,
+          // Ensure rating and reviews are available
+          rating: product.rating || 0,
+          reviews: product.reviews || 0,
+        }));
         
-        setProducts(enhancedProducts);
+        setProducts(productsWithData);
         setError('');
       } catch (err) {
         console.error('Failed to fetch products:', err);
@@ -144,7 +89,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
     fetchProducts();
   }, []);
 
-  const handleProductChange = (product: ExtendedProduct) => {
+  const handleProductChange = (product: Product) => {
     setSelectedProduct(product);
     setSelectedPackage(0);
     setQuantity(1);
@@ -160,21 +105,23 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
   };
 
   const handlePrevImage = () => {
-    if (Array.isArray(selectedProduct?.images) && selectedProduct.images.length > 0) {
-      const totalImages = Math.min(5, selectedProduct.images.length);
+    const pkgImages = (packageData?.images as string[]) || [];
+    if (pkgImages.length > 0) {
+      const totalImages = Math.min(5, pkgImages.length);
       setCurrentImageIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
     }
   };
 
   const handleNextImage = () => {
-    if (Array.isArray(selectedProduct?.images) && selectedProduct.images.length > 0) {
-      const totalImages = Math.min(5, selectedProduct.images.length);
+    const pkgImages = (packageData?.images as string[]) || [];
+    if (pkgImages.length > 0) {
+      const totalImages = Math.min(5, pkgImages.length);
       setCurrentImageIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
     }
   };
 
   const packageData = selectedProduct?.packages?.[selectedPackage];
-  const price = packageData && purchaseType === 'subscribe' ? packageData.subscribePrice : packageData?.oneTimePrice || 0;
+  const price = packageData?.price || 0;
 
   if (loading) {
     return (
@@ -270,7 +217,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                   justifyContent: 'center',
                 }}>
                   <Image
-                    src={Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : '/images/Products/brownpack.png'}
+                    src={product.packages?.[0]?.images?.[0] || '/images/Products/brownpack.png'}
                     alt={product.name}
                     width={200}
                     height={200}
@@ -305,7 +252,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                       Starting from
                     </p>
                     <p style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: G, margin: 0 }}>
-                      ₹{(product.packages?.[0]?.oneTimePrice ?? 0).toLocaleString()}
+                      ₹{(product.packages?.[0]?.price ?? 0).toLocaleString()}
                     </p>
                   </div>
 
@@ -454,7 +401,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                           style={{ width: '100%', height: '100%', position: 'relative' }}
                         >
                           <Image
-                            src={Array.isArray(selectedProduct.images) && selectedProduct.images.length > currentImageIndex ? selectedProduct.images[currentImageIndex] : '/images/Products/brownpack.png'}
+                            src={selectedProduct.packages?.[selectedPackage]?.images?.[currentImageIndex] || '/images/Products/brownpack.png'}
                             alt={`${selectedProduct.name} - Image ${currentImageIndex + 1}`}
                             fill
                             style={{ objectFit: 'contain' }}
@@ -464,7 +411,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                       </AnimatePresence>
 
                       {/* Main image navigation arrows - show only if there are multiple images */}
-                      {Array.isArray(selectedProduct.images) && selectedProduct.images.length > 1 && (
+                      {Array.isArray(selectedProduct.packages?.[selectedPackage]?.images) && selectedProduct.packages[selectedPackage].images.length > 1 && (
                         <>
                           {/* Previous image button */}
                           <motion.button
@@ -504,7 +451,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                     </div>
 
                     {/* Thumbnail carousel - show only if there are multiple images */}
-                    {Array.isArray(selectedProduct.images) && selectedProduct.images.length > 1 && (
+                    {Array.isArray(selectedProduct.packages?.[selectedPackage]?.images) && selectedProduct.packages[selectedPackage].images.length > 1 && (
                       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 12 }}>
                         {/* Previous thumbnail button */}
                         {thumbnailScrollPos > 0 && (
@@ -529,7 +476,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                           display: 'flex', gap: 8, overflowX: 'hidden',
                           flex: 1, paddingBottom: 4,
                         }}>
-                          {Array.isArray(selectedProduct.images) && selectedProduct.images.slice(0, 5).map((img, idx) => (
+                          {Array.isArray(selectedProduct.packages?.[selectedPackage]?.images) && selectedProduct.packages[selectedPackage].images.slice(0, 5).map((img: string, idx: number) => (
                             <motion.div
                               key={idx}
                               whileHover={{ scale: 1.05 }}
@@ -556,11 +503,11 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                         </div>
 
                         {/* Next thumbnail button */}
-                        {Array.isArray(selectedProduct.images) && selectedProduct.images.length > 4 && thumbnailScrollPos < (Array.isArray(selectedProduct.images) ? (selectedProduct.images.length - 4) * 80 : 0) && (
+                        {Array.isArray(selectedProduct.packages?.[selectedPackage]?.images) && (selectedProduct.packages?.[selectedPackage]?.images?.length || 0) > 4 && thumbnailScrollPos < ((selectedProduct.packages?.[selectedPackage]?.images?.length || 0) - 4) * 80 && (
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setThumbnailScrollPos(Math.min(Array.isArray(selectedProduct.images) ? (selectedProduct.images.length - 4) * 80 : 0, thumbnailScrollPos + 80))}
+                            onClick={() => setThumbnailScrollPos(Math.min(((selectedProduct.packages?.[selectedPackage]?.images?.length || 0) - 4) * 80, thumbnailScrollPos + 80))}
                             style={{
                               width: 32, height: 32, borderRadius: '4px',
                               border: `1.5px solid ${G}`, background: '#fff',
@@ -576,26 +523,38 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                     )}
                   </div>
 
-                  {/* Package selector */}
-                  <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                  {/* Package selector - Enhanced UI */}
+                  <div style={{ display: 'flex', gap: 8, marginTop: 16, marginBottom: 20 }}>
                     {(selectedProduct.packages || []).map((pkg, i) => (
-                      <motion.button
+                      <motion.div
                         key={pkg.id}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => setSelectedPackage(i)}
                         style={{
-                          flex: 1, height: 48, borderRadius: 10,
+                          flex: 1, borderRadius: 12,
                           border: selectedPackage === i ? `2.5px solid ${G}` : '2px solid rgba(0,0,0,0.08)',
-                          background: selectedPackage === i ? 'rgba(21,128,61,0.08)' : '#fff',
-                          cursor: 'pointer', fontFamily: FS, fontWeight: 600, fontSize: 12,
-                          color: selectedPackage === i ? G : '#1a1a1a',
-                          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+                          background: selectedPackage === i ? '#f0fdf4' : '#fff',
+                          cursor: 'pointer', fontFamily: FS, fontWeight: 600,
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4,
+                          padding: '12px 8px', position: 'relative',
+                          transition: 'all 0.3s ease',
+                          boxShadow: selectedPackage === i ? '0 4px 12px rgba(21,128,61,0.15)' : 'none',
                         }}
                       >
-                        <div>{pkg.duration}</div>
-                        <div style={{ fontSize: 10, opacity: 0.6 }}>{pkg.pouches} pouches</div>
-                      </motion.button>
+                        {pkg.tag && (
+                          <div style={{ fontSize: 10, fontWeight: 700, color: G, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                            {pkg.tag}
+                          </div>
+                        )}
+                        <div style={{ fontSize: 14, color: selectedPackage === i ? G : '#1a1a1a' }}>{pkg.duration}</div>
+                        <div style={{ fontSize: 11, opacity: 0.6 }}>{pkg.pouches} pouches</div>
+                        {pkg.savePct && (
+                          <div style={{ fontSize: 10, fontWeight: 700, color: '#dc2626', marginTop: 2 }}>
+                            {pkg.savePct}
+                          </div>
+                        )}
+                      </motion.div>
                     ))}
                   </div>
                 </div>
@@ -622,115 +581,92 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                     {selectedProduct.description}
                   </p>
 
-                  {/* Purchase options */}
-                  <div style={{
-                    border: '1.5px solid rgba(21,128,61,0.15)', borderRadius: 12,
-                    overflow: 'hidden', marginBottom: 20,
-                  }}>
-                    {/* One-time */}
-                    <label style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '14px 16px', cursor: 'pointer',
-                      background: purchaseType === 'onetime' ? 'rgba(21,128,61,0.04)' : '#fff',
-                      borderBottom: '1px solid rgba(21,128,61,0.1)',
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <input
-                          type="radio" name="purchase" checked={purchaseType === 'onetime'}
-                          onChange={() => setPurchaseType('onetime')}
-                          style={{ accentColor: G, width: 16, height: 16 }}
-                        />
-                        <span style={{ fontFamily: FS, fontSize: 14, fontWeight: 600 }}>One-Time Purchase</span>
-                      </div>
-                      <span style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: '#1a1a1a' }}>
-                        ₹{(packageData.oneTimePrice ?? 0).toLocaleString()}
-                      </span>
-                    </label>
-
-                    {/* Subscribe */}
-                    <label style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '14px 16px', cursor: 'pointer',
-                      background: purchaseType === 'subscribe' ? 'rgba(21,128,61,0.04)' : '#fff',
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <input
-                          type="radio" name="purchase" checked={purchaseType === 'subscribe'}
-                          onChange={() => setPurchaseType('subscribe')}
-                          style={{ accentColor: G, width: 16, height: 16 }}
-                        />
-                        <div>
-                          <span style={{ fontFamily: FS, fontSize: 14, fontWeight: 600 }}>Subscribe & Save</span>
-                          <span style={{
-                            marginLeft: 8, padding: '2px 8px', borderRadius: 10,
-                            background: '#dcfce7', fontFamily: FS, fontSize: 11, fontWeight: 700, color: G,
-                          }}>
-                            BEST VALUE
-                          </span>
-                          <p style={{ fontFamily: FS, fontSize: 12, color: '#888', margin: '2px 0 0' }}>
-                            Deliver every {packageData.duration}
-                          </p>
-                        </div>
-                      </div>
-                      <span style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: G }}>
-                        ₹{(packageData.subscribePrice ?? 0).toLocaleString()}
-                      </span>
-                    </label>
-                  </div>
-
-                  {/* Quantity + Add to cart */}
-                  <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 20 }}>
-                    {/* Quantity */}
+                  {/* Price & Add to cart - Enhanced */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 12, marginBottom: 24 }}>
+                    {/* Price Display - Enhanced */}
                     <div style={{
-                      display: 'flex', alignItems: 'center', gap: 0,
-                      border: '1.5px solid rgba(21,128,61,0.2)', borderRadius: 10,
-                      overflow: 'hidden',
+                      padding: '16px', background: 'linear-gradient(135deg, rgba(21,128,61,0.06) 0%, rgba(21,128,61,0.03) 100%)',
+                      border: '2px solid rgba(21,128,61,0.2)', borderRadius: 12,
+                      textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center'
                     }}>
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        style={{
-                          width: 40, height: 40, border: 'none',
-                          background: 'transparent', cursor: 'pointer',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: '#666',
-                        }}
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span style={{
-                        width: 40, textAlign: 'center', fontFamily: FS,
-                        fontSize: 15, fontWeight: 600, color: '#1a1a1a',
-                      }}>
-                        {quantity}
+                      <p style={{ fontFamily: FS, fontSize: 11, color: '#666', margin: '0 0 6px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: 0.5 }}>Price</p>
+                      {packageData?.origPrice && packageData.price < packageData.origPrice && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', marginBottom: 4 }}>
+                          <span style={{ fontFamily: FD, fontSize: 14, color: '#999', textDecoration: 'line-through', fontWeight: 500 }}>
+                            ₹{(packageData.origPrice).toLocaleString()}
+                          </span>
+                          {packageData?.savePct && (
+                            <span style={{ fontFamily: FS, fontSize: 10, fontWeight: 700, color: '#fff', background: '#dc2626', padding: '2px 6px', borderRadius: 4 }}>
+                              {packageData.savePct}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <span style={{ fontFamily: FD, fontSize: 32, fontWeight: 800, color: G }}>
+                        ₹{price.toLocaleString()}
                       </span>
-                      <button
-                        onClick={() => setQuantity(quantity + 1)}
-                        style={{
-                          width: 40, height: 40, border: 'none',
-                          background: 'transparent', cursor: 'pointer',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: '#666',
-                        }}
-                      >
-                        <Plus size={16} />
-                      </button>
+                      <p style={{ fontFamily: FS, fontSize: 10, color: '#999', margin: '4px 0 0' }}>per {packageData?.duration}</p>
                     </div>
 
-                    {/* Add to cart */}
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      style={{
-                        flex: 1, height: 44, borderRadius: 10,
-                        background: G, border: 'none',
-                        color: '#fff', fontFamily: FS, fontSize: 15, fontWeight: 700,
-                        cursor: 'pointer', display: 'flex', alignItems: 'center',
-                        justifyContent: 'center', gap: 8,
-                      }}
-                    >
-                      <ShoppingCart size={18} />
-                      Add to Cart · ₹{(price * quantity).toLocaleString()}
-                    </motion.button>
+                    {/* Quantity + Add to Cart Button */}
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'stretch', gridColumn: '1 / -1' }}>
+                      {/* Quantity Selector - Enhanced */}
+                      <div style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        border: `2px solid ${G}`, borderRadius: 10, padding: '6px 12px',
+                        background: 'rgba(21,128,61,0.04)',
+                      }}>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          style={{
+                            width: 28, height: 28, border: 'none',
+                            background: 'rgba(21,128,61,0.1)', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: G, borderRadius: 6, fontWeight: 700,
+                          }}
+                        >
+                          −
+                        </motion.button>
+                        <span style={{
+                          width: 32, textAlign: 'center', fontFamily: FS,
+                          fontSize: 16, fontWeight: 700, color: '#1a1a1a',
+                        }}>
+                          {quantity}
+                        </span>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => setQuantity(quantity + 1)}
+                          style={{
+                            width: 28, height: 28, border: 'none',
+                            background: G, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#fff', borderRadius: 6, fontWeight: 700, fontSize: 14,
+                          }}
+                        >
+                          +
+                        </motion.button>
+                      </div>
+
+                      {/* Add to cart - Enhanced */}
+                      <motion.button
+                        whileHover={{ scale: 1.02, boxShadow: '0 12px 24px rgba(21,128,61,0.3)' }}
+                        whileTap={{ scale: 0.98 }}
+                        style={{
+                          flex: 1, height: 48, borderRadius: 12,
+                          background: `linear-gradient(135deg, ${G} 0%, #1d7e34 100%)`, border: 'none',
+                          color: '#fff', fontFamily: FS, fontSize: 15, fontWeight: 700,
+                          cursor: 'pointer', display: 'flex', alignItems: 'center',
+                          justifyContent: 'center', gap: 8, boxShadow: '0 4px 12px rgba(21,128,61,0.2)',
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        <ShoppingCart size={20} />
+                        <span>Add to Cart · ₹{(price * quantity).toLocaleString()}</span>
+                      </motion.button>
+                    </div>
                   </div>
 
                   {/* Trust badges */}
@@ -747,54 +683,98 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
                 </div>
               </div>
 
-              {/* ── Bottom section: Benefits + Nutrients ── */}
+              {/* ── Bottom section: Benefits + Nutrients ── Enhanced */}
               <div style={{
-                borderTop: '1px dashed rgba(21,128,61,0.15)',
-                padding: 'clamp(24px, 4vw, 40px)',
-                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40,
+                borderTop: '2px dashed rgba(21,128,61,0.15)',
+                padding: 'clamp(32px, 5vw, 48px)',
+                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48,
               }}>
-                {/* Benefits */}
-                <div>
-                  <h3 style={{ fontFamily: FD, fontSize: 18, fontWeight: 800, color: '#1a1a1a', marginBottom: 16 }}>
+                {/* Benefits - Enhanced */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <h3 style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: '#1a1a1a', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ background: 'rgba(21,128,61,0.1)', padding: '8px 10px', borderRadius: 8 }}>
+                      <Zap size={20} color={G} />
+                    </div>
                     What makes it different
                   </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {(selectedProduct.benefits || []).map((b) => (
-                      <div key={b} style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '8px 12px', borderRadius: 8,
-                        background: 'rgba(21,128,61,0.04)',
-                        border: '1px solid rgba(21,128,61,0.08)',
-                      }}>
-                        <Check size={14} color={G} />
-                        <span style={{ fontFamily: FS, fontSize: 13, color: '#333' }}>{b}</span>
-                      </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {(packageData?.benefits || []).map((b: string, idx: number) => (
+                      <motion.div
+                        key={b}
+                        initial={{ opacity: 0, x: -15 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        viewport={{ once: true }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 12,
+                          padding: '14px 16px', borderRadius: 12,
+                          background: 'linear-gradient(135deg, rgba(21,128,61,0.08) 0%, rgba(21,128,61,0.02) 100%)',
+                          border: '1.5px solid rgba(21,128,61,0.15)',
+                          transition: 'all 0.3s ease',
+                          cursor: 'default',
+                        }}
+                        whileHover={{ paddingLeft: '20px', borderColor: 'rgba(21,128,61,0.3)', background: 'rgba(21,128,61,0.1)' }}
+                      >
+                        <Check size={20} color={G} strokeWidth={3} style={{ flexShrink: 0 }} />
+                        <span style={{ fontFamily: FS, fontSize: 14, color: '#333', fontWeight: 500 }}>{b}</span>
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Key nutrients */}
-                <div>
-                  <h3 style={{ fontFamily: FD, fontSize: 18, fontWeight: 800, color: '#1a1a1a', marginBottom: 16 }}>
+                {/* Key nutrients - Enhanced */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <h3 style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: '#1a1a1a', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ background: 'rgba(21,128,61,0.1)', padding: '8px 10px', borderRadius: 8 }}>
+                      <BarChart3 size={20} color={G} />
+                    </div>
                     Key Nutrients
                   </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    {(selectedProduct.nutrients || []).map((n) => (
-                      <div key={n.label} style={{
-                        padding: '10px 14px', borderRadius: 8,
-                        background: '#fffde6', border: '1.5px solid rgba(21,128,61,0.12)',
-                        position: 'relative',
-                      }}>
-                        <p style={{ fontFamily: FS, fontSize: 13, fontWeight: 600, color: '#1a1a1a', margin: 0 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    {(packageData?.nutrients || []).map((n: ProductNutrient, idx: number) => (
+                      <motion.div
+                        key={n.label}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: idx * 0.08 }}
+                        viewport={{ once: true }}
+                        whileHover={{ translateY: -4 }}
+                        style={{
+                          padding: '16px 14px', borderRadius: 12,
+                          background: 'linear-gradient(135deg, #fffde6 0%, #fefce8 100%)',
+                          border: '2px solid rgba(21,128,61,0.15)',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                        }}
+                      >
+                        {/* Decorative background */}
+                        <div style={{ position: 'absolute', top: 0, right: 0, fontSize: 32, opacity: 0.08 }}>
+                          {n.emoji}
+                        </div>
+                        <p style={{ fontFamily: FS, fontSize: 12, fontWeight: 600, color: '#666', margin: 0, textTransform: 'uppercase', letterSpacing: 0.5 }}>
                           {n.label}
                         </p>
-                        <p style={{ fontFamily: FD, fontSize: 18, fontWeight: 800, color: G, margin: '2px 0 0' }}>
+                        <p style={{ fontFamily: FD, fontSize: 24, fontWeight: 800, color: G, margin: '4px 0 0', position: 'relative', zIndex: 1 }}>
                           {n.amount}
                         </p>
-                      </div>
+                        <p style={{ fontFamily: FS, fontSize: 12, color: '#666', margin: '6px 0 0', fontStyle: 'italic', position: 'relative', zIndex: 1 }}>
+                          {n.friendly}
+                        </p>
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>

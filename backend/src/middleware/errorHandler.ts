@@ -8,6 +8,11 @@ export class AppError extends Error {
 
 export const errorHandler = (err: Error & { code?: string }, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err);
+  console.error('Error Details:', {
+    message: err.message,
+    code: err.code,
+    stack: err.stack,
+  });
 
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({ error: err.message });
@@ -23,5 +28,9 @@ export const errorHandler = (err: Error & { code?: string }, _req: Request, res:
     return res.status(400).json({ error: 'Invalid reference' });
   }
 
-  return res.status(500).json({ error: 'Internal server error' });
+  // Return more detailed error info in development
+  return res.status(500).json({ 
+    error: 'Internal server error',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 };

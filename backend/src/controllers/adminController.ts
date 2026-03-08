@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { Order } from '../models/Order';
-import { Product } from '../models/Product';
+import { Product, ProductInput } from '../models/Product';
 import { User } from '../models/User';
 import { Payment } from '../models/Payment';
 import { AppError } from '../middleware/errorHandler';
@@ -66,22 +66,21 @@ export const getAdminDashboard = async (_req: AuthRequest, res: Response) => {
 
 // Product Management
 export const createProduct = async (req: AuthRequest, res: Response) => {
-  const {
-    name, description, price, category, stock,
-    subscribePrice, origPrice, tag, duration, subtitle, rating, reviews,
-    headline, accentWord, grayWord, persuade, tagline, highlight, savePct,
-    benefits, badges, variants, nutrients, images,
-  } = req.body;
+  const { name, description, category, packages } = req.body;
 
-  if (!name || !price) {
-    throw new AppError(400, 'Name and price are required');
+  if (!name || !category) {
+    throw new AppError(400, 'Name and category are required');
+  }
+
+  if (!packages || !Array.isArray(packages) || packages.length === 0) {
+    throw new AppError(400, 'At least one package is required');
   }
 
   const product = await Product.create({
-    name, description, price, category, stock: stock ?? 0,
-    subscribePrice, origPrice, tag, duration, subtitle, rating, reviews,
-    headline, accentWord, grayWord, persuade, tagline, highlight, savePct,
-    benefits, badges, variants, nutrients, images,
+    name,
+    description,
+    category,
+    packages,
   });
 
   res.status(201).json({
@@ -97,24 +96,24 @@ export const getAllProducts = async (_req: AuthRequest, res: Response) => {
 
 export const updateProduct = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
-  const {
-    name, description, price, category, stock,
-    subscribePrice, origPrice, tag, duration, subtitle, rating, reviews,
-    headline, accentWord, grayWord, persuade, tagline, highlight, savePct,
-    benefits, badges, variants, nutrients, images,
-  } = req.body;
+  const { name, description, category, packages } = req.body;
 
   const product = await Product.findById(parseInt(id));
   if (!product) {
     throw new AppError(404, 'Product not found');
   }
 
-  const updatedProduct = await Product.update(parseInt(id), {
-    name, description, price, category, stock,
-    subscribePrice, origPrice, tag, duration, subtitle, rating, reviews,
-    headline, accentWord, grayWord, persuade, tagline, highlight, savePct,
-    benefits, badges, variants, nutrients, images,
-  });
+  if (packages && (!Array.isArray(packages) || packages.length === 0)) {
+    throw new AppError(400, 'At least one package is required');
+  }
+
+  const updateData: Partial<ProductInput> = {};
+  if (name !== undefined) updateData.name = name;
+  if (description !== undefined) updateData.description = description;
+  if (category !== undefined) updateData.category = category;
+  if (packages !== undefined) updateData.packages = packages;
+
+  const updatedProduct = await Product.update(parseInt(id), updateData);
 
   res.json({
     message: 'Product updated successfully',

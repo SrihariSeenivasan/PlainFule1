@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Plus, Minus, Search, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { adminAPI, Product } from '@/lib/api';
+import { adminAPI, Product, ProductPackage } from '@/lib/api';
 
 export default function AdminInventory() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -43,19 +43,30 @@ export default function AdminInventory() {
     setFilteredProducts(filtered);
   };
 
-  const handleStockChange = async (productId: number, action: 'up' | 'down', quantity: number = 1) => {
+  const handleStockChange = async (productId: number, packageId: string, action: 'up' | 'down', quantity: number = 1) => {
     try {
       setUpdating(productId);
       const product = products.find(p => p.id === productId);
-      if (!product) return;
+      if (!product || !product.packages) return;
 
-      const currentStock = product.stock || 0;
-      const newStock = action === 'up' ? currentStock + quantity : Math.max(0, currentStock - quantity);
+      const updatedPackages = product.packages.map((pkg: ProductPackage) => {
+        if (pkg.id === packageId) {
+          const currentStock = pkg.stock || 0;
+          const newStock = action === 'up' ? currentStock + quantity : Math.max(0, currentStock - quantity);
+          return { ...pkg, stock: newStock };
+        }
+        return pkg;
+      });
 
-      await adminAPI.updateProduct(productId, { ...product, stock: newStock });
+      await adminAPI.updateProduct(productId, { 
+        name: product.name, 
+        description: product.description, 
+        category: product.category, 
+        packages: updatedPackages 
+      });
 
-      setProducts(products.map(p => p.id === productId ? { ...p, stock: newStock } : p));
-      setFilteredProducts(filteredProducts.map(p => p.id === productId ? { ...p, stock: newStock } : p));
+      setProducts(products.map(p => p.id === productId ? { ...p, packages: updatedPackages } : p));
+      setFilteredProducts(filteredProducts.map(p => p.id === productId ? { ...p, packages: updatedPackages } : p));
 
       setSuccessMessage(`Stock updated for ${product.name}`);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -68,16 +79,28 @@ export default function AdminInventory() {
     }
   };
 
-  const handleQuickAdjust = async (productId: number, newStock: number) => {
+  const handleQuickAdjust = async (productId: number, packageId: string, newStock: number) => {
     try {
       setUpdating(productId);
       const product = products.find(p => p.id === productId);
-      if (!product) return;
+      if (!product || !product.packages) return;
 
-      await adminAPI.updateProduct(productId, { ...product, stock: Math.max(0, newStock) });
+      const updatedPackages = product.packages.map((pkg: ProductPackage) => {
+        if (pkg.id === packageId) {
+          return { ...pkg, stock: Math.max(0, newStock) };
+        }
+        return pkg;
+      });
 
-      setProducts(products.map(p => p.id === productId ? { ...p, stock: Math.max(0, newStock) } : p));
-      setFilteredProducts(filteredProducts.map(p => p.id === productId ? { ...p, stock: Math.max(0, newStock) } : p));
+      await adminAPI.updateProduct(productId, { 
+        name: product.name, 
+        description: product.description, 
+        category: product.category, 
+        packages: updatedPackages 
+      });
+
+      setProducts(products.map(p => p.id === productId ? { ...p, packages: updatedPackages } : p));
+      setFilteredProducts(filteredProducts.map(p => p.id === productId ? { ...p, packages: updatedPackages } : p));
 
       setSuccessMessage(`Stock updated for ${product.name}`);
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -122,9 +145,18 @@ export default function AdminInventory() {
         </div>
         <div className="flex gap-2 flex-wrap">
           {[
-            { label: 'In Stock', count: products.filter(p => p.stock > 15).length, color: 'bg-green-900/40 text-green-400' },
-            { label: 'Low', count: products.filter(p => p.stock > 0 && p.stock <= 15).length, color: 'bg-yellow-900/40 text-yellow-400' },
-            { label: 'Out', count: products.filter(p => p.stock === 0).length, color: 'bg-red-900/40 text-red-400' },
+            { label: 'In Stock', count: filteredProducts.filter(p => {
+              const total = (p.packages || []).reduce((sum: number, pkg: ProductPackage) => sum + (pkg.stock || 0), 0);
+              return total > 15;
+            }).length, color: 'bg-green-900/40 text-green-400' },
+            { label: 'Low', count: filteredProducts.filter(p => {
+              const total = (p.packages || []).reduce((sum: number, pkg: ProductPackage) => sum + (pkg.stock || 0), 0);
+              return total > 0 && total <= 15;
+            }).length, color: 'bg-yellow-900/40 text-yellow-400' },
+            { label: 'Out', count: filteredProducts.filter(p => {
+              const total = (p.packages || []).reduce((sum: number, pkg: ProductPackage) => sum + (pkg.stock || 0), 0);
+              return total === 0;
+            }).length, color: 'bg-red-900/40 text-red-400' },
           ].map(({ label, count, color }) => (
             <span key={label} className={`text-xs font-semibold px-2.5 py-1 rounded-full ${color}`}>
               {count} {label}
@@ -160,105 +192,130 @@ export default function AdminInventory() {
       </div>
 
       {/* Products Grid */}
-      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 lg:grid-cols-2">
         {filteredProducts.map((product) => {
-          const status = getStockStatus(product.stock || 0);
           const isUpdating = updating === product.id;
+          const packages = (product.packages || []) as ProductPackage[];
+          const totalStock = packages.reduce((sum, pkg) => sum + (pkg.stock || 0), 0);
 
           return (
             <div
               key={product.id}
-              className="bg-gray-800 border border-gray-700 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:shadow-black/30 transition-shadow flex flex-col gap-4"
+              className="bg-gray-800 border border-gray-700 rounded-xl p-4 sm:p-5 hover:shadow-lg hover:shadow-black/30 transition-shadow"
             >
               {/* Product header */}
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start justify-between gap-3 mb-4">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-white text-sm leading-tight truncate">
+                  <h3 className="font-semibold text-white text-base leading-tight">
                     {product.name}
                   </h3>
                   <p className="text-xs text-gray-500 mt-0.5 font-mono">ID: {product.id}</p>
                 </div>
-                <span className={`shrink-0 text-xs font-semibold px-2 py-1 rounded-full ${status.class}`}>
-                  {status.label}
-                </span>
+                <div className="text-right text-xs">
+                  <p className="text-gray-400">Total Stock</p>
+                  <p className="text-2xl font-bold text-white">{totalStock}</p>
+                </div>
               </div>
 
               {/* Description */}
               {product.description && (
-                <p className="text-xs text-gray-400 line-clamp-2 -mt-2">
+                <p className="text-xs text-gray-400 line-clamp-2 mb-4">
                   {product.description}
                 </p>
               )}
 
-              {/* Stock display + price row */}
-              <div className="flex items-center justify-between bg-gray-700/50 rounded-lg px-4 py-3">
-                <div>
-                  <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Stock</p>
-                  <p className="text-3xl font-bold text-white leading-tight mt-0.5">
-                    {product.stock || 0}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Price</p>
-                  <p className="text-lg font-bold text-white mt-0.5">₹{product.price}</p>
-                </div>
-              </div>
+              {/* Packages */}
+              <div className="space-y-3 border-t border-gray-700 pt-4">
+                {packages.length === 0 ? (
+                  <p className="text-xs text-gray-500 italic">No packages configured</p>
+                ) : (
+                  packages.map((pkg: ProductPackage) => {
+                    const pkgStatus = getStockStatus(pkg.stock || 0);
+                    return (
+                      <div key={pkg.id} className="bg-gray-700/30 rounded-lg p-3">
+                        {/* Package header */}
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-white">{pkg.duration}</p>
+                            <p className="text-xs text-gray-400">{pkg.pouches} pouches</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-gray-400">Price</p>
+                            <p className="text-sm font-bold text-green-400">₹{(pkg.price || 0).toLocaleString()}</p>
+                          </div>
+                        </div>
 
-              {/* Direct input */}
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
-                  Set Stock Directly
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  defaultValue={product.stock || 0}
-                  onBlur={(e) => {
-                    const value = parseInt(e.currentTarget.value) || 0;
-                    if (value !== product.stock) {
-                      handleQuickAdjust(product.id, value);
-                    }
-                  }}
-                  className="w-full px-3 py-2 text-sm border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                />
-              </div>
+                        {/* Stock display and status */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Stock</p>
+                            <p className="text-2xl font-bold text-white leading-tight mt-0.5">
+                              {pkg.stock || 0}
+                            </p>
+                          </div>
+                          <span className={`shrink-0 text-xs font-semibold px-2 py-1 rounded-full ${pkgStatus.class}`}>
+                            {pkgStatus.label}
+                          </span>
+                        </div>
 
-              {/* ±5 buttons */}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => handleStockChange(product.id, 'up', 5)}
-                  disabled={isUpdating}
-                  className="flex items-center justify-center gap-1.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2 px-3 rounded-lg transition-colors text-sm"
-                >
-                  {isUpdating ? <Loader2 size={15} className="animate-spin" /> : <Plus size={15} />}
-                  +5
-                </button>
-                <button
-                  onClick={() => handleStockChange(product.id, 'down', 5)}
-                  disabled={isUpdating}
-                  className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2 px-3 rounded-lg transition-colors text-sm"
-                >
-                  {isUpdating ? <Loader2 size={15} className="animate-spin" /> : <Minus size={15} />}
-                  -5
-                </button>
-              </div>
+                        {/* Direct input */}
+                        <div className="mb-2">
+                          <input
+                            type="number"
+                            min="0"
+                            defaultValue={pkg.stock || 0}
+                            onBlur={(e) => {
+                              const value = parseInt(e.currentTarget.value) || 0;
+                              if (value !== pkg.stock) {
+                                handleQuickAdjust(product.id, pkg.id, value);
+                              }
+                            }}
+                            className="w-full px-2 py-1 text-xs border border-gray-600 rounded-lg bg-gray-600 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                            placeholder="Set stock"
+                          />
+                        </div>
 
-              {/* ±1 buttons */}
-              <div className="grid grid-cols-2 gap-2 -mt-2">
-                <button
-                  onClick={() => handleStockChange(product.id, 'up', 1)}
-                  disabled={isUpdating}
-                  className="text-xs font-semibold bg-green-900/30 text-green-400 hover:bg-green-900/50 disabled:opacity-50 disabled:cursor-not-allowed py-1.5 rounded-lg transition-colors"
-                >
-                  +1
-                </button>
-                <button
-                  onClick={() => handleStockChange(product.id, 'down', 1)}
-                  disabled={isUpdating}
-                  className="text-xs font-semibold bg-orange-900/30 text-orange-400 hover:bg-orange-900/50 disabled:opacity-50 disabled:cursor-not-allowed py-1.5 rounded-lg transition-colors"
-                >
-                  -1
-                </button>
+                        {/* ±5 buttons */}
+                        <div className="grid grid-cols-2 gap-1.5 mb-1.5">
+                          <button
+                            onClick={() => handleStockChange(product.id, pkg.id, 'up', 5)}
+                            disabled={isUpdating}
+                            className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-1.5 px-2 rounded text-xs transition-colors"
+                          >
+                            {isUpdating ? <Loader2 size={12} className="animate-spin" /> : <Plus size={12} />}
+                            +5
+                          </button>
+                          <button
+                            onClick={() => handleStockChange(product.id, pkg.id, 'down', 5)}
+                            disabled={isUpdating}
+                            className="flex items-center justify-center gap-1 bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-1.5 px-2 rounded text-xs transition-colors"
+                          >
+                            {isUpdating ? <Loader2 size={12} className="animate-spin" /> : <Minus size={12} />}
+                            -5
+                          </button>
+                        </div>
+
+                        {/* ±1 buttons */}
+                        <div className="grid grid-cols-2 gap-1.5">
+                          <button
+                            onClick={() => handleStockChange(product.id, pkg.id, 'up', 1)}
+                            disabled={isUpdating}
+                            className="text-xs font-semibold bg-green-900/30 text-green-400 hover:bg-green-900/50 disabled:opacity-50 disabled:cursor-not-allowed py-1 rounded transition-colors"
+                          >
+                            +1
+                          </button>
+                          <button
+                            onClick={() => handleStockChange(product.id, pkg.id, 'down', 1)}
+                            disabled={isUpdating}
+                            className="text-xs font-semibold bg-orange-900/30 text-orange-400 hover:bg-orange-900/50 disabled:opacity-50 disabled:cursor-not-allowed py-1 rounded transition-colors"
+                          >
+                            -1
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
           );

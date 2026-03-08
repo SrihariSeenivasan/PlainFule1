@@ -47,36 +47,46 @@ export interface ProductVariant {
   image: string;
 }
 
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
+export interface ProductPackage {
+  id: string;
+  duration: '7 days' | '15 days' | '30 days';
+  daysCount: 7 | 15 | 30;
+  pouches: number;
   price: number;
-  category: string;
-  stock: number;
-  // Pricing
-  subscribePrice?: number;
   origPrice?: number;
-  // Display info
+  savePct?: string;
+  images?: string[];
+  stock?: number;
+  // Package-specific display details
   tag?: string;
-  duration?: string;
   subtitle?: string;
-  rating?: number;
-  reviews?: number;
-  // Marketing copy
   headline?: string;
   accentWord?: string;
   grayWord?: string;
   persuade?: string;
   tagline?: string;
   highlight?: string;
-  savePct?: string;
-  // JSON arrays
   benefits?: string[];
   badges?: string[];
   variants?: ProductVariant[];
   nutrients?: ProductNutrient[];
-  images?: string[];
+  // Database fields from Package model
+  productId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Product {
+  id: number;
+  // Common product details only
+  name: string;
+  description: string;
+  category: string;
+  // All display/pricing/marketing details are in packages
+  packages?: ProductPackage[];
+  // Auto-calculated from reviews
+  rating?: number;
+  reviews?: number;
 }
 
 export interface AuthResponse {

@@ -36,38 +36,17 @@ model User {
 
 model Product {
   id             Int      @id @default(autoincrement())
+  // Common product details
   name           String
   description    String?
-  price          Decimal  @db.Decimal(10, 2)
   category       String?
-  stock          Int      @default(0)
 
-  // Pricing
-  subscribePrice Decimal? @db.Decimal(10, 2)
-  origPrice      Decimal? @db.Decimal(10, 2)
+  // All display details are now in Package model
+  packages       Package[]
 
-  // Display info
-  tag            String?
-  duration       String?
-  subtitle       String?
+  // Auto-calculated from reviews
   rating         Decimal? @db.Decimal(3, 1)
-  reviewCount    Int? @default(0)
-
-  // Marketing copy (from Productsection)
-  headline       String?
-  accentWord     String?
-  grayWord       String?
-  persuade       String?
-  tagline        String?
-  highlight      String?
-  savePct        String?
-
-  // JSON arrays
-  benefits       Json?
-  badges         Json?
-  variants       Json?
-  nutrients      Json?
-  images         Json?
+  reviewCount    Int      @default(0)
 
   orderItems OrderItem[]
   reviews    Review[]
@@ -77,6 +56,43 @@ model Product {
   updatedAt DateTime @updatedAt
 
   @@index([category])
+}
+
+model Package {
+  id            String   @id // "7days", "15days", "30days"
+  duration      String   // "7 days", "15 days", "30 days"
+  daysCount     Int      // 7, 15, 30
+  pouches       Int
+  price         Decimal  @db.Decimal(10, 2)
+  origPrice     Decimal? @db.Decimal(10, 2)
+  savePct       String?
+  stock         Int      @default(0)
+
+  // Display fields
+  tag           String?
+  subtitle      String?
+  headline      String?
+  accentWord    String?
+  grayWord      String?
+  persuade      String?
+  tagline       String?
+  highlight     String?
+
+  // JSON arrays (for complex/less frequently queried data)
+  images        Json?        // ["url1", "url2"]
+  benefits      Json?        // ["benefit1", "benefit2"]
+  badges        Json?        // ["badge1", "badge2"]
+  variants      Json?        // [{"id":"original","name":"Original","color":"#d4a574","image":"/images/..."}]
+  nutrients     Json?        // [{"label":"Vitamin C","amount":"80mg","friendly":"Immunity shield","emoji":"🍊"}]
+
+  // Foreign key
+  productId     Int
+  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([productId])
 }
 
 model Order {
