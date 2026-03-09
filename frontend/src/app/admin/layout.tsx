@@ -8,18 +8,20 @@ import AdminSidebar from '@/components/AdminPanel/AdminSidebar';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   useEffect(() => {
+    // Wait for auth to load from localStorage
+    if (isLoading) return;
+
     // Redirect non-admin users
-    if (isAuthenticated && user?.role !== 'ADMIN') {
-      router.push('/');
-    } else if (!isAuthenticated) {
+    if (!isAuthenticated || user?.role !== 'ADMIN') {
       router.push('/');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, isLoading, router]);
 
-  if (!isAuthenticated || user?.role !== 'ADMIN') {
+  // Show nothing while loading auth
+  if (isLoading || !isAuthenticated || user?.role !== 'ADMIN') {
     return null;
   }
 

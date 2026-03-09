@@ -37,12 +37,8 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
       loginWithToken(authResponse.token, authResponse.user as import('@/lib/api').User);
       
       onSuccess?.();
-      // Redirect based on role
-      if (authResponse.user.role === 'ADMIN') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      // Redirect to home
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Google login failed');
       setLoading(false);
@@ -82,14 +78,7 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
     try {
       await login(email, password);
       onSuccess?.();
-      // Get user from auth context or localStorage
-      const userStr = localStorage.getItem('user');
-      const user = userStr ? JSON.parse(userStr) : null;
-      if (user?.role === 'ADMIN') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
       setLoading(false);

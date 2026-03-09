@@ -5,9 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import React from 'react';
-import { LayoutDashboard, Shield, LogOut, User, Menu, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Shield, LogOut, User, Menu, X, ShoppingCart, Package, UserCircle } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '@/lib/auth-context';
+import { useCart } from '@/lib/cart-context';
 
 // ── Star Doodle ───────────────────────────────────────────────────────────────
 const StarDoodle = ({ size = 16, rotate = 0, style = {} }: {
@@ -61,8 +63,7 @@ const DoodleLogo = () => (
 const DoodleCTA = ({ delay = 0 }: { delay?: number }) => {
   const [hovered, setHovered] = useState(false);
   return (
-    <motion.a href="/?view=products"
-      initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
+    <motion.a href="/products"
       transition={{ duration: 0.5, delay }}
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
@@ -99,9 +100,14 @@ const LoginButton = ({ delay = 0, onClick }: { delay?: number; onClick?: () => v
 );
 
 // ── Profile Dropdown ──────────────────────────────────────────────────────────
-const ProfileDropdown = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: () => void; navigate: (path: string) => void }) => {
   const { logout, user } = useAuth();
   const handleLogout = () => { logout(); onClose(); window.location.href = '/'; };
+  const handleNav = (path: string) => {
+    onClose();
+    navigate(path);
+  };
+  const linkStyle = { display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Caveat', cursive", cursor: 'pointer' } as const;
   return (
     <motion.div
       initial={{ opacity: 0, y: -8, scale: 0.95 }}
@@ -112,24 +118,34 @@ const ProfileDropdown = ({ open, onClose }: { open: boolean; onClose: () => void
         position: 'absolute', top: 'calc(100% + 8px)', right: 0,
         background: '#fffef5', borderRadius: 14, padding: '10px 0',
         border: '2px dashed rgba(21,128,61,0.4)', boxShadow: '4px 5px 0 rgba(21,128,61,0.15)',
-        zIndex: 300, minWidth: 190,
+        zIndex: 300, minWidth: 200,
       }}
     >
       <div style={{ padding: '10px 14px', borderBottom: '1.5px dashed rgba(21,128,61,0.2)' }}>
-        <p style={{ margin: 0, fontSize: 10, color: '#999', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Profile</p>
+        <p style={{ margin: 0, fontSize: 10, color: '#999', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Signed in as</p>
         <p style={{ margin: '4px 0 0', fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: "'Caveat', cursive" }}>
           {user?.firstName || 'User'}
         </p>
       </div>
       {user?.role !== 'ADMIN' && (
-        <motion.a href="/" onClick={onClose} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Caveat', cursive" }}>
-          <LayoutDashboard size={16} /> Go to Dashboard
-        </motion.a>
+        <>
+          <motion.button onClick={() => handleNav('/my-profile')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
+            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent' }}>
+            <UserCircle size={16} /> My Profile
+          </motion.button>
+          <motion.button onClick={() => handleNav('/my-orders')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
+            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent' }}>
+            <Package size={16} /> My Orders
+          </motion.button>
+          <motion.button onClick={() => handleNav('/cart')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
+            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent', borderBottom: '1.5px dashed rgba(21,128,61,0.15)', paddingBottom: 11 }}>
+            <ShoppingCart size={16} /> Cart
+          </motion.button>
+        </>
       )}
       {user?.role === 'ADMIN' && (
-        <motion.a href="/" onClick={onClose} whileHover={{ backgroundColor: 'rgba(239,68,68,0.08)' }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#ef4444', fontFamily: "'Caveat', cursive" }}>
+        <motion.a href="/admin/dashboard" onClick={onClose} whileHover={{ backgroundColor: 'rgba(239,68,68,0.08)' }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#ef4444', fontFamily: "'Caveat', cursive", borderBottom: '1.5px dashed rgba(21,128,61,0.15)' }}>
           <Shield size={16} /> Admin Panel
         </motion.a>
       )}
@@ -157,23 +173,59 @@ const ProfileIconButton = ({ onClick, delay = 0 }: { onClick: () => void; delay?
   </motion.button>
 );
 
+// ── Cart Icon Button ───────────────────────────────────────────────────────
+const CartIconButton = ({ onClick, totalItems, delay = 0 }: { onClick: () => void; totalItems: number; delay?: number }) => (
+  <motion.button onClick={onClick}
+    initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, delay }} whileHover={{ scale: 1.05 }}
+    style={{
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      width: 36, height: 36, background: '#15803d', color: '#fff',
+      border: '2px solid #15803d', borderRadius: 10, cursor: 'pointer',
+      boxShadow: '2px 3px 0 rgba(21,100,50,0.3)', flexShrink: 0, padding: 0,
+      position: 'relative',
+    }} aria-label="View shopping cart"
+  >
+    <ShoppingCart size={16} />
+    {totalItems > 0 && (
+      <motion.span
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        style={{
+          position: 'absolute',
+          top: -8,
+          right: -8,
+          width: 24,
+          height: 24,
+          background: '#ef4444',
+          color: '#fff',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 11,
+          fontWeight: 700,
+          border: '2px solid #fffef5',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+        }}
+      >
+        {totalItems > 9 ? '9+' : totalItems}
+      </motion.span>
+    )}
+  </motion.button>
+);
+
 // ── Mobile Drawer — rendered OUTSIDE the pill, as a sibling ──────────────────
-const MobileDrawer = ({ open, onClose, onNavigate, onOpenAuth, isAuthenticated, user, onLogout }: {
-  open: boolean; onClose: () => void; onNavigate?: (view: string) => void;
+const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogout, navigate }: {
+  open: boolean; onClose: () => void;
   onOpenAuth: () => void; isAuthenticated: boolean;
   user: { firstName?: string; role?: string } | null; onLogout: () => void;
+  navigate: (path: string) => void;
 }) => {
-  const defaultLinks = [
-    { href: '#investigation', label: 'Investigation' },
-    { href: '#inside', label: 'Inside' },
-    { href: '#habit', label: 'Habit' },
-    { href: '#buy', label: 'Order →' },
+  const links = [
+    { href: '/about', label: 'About' },
+    { href: '/products', label: 'Products' },
   ] as const;
-
-  const guestLinks = [
-    { label: 'Home', view: 'home' },
-    { label: 'Products', view: 'products' },
-  ];
 
   return (
     <motion.div
@@ -203,14 +255,11 @@ const MobileDrawer = ({ open, onClose, onNavigate, onOpenAuth, isAuthenticated, 
       <div style={{ position: 'relative' }}>
         {/* Nav links */}
         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-          {(onNavigate ? guestLinks : defaultLinks).map((l, i) => (
+          {links.map((l, i) => (
             <motion.a
-              key={'view' in l ? l.view : l.href}
-              href={'view' in l ? '#' : l.href}
-              onClick={(e: React.MouseEvent) => {
-                if ('view' in l) { e.preventDefault(); onNavigate!(l.view); }
-                onClose();
-              }}
+              key={l.href}
+              href={l.href}
+              onClick={() => { onClose(); }}
               initial={{ opacity: 0, x: -6 }}
               animate={{ opacity: open ? 1 : 0, x: open ? 0 : -6 }}
               transition={{ delay: open ? 0.03 * i + 0.04 : 0 }}
@@ -234,40 +283,75 @@ const MobileDrawer = ({ open, onClose, onNavigate, onOpenAuth, isAuthenticated, 
           transition={{ delay: open ? 0.14 : 0 }}
         >
           {isAuthenticated ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <p style={{ margin: 0, fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: '#15803d' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <p style={{ margin: '0 0 6px', fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: '#15803d' }}>
                 Hey, {user?.firstName || 'there'} 👋
               </p>
-              <div style={{ display: 'flex', gap: 6 }}>
-                <motion.a href="/" onClick={onClose} whileHover={{ scale: 1.02 }}
-                  style={{
-                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                    padding: '7px 10px', background: 'rgba(21,128,61,0.07)',
-                    border: '1.5px dashed rgba(21,128,61,0.3)', borderRadius: 9,
-                    textDecoration: 'none', fontFamily: "'Caveat', cursive",
-                    fontSize: 13, fontWeight: 700, color: '#15803d',
-                  }}
-                >
-                  {user?.role === 'ADMIN' ? <Shield size={13} /> : <LayoutDashboard size={13} />}
-                  {user?.role === 'ADMIN' ? 'Admin' : 'Dashboard'}
-                </motion.a>
-                <button onClick={() => { onLogout(); onClose(); }}
-                  style={{
-                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                    padding: '7px 10px', background: 'rgba(239,68,68,0.06)',
-                    border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
-                    fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700,
-                    color: '#ef4444', cursor: 'pointer',
-                  }}
-                >
-                  <LogOut size={13} /> Logout
-                </button>
-              </div>
+              {user?.role !== 'ADMIN' ? (
+                <>
+                  {[
+                    { path: '/my-profile', icon: <UserCircle size={14} />, label: 'My Profile' },
+                    { path: '/my-orders',  icon: <Package size={14} />,    label: 'My Orders' },
+                    { path: '/cart',       icon: <ShoppingCart size={14} />, label: 'Cart' },
+                  ].map(({ path, icon, label }) => (
+                    <motion.button
+                      key={path}
+                      onClick={() => { navigate(path); onClose(); }}
+                      whileHover={{ backgroundColor: 'rgba(21,128,61,0.1)' }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        padding: '8px 10px', background: 'rgba(21,128,61,0.04)',
+                        border: '1.5px dashed rgba(21,128,61,0.25)', borderRadius: 9,
+                        fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700,
+                        color: '#1a1a1a', cursor: 'pointer', width: '100%',
+                      }}
+                    >
+                      {icon} {label}
+                    </motion.button>
+                  ))}
+                  <button onClick={() => { onLogout(); onClose(); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                      padding: '7px 10px', background: 'rgba(239,68,68,0.06)',
+                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
+                      fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700,
+                      color: '#ef4444', cursor: 'pointer', marginTop: 2,
+                    }}
+                  >
+                    <LogOut size={13} /> Logout
+                  </button>
+                </>
+              ) : (
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <motion.a href="/admin/dashboard" onClick={onClose} whileHover={{ scale: 1.02 }}
+                    style={{
+                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                      padding: '7px 10px', background: 'rgba(239,68,68,0.07)',
+                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
+                      textDecoration: 'none', fontFamily: "'Caveat', cursive",
+                      fontSize: 13, fontWeight: 700, color: '#ef4444',
+                    }}
+                  >
+                    <Shield size={13} /> Admin Panel
+                  </motion.a>
+                  <button onClick={() => { onLogout(); onClose(); }}
+                    style={{
+                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                      padding: '7px 10px', background: 'rgba(239,68,68,0.06)',
+                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
+                      fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700,
+                      color: '#ef4444', cursor: 'pointer',
+                    }}
+                  >
+                    <LogOut size={13} /> Logout
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div style={{ display: 'flex', gap: 8 }}>
               {/* Compact inline CTA */}
-              <motion.a href="/?view=products" whileHover={{ scale: 1.02 }}
+              <motion.a href="/products" whileHover={{ scale: 1.02 }}
                 style={{
                   flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   padding: '8px 10px', background: '#15803d', color: '#fff',
@@ -300,7 +384,7 @@ const MobileDrawer = ({ open, onClose, onNavigate, onOpenAuth, isAuthenticated, 
 };
 
 // ── Main Navbar ───────────────────────────────────────────────────────────────
-export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -308,12 +392,16 @@ export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => 
   const [mounted, setMounted] = useState(false);
 
   const { isAuthenticated, user, logout } = useAuth();
+  const { totalItems } = useCart();
   const { scrollY } = useScroll();
+  const router = useRouter();
 
   useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 60));
   React.useEffect(() => { setMounted(true); }, []);
 
-  const handleLogout = () => { logout(); window.location.href = '/'; };
+  const navigate = (path: string) => router.push(path);
+  const handleLogout = () => { logout(); router.push('/'); };
+  const handleCartClick = () => router.push('/cart');
 
   return (
     <>
@@ -364,22 +452,8 @@ export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => 
 
             {/* Desktop center nav */}
             <nav className="nav-desktop" style={{ alignItems: 'center', gap: 30 }}>
-              {onNavigate ? (
-                <>
-                  <NavLink href="#" delay={0.2} onClick={() => onNavigate('home')}>Home</NavLink>
-                  <NavLink href="#" delay={0.3} onClick={() => onNavigate('products')}>Products</NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink href="#investigation" delay={0.2}>Investigation</NavLink>
-                  <NavLink href="#inside" delay={0.3}>Inside</NavLink>
-                  <NavLink href="#habit" delay={0.4}>Habit</NavLink>
-                  <svg viewBox="0 0 4 24" width={4} height={24} aria-hidden>
-                    <line x1="2" y1="2" x2="2" y2="22" stroke="rgba(0,0,0,0.15)" strokeWidth="2" strokeLinecap="round" strokeDasharray="3,3" />
-                  </svg>
-                  <NavLink href="#buy" accent delay={0.5}>Order →</NavLink>
-                </>
-              )}
+              <NavLink href="/about" delay={0.2}>About</NavLink>
+              <NavLink href="/products" delay={0.25}>Products</NavLink>
             </nav>
 
             {/* Right: desktop buttons + mobile hamburger */}
@@ -388,10 +462,11 @@ export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => 
               {/* Desktop auth row — CSS class controls display */}
               <div className="nav-desktop-cta" style={{ alignItems: 'center', gap: 8, position: 'relative' }}>
                 <DoodleCTA delay={0.6} />
+                <CartIconButton delay={0.62} onClick={handleCartClick} totalItems={totalItems} />
                 {mounted && isAuthenticated ? (
                   <>
-                    <ProfileIconButton delay={0.65} onClick={() => setProfileDropdownOpen(v => !v)} />
-                    <ProfileDropdown open={profileDropdownOpen} onClose={() => setProfileDropdownOpen(false)} />
+                  <ProfileIconButton delay={0.65} onClick={() => setProfileDropdownOpen(v => !v)} />
+                    <ProfileDropdown open={profileDropdownOpen} onClose={() => setProfileDropdownOpen(false)} navigate={navigate} />
                   </>
                 ) : mounted ? (
                   <LoginButton delay={0.65} onClick={() => setAuthModalOpen(true)} />
@@ -432,11 +507,11 @@ export default function Navbar({ onNavigate }: { onNavigate?: (view: string) => 
         <MobileDrawer
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
-          onNavigate={onNavigate}
           onOpenAuth={() => setAuthModalOpen(true)}
           isAuthenticated={mounted && isAuthenticated}
           user={user}
           onLogout={handleLogout}
+          navigate={navigate}
         />
       </motion.nav>
 

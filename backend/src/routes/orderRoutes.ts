@@ -10,7 +10,10 @@ router.use(userMiddleware);
 
 router.post('/', orderController.createOrder);
 router.get('/', orderController.getOrders);
+router.get('/returns', orderController.getUserReturnRequests);
 router.get('/:id', orderController.getOrderById);
+router.post('/:id/cancel', orderController.cancelOrder);
+router.post('/:id/return', orderController.createReturnRequest);
 router.put('/:orderId/payment', orderController.updatePaymentStatus);
 
 export default router;

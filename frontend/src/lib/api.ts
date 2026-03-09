@@ -20,17 +20,50 @@ export interface Order {
   totalAmount: number;
   status: 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   shippingAddress: string;
+  deliveryDate?: string | null;
   items: OrderItem[];
+  payment?: {
+    id: number;
+    amount: number;
+    paymentMethod: string;
+    status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
+    transactionId?: string;
+  };
   createdAt: string;
 }
 
 export interface OrderItem {
   id: number;
   productId: number;
+  packageId?: string;
   quantity: number;
   price: number;
   name: string;
-  imageUrl: string;
+  imageUrl?: string;
+  product?: { name: string };
+  package?: { id: string; duration: string; pouches: number };
+}
+
+export type ReturnStatus = 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'RECEIVED' | 'REFUNDED';
+
+export interface ReturnItem {
+  id: number;
+  quantity: number;
+  orderItemId: number;
+  orderItem: OrderItem & { product: { name: string }; package?: { id: string; duration: string; pouches: number } };
+}
+
+export interface ReturnRequest {
+  id: number;
+  status: ReturnStatus;
+  reason?: string;
+  refundAmount?: number;
+  orderId: number;
+  userId: number;
+  order: { id: number; orderNumber: string; totalAmount: number };
+  items: ReturnItem[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProductNutrient {
@@ -154,6 +187,18 @@ export const authAPI = {
     }),
 
   getCurrentUser: (): Promise<User> => apiRequest<User>('/auth/me'),
+
+  forgotPassword: (email: string): Promise<{ message: string }> =>
+    apiRequest<{ message: string }>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+
+  resetPassword: (token: string, newPassword: string, confirmPassword: string): Promise<{ message: string }> =>
+    apiRequest<{ message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, newPassword, confirmPassword }),
+    }),
 };
 
 // User APIs
@@ -174,17 +219,31 @@ export const userAPI = {
 // Order APIs
 export const orderAPI = {
   createOrder: (data: {
-    items: Array<{ product_id: number; quantity: number; price: number }>;
-    shipping_address: string;
+    items: Array<{ productId: number; packageId: string; quantity: number }>;
+    shippingAddress: string;
   }) =>
-    apiRequest('/orders', {
+    apiRequest<{ message: string; order: Order; payment: Order['payment'] }>('/orders', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
-  getOrders: () => apiRequest('/orders'),
+  getOrders: () => apiRequest<Order[]>('/orders'),
 
-  getOrderById: (id: number) => apiRequest(`/orders/${id}`),
+  getOrderById: (id: number) => apiRequest<Order>(`/orders/${id}`),
+
+  cancelOrder: (id: number) =>
+    apiRequest<{ message: string }>(`/orders/${id}/cancel`, { method: 'POST' }),
+
+  createReturnRequest: (orderId: number, data: {
+    reason?: string;
+    items: Array<{ orderItemId: number; quantity: number }>;
+  }) =>
+    apiRequest<{ message: string; returnRequest: ReturnRequest }>(`/orders/${orderId}/return`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getReturnRequests: () => apiRequest<ReturnRequest[]>('/orders/returns'),
 
   updatePayment: (orderId: number, data: { status: string; transaction_id?: string }) =>
     apiRequest(`/orders/${orderId}/payment`, {
@@ -209,12 +268,21 @@ export const adminAPI = {
   getUsers: () => apiRequest('/admin/users'),
 
   getOrders: (status?: string) =>
-    apiRequest(`/admin/orders${status ? `?status=${status}` : ''}`),
+    apiRequest<Order[]>(`/admin/orders${status ? `?status=${status}` : ''}`),
 
-  updateOrderStatus: (id: number, data: { status: string; shipping_address?: string }) =>
+  updateOrderStatus: (id: number, data: { status: string; shippingAddress?: string }) =>
     apiRequest(`/admin/orders/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
+    }),
+
+  getReturnRequests: (status?: string) =>
+    apiRequest<ReturnRequest[]>(`/admin/returns${status ? `?status=${status}` : ''}`),
+
+  updateReturnStatus: (id: number, status: string) =>
+    apiRequest(`/admin/returns/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
     }),
 
   getProducts: () => apiRequest('/admin/products'),

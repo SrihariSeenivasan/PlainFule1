@@ -54,6 +54,7 @@ export const Order = {
     orderData: {
       status?: string;
       shippingAddress?: string;
+      deliveryDate?: Date | null;
     }
   ): Promise<Order> {
     return prisma.order.update({
@@ -62,6 +63,7 @@ export const Order = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         status: orderData.status as any,
         shippingAddress: orderData.shippingAddress,
+        deliveryDate: orderData.deliveryDate,
       },
     });
   },
@@ -81,7 +83,8 @@ export const Order = {
     orderId: number,
     productId: number,
     quantity: number,
-    price: number
+    price: number,
+    packageId?: string
   ): Promise<OrderItem> {
     return prisma.orderItem.create({
       data: {
@@ -89,6 +92,7 @@ export const Order = {
         productId,
         quantity,
         price,
+        packageId,
       },
     });
   },
@@ -100,6 +104,13 @@ export const Order = {
         product: {
           select: {
             name: true,
+          },
+        },
+        package: {
+          select: {
+            id: true,
+            duration: true,
+            pouches: true,
           },
         },
       },

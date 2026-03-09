@@ -18,6 +18,10 @@ router.get('/users', adminController.getAllUsers);
 router.get('/orders', adminController.getAllOrders);
 router.put('/orders/:id', adminController.updateOrderStatus);
 
+// Returns management
+router.get('/returns', adminController.getAllReturnRequests);
+router.put('/returns/:id', adminController.updateReturnStatus);
+
 // Products management
 router.get('/products', adminController.getAllProducts);
 router.post('/products', adminController.createProduct);

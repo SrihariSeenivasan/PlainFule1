@@ -44,12 +44,7 @@ export default function RegisterPage({ onSuccess }: RegisterPageProps) {
       loginWithToken(authResponse.token, authResponse.user as import('@/lib/api').User);
       
       onSuccess?.();
-      // Redirect based on role
-      if (authResponse.user.role === 'ADMIN') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Google signup failed');
       setLoading(false);
@@ -113,14 +108,7 @@ export default function RegisterPage({ onSuccess }: RegisterPageProps) {
         phone: formData.phone,
       });
       onSuccess?.();
-      // Get user from auth context or localStorage
-      const userStr = localStorage.getItem('user');
-      const user = userStr ? JSON.parse(userStr) : null;
-      if (user?.role === 'ADMIN') {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
       setLoading(false);

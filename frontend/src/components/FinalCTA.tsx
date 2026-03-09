@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Instagram, Mail, Twitter } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 // ─── Doodle SVG Primitives ────────────────────────────────────────────────────
 
@@ -134,7 +135,8 @@ const faqs = [
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+export default function FinalCTA() {
+  const router = useRouter();
   const sectionRef = useRef(null);
 
   return (
@@ -279,8 +281,7 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                 }}>
 
                   {/* Quick Links */}
-                  {onNavigate && (
-                    <motion.div
+                  <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -293,7 +294,7 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                         textTransform: 'uppercase', letterSpacing: '0.08em',
                       }}>Quick Links</p>
                       <motion.button
-                        onClick={() => onNavigate('products')}
+                        onClick={() => router.push('/products')}
                         whileHover={{ rotate: -3, y: -2 }}
                         style={{
                           fontFamily: "'Caveat',cursive",
@@ -320,7 +321,6 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                         Products
                       </motion.button>
                     </motion.div>
-                  )}
 
                   {/* Social links */}
                   <motion.div
@@ -375,8 +375,7 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                 </div>
 
                 {/* Second Row: Policies - centered */}
-                {onNavigate && (
-                  <motion.div
+                <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -399,7 +398,7 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                       ].map(({ label, view }, i) => (
                         <motion.button
                           key={label}
-                          onClick={() => onNavigate(view)}
+                          onClick={() => router.push(`/${view}`)}
                           whileHover={{ rotate: i % 2 === 0 ? -3 : 3, y: -2 }}
                           style={{
                             fontFamily: "'Caveat',cursive",
@@ -427,7 +426,6 @@ export default function FinalCTA({ onNavigate }: { onNavigate?: (view: string) =
                       ))}
                     </div>
                   </motion.div>
-                )}
               </div>
             </div>
 

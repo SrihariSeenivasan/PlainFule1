@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { initializeDatabase, disconnectDatabase } from './config/init';
 import { errorHandler } from './middleware/errorHandler';
 import { authMiddleware } from './middleware/auth';
+import emailService from './services/emailService';
 
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
@@ -14,6 +15,7 @@ import orderRoutes from './routes/orderRoutes';
 import productRoutes from './routes/productRoutes';
 import faqRoutes from './routes/faqRoutes';
 import reviewRoutes from './routes/reviewRoutes';
+import cartRoutes from './routes/cartRoutes';
 
 dotenv.config();
 
@@ -40,6 +42,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/user', authMiddleware, userRoutes);
 app.use('/api/admin', authMiddleware, adminRoutes);
 app.use('/api/orders', authMiddleware, orderRoutes);
+app.use('/api/cart', cartRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/reviews', reviewRoutes);
 
@@ -57,6 +60,9 @@ const startServer = async () => {
     console.log('Initializing database...');
     await initializeDatabase();
     console.log('Database connected successfully');
+
+    console.log('Verifying SMTP connection...');
+    await emailService.verifyConnection();
 
     const server = app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

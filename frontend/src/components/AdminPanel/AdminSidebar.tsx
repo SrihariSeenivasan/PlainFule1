@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, CreditCard,
-  ShoppingBag, Users, Home, LogOut, MoreHorizontal, X, Boxes, HelpCircle,
+  ShoppingBag, Users, Home, LogOut, MoreHorizontal, X, Boxes, HelpCircle, RotateCcw,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
@@ -24,6 +24,7 @@ export default function AdminSidebar() {
   const allItems = [
     { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
+    { href: '/admin/returns',   icon: RotateCcw,       label: 'Returns'   },
     { href: '/admin/payments',  icon: CreditCard,      label: 'Payments'  },
     { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
     { href: '/admin/inventory', icon: Boxes,           label: 'Inventory' },
@@ -41,6 +42,7 @@ export default function AdminSidebar() {
   // "More" drawer items
   const moreItems = [
     { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
+    { href: '/admin/returns',  icon: RotateCcw,  label: 'Returns'  },
     { href: '/admin/inventory', icon: Boxes,     label: 'Inventory' },
     { href: '/admin/users',    icon: Users,      label: 'Users'    },
     { href: '/admin/faq',      icon: HelpCircle, label: 'FAQs'     },

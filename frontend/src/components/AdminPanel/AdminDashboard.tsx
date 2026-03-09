@@ -5,9 +5,10 @@ import { Package, DollarSign, Users, TrendingUp } from 'lucide-react';
 import AdminOrders from './AdminOrders';
 import AdminPayments from './AdminPayments';
 import AdminProducts from './AdminProducts';
+import AdminReturns from './AdminReturns';
 import AdminUsers from './AdminUsers';
 
-type TabType = 'overview' | 'orders' | 'payments' | 'products' | 'users';
+type TabType = 'overview' | 'orders' | 'returns' | 'payments' | 'products' | 'users';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -15,6 +16,7 @@ export default function AdminDashboard() {
   const tabs: { id: TabType; label: string }[] = [
     { id: 'overview', label: 'Overview' },
     { id: 'orders', label: 'Orders' },
+    { id: 'returns', label: 'Returns' },
     { id: 'payments', label: 'Payments' },
     { id: 'products', label: 'Products' },
     { id: 'users', label: 'Users' },
@@ -55,6 +57,7 @@ export default function AdminDashboard() {
       <div>
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'orders' && <AdminOrders />}
+        {activeTab === 'returns' && <AdminReturns />}
         {activeTab === 'payments' && <AdminPayments />}
         {activeTab === 'products' && <AdminProducts />}
         {activeTab === 'users' && <AdminUsers />}

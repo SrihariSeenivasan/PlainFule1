@@ -8,6 +8,7 @@ import AdminProducts from '@/components/AdminPanel/AdminProducts';
 import AdminPayments from '@/components/AdminPanel/AdminPayments';
 import AdminInventory from '@/components/AdminPanel/AdminInventory';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
+import AdminReturns from '@/components/AdminPanel/AdminReturns';
 
 export default function AdminSectionPage() {
   const params = useParams();
@@ -21,6 +22,8 @@ export default function AdminSectionPage() {
         return <AdminUsers />;
       case 'orders':
         return <AdminOrders />;
+      case 'returns':
+        return <AdminReturns />;
       case 'products':
         return <AdminProducts />;
       case 'payments':

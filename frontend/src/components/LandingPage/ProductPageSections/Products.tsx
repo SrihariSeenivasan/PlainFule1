@@ -5,7 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { ShoppingCart, Check, Star, Truck, RotateCcw, ChevronLeft, ChevronRight, Zap, BarChart3 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import AuthModal from '@/components/AuthModal';
 import { productAPI, Product, ProductNutrient } from '@/lib/api';
+import { useCart, CartItem } from '@/lib/cart-context';
+import { useAuth } from '@/lib/auth-context';
 import ProductFAQ from './ProductFAQ';
 import ReviewsSection from './ReviewsSection';
 
@@ -46,19 +49,23 @@ const DoodleStar = ({ size = 24, style = {} }: { size?: number; style?: React.CS
   </svg>
 );
 
-/* ─── product data interface ─── */
+/* ─── main component ─── */
 // Products come directly from backend with packages
 
-/* ─── main component ─── */
-export default function Products({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+export default function Products() {
+  const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedPackage, setSelectedPackage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [thumbnailScrollPos, setThumbnailScrollPos] = useState(0);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const { addToCart } = useCart();
 
   // Fetch products from backend
   useEffect(() => {
@@ -120,6 +127,45 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
     }
   };
 
+  const handleAddToCart = async () => {
+    if (!selectedProduct || !packageData) return;
+
+    // Check if user is logged in
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const cartItem: CartItem = {
+      id: `${selectedProduct.id}-${packageData.id}`,
+      productId: selectedProduct.id,
+      productName: selectedProduct.name,
+      packageId: packageData.id,
+      packageName: `${packageData.duration} · ${packageData.pouches} pouches`,
+      price: packageData.price,
+      origPrice: packageData.origPrice,
+      quantity,
+      image: packageData.images?.[0] || '/images/Products/brownpack.png',
+      duration: packageData.duration,
+      pouches: packageData.pouches,
+    };
+
+    try {
+      await addToCart(cartItem);
+      setToastMessage(`✓ Added ${quantity} ${packageData.duration} package(s) to cart!`);
+      setShowToast(true);
+      setQuantity(1); // Reset quantity to 1 after adding to cart
+
+      // Hide toast after 3 seconds
+      setTimeout(() => setShowToast(false), 3000);
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      setToastMessage('Failed to add item to cart. Please try again.');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
+  };
+
   const packageData = selectedProduct?.packages?.[selectedPackage];
   const price = packageData?.price || 0;
 
@@ -146,7 +192,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
   if (!selectedProduct) {
     return (
       <div style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
-        <Navbar onNavigate={onNavigate} />
+        <Navbar />
         <SketchFilter />
 
         {/* ── Doodle decorations ── */}
@@ -295,7 +341,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
 
   return (
     <div style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
-      <Navbar onNavigate={onNavigate} />
+      <Navbar />
       <SketchFilter />
 
       {/* ── Doodle decorations ── */}
@@ -652,6 +698,7 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
 
                       {/* Add to cart - Enhanced */}
                       <motion.button
+                        onClick={handleAddToCart}
                         whileHover={{ scale: 1.02, boxShadow: '0 12px 24px rgba(21,128,61,0.3)' }}
                         whileTap={{ scale: 0.98 }}
                         style={{
@@ -813,6 +860,38 @@ export default function Products({ onNavigate }: { onNavigate?: (view: string) =
           }
         }
       `}</style>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, x: -20 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: -20, x: -20 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: 'fixed',
+              bottom: 24,
+              left: 24,
+              background: G,
+              color: '#fff',
+              padding: '16px 24px',
+              borderRadius: 12,
+              fontFamily: FS,
+              fontSize: 14,
+              fontWeight: 600,
+              boxShadow: '0 8px 24px rgba(21,128,61,0.3)',
+              zIndex: 1000,
+              maxWidth: 300,
+            }}
+          >
+            {toastMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Auth Modal */}
+      <AuthModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
 }

@@ -1,12 +1,5 @@
-'use client';
-
-import { Suspense } from 'react';
-import HomeContent from './home-content';
+import LandingPage from '@/components/LandingPage/LandingPage';
 
 export default function Home() {
-  return (
-    <Suspense fallback={null}>
-      <HomeContent />
-    </Suspense>
-  );
+  return <LandingPage />;
 }

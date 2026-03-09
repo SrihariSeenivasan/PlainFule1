@@ -2,26 +2,30 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { authAPI } from '@/lib/api';
 
 interface ForgotPasswordProps {
   onSwitchView?: (view: 'login' | 'register' | 'forgot') => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Dummy implementation - will be replaced with backend
-    console.log('Reset email sent to:', email);
-    setTimeout(() => {
-      setLoading(false);
+    setError('');
+
+    try {
+      await authAPI.forgotPassword(email);
       setSubmitted(true);
-    }, 1500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send reset email');
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,6 +61,12 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
             <>
               {/* Reset Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                    <p className="text-red-800 text-xs sm:text-sm">{error}</p>
+                  </div>
+                )}
+
                 <div>
                   <label htmlFor="email" className="block text-xs sm:text-sm font-semibold text-gray-900 mb-1.5">
                     Email Address
@@ -69,6 +79,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
                     placeholder="you@example.com"
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all"
                     required
+                    disabled={loading}
                   />
                 </div>
 

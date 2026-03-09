@@ -3,6 +3,9 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import { AuthRequest } from '../middleware/auth';
 import { User } from '../models/User';
 import { AppError } from '../middleware/errorHandler';
+import emailService from '../services/emailService';
+import { emailTemplates } from '../services/emailTemplates';
+import prisma from '../config/database';
 
 export const register = async (req: AuthRequest, res: Response) => {
   const { email, password, firstName, lastName, phone, role = 'USER' } = req.body;
@@ -134,4 +137,99 @@ export const googleAuth = async (req: AuthRequest, res: Response) => {
     token: jwtToken,
     user: userWithoutPassword
   });
+};
+
+// POST /api/auth/forgot-password — send password reset email
+export const forgotPassword = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new AppError(400, 'Email is required');
+  }
+
+  const user = await User.findByEmail(email);
+  if (!user) {
+    // Don't reveal if email exists for security
+    res.json({ message: 'If an account exists with this email, a password reset link has been sent' });
+    return;
+  }
+
+  try {
+    // Generate reset token (valid for 15 minutes)
+    const resetToken = jwt.sign(
+      { id: user.id, email: user.email, type: 'reset' },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: '15m' }
+    );
+
+    // Create reset link
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${encodeURIComponent(resetToken)}`;
+
+    // Send password reset email
+    const emailHtml = emailTemplates.passwordReset({
+      userName: user.firstName || 'User',
+      resetLink,
+      expiryTime: '15 minutes',
+    });
+
+    await emailService.sendEmail({
+      to: user.email,
+      subject: 'Password Reset Request - PlainFuel',
+      html: emailHtml,
+    });
+
+    res.json({ message: 'If an account exists with this email, a password reset link has been sent' });
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    throw new AppError(500, 'Failed to send password reset email');
+  }
+};
+
+// POST /api/auth/reset-password — reset password with token
+export const resetPassword = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { token, newPassword, confirmPassword } = req.body;
+
+  if (!token || !newPassword || !confirmPassword) {
+    throw new AppError(400, 'Token, new password, and confirm password are required');
+  }
+
+  if (newPassword !== confirmPassword) {
+    throw new AppError(400, 'Passwords do not match');
+  }
+
+  if (newPassword.length < 6) {
+    throw new AppError(400, 'Password must be at least 6 characters long');
+  }
+
+  try {
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { id: number; email: string; type: string };
+
+    if (decoded.type !== 'reset') {
+      throw new AppError(400, 'Invalid token');
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (!user) {
+      throw new AppError(404, 'User not found');
+    }
+
+    // Hash the new password using the User model
+    const hashedPassword = await User.hashPassword(newPassword);
+
+    // Update password
+    await prisma.user.update({
+      where: { id: decoded.id },
+      data: { password: hashedPassword },
+    });
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new AppError(400, 'Password reset link has expired');
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      throw new AppError(400, 'Invalid password reset link');
+    }
+    throw error;
+  }
 };
