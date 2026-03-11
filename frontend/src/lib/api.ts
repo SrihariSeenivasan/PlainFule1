@@ -1,4 +1,23 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Dynamically determine API URL based on current hostname
+const getApiUrl = () => {
+  if (typeof window === 'undefined') {
+    // Server-side: use default
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  }
+  
+  // Client-side: detect which domain we're on
+  const hostname = window.location.hostname;
+  
+  if (hostname.includes('plainfuel.in')) {
+    // Production domain
+    return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://app.plainfuel.in:5000/api';
+  }
+  
+  // Development/localhost
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+};
+
+const API_URL = getApiUrl();
 
 export interface User {
   id: number;
