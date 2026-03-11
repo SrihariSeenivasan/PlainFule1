@@ -10,7 +10,7 @@ const getApiUrl = () => {
   
   if (hostname.includes('plainfuel.in')) {
     // Production domain
-    return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://app.plainfuel.in:5000/api';
+    return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://app.plainfuel.in/api';
   }
   
   // Development/localhost
