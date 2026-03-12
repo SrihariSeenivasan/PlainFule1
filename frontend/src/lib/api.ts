@@ -141,6 +141,15 @@ export interface Product {
   reviews?: number;
 }
 
+export interface FAQ {
+  id: number;
+  question: string;
+  answer: string;
+  category?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthResponse {
   message: string;
   token: string;
@@ -320,6 +329,62 @@ export const adminAPI = {
 
   deleteProduct: (id: number) =>
     apiRequest(`/admin/products/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Cart APIs
+export const cartAPI = {
+  getCart: () => apiRequest('/cart'),
+
+  addToCart: (data: {
+    productId: number;
+    packageId: string;
+    quantity: number;
+    price: number;
+  }) =>
+    apiRequest('/cart/items', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateCartItem: (itemId: number, quantity: number) =>
+    apiRequest(`/cart/items/${itemId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ quantity }),
+    }),
+
+  removeFromCart: (itemId: number) =>
+    apiRequest(`/cart/items/${itemId}`, {
+      method: 'DELETE',
+    }),
+
+  clearCart: () =>
+    apiRequest('/cart', {
+      method: 'DELETE',
+    }),
+};
+
+// FAQ APIs
+export const faqAPI = {
+  getFAQs: () => apiRequest<FAQ[]>('/faqs'),
+
+  getFAQById: (id: number) => apiRequest<FAQ>(`/faqs/${id}`),
+
+  createFAQ: (data: { question: string; answer: string; category?: string }) =>
+    apiRequest<FAQ>('/faqs', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateFAQ: (id: number, data: { question?: string; answer?: string; category?: string }) =>
+    apiRequest<FAQ>(`/faqs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  deleteFAQ: (id: number) =>
+    apiRequest<{ message: string }>(`/faqs/${id}`, {
       method: 'DELETE',
     }),
 };

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authMiddleware, userMiddleware } from '../middleware/auth';
+import { authMiddleware, adminMiddleware } from '../middleware/auth';
 import * as faqController from '../controllers/faqController';
 
 const router = Router();
@@ -10,7 +10,7 @@ router.get('/:id', faqController.getFAQById);
 
 // Admin only routes - authentication required
 router.use(authMiddleware);
-router.use(userMiddleware);
+router.use(adminMiddleware);
 
 router.post('/', faqController.createFAQ);
 router.put('/:id', faqController.updateFAQ);
