@@ -5,186 +5,370 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Package, CreditCard,
-  ShoppingBag, Users, Home, LogOut, MoreHorizontal, X, Boxes, HelpCircle, RotateCcw,
+  ShoppingBag, Users, Home, LogOut,
+  MoreHorizontal, X, Boxes, HelpCircle, RotateCcw,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
+const FONT = "'Segoe UI', 'Roboto', sans-serif";
+
+// ─── Nav config ───────────────────────────────────────────────────────────────
+
+interface NavItem {
+  href: string;
+  icon: React.ComponentType<{ size?: number }>;
+  label: string;
+}
+
+const ALL_ITEMS: NavItem[] = [
+  { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
+  { href: '/admin/returns',   icon: RotateCcw,       label: 'Returns'   },
+  { href: '/admin/payments',  icon: CreditCard,      label: 'Payments'  },
+  { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
+  { href: '/admin/inventory', icon: Boxes,           label: 'Inventory' },
+  { href: '/admin/users',     icon: Users,           label: 'Users'     },
+  { href: '/admin/faq',       icon: HelpCircle,      label: 'FAQs'      },
+];
+
+const PRIMARY_NAV: NavItem[] = [
+  { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
+  { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
+];
+
+const MORE_ITEMS: NavItem[] = [
+  { href: '/admin/payments',  icon: CreditCard,  label: 'Payments'  },
+  { href: '/admin/returns',   icon: RotateCcw,   label: 'Returns'   },
+  { href: '/admin/inventory', icon: Boxes,       label: 'Inventory' },
+  { href: '/admin/users',     icon: Users,       label: 'Users'     },
+  { href: '/admin/faq',       icon: HelpCircle,  label: 'FAQs'      },
+];
+
+// ─── Desktop nav link ─────────────────────────────────────────────────────────
+
+interface DesktopLinkProps { item: NavItem; active: boolean }
+
+function DesktopLink({ item, active }: DesktopLinkProps) {
+  const Icon = item.icon;
+  return (
+    <Link
+      href={item.href}
+      style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '9px 12px', borderRadius: 8,
+        textDecoration: 'none',
+        fontFamily: FONT,
+        fontSize: 13,
+        fontWeight: active ? 600 : 400,
+        color: active ? '#f9fafb' : '#6b7280',
+        background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
+        transition: 'background 0.13s, color 0.13s',
+        borderLeft: active ? '3px solid #22c55e' : '3px solid transparent',
+        paddingLeft: active ? 10 : 12,
+      }}
+      onMouseEnter={e => {
+        if (!active) {
+          const el = e.currentTarget as HTMLAnchorElement;
+          el.style.background = 'rgba(255,255,255,0.04)';
+          el.style.color = '#d1d5db';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!active) {
+          const el = e.currentTarget as HTMLAnchorElement;
+          el.style.background = 'transparent';
+          el.style.color = '#6b7280';
+        }
+      }}
+    >
+      <Icon size={16} />
+      <span style={{ flex: 1 }}>{item.label}</span>
+    </Link>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export default function AdminSidebar() {
   const { logout } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
+  const router     = useRouter();
+  const pathname   = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
-
-  // All sidebar items (desktop)
-  const allItems = [
-    { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
-    { href: '/admin/returns',   icon: RotateCcw,       label: 'Returns'   },
-    { href: '/admin/payments',  icon: CreditCard,      label: 'Payments'  },
-    { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
-    { href: '/admin/inventory', icon: Boxes,           label: 'Inventory' },
-    { href: '/admin/users',     icon: Users,           label: 'Users'     },
-    { href: '/admin/faq',       icon: HelpCircle,      label: 'FAQs'      },
-  ];
-
-  // Bottom nav: 3 primary tabs always visible
-  const primaryNav = [
-    { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/admin/orders',    icon: Package,         label: 'Orders'    },
-    { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
-  ];
-
-  // "More" drawer items
-  const moreItems = [
-    { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
-    { href: '/admin/returns',  icon: RotateCcw,  label: 'Returns'  },
-    { href: '/admin/inventory', icon: Boxes,     label: 'Inventory' },
-    { href: '/admin/users',    icon: Users,      label: 'Users'    },
-    { href: '/admin/faq',      icon: HelpCircle, label: 'FAQs'     },
-  ];
-
+  const handleLogout = () => { logout(); router.push('/'); };
   const isActive = (href: string) => pathname === href;
-
 
   return (
     <>
-      {/* ── Desktop Sidebar (md+) ── */}
-      <aside className="hidden md:flex flex-col w-64 bg-gray-900 text-white h-full flex-shrink-0">
-        <div className="p-6 border-b border-gray-800">
-          <h1 className="text-2xl font-bold">PlainFuel</h1>
-          <p className="text-gray-400 text-sm mt-1">Admin Panel</p>
+      <style>{`
+        @keyframes sb-up {
+          from { transform: translateY(20px); opacity: 0; }
+          to   { transform: translateY(0);    opacity: 1; }
+        }
+        .sb-drawer { animation: sb-up 0.2s ease forwards; }
+
+        /* Desktop sidebar — visible md+ */
+        .sb-sidebar { display: none; }
+        @media (min-width: 768px) { .sb-sidebar { display: flex; } }
+
+        /* Mobile bottom bar — hidden md+ */
+        .sb-bottom  { display: flex; }
+        @media (min-width: 768px) { .sb-bottom { display: none; } }
+
+        .sb-tab {
+          flex: 1; display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          gap: 3px; padding: 7px 4px;
+          text-decoration: none;
+          color: #4b5563;
+          font-family: ${FONT};
+          transition: color 0.14s;
+          background: none; border: none; cursor: pointer;
+        }
+        .sb-tab:hover  { color: #9ca3af; }
+        .sb-tab.sb-act { color: #22c55e; }
+        .sb-tab span   { font-size: 10px; font-weight: 500; }
+        .sb-tab.sb-act span { font-weight: 700; }
+      `}</style>
+
+      {/* ─── Desktop Sidebar ─── */}
+      <aside className="sb-sidebar" style={{
+        flexDirection: 'column',
+        width: 216,
+        background: '#0b1120',
+        borderRight: '1px solid rgba(255,255,255,0.07)',
+        height: '100%',
+        flexShrink: 0,
+        fontFamily: FONT,
+      }}>
+        {/* Brand */}
+        <div style={{
+          padding: '18px 16px 14px',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          flexShrink: 0,
+          display: 'flex', alignItems: 'center', gap: 10,
+        }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 9,
+            background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <div>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: '#f9fafb', lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+              PlainFuel
+            </p>
+            <p style={{ margin: 0, fontSize: 10, color: '#374151', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              Admin Panel
+            </p>
+          </div>
         </div>
 
-        <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
-          {allItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive(item.href)
-                  ? 'bg-green-600 text-white'
-                  : 'hover:bg-gray-800 text-gray-300'
-              }`}
-            >
-              <item.icon size={20} />
-              <span>{item.label}</span>
-            </Link>
+        {/* Section label */}
+        <div style={{ padding: '16px 16px 6px' }}>
+          <p style={{ margin: 0, fontSize: 10, fontWeight: 700, color: '#1f2937', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            Menu
+          </p>
+        </div>
+
+        {/* Nav */}
+        <nav style={{
+          flex: 1, padding: '0 8px',
+          overflowY: 'auto',
+          display: 'flex', flexDirection: 'column', gap: 1,
+        }}>
+          {ALL_ITEMS.map(item => (
+            <DesktopLink key={item.href} item={item} active={isActive(item.href)} />
           ))}
         </nav>
 
-        <div className="border-t border-gray-800 mx-4" />
-
-        <nav className="p-4">
+        {/* Footer */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '8px 8px 0' }}>
           <Link
             href="/?view=home"
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 transition-colors"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '9px 12px', borderRadius: 8,
+              textDecoration: 'none', color: '#4b5563',
+              fontSize: 13, fontWeight: 400, fontFamily: FONT,
+              transition: 'color 0.13s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#9ca3af'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#4b5563'; }}
           >
-            <Home size={20} />
-            <span>Back to Home</span>
+            <Home size={16} />
+            Back to Home
           </Link>
-        </nav>
+        </div>
 
-        <div className="p-4 border-t border-gray-800">
+        <div style={{ padding: '8px' }}>
           <button
+            type="button"
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', gap: 8,
+              padding: '9px 16px',
+              background: 'rgba(239,68,68,0.08)',
+              border: '1px solid rgba(239,68,68,0.18)',
+              borderRadius: 8, color: '#ef4444',
+              fontSize: 13, fontWeight: 600,
+              fontFamily: FONT, cursor: 'pointer',
+              transition: 'background 0.13s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.14)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,0.08)'; }}
           >
-            <LogOut size={18} />
-            Logout
+            <LogOut size={14} /> Logout
           </button>
         </div>
       </aside>
 
-      {/* ── Mobile: backdrop ── */}
+      {/* ─── Mobile: backdrop ─── */}
       {moreOpen && (
         <div
-          className="md:hidden fixed inset-0 z-40 bg-black/50"
+          style={{
+            position: 'fixed', inset: 0, zIndex: 40,
+            background: 'rgba(0,0,0,0.55)',
+            backdropFilter: 'blur(3px)',
+          }}
           onClick={() => setMoreOpen(false)}
         />
       )}
 
-      {/* ── Mobile: "More" slide-up drawer ── */}
-      <div
-        className={`md:hidden fixed bottom-16 left-0 right-0 z-50 bg-gray-900 rounded-t-2xl border-t border-gray-700 transition-transform duration-300 ${
-          moreOpen ? 'translate-y-0' : 'translate-y-full'
-        }`}
-      >
-        <div className="flex items-center justify-between px-5 pt-4 pb-2">
-          <span className="text-white font-semibold text-sm">More</span>
-          <button onClick={() => setMoreOpen(false)} className="text-gray-400 hover:text-white">
-            <X size={20} />
-          </button>
-        </div>
+      {/* ─── Mobile: More drawer ─── */}
+      {moreOpen && (
+        <div className="sb-drawer" style={{
+          position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 50,
+          background: '#0f172a',
+          borderTop: '1px solid rgba(255,255,255,0.09)',
+          borderRadius: '16px 16px 0 0',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+          fontFamily: FONT,
+        }}>
+          {/* handle */}
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 2px' }}>
+            <div style={{ width: 32, height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.1)' }} />
+          </div>
 
-        <div className="px-4 pb-6 space-y-1">
-          {moreItems.map((item) => (
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '8px 18px 10px',
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#d1d5db' }}>More</span>
+            <button
+              type="button"
+              onClick={() => setMoreOpen(false)}
+              style={{ background: 'none', border: 'none', color: '#4b5563', cursor: 'pointer', display: 'flex', padding: 4 }}
+            >
+              <X size={17} />
+            </button>
+          </div>
+
+          <div style={{ padding: '0 8px 8px', display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {MORE_ITEMS.map(item => {
+              const Icon  = item.icon;
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMoreOpen(false)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '11px 14px', borderRadius: 8,
+                    textDecoration: 'none',
+                    fontFamily: FONT, fontSize: 14,
+                    fontWeight: active ? 600 : 400,
+                    color: active ? '#f9fafb' : '#9ca3af',
+                    background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
+                    borderLeft: active ? '3px solid #22c55e' : '3px solid transparent',
+                    paddingLeft: active ? 12 : 14,
+                  }}
+                >
+                  <Icon size={18} />
+                  {item.label}
+                </Link>
+              );
+            })}
+
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', margin: '6px 4px' }} />
+
+            <Link
+              href="/?view=home"
+              onClick={() => setMoreOpen(false)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '11px 14px', borderRadius: 8,
+                textDecoration: 'none', color: '#4b5563',
+                fontFamily: FONT, fontSize: 14, fontWeight: 400,
+              }}
+            >
+              <Home size={18} /> Back to Home
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '11px 14px', borderRadius: 8,
+                background: 'none', border: 'none',
+                color: '#ef4444', fontFamily: FONT,
+                fontSize: 14, fontWeight: 600,
+                cursor: 'pointer', width: '100%', textAlign: 'left',
+              }}
+            >
+              <LogOut size={18} /> Logout
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Mobile: bottom tab bar ─── */}
+      <nav className="sb-bottom" style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 50,
+        background: '#0b1120',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        alignItems: 'stretch',
+      }}>
+        {PRIMARY_NAV.map(item => {
+          const Icon   = item.icon;
+          const active = isActive(item.href);
+          return (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMoreOpen(false)}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive(item.href)
-                  ? 'bg-green-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-800'
-              }`}
+              className={`sb-tab${active ? ' sb-act' : ''}`}
+              style={{ position: 'relative' }}
             >
-              <item.icon size={20} />
-              <span className="text-sm font-medium">{item.label}</span>
+              {active && (
+                <span style={{
+                  position: 'absolute', top: 0, left: '25%', right: '25%',
+                  height: 2, background: '#22c55e',
+                  borderRadius: '0 0 2px 2px',
+                }} />
+              )}
+              <Icon size={20} />
+              <span>{item.label}</span>
             </Link>
-          ))}
-
-          <div className="border-t border-gray-700 my-2" />
-
-          <Link
-            href="/?view=home"
-            onClick={() => setMoreOpen(false)}
-            className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors"
-          >
-            <Home size={20} />
-            <span className="text-sm font-medium">Back to Home</span>
-          </Link>
-
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 transition-colors"
-          >
-            <LogOut size={20} />
-            <span className="text-sm font-medium">Logout</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ── Mobile: bottom tab bar ── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-gray-900 border-t border-gray-800 flex items-center justify-around px-1 py-2">
-        {primaryNav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={() => setMoreOpen(false)}
-            className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors flex-1 ${
-              isActive(item.href)
-                ? 'text-green-400'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            <item.icon size={21} />
-            <span className="text-[10px] font-medium">{item.label}</span>
-          </Link>
-        ))}
+          );
+        })}
 
         <button
-          onClick={() => setMoreOpen((v) => !v)}
-          className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg transition-colors flex-1 ${
-            moreOpen ? 'text-green-400' : 'text-gray-400 hover:text-white'
-          }`}
+          type="button"
+          className={`sb-tab${moreOpen ? ' sb-act' : ''}`}
+          onClick={() => setMoreOpen(v => !v)}
         >
-          <MoreHorizontal size={21} />
-          <span className="text-[10px] font-medium">More</span>
+          <MoreHorizontal size={20} />
+          <span>More</span>
         </button>
       </nav>
     </>

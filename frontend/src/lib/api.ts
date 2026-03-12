@@ -1,5 +1,5 @@
 // Dynamically determine API URL based on current hostname
-const getApiUrl = () => {
+export const getApiUrl = () => {
   if (typeof window === 'undefined') {
     // Server-side: use default
     return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';

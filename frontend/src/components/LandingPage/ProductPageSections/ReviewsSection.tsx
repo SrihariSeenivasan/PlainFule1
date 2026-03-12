@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
+import { getApiUrl } from '@/lib/api';
 import AuthModal from '@/components/AuthModal';
 
 // ── Theme Constants ──
@@ -99,7 +100,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
   const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const apiUrl = getApiUrl();
       const [reviewsRes, statsRes] = await Promise.all([
         fetch(`${apiUrl}/reviews/product/${productId}`),
         fetch(`${apiUrl}/reviews/stats/${productId}`),
@@ -143,7 +144,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
 
     try {
       setSubmitting(true);
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const apiUrl = getApiUrl();
       const token = localStorage.getItem('token');
 
       const response = await fetch(`${apiUrl}/reviews`, {

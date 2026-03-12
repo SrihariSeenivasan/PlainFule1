@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
+import { getApiUrl } from '@/lib/api';
 
 // ── Theme Constants ──
 const FD = "'Playfair Display', Georgia, serif";
@@ -151,7 +152,7 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
   const fetchFaqs = useCallback(async () => {
       try {
         setLoading(true);
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        const apiUrl = getApiUrl();
         
         // Build query params
         const params = new URLSearchParams();

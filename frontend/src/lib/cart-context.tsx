@@ -2,25 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './auth-context';
-
-// Match the same URL detection logic as api.ts
-const getApiUrl = () => {
-  if (typeof window === 'undefined') {
-    // Server-side: use default
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-  }
-  
-  // Client-side: detect which domain we're on
-  const hostname = window.location.hostname;
-  
-  if (hostname.includes('plainfuel.in')) {
-    // Production domain
-    return process.env.NEXT_PUBLIC_PRODUCTION_API_URL || 'https://app.plainfuel.in/api';
-  }
-  
-  // Development/localhost
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-};
+import { getApiUrl } from './api';
 
 const API_URL = getApiUrl();
 

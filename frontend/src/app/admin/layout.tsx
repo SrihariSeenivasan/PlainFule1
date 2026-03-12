@@ -26,12 +26,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-gray-50">
+    <div
+      className="flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-900"
+      style={{ height: '100dvh' }}
+    >
       <AdminHeader />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         <AdminSidebar />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6">
-          {children}
+        <main
+          className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900"
+          style={{
+            padding: 'clamp(12px, 3vw, 24px)',
+            paddingBottom: 'max(env(safe-area-inset-bottom, 0px) + 80px, 96px)',
+          }}
+        >
+          <div className="max-w-screen-2xl mx-auto md:pb-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>
