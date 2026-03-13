@@ -100,20 +100,24 @@ export const Product = {
         where: { productId: id },
       });
 
-      // Validate and normalize package data
-      const normalizedPackages = packages.map(pkg => ({
-        ...pkg,
-        price: Number(pkg.price) || 0,
-        origPrice: pkg.origPrice ? Number(pkg.origPrice) : null,
-        daysCount: Number(pkg.daysCount) || 0,
-        pouches: Number(pkg.pouches) || 0,
-        stock: pkg.stock ? Number(pkg.stock) : 0,
-        images: Array.isArray(pkg.images) ? pkg.images : [],
-        benefits: Array.isArray(pkg.benefits) ? pkg.benefits : [],
-        badges: Array.isArray(pkg.badges) ? pkg.badges : [],
-        variants: Array.isArray(pkg.variants) ? pkg.variants : [],
-        nutrients: Array.isArray(pkg.nutrients) ? pkg.nutrients : [],
-      }));
+      // Validate and normalize package data - remove fields that shouldn't be in create
+      const normalizedPackages = packages.map(pkg => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { productId, createdAt, updatedAt, ...cleanPkg } = pkg as any;
+        return {
+          ...cleanPkg,
+          price: Number(cleanPkg.price) || 0,
+          origPrice: cleanPkg.origPrice ? Number(cleanPkg.origPrice) : null,
+          daysCount: Number(cleanPkg.daysCount) || 0,
+          pouches: Number(cleanPkg.pouches) || 0,
+          stock: cleanPkg.stock ? Number(cleanPkg.stock) : 0,
+          images: Array.isArray(cleanPkg.images) ? cleanPkg.images : [],
+          benefits: Array.isArray(cleanPkg.benefits) ? cleanPkg.benefits : [],
+          badges: Array.isArray(cleanPkg.badges) ? cleanPkg.badges : [],
+          variants: Array.isArray(cleanPkg.variants) ? cleanPkg.variants : [],
+          nutrients: Array.isArray(cleanPkg.nutrients) ? cleanPkg.nutrients : [],
+        };
+      });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return prisma.product.update({

@@ -16,6 +16,7 @@ import productRoutes from './routes/productRoutes';
 import faqRoutes from './routes/faqRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import cartRoutes from './routes/cartRoutes';
+import uploadRoutes from './routes/uploadRoutes';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ app.get('/health', (_req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/upload', uploadRoutes);
 app.use('/api/user', authMiddleware, userRoutes);
 app.use('/api/admin', authMiddleware, adminRoutes);
 app.use('/api/orders', authMiddleware, orderRoutes);
