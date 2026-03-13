@@ -9,8 +9,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No files provided' }, { status: 400 });
     }
 
-    // Get the backend API URL
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    // Determine backend URL based on environment
+    let backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    
+    // In production, use PRODUCTION_API_URL if available
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_PRODUCTION_API_URL) {
+      backendUrl = process.env.NEXT_PUBLIC_PRODUCTION_API_URL;
+    }
     
     // Forward the request to the backend
     const backendFormData = new FormData();

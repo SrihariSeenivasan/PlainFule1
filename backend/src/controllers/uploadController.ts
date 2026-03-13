@@ -20,13 +20,25 @@ const S3_BASE_URL = process.env.AWS_S3_BASE_URL || `https://${BUCKET_NAME}.s3.am
 
 export const uploadImages = async (req: Request, res: Response) => {
   try {
+    console.log('[Upload] Request received', {
+      bucketConfigured: !!BUCKET_NAME,
+      filesCount: req.files ? (Array.isArray(req.files) ? req.files.length : 1) : 0,
+      region: process.env.AWS_REGION,
+    });
+
     // Validate S3 configuration
     if (!BUCKET_NAME || !process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+      console.error('[Upload] S3 configuration missing', {
+        bucket: !!BUCKET_NAME,
+        accessKey: !!process.env.AWS_ACCESS_KEY_ID,
+        secretKey: !!process.env.AWS_SECRET_ACCESS_KEY,
+      });
       throw new AppError(500, 'Server not properly configured for uploads');
     }
 
     // Check if files are present
     if (!req.files) {
+      console.error('[Upload] No files provided in request');
       throw new AppError(400, 'No files provided');
     }
 
@@ -39,6 +51,7 @@ export const uploadImages = async (req: Request, res: Response) => {
     }
 
     if (files.length === 0) {
+      console.error('[Upload] Files array is empty after parsing');
       throw new AppError(400, 'No files provided');
     }
 
@@ -46,6 +59,7 @@ export const uploadImages = async (req: Request, res: Response) => {
       throw new AppError(400, `Maximum ${MAX_FILES} images allowed`);
     }
 
+    console.log('[Upload] Processing', files.length, 'files');
     const urls: string[] = [];
 
     for (const file of files) {
@@ -67,6 +81,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
       // Upload to S3
       try {
+        console.log('[Upload] Uploading to S3:', { bucket: BUCKET_NAME, key: filename });
         await s3Client.send(
           new PutObjectCommand({
             Bucket: BUCKET_NAME,
@@ -80,18 +95,21 @@ export const uploadImages = async (req: Request, res: Response) => {
         // Construct the full URL
         const url = `${S3_BASE_URL}/${filename}`;
         urls.push(url);
+        console.log('[Upload] Successfully uploaded:', url);
       } catch (uploadErr) {
-        console.error('S3 upload error for file:', file.originalname, uploadErr);
+        console.error('[Upload] S3 upload error for file:', file.originalname, uploadErr);
         throw new AppError(500, `Failed to upload "${file.originalname}" to storage`);
       }
     }
 
+    console.log('[Upload] Success:', { uploadedCount: urls.length });
     res.json({ urls });
   } catch (err) {
     if (err instanceof AppError) {
+      console.error('[Upload] AppError:', err.statusCode, err.message);
       throw err;
     }
-    console.error('Upload error:', err);
+    console.error('[Upload] Unexpected error:', err);
     throw new AppError(500, 'Upload failed');
   }
 };
