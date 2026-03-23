@@ -8,22 +8,26 @@ import Productsection from './LandingPageSections/Productsection';
 import MicronutrientGapSection from './LandingPageSections/MicronutrientGapSection';
 import DoctorsReview from './LandingPageSections/DoctorsReview';
 import ProblemSection from './LandingPageSections/TheProblem';
+import WhyPlainFuel from './LandingPageSections/WhyPlainFuel';
+import CanWeGetFromFood from './LandingPageSections/CanWeGetFromFood';
+import WhatDoWeDoToday from './LandingPageSections/Whatdowedotoday';
 
-export default function LandingPage({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[var(--background)]">
       {/* This div clips horizontal overflow WITHOUT breaking sticky */}
       <div style={{ overflowX: 'clip' }}>
-        <Navbar onNavigate={onNavigate} />
+        <Navbar />
         <Herosection />
-        <ProblemSection />
-        <MicronutrientGapSection />
+        <WhyPlainFuel />
+        <CanWeGetFromFood />
+        <WhatDoWeDoToday />
         <Productsection />
         <HAWDsection />
         <Blogsection />
         <Peoplesection />
         <DoctorsReview />
-        <FinalCTA onNavigate={onNavigate} />
+        <FinalCTA />
       </div>
     </main>
   );

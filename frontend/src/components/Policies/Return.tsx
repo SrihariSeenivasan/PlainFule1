@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 
-export default function ReturnPolicy({ onNavigate }: { onNavigate?: (view: string) => void } = {}) {
+export default function ReturnPolicy() {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -22,7 +22,7 @@ export default function ReturnPolicy({ onNavigate }: { onNavigate?: (view: strin
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
-      <Navbar onNavigate={onNavigate} />
+      <Navbar />
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
       <motion.div
         className="max-w-4xl mx-auto"
