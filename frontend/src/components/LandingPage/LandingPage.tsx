@@ -8,6 +8,9 @@ import Productsection from './LandingPageSections/Productsection';
 import MicronutrientGapSection from './LandingPageSections/MicronutrientGapSection';
 import DoctorsReview from './LandingPageSections/DoctorsReview';
 import ProblemSection from './LandingPageSections/TheProblem';
+import WhyPlainFuel from './LandingPageSections/WhyPlainFuel';
+import CanWeGetFromFood from './LandingPageSections/CanWeGetFromFood';
+import WhatDoWeDoToday from './LandingPageSections/Whatdowedotoday';
 
 export default function LandingPage() {
   return (
@@ -16,8 +19,9 @@ export default function LandingPage() {
       <div style={{ overflowX: 'clip' }}>
         <Navbar />
         <Herosection />
-        <ProblemSection />
-        <MicronutrientGapSection />
+        <WhyPlainFuel />
+        <CanWeGetFromFood />
+        <WhatDoWeDoToday />
         <Productsection />
         <HAWDsection />
         <Blogsection />
