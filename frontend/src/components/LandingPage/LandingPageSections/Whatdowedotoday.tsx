@@ -1,5 +1,6 @@
 'use client';
 
+import { Bold } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -244,12 +245,12 @@ export default function WhatDoWeDoToday() {
                     <div className="text-center mb-8" style={fadeUp('0s')}>
                         <div className="inline-flex items-center gap-2 mb-4">
                             <div className="w-2 h-2 rounded-full bg-[#22c55e] dot-pulse" />
-                            <span className="text-[#15803d] tracking-[0.18em] uppercase font-semibold" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 11 }}>
+                            <span className="text-[#15803d] tracking-[0.18em] uppercase font-semibold" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 16 }}>
                                 What do we do today?
                             </span>
                         </div>
                         <h2 className="text-[#111410] leading-[1.08] tracking-tight mb-2" style={{ fontFamily: "'Fraunces',serif", fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 900 }}>
-                            Turn to{' '}
+                            To fill this gap, most people turn to{' '}
                             <span className="relative text-[#15803d] italic inline-block">
                                 supplements.
                                 <svg viewBox="0 0 300 14" preserveAspectRatio="none" height={9} className="absolute bottom-[-3px] left-0 w-full pointer-events-none">
@@ -258,7 +259,7 @@ export default function WhatDoWeDoToday() {
                             </span>
                         </h2>
                         <p className="text-[#4b5563] mt-3" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15 }}>
-                            Most people fill the nutrition gap this way — but this creates <strong className="text-[#dc2626]">another problem.</strong>
+                            But this creates <strong className="text-[#dc2626]">another problem.</strong>
                         </p>
                     </div>
 
@@ -270,7 +271,7 @@ export default function WhatDoWeDoToday() {
 
                             {/* Floating Pills + 3 Problem Cards */}
                             <div className="rounded-2xl border-2 border-[#0f4a23] overflow-hidden p-5" style={{ background: '#fefce8', boxShadow: '4px 5px 0 #0f4a23', ...fadeUp('0.1s') }}>
-                                <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-3" style={{ fontFamily: "'DM Mono',monospace", fontSize: 10 }}>The supplement problem</p>
+                                <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-3" style={{ fontFamily: "'DM Mono',monospace", fontSize: 14 }}>The supplement problem</p>
 
                                 {/* Pills cluster */}
                                 <div className="relative h-44 flex items-center justify-center mb-3">
@@ -292,7 +293,7 @@ export default function WhatDoWeDoToday() {
                                             style={{ background: card.bg, transform: `rotate(${card.rotate})`, boxShadow: '3px 4px 0 #0f4a23' }}
                                         >
                                             <div className="flex items-center justify-center">{card.illustration}</div>
-                                            <p className="text-center" style={{ fontFamily: "'Caveat',cursive", fontSize: 14, fontWeight: 700, color: '#0f4a23', whiteSpace: 'pre-line' }}>{card.title}</p>
+                                            <p className="text-center" style={{ fontFamily: "'Caveat',cursive", fontWeight: 'bold', fontSize: 18, color: '#0f4a23', whiteSpace: 'pre-line' }}>{card.title}</p>
                                             <svg viewBox="0 0 100 6" width={70}>
                                                 <path d="M4,4 Q50,1 96,4" fill="none" stroke={card.uc} strokeWidth={2.5} strokeLinecap="round" />
                                             </svg>
@@ -307,50 +308,17 @@ export default function WhatDoWeDoToday() {
                                     <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(21,128,61,0.08) 27px, rgba(21,128,61,0.08) 28px)', backgroundPositionY: 28 }} />
                                     <div className="absolute left-[20px] top-0 bottom-0 w-[2px] bg-red-300 opacity-30" />
                                     <div className="relative z-10 p-4 pl-8">
-                                        <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-2" style={{ fontFamily: "'DM Mono',monospace", fontSize: 10 }}>In daily life →</p>
-                                        <p className="text-[#0f4a23] leading-[1.7]" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 14 }}>
+                                        <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-2" style={{ fontFamily: "'DM Mono',monospace", fontSize: 16 }}>In daily life →</p>
+                                        <p className="text-[#0f4a23] leading-[1.7]" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 16 }}>
                                             In a <strong>busy daily life,</strong> maintaining this routine becomes hard.<br />
-                                            Most people start with <strong>good intent</strong> but stop within days or weeks.
+                                            That’s why most people start with <strong>good intent</strong> but stop within a few days or weeks.
+
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Timeline */}
-                            <div className="rounded-2xl border-2 border-[#0f4a23] p-4" style={{ background: '#f0fdf4', boxShadow: '4px 5px 0 #0f4a23', ...fadeUp('0.25s') }}>
-                                <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-3" style={{ fontFamily: "'DM Mono',monospace", fontSize: 10 }}>How it usually goes</p>
 
-                                {/* Day labels */}
-                                <div className="relative h-5 mb-1">
-                                    {TIMELINE_STEPS.map((step, i) => (
-                                        <span key={i} className="absolute -translate-x-1/2 font-bold" style={{ fontFamily: "'Caveat',cursive", left: step.left, color: step.color, fontSize: 12 }}>{step.label}</span>
-                                    ))}
-                                    <span className="absolute -translate-x-1/2 font-bold text-[#dc2626]" style={{ fontFamily: "'Caveat',cursive", left: '90%', fontSize: 13 }}>Stop.</span>
-                                </div>
-
-                                {/* Track */}
-                                <div className="relative h-3 rounded-full bg-slate-100 mx-1">
-                                    <div className="absolute inset-y-0 left-0 rounded-full" style={{ width: animated ? '75%' : '0%', background: 'linear-gradient(90deg, #15803d 0%, #15803d 60%, rgba(21,128,61,0) 100%)', transition: 'width 1.2s cubic-bezier(0.22,1,0.36,1)' }} />
-                                    {TIMELINE_STEPS.map((step, i) => (
-                                        <div key={i} className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-sm" style={{ left: step.left, background: step.bgColor, fontSize: 9, fontFamily: "'Fraunces',serif", fontWeight: 900 }}>{step.day}</div>
-                                    ))}
-                                    <div className="absolute top-[-5px] bottom-[-5px] border-r-2 border-dashed border-[#dc2626] opacity-60" style={{ left: '90%' }} />
-                                </div>
-
-                                {/* Emojis */}
-                                <div className="relative h-10 mt-1">
-                                    {TIMELINE_STEPS.map((step, i) => (
-                                        <div key={i} className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: step.left }}>
-                                            <span style={{ fontSize: 13 }}>{step.emoji}</span>
-                                            <span style={{ fontFamily: "'Caveat',cursive", fontSize: 10, color: step.color }}>{step.emojiLabel}</span>
-                                        </div>
-                                    ))}
-                                    <div className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: '90%' }}>
-                                        <span style={{ fontSize: 13 }}>😴</span>
-                                        <span style={{ fontFamily: "'Caveat',cursive", fontSize: 10, color: '#dc2626' }}>Forgot again</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         {/* ── RIGHT COLUMN ── */}
@@ -396,7 +364,7 @@ export default function WhatDoWeDoToday() {
                                     <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(21,128,61,0.08) 27px, rgba(21,128,61,0.08) 28px)', backgroundPositionY: 28 }} />
                                     <div className="absolute left-[20px] top-0 bottom-0 w-[2px] bg-red-300 opacity-30" />
                                     <div className="relative z-10 p-5 pl-8">
-                                        <p className="text-[#15803d] uppercase tracking-[0.15em] font-semibold mb-2" style={{ fontFamily: "'DM Mono',monospace", fontSize: 10 }}>The real insight</p>
+                                        <p className="text-[#15803d] uppercase tracking-[0.15em] font-semibold mb-2" style={{ fontFamily: "'DM Mono',monospace", fontSize: 16 }}>The real insight</p>
                                         <p className="text-[#0f4a23] leading-[1.75]" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 15 }}>
                                             The real issue is not effort.<br />
                                             The issue is that the system is{' '}
@@ -406,29 +374,7 @@ export default function WhatDoWeDoToday() {
                                 </div>
                             </div>
 
-                            {/* PlainFuel CTA card */}
-                            <div className="rounded-2xl border-2 border-[#0f4a23] p-5 flex flex-col items-center justify-center gap-3" style={{ background: '#dcfce7', boxShadow: '4px 5px 0 #0f4a23', ...fadeUp('0.4s') }}>
-                                <div className="flex items-center gap-3">
-                                    <svg viewBox="0 0 80 40" width={40} className="opacity-50">
-                                        <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth={3.5} strokeLinecap="round" />
-                                        <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    <span className="text-[#15803d] uppercase tracking-[0.14em] font-semibold" style={{ fontFamily: "'DM Mono',monospace", fontSize: 11 }}>PlainFuel bridges this gap</span>
-                                    <svg viewBox="0 0 80 40" width={40} className="opacity-50 scale-x-[-1]">
-                                        <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth={3.5} strokeLinecap="round" />
-                                        <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
-                                <p className="text-[#0f4a23] text-center text-sm leading-relaxed" style={{ fontFamily: "'DM Sans',sans-serif" }}>
-                                    One simple daily routine. Everything you need.<br />
-                                    <strong>Nothing you don't.</strong>
-                                </p>
-                                <div className="mt-1">
-                                    <svg viewBox="0 0 300 12" width="200">
-                                        <path d="M10,8 Q75,3 150,7 Q225,11 290,5" fill="none" stroke="#22c55e" strokeWidth={3} strokeLinecap="round" opacity={0.5} />
-                                    </svg>
-                                </div>
-                            </div>
+
 
                             {/* Decorative squiggle */}
                             <div className="pointer-events-none">
@@ -436,6 +382,42 @@ export default function WhatDoWeDoToday() {
                                     <path d="M10,8 Q80,3 160,8 Q240,13 320,6 Q400,2 490,10" fill="none" stroke="#22c55e" strokeWidth={2} strokeLinecap="round" opacity={0.25} />
                                 </svg>
                             </div>
+                            {/* Timeline */}
+                            <div className="rounded-2xl border-2 border-[#0f4a23] p-4" style={{ background: '#f0fdf4', boxShadow: '4px 5px 0 #0f4a23', ...fadeUp('0.25s') }}>
+                                <p className="text-[#6b7a6e] uppercase tracking-[0.15em] font-semibold mb-3" style={{ fontFamily: "'DM Mono',monospace", fontSize: 16 }}>How it usually goes</p>
+
+                                {/* Day labels */}
+                                <div className="relative h-5 mb-1">
+                                    {TIMELINE_STEPS.map((step, i) => (
+                                        <span key={i} className="absolute -translate-x-1/2 font-bold" style={{ fontFamily: "'Caveat',cursive", left: step.left, color: step.color, fontSize: 12 }}>{step.label}</span>
+                                    ))}
+                                    <span className="absolute -translate-x-1/2 font-bold text-[#dc2626]" style={{ fontFamily: "'Caveat',cursive", left: '90%', fontSize: 13 }}>Stop.</span>
+                                </div>
+
+                                {/* Track */}
+                                <div className="relative h-3 rounded-full bg-slate-100 mx-1">
+                                    <div className="absolute inset-y-0 left-0 rounded-full" style={{ width: animated ? '75%' : '0%', background: 'linear-gradient(90deg, #15803d 0%, #15803d 60%, rgba(21,128,61,0) 100%)', transition: 'width 1.2s cubic-bezier(0.22,1,0.36,1)' }} />
+                                    {TIMELINE_STEPS.map((step, i) => (
+                                        <div key={i} className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full flex items-center justify-center text-white shadow-sm" style={{ left: step.left, background: step.bgColor, fontSize: 9, fontFamily: "'Fraunces',serif", fontWeight: 900 }}>{step.day}</div>
+                                    ))}
+                                    <div className="absolute top-[-5px] bottom-[-5px] border-r-2 border-dashed border-[#dc2626] opacity-60" style={{ left: '90%' }} />
+                                </div>
+
+                                {/* Emojis */}
+                                <div className="relative h-10 mt-1">
+                                    {TIMELINE_STEPS.map((step, i) => (
+                                        <div key={i} className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: step.left }}>
+                                            <span style={{ fontSize: 13 }}>{step.emoji}</span>
+                                            <span style={{ fontFamily: "'Caveat',cursive", fontSize: 10, color: step.color }}>{step.emojiLabel}</span>
+                                        </div>
+                                    ))}
+                                    <div className="absolute -translate-x-1/2 flex flex-col items-center" style={{ left: '90%' }}>
+                                        <span style={{ fontSize: 13 }}>😴</span>
+                                        <span style={{ fontFamily: "'Caveat',cursive", fontSize: 10, color: '#dc2626' }}>Forgot again</span>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
