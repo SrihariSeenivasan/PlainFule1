@@ -217,10 +217,10 @@ function ImageCell({ imageIndex, isChanging, slotIndex, style }: CellProps) {
 }
 
 const stats = [
-    { value: '50K+', label: 'active users',  accent: '#15803d' },
-    { value: '4.9★', label: 'avg rating',    accent: '#f59e0b' },
-    { value: '21',   label: 'ingredients',   accent: '#8b5cf6' },
-    { value: '0',    label: 'fillers added', accent: '#ec4899' },
+    { value: '50K+', label: 'active users', accent: '#15803d' },
+    { value: '4.9★', label: 'avg rating', accent: '#f59e0b' },
+    { value: '21', label: 'ingredients', accent: '#8b5cf6' },
+    { value: '0', label: 'fillers added', accent: '#ec4899' },
 ];
 
 const SLOT_COUNT = 12;
@@ -280,9 +280,9 @@ export default function PeopleSection() {
                     <rect width="100%" height="100%" fill="url(#dotgrid)" />
                 </svg>
 
-                <Sparkle  color="#15803d" className="absolute top-10 left-[2%] w-7 h-7 opacity-20 rotate-12 pointer-events-none" />
+                <Sparkle color="#15803d" className="absolute top-10 left-[2%] w-7 h-7 opacity-20 rotate-12 pointer-events-none" />
                 <DoodleCircle color="#f59e0b" className="absolute top-24 right-[2%] w-12 h-12 opacity-15 -rotate-6 pointer-events-none" />
-                <Sparkle  color="#8b5cf6" className="absolute bottom-24 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
+                <Sparkle color="#8b5cf6" className="absolute bottom-24 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
                 <DoodleCircle color="#15803d" className="absolute bottom-10 right-[4%] w-9 h-9 opacity-10 rotate-3 pointer-events-none" />
 
                 <div className="relative max-w-screen-xl mx-auto px-6 md:px-12 lg:px-16">
@@ -330,11 +330,6 @@ export default function PeopleSection() {
                             Plainfuel fits every lifestyle.
                         </H>
 
-                        {/* sticky note — bigger */}
-                        <div className="flex items-center justify-center gap-2">
-                            <StickyNote text="50,000+ people & counting 🎉" rotate="-rotate-1" />
-                            <DoodleArrow color="#f59e0b" className="w-10 h-6 rotate-12" />
-                        </div>
                     </motion.div>
 
                     {/* ── STATS ── */}
@@ -391,7 +386,7 @@ export default function PeopleSection() {
                                 {cat}
                             </span>
                         ))}
-                       
+
                     </motion.div>
 
                     {/* ── IMAGE GRID ── */}
@@ -408,18 +403,18 @@ export default function PeopleSection() {
                             width: '100%',
                         }}
                     >
-                        <ImageCell imageIndex={slots[0]}  isChanging={flashingSlot === 0}  slotIndex={0}  style={{ gridColumn: '1',   gridRow: '1 / 3' }} />
-                        <ImageCell imageIndex={slots[1]}  isChanging={flashingSlot === 1}  slotIndex={1}  style={{ gridColumn: '2',   gridRow: '1' }} />
-                        <ImageCell imageIndex={slots[2]}  isChanging={flashingSlot === 2}  slotIndex={2}  style={{ gridColumn: '3',   gridRow: '1' }} />
-                        <ImageCell imageIndex={slots[3]}  isChanging={flashingSlot === 3}  slotIndex={3}  style={{ gridColumn: '4',   gridRow: '1 / 3' }} />
-                        <ImageCell imageIndex={slots[4]}  isChanging={flashingSlot === 4}  slotIndex={4}  style={{ gridColumn: '5',   gridRow: '1' }} />
-                        <ImageCell imageIndex={slots[5]}  isChanging={flashingSlot === 5}  slotIndex={5}  style={{ gridColumn: '2',   gridRow: '2' }} />
-                        <ImageCell imageIndex={slots[6]}  isChanging={flashingSlot === 6}  slotIndex={6}  style={{ gridColumn: '3',   gridRow: '2' }} />
-                        <ImageCell imageIndex={slots[7]}  isChanging={flashingSlot === 7}  slotIndex={7}  style={{ gridColumn: '5',   gridRow: '2' }} />
-                        <ImageCell imageIndex={slots[8]}  isChanging={flashingSlot === 8}  slotIndex={8}  style={{ gridColumn: '1',   gridRow: '3' }} />
-                        <ImageCell imageIndex={slots[9]}  isChanging={flashingSlot === 9}  slotIndex={9}  style={{ gridColumn: '2 / 4', gridRow: '3' }} />
-                        <ImageCell imageIndex={slots[10]} isChanging={flashingSlot === 10} slotIndex={10} style={{ gridColumn: '4',   gridRow: '3' }} />
-                        <ImageCell imageIndex={slots[11]} isChanging={flashingSlot === 11} slotIndex={11} style={{ gridColumn: '5',   gridRow: '3' }} />
+                        <ImageCell imageIndex={slots[0]} isChanging={flashingSlot === 0} slotIndex={0} style={{ gridColumn: '1', gridRow: '1 / 3' }} />
+                        <ImageCell imageIndex={slots[1]} isChanging={flashingSlot === 1} slotIndex={1} style={{ gridColumn: '2', gridRow: '1' }} />
+                        <ImageCell imageIndex={slots[2]} isChanging={flashingSlot === 2} slotIndex={2} style={{ gridColumn: '3', gridRow: '1' }} />
+                        <ImageCell imageIndex={slots[3]} isChanging={flashingSlot === 3} slotIndex={3} style={{ gridColumn: '4', gridRow: '1 / 3' }} />
+                        <ImageCell imageIndex={slots[4]} isChanging={flashingSlot === 4} slotIndex={4} style={{ gridColumn: '5', gridRow: '1' }} />
+                        <ImageCell imageIndex={slots[5]} isChanging={flashingSlot === 5} slotIndex={5} style={{ gridColumn: '2', gridRow: '2' }} />
+                        <ImageCell imageIndex={slots[6]} isChanging={flashingSlot === 6} slotIndex={6} style={{ gridColumn: '3', gridRow: '2' }} />
+                        <ImageCell imageIndex={slots[7]} isChanging={flashingSlot === 7} slotIndex={7} style={{ gridColumn: '5', gridRow: '2' }} />
+                        <ImageCell imageIndex={slots[8]} isChanging={flashingSlot === 8} slotIndex={8} style={{ gridColumn: '1', gridRow: '3' }} />
+                        <ImageCell imageIndex={slots[9]} isChanging={flashingSlot === 9} slotIndex={9} style={{ gridColumn: '2 / 4', gridRow: '3' }} />
+                        <ImageCell imageIndex={slots[10]} isChanging={flashingSlot === 10} slotIndex={10} style={{ gridColumn: '4', gridRow: '3' }} />
+                        <ImageCell imageIndex={slots[11]} isChanging={flashingSlot === 11} slotIndex={11} style={{ gridColumn: '5', gridRow: '3' }} />
                     </motion.div>
 
                     {/* ── CTA ── */}
@@ -430,16 +425,8 @@ export default function PeopleSection() {
                         transition={{ duration: 0.6, delay: 0.3 }}
                         className="mt-14 text-center"
                     >
-                        <div className="flex items-center gap-4 mb-7 max-w-xs mx-auto">
-                            <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
-                            <H style={{ fontSize: '25px', fontWeight: 700, color: '#333', whiteSpace: 'nowrap' }}>✦ join the movement ✦</H>
-                            <WiggleLine color="rgba(21,128,61,0.25)" className="flex-1 h-3" />
-                        </div>
 
-                        {/* CTA subtext — bigger and dark */}
-                        <H style={{ display: 'block', fontSize: '1.35rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '20px' }}>
-                            Join thousands who fuel smarter 🚀
-                        </H>
+
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <motion.button

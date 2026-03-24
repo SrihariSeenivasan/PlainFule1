@@ -11,6 +11,7 @@ import ProblemSection from './LandingPageSections/TheProblem';
 import WhyPlainFuel from './LandingPageSections/WhyPlainFuel';
 import CanWeGetFromFood from './LandingPageSections/CanWeGetFromFood';
 import WhatDoWeDoToday from './LandingPageSections/Whatdowedotoday';
+import FiveInOneSection from './LandingPageSections/FiveInOneSection';
 
 export default function LandingPage() {
   return (
@@ -22,6 +23,7 @@ export default function LandingPage() {
         <WhyPlainFuel />
         <CanWeGetFromFood />
         <WhatDoWeDoToday />
+        <FiveInOneSection />
         <Productsection />
         <HAWDsection />
         <Blogsection />

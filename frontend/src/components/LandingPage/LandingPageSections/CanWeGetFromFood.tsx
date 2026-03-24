@@ -93,7 +93,7 @@ function ContentPanel({ animated }: { animated: boolean }) {
             {/* Eyebrow */}
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
                 <PulseDot />
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10.5, color: '#15803d', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600 }}>The real question</span>
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 14.5, color: '#15803d', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600 }}>The real question</span>
             </div>
 
             {/* Headline */}
@@ -125,7 +125,7 @@ function ContentPanel({ animated }: { animated: boolean }) {
             {/* Divider with label */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
                 <div style={{ height: 1.5, flex: 1, background: 'linear-gradient(90deg,#15803d,transparent)', opacity: 0.18 }} />
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 9.5, color: '#6b7a6e', letterSpacing: '0.15em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Let's look at simple examples</span>
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 13.5, color: '#030303ff', letterSpacing: '0.15em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Let's look at simple examples</span>
                 <div style={{ height: 1.5, flex: 1, background: 'linear-gradient(270deg,#15803d,transparent)', opacity: 0.18 }} />
             </div>
 
@@ -168,12 +168,12 @@ function ContentPanel({ animated }: { animated: boolean }) {
                 {/* Margin rule */}
                 <div style={{ position: 'absolute', left: 16, top: 0, bottom: 0, width: 2, background: 'rgba(21,128,61,0.2)' }} />
 
-                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 9.5, color: '#15803d', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10, position: 'relative', zIndex: 1 }}>
+                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11.5, color: '#15803d', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10, position: 'relative', zIndex: 1 }}>
                     The real insight
                 </div>
                 <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15.5, color: '#0f4a23', lineHeight: 1.75, position: 'relative', zIndex: 1 }}>
                     This is not practical for most people.<br />
-                    The problem is not{' '}
+                    So the problem is not{' '}
                     <span style={{ background: '#fee2e2', padding: '1px 6px', borderRadius: 4, fontWeight: 700, color: '#991b1b' }}>lack of knowledge</span>.<br />
                     The problem is{' '}
                     <span style={{ background: '#dcfce7', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>consistency and practicality</span>.
@@ -186,7 +186,7 @@ function ContentPanel({ animated }: { animated: boolean }) {
                     <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" />
                     <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 10.5, color: '#15803d', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.75 }}>PlainFuel bridges this gap</span>
+                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 16.5, color: '#15803d', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.75 }}>PlainFuel bridges this gap</span>
                 <svg viewBox="0 0 80 40" width={40} style={{ opacity: 0.45, transform: 'scaleX(-1)' }}>
                     <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" />
                     <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
