@@ -33,7 +33,7 @@ const CATEGORIES = {
     'High Physical Demand': [
         {
             id: 'farmer-1',
-            src: '/images/people/field.png',
+            src: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=800&q=80',
             alt: 'Farmer working',
             title: 'Farmers & Workers',
             description: 'Energy for long physical labor',
@@ -52,7 +52,7 @@ const CATEGORIES = {
     'Mental Performance': [
         {
             id: 'student-1',
-            src: '/images/people/student.png',
+            src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
             alt: 'Student studying',
             title: 'Students',
             description: 'Focus and memory',
@@ -71,7 +71,7 @@ const CATEGORIES = {
     'Family & Growth': [
         {
             id: 'parent-1',
-            src: '/images/people/parents.png',
+            src: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&q=80',
             alt: 'Parents',
             title: 'Parents',
             description: 'Balanced nutrition',
@@ -90,7 +90,7 @@ const CATEGORIES = {
     'Aging & Longevity': [
         {
             id: 'senior-1',
-            src: '/images/people/senior.png',
+            src: 'https://images.unsplash.com/photo-1515377553641-5b868e6584c6?w=800&q=80',
             alt: 'Senior',
             title: 'Seniors',
             description: 'Healthy aging',
@@ -123,7 +123,7 @@ const CATEGORIES = {
     'Women’s Health': [
         {
             id: 'women-1',
-            src: '/images/people/women.png',
+            src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80',
             alt: 'Woman',
             title: 'Women',
             description: 'Hormonal & iron support',
@@ -240,7 +240,7 @@ export default function PeopleSection() {
                     fontWeight: 900,
                     fontSize: '3rem'
                 }}>
-                    One Scoop. For Everyone.
+                    One Sachet. For Everyone.
                 </h2>
 
                 <div className="grid">

@@ -338,7 +338,7 @@ function ProductPanel() {
 function AboutLeft({ inView }: { inView: boolean }) {
   const paragraphs = [
     "PlainFuel is a daily nutrition supplement designed to simplify how we meet our body's needs.",
-    "Instead of taking multiple supplements or tracking different nutrients, PlainFuel brings everything together in one scoop. It combines protein, essential micronutrients, and fiber in a structured way so that your body gets consistent support every day.",
+    "Instead of taking multiple supplements or tracking different nutrients, PlainFuel brings everything together in one sachet. It combines protein, essential micronutrients, and fiber in a structured way so that your body gets consistent support every day.",
     "This is not just another protein powder. It is designed to act as a daily nutrition system — something you can rely on without overthinking.",
   ];
 

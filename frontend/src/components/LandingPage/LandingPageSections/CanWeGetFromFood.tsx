@@ -33,7 +33,7 @@ const FONTS = {
 
 function DataChip({ label, value, color = C.forest }: { label: string; value: string; color?: string }) {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '20px 24px', borderRadius: 20, background: C.white, border: `1px solid ${C.border}`, boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '16px 20px', borderRadius: 20, background: C.white, border: `1px solid ${C.border}`, boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
                 <div style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: C.ink }}>{label}</div>
@@ -47,7 +47,7 @@ function SectionBadge({ text, icon: Icon }: { text: string; icon?: any }) {
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}>
             {Icon && <Icon size={12} color={C.gold} />}
-            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }
@@ -58,7 +58,7 @@ export default function CanWeGetFromFood() {
     const inView = useInView(sectionRef, { once: true, margin: '-100px' });
 
     return (
-        <section ref={sectionRef} style={{ background: C.offwhite, padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
+        <section ref={sectionRef} style={{ background: C.offwhite, padding: '32px 0', position: 'relative', overflow: 'hidden' }}>
 
             {/* Background Atmosphere */}
             <div style={{ position: 'absolute', top: '10%', right: '-10%', width: '50vw', height: '50vw', background: `radial-gradient(circle, ${C.forest}04 0%, transparent 70%)`, pointerEvents: 'none' }} />
@@ -99,15 +99,15 @@ export default function CanWeGetFromFood() {
                     {/* RIGHT — Analytical Content */}
                     <div>
                         <SectionBadge text="Theoretical vs Practical" icon={Microscope} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4.5vw, 48px)', fontWeight: 900, color: C.ink, lineHeight: 1.15, letterSpacing: '-0.03em', margin: '24px 0 32px' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4.5vw, 48px)', fontWeight: 900, color: C.ink, lineHeight: 1.15, letterSpacing: '-0.03em', margin: '8px 0 12px' }}>
                             Can we get everything <br /> from <span style={{ color: C.leaf }}>food?</span>
                         </h2>
 
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.75, marginBottom: 48 }}>
-                            In theory, yes. In reality, it is difficult to do consistently. Let’s look at simple examples:
+                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.ink, lineHeight: 1.75, marginBottom: 12 }}>
+                            In theory, yes. In reality, it is difficult to do consistently. Let's look at simple examples:
                         </p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 48 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
                             <DataChip label="Spinach is considered rich in iron" value="But to meet daily iron needs, you would need around 600 grams of spinach every day" color="#ef4444" />
                             <DataChip label="Ragi is rich in calcium" value="To meet daily calcium needs, you would need around 300 grams of ragi daily" color={C.gold} />
                             <DataChip label="Eggs provide Vitamin D3" value="To meet daily requirements, you would need 15 or more eggs every day" color="#f59e0b" />
@@ -117,26 +117,23 @@ export default function CanWeGetFromFood() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={inView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            style={{ padding: '48px', background: C.white, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 20px 60px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}
+                            style={{ padding: '20px', background: C.white, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 20px 60px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}
                         >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                                 <Info size={18} color={C.forest} style={{ opacity: 0.3 }} />
                                 <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.15em' }}>Consistency & Practicality</div>
                             </div>
-                            <h4 style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 800, color: C.ink, marginBottom: 16 }}>This is not practical for most people.</h4>
-                            <p style={{ fontFamily: FONTS.main, fontSize: 15, color: C.silver, lineHeight: 1.7, margin: 0 }}>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 800, color: C.ink, marginBottom: 12 }}>This is not practical for most people.</h4>
+                            <p style={{ fontFamily: FONTS.main, fontSize: 15, color: C.ink, lineHeight: 1.7, margin: 0 }}>
                                 So the problem is not lack of knowledge. The problem is consistency and practicality.
                             </p>
-                            <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <CheckCircle2 size={16} color={C.leaf} />
                                 <span style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.leaf, fontWeight: 700 }}>Practical Choice.</span>
                             </div>
                         </motion.div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 48 }}>
-                            {[1, 2, 3].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.3 }} />)}
-                            <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.2em' }}>Consolidating the daily gap.</span>
-                        </div>
+
                     </div>
 
                 </div>
@@ -149,13 +146,16 @@ export default function CanWeGetFromFood() {
                 .food-grid {
                     display: grid;
                     grid-template-columns: minmax(0, 1fr) 1.1fr;
-                    gap: 80px;
+                    gap: 32px;
                     align-items: center;
                 }
                 @media (max-width: 1024px) {
                     .food-grid {
                         grid-template-columns: 1fr;
-                        gap: 48px;
+                        gap: 24px;
+                    }
+                    .food-grid > div:first-child {
+                        max-height: 400px;
                     }
                 }
             `}</style>

@@ -45,7 +45,7 @@ function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
     const inView = useInView(ref, { once: true, margin: '-100px' });
 
     return (
-        <div ref={ref} style={{ textAlign: align, marginBottom: 80, maxWidth: align === 'center' ? 800 : '100%', margin: align === 'center' ? '0 auto 80px' : '0 0 80px' }}>
+        <div ref={ref} style={{ textAlign: align, marginBottom: 32, maxWidth: align === 'center' ? 800 : '100%', margin: align === 'center' ? '0 auto 32px' : '0 0 32px' }}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -70,7 +70,7 @@ function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    style={{ fontFamily: FONTS.main, fontSize: 'clamp(16px, 1.8vw, 19px)', color: C.silver, marginTop: 24, lineHeight: 1.6, fontWeight: 400 }}
+                    style={{ fontFamily: FONTS.main, fontSize: 'clamp(16px, 1.8vw, 19px)', color: C.ink, marginTop: 12, lineHeight: 1.6, fontWeight: 400 }}
                 >
                     {subtitle}
                 </motion.p>
@@ -96,7 +96,7 @@ function GlacierCard({ children, style = {}, delay = 0, className = "" }: { chil
                 WebkitBackdropFilter: 'blur(32px)',
                 border: `1px solid ${C.white}50`,
                 borderRadius: 32,
-                padding: 48,
+                padding: 24,
                 boxShadow: '0 40px 80px rgba(0, 0, 0, 0.05)',
                 position: 'relative',
                 overflow: 'hidden',
@@ -137,7 +137,7 @@ export default function WhyPlainFuel() {
             <div style={{ position: 'absolute', bottom: '10%', left: '-10%', width: '50vw', height: '50vw', background: `radial-gradient(circle, ${C.gold}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
             {/* ── SECTION 1: THE HOOK ── */}
-            <section style={{ padding: 'clamp(80px, 12vw, 160px) 24px 80px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+            <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
                 <div className="hook-grid">
                     <div>
                         <SectionHeader
@@ -148,7 +148,7 @@ export default function WhyPlainFuel() {
 They are the result of missing small amounts of nutrients every day for months."
                         />
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: -40 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: -16 }}>
                             {[
                                 { icon: <Activity size={18} color={C.forest} />, label: '70% B12 Deficiency', sub: 'In the Indian population' },
                                 { icon: <Sparkles size={18} color={C.gold} />, label: '80% Low Vitamin D', sub: 'Due to sedentary lifestyles' },
@@ -195,16 +195,16 @@ They are the result of missing small amounts of nutrients every day for months."
             </section>
 
             {/* ── SECTION 2: DEFICIENCY ACCUMULATION ── */}
-            <section style={{ padding: '80px 24px', maxWidth: 1200, margin: '0 auto' }}>
-                <GlacierCard className="accumulator-card" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'center' }}>
+            <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto' }}>
+                <GlacierCard className="accumulator-card" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 32, alignItems: 'center' }}>
                     <Image src="/images/why/bg-slow.png" alt="Slow" fill style={{ objectFit: 'cover', opacity: 0.05, pointerEvents: 'none' }} />
                     <div style={{ position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '4px 12px', borderRadius: 4, background: C.mist, marginBottom: 20 }}>
                             <Calendar size={12} color={C.forest} />
-                            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: FONTS.main }}>Timeline Analysis</span>
+                            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: FONTS.main }}>Timeline Analysis</span>
                         </div>
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 36, fontWeight: 900, color: C.ink, marginBottom: 24, lineHeight: 1.1 }}>Your body works on daily input.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 16, color: C.silver, lineHeight: 1.7, marginBottom: 40 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: 36, fontWeight: 900, color: C.ink, marginBottom: 12, lineHeight: 1.1 }}>Your body works on daily input.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 16, color: C.ink, lineHeight: 1.7, marginBottom: 20 }}>
                             Just like missing homework every day leads to problems later, missing nutrients daily creates long-term gaps.
                         </p>
 
@@ -226,8 +226,8 @@ They are the result of missing small amounts of nutrients every day for months."
                         </div>
                     </div>
 
-                    <div style={{ padding: '32px', background: 'rgba(255,255,255,0.4)', borderRadius: 24, border: `1px solid ${C.forest}05`, backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+                    <div style={{ padding: '24px', background: 'rgba(255,255,255,0.4)', borderRadius: 24, border: `1px solid ${C.forest}05`, backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                             <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink, letterSpacing: '0.05em' }}>Biomarker Depletion Graph (12 Mo)</span>
                             <TrendingDown size={18} color={C.gold} />
                         </div>
@@ -256,7 +256,7 @@ They are the result of missing small amounts of nutrients every day for months."
                             {['Jan', 'Apr', 'Aug', 'Dec'].map(m => <span key={m} style={{ fontFamily: FONTS.main, fontSize: 10, color: C.silver, fontWeight: 700 }}>{m}</span>)}
                         </div>
 
-                        <div style={{ marginTop: 32, padding: 16, background: C.white, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ marginTop: 20, padding: 16, background: C.white, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12 }}>
                             <div style={{ padding: '8px', borderRadius: 8, background: `${C.gold}11` }}><Microscope size={16} color={C.gold} /></div>
                             <p style={{ fontFamily: FONTS.accent, fontSize: 16, color: C.gold, margin: 0, fontWeight: 600 }}>Closing the Gap: Systematic Daily Restoration.</p>
                         </div>
@@ -265,7 +265,7 @@ They are the result of missing small amounts of nutrients every day for months."
             </section>
 
             {/* ── SECTION 3: THE INDIAN REALITY ── */}
-            <section style={{ padding: '80px 24px', maxWidth: 1200, margin: '0 auto' }}>
+            <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto' }}>
                 <SectionHeader eyebrow="Dietary Profile" title="Today, many of us have started paying attention to protein. But nutrition is not just about protein." subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients." />
 
                 <motion.div
@@ -289,11 +289,11 @@ They are the result of missing small amounts of nutrients every day for months."
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12, position: 'relative', zIndex: 1, height: '100%' }}>
 
                         {/* LEFT PANE: Heavily Focused On */}
-                        <div style={{ padding: '40px', borderRadius: 28, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(24px)', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ padding: '24px', borderRadius: 28, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(24px)', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
                             <Image src="/images/why/bg-diet.png" alt="Diet Pattern" fill style={{ objectFit: 'cover', opacity: 0.08, mixBlendMode: 'luminosity' }} />
 
                             <div style={{ position: 'relative', zIndex: 1 }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
                                     <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${C.leaf} 0%, #15803d 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(22, 163, 74, 0.3)` }}>
                                         <CheckCircle2 size={24} color={C.white} />
                                     </div>
@@ -319,9 +319,9 @@ They are the result of missing small amounts of nutrients every day for months."
                         </div>
 
                         {/* RIGHT PANE: But often lacks */}
-                        <div style={{ padding: '40px', borderRadius: 28, background: 'rgba(255,255,255,0.98)', border: `1px solid ${C.white}`, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                        <div style={{ padding: '24px', borderRadius: 28, background: 'rgba(255,255,255,0.98)', border: `1px solid ${C.white}`, boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.5)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                             <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 32 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
                                     <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${C.gold} 0%, #d4af37 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(184, 149, 58, 0.3)` }}>
                                         <AlertCircle size={24} color={C.white} />
                                     </div>
@@ -351,12 +351,12 @@ They are the result of missing small amounts of nutrients every day for months."
             </section>
 
             {/* ── SECTION 4: BEYOND THE SURFACE ── */}
-            <section style={{ padding: '80px 24px 160px', maxWidth: 1200, margin: '0 auto' }}>
+            <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto' }}>
                 <GlacierCard className="beyond-card" style={{ padding: 0, display: 'grid', gridTemplateColumns: '1fr 480px', overflow: 'hidden' }}>
-                    <div style={{ padding: 'clamp(32px, 6vw, 64px)' }}>
+                    <div style={{ padding: '24px' }}>
                         <Chip text="Laboratory Insights" />
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.ink, marginTop: 24, marginBottom: 24 }}>Beyond the Surface.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, marginBottom: 48 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.ink, marginTop: 16, marginBottom: 16 }}>Beyond the Surface.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, marginBottom: 24 }}>
                             When we look at blood reports, the most common deficiencies are not protein —  these are micronutrients, and they play a critical role in how our body functions.
                         </p>
 
@@ -413,13 +413,13 @@ They are the result of missing small amounts of nutrients every day for months."
             .hook-grid {
                 display: grid;
                 grid-template-columns: minmax(0, 1.2fr) 0.8fr;
-                gap: 80px;
+                gap: 32px;
                 align-items: center;
             }
             .reality-grid, .vitamin-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 32px;
+                gap: 16px;
             }
             
             @media (max-width: 1100px) {
@@ -434,7 +434,7 @@ They are the result of missing small amounts of nutrients every day for months."
             @media (max-width: 900px) {
                 .hook-grid, .accumulator-card, .reality-grid {
                     grid-template-columns: 1fr !important;
-                    gap: 48px;
+                    gap: 24px;
                 }
                 .hook-grid > div:last-child {
                     order: -1;
@@ -456,7 +456,7 @@ function Chip({ text }: { text: string }) {
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)' }}>
             <Sparkles size={12} color={C.gold} />
-            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }

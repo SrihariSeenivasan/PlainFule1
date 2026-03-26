@@ -64,7 +64,7 @@ const PAGES = [
         headline: "How does PlainFuel fit into daily life?",
         content: "PlainFuel is designed to be easy to use.",
         list: [
-            { title: "Simple Habit", desc: "Take one scoop daily" },
+            { title: "Simple Habit", desc: "Take one sachet daily" },
             { title: "Replacement", desc: "Replace your regular protein" },
             { title: "Minimalist", desc: "No need for multiple supplements" },
             { title: "Versatile", desc: "Works with any diet" }
@@ -80,8 +80,8 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
     const ref = useRef(null);
     const inView = useInView(ref, { once: true });
     return (
-        <div ref={ref} style={{ marginBottom: 80 }}>
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        <div ref={ref} style={{ marginBottom: 32 }}>
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                 <div style={{ width: 40, height: 2, background: C.leaf, borderRadius: 2 }} />
                 <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: C.leaf, letterSpacing: '0.2em' }}>{eyebrow}</span>
             </motion.div>
@@ -106,7 +106,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 style={{
                     background: `linear-gradient(135deg, ${C.deep} 0%, ${C.forest} 100%)`,
                     borderRadius: 36,
-                    padding: 'clamp(40px, 5vw, 64px)',
+                    padding: '24px',
                     border: `1px solid rgba(255, 255, 255, 0.08)`,
                     boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
                     display: 'flex',
@@ -121,7 +121,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 <div className="clinical-inner-full" style={{ position: 'relative', zIndex: 2, height: '100%', alignItems: 'center' }}>
 
                     {/* Left Text Layer */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                         <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${C.gold} 0%, #d4af37 100%)`, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(184, 149, 58, 0.4)` }}>
                             {data.icon}
                         </div>
@@ -134,12 +134,12 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                     </div>
 
                     {/* Right Grid Layer */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                         {data.list && (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
                                 {data.list.map((it: any, i: number) => (
-                                    <div key={i} style={{ padding: '24px', borderRadius: 20, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                                    <div key={i} style={{ padding: '16px', borderRadius: 20, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                                             <div style={{ width: 28, height: 28, borderRadius: 8, background: `${C.leaf}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.leaf }}>
                                                 <CheckCircle2 size={14} />
                                             </div>
@@ -154,7 +154,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                         )}
 
                         {data.note && (
-                            <div style={{ paddingTop: 24, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
+                            <div style={{ paddingTop: 16, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
                                 <p style={{ fontFamily: FONTS.accent, fontSize: 22, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
                             </div>
                         )}
@@ -178,12 +178,12 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 backdropFilter: 'blur(32px)',
                 WebkitBackdropFilter: 'blur(32px)',
                 borderRadius: 28,
-                padding: '48px',
+                padding: '24px',
                 border: `1px solid ${C.white}60`,
                 boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 28,
+                gap: 16,
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
@@ -198,7 +198,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
             />
 
             <div className={'clinical-inner-standard'} style={{ position: 'relative', zIndex: 2, height: '100%' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 28, height: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ width: 44, height: 44, borderRadius: 12, background: C.forest, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {data.icon}
@@ -214,7 +214,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                         {data.content}
                     </div>
 
-                    <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: `1px solid ${C.border}` }}>
+                    <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
                         <p style={{ fontFamily: FONTS.accent, fontSize: 20, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
                     </div>
                 </div>
@@ -227,7 +227,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
 
 export default function FiveInOneSection() {
     return (
-        <section style={{ padding: '80px 0', background: C.white, position: 'relative', overflow: 'hidden' }}>
+        <section style={{ padding: '32px 0', background: C.white, position: 'relative', overflow: 'hidden' }}>
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
                 <SectionHeader eyebrow="The Logic" title="PlainFuel — A Simple Approach." />
                 <div className="clinical-grid">
@@ -236,13 +236,13 @@ export default function FiveInOneSection() {
                     ))}
                 </div>
 
-                <div style={{ marginTop: 80, display: 'flex', flexWrap: 'wrap', gap: 40, justifyContent: 'center' }}>
+                <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}>
                     {[
                         { icon: <Microscope size={18} />, text: "Lab Verified Constituents" },
                         { icon: <Activity size={18} />, text: "Optimized Bio-Availability" },
                         { icon: <Dna size={18} />, text: "Zero Amino Spiking" }
                     ].map((t, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: C.silver, fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: C.ink, fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             <span style={{ color: C.leaf }}>{t.icon}</span>
                             {t.text}
                         </div>
@@ -257,7 +257,7 @@ export default function FiveInOneSection() {
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="cinematic-footer-grid"
                     style={{
-                        marginTop: 120,
+                        marginTop: 48,
                         borderRadius: 48,
                         background: `linear-gradient(135deg, ${C.deep} 0%, ${C.mid} 100%)`,
                         position: 'relative',
@@ -269,8 +269,8 @@ export default function FiveInOneSection() {
                     }}
                 >
                     {/* Text Content */}
-                    <div style={{ padding: 'clamp(40px, 6vw, 80px)', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                    <div style={{ padding: '32px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                             <div style={{ width: 10, height: 10, borderRadius: '50%', background: C.leaf, boxShadow: `0 0 20px ${C.leaf}` }} />
                             <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, color: C.leaf, textTransform: 'uppercase', letterSpacing: '0.25em' }}>Closing Perspective</span>
                         </div>
@@ -280,12 +280,12 @@ export default function FiveInOneSection() {
                             fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
                             fontWeight: 900,
                             color: C.white,
-                            marginBottom: 40,
+                            marginBottom: 20,
                             lineHeight: 1.05,
                             letterSpacing: '-0.04em'
                         }}>A Daily Ritual of<br /><span style={{ background: `linear-gradient(to right, ${C.leaf}, #4ade80)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Collective Prevention.</span></h4>
 
-                        <div style={{ position: 'relative', borderLeft: `3px solid ${C.leaf}30`, paddingLeft: 32, marginBottom: 32 }}>
+                        <div style={{ position: 'relative', borderLeft: `3px solid ${C.leaf}30`, paddingLeft: 32, marginBottom: 16 }}>
                             <p style={{
                                 fontFamily: FONTS.main,
                                 fontSize: 18,
@@ -302,14 +302,14 @@ export default function FiveInOneSection() {
                                 color: 'rgba(255,255,255,0.75)',
                                 lineHeight: 1.8,
                                 fontWeight: 500,
-                                marginTop: 24,
-                                margin: '24px 0 0'
+                                marginTop: 12,
+                                margin: '12px 0 0'
                             }}>
                                 PlainFuel is built around that idea. A simple habit. Done daily. Making nutrition easier to manage.
                             </p>
                         </div>
 
-                        <div style={{ marginTop: 40, display: 'flex', alignItems: 'center', gap: 20 }}>
+                        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 20 }}>
                             <div style={{ width: 48, height: 1, background: 'rgba(22, 163, 74, 0.4)' }} />
                             <span style={{ fontFamily: FONTS.accent, fontSize: 28, color: C.leaf, fontWeight: 700 }}>The New Standard for Tomorrow.</span>
                         </div>
@@ -336,10 +336,10 @@ export default function FiveInOneSection() {
 
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
-                .clinical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+                .clinical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
                 .clinical-card.full-width { grid-column: 1 / -1; }
                 
-                .clinical-inner-full { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; }
+                .clinical-inner-full { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
                 .clinical-inner-standard { display: flex; flex-direction: column; }
 
                 @media (max-width: 1024px) { 

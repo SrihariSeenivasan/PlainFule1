@@ -153,7 +153,7 @@ function TrainCard({ item, isHovered, onHover, onLeave }: {
             onMouseEnter={onHover}
             onMouseLeave={onLeave}
             style={{
-                width: 280, flexShrink: 0, padding: '24px', borderRadius: 28,
+                width: 280, flexShrink: 0, padding: '16px', borderRadius: 28,
                 background: C.white, border: `1px solid ${C.border}`,
                 boxShadow: isHovered ? '0 32px 64px rgba(0,0,0,0.08)' : '0 10px 30px rgba(0,0,0,0.03)',
                 transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)'
@@ -208,7 +208,7 @@ export default function HAWDsection() {
     const ROW_CARDS = [...allCards, ...allCards];
 
     return (
-        <section ref={sectionRef} style={{ background: C.white, padding: '160px 0', overflow: 'hidden', position: 'relative' }}>
+        <section ref={sectionRef} style={{ background: C.white, padding: '32px 0', overflow: 'hidden', position: 'relative' }}>
             
             {/* Ambient Background Elements */}
             <div style={{ position: 'absolute', top: -100, left: -100, width: 600, height: 600, background: `radial-gradient(circle, ${C.forest}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
@@ -217,18 +217,18 @@ export default function HAWDsection() {
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
                 
                 {/* ── TOP SECTION ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 480px', gap: 80, alignItems: 'flex-start', marginBottom: 120 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 480px', gap: 40, alignItems: 'flex-start', marginBottom: 48 }}>
                     <div>
                         <Chip text="The Simple Process" icon={ShieldCheck} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '24px 0' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0' }}>
                             What do we do <br /> <span style={{ color: C.leaf }}>today?</span>
                         </h2>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, maxWidth: 520, marginBottom: 48 }}>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, maxWidth: 520, marginBottom: 24 }}>
                             To fill nutritional gaps, most people turn to multiple supplements. But this creates a new problem: it's hard to track and maintain in a busy life.
                         </p>
 
-                        <div style={{ padding: '40px', background: C.offwhite, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                        <div style={{ padding: '24px', background: C.offwhite, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                                 <FlaskConical size={18} color={C.forest} />
                                 <h4 style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: C.ink, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Laboratory Ingredients</h4>
                             </div>
@@ -238,15 +238,15 @@ export default function HAWDsection() {
                         </div>
                     </div>
 
-                    <div style={{ padding: '48px', background: `${C.mist}50`, borderRadius: 40, border: `1px solid ${C.forest}05`, position: 'relative' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
+                    <div style={{ padding: '24px', background: `${C.mist}50`, borderRadius: 40, border: `1px solid ${C.forest}05`, position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyItems: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                              <Chip text="Market Analysis" />
                         </div>
                         
                         <h3 style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: C.ink, marginBottom: 12 }}>The Complexity Barrier.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 14, color: C.silver, marginBottom: 40 }}>The issue is not effort; the issue is that the system for meeting daily needs is too complex.</p>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 14, color: C.silver, marginBottom: 20 }}>The issue is not effort; the issue is that the system for meeting daily needs is too complex.</p>
                         
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginBottom: 48 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
                             {supplements.map((s, i) => (
                                 <div key={i}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -260,7 +260,7 @@ export default function HAWDsection() {
                             ))}
                         </div>
 
-                        <div style={{ padding: '32px', background: C.forest, borderRadius: 24, textAlign: 'center', boxShadow: '0 20px 48px rgba(10,61,31,0.2)' }}>
+                        <div style={{ padding: '20px', background: C.forest, borderRadius: 24, textAlign: 'center', boxShadow: '0 20px 48px rgba(10,61,31,0.2)' }}>
                             <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, color: `${C.white}70`, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>Total Investment</div>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
                                 <span style={{ fontSize: 32, fontWeight: 900, color: C.white }}>₹7,300</span>
@@ -272,8 +272,8 @@ export default function HAWDsection() {
                 </div>
 
                 {/* ── CAROUSEL SECTION ── */}
-                <div style={{ borderTop: `1px solid ${C.forest}08`, paddingTop: 80 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40 }}>
+                <div style={{ borderTop: `1px solid ${C.forest}08`, paddingTop: 32 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
                         <div>
                              <h3 style={{ fontFamily: FONTS.main, fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>PlainFuel simplifies the process.</h3>
                              <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.gold, margin: '8px 0 0' }}>One simple habit. Done daily. Making nutrition easier.</p>
@@ -287,17 +287,17 @@ export default function HAWDsection() {
                 </div>
 
                 {/* ── RDA BARS ── */}
-                <div style={{ marginTop: 120, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 32 }}>
+                <div style={{ marginTop: 48, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
                     {rdaBars.map((b, i) => (
                         <motion.div 
                             key={i} 
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.1 }}
-                            style={{ textAlign: 'center', padding: '32px 24px', background: C.offwhite, borderRadius: 24, border: `1px solid ${C.forest}02` }}
+                            style={{ textAlign: 'center', padding: '20px 16px', background: C.offwhite, borderRadius: 24, border: `1px solid ${C.forest}02` }}
                         >
                             <div style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: b.color, marginBottom: 12 }}>{b.pct}%</div>
-                            <div style={{ height: 120, width: 12, background: C.white, borderRadius: 10, margin: '0 auto 16px', position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ height: 120, width: 12, background: C.white, borderRadius: 10, margin: '0 auto 12px', position: 'relative', overflow: 'hidden' }}>
                                 <motion.div initial={{ height: 0 }} whileInView={{ height: `${b.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ width: '100%', background: `${b.color}cc`, position: 'absolute', bottom: 0 }} />
                             </div>
                             <div style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink }}>{b.label}</div>

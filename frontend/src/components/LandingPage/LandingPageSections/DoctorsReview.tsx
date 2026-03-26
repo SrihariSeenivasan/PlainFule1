@@ -412,12 +412,12 @@ export default function DoctorsReview() {
         .trust-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 16px;
+          gap: 12px;
         }
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
+          gap: 16px;
         }
         .hint-text { display: block; }
 
@@ -434,7 +434,7 @@ export default function DoctorsReview() {
 
       <section
         ref={sectionRef}
-        style={{ position: 'relative', overflow: 'hidden', background: '#f4f6f4', paddingBottom: isMobile ? 60 : 100 }}
+        style={{ position: 'relative', overflow: 'hidden', background: '#f4f6f4', paddingBottom: isMobile ? 32 : 48 }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -448,10 +448,10 @@ export default function DoctorsReview() {
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(10,61,31,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         </div>
 
-        <div style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '60px 16px 0' : '90px 24px 0', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '32px 16px 0' : '48px 24px 0', position: 'relative', zIndex: 1 }}>
 
           {/* Eyebrow */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'center', marginBottom: isMobile ? 24 : 36 }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'center', marginBottom: isMobile ? 12 : 16 }}>
             <div style={{ background: 'rgba(10,61,31,0.09)', border: '2px dashed #15803d', borderRadius: 10, padding: '7px 18px', transform: 'rotate(-1.5deg)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <StarDoodle size={13} />
               <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13, color: '#0a3d1f', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trusted by Experts</span>
@@ -475,7 +475,7 @@ export default function DoctorsReview() {
           </motion.div>
 
           <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
-            style={{ fontSize: isMobile ? 14 : 'clamp(15px, 2vw, 17px)', fontFamily: "'Montserrat', sans-serif", fontWeight: 400, color: '#3c4a3e', textAlign: 'center', maxWidth: 540, margin: `0 auto ${isMobile ? '36px' : '60px'} auto`, lineHeight: 1.7, letterSpacing: '-0.005em', padding: '0 8px' }}>
+            style={{ fontSize: isMobile ? 14 : 'clamp(15px, 2vw, 17px)', fontFamily: "'Montserrat', sans-serif", fontWeight: 400, color: '#3c4a3e', textAlign: 'center', maxWidth: 540, margin: `0 auto ${isMobile ? '20px' : '32px'} auto`, lineHeight: 1.7, letterSpacing: '-0.005em', padding: '0 8px' }}>
             Leading doctors, nutritionists, and scientists recommend PlainFuel for its precision, transparency, and evidence-based formulation.
           </motion.p>
 
@@ -526,7 +526,7 @@ export default function DoctorsReview() {
             </div>
 
             {/* Controls row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 12 : 20, marginTop: isMobile ? 20 : 28 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 12 : 20, marginTop: isMobile ? 12 : 20 }}>
               <NavBtn onClick={prev} dir="prev" disabled={isAnimating} />
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {DOCTORS.map((_, i) => (
@@ -546,7 +546,7 @@ export default function DoctorsReview() {
 
           {/* Stats row */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-            style={{ marginTop: isMobile ? 40 : 64, background: '#f7f8f5', border: '2px solid rgba(10,61,31,0.22)', borderRadius: isMobile ? 16 : 20, padding: isMobile ? '24px 20px' : '36px 40px', boxShadow: '5px 7px 0 rgba(10,61,31,0.1)', position: 'relative', overflow: 'hidden' }}>
+            style={{ marginTop: isMobile ? 24 : 32, background: '#f7f8f5', border: '2px solid rgba(10,61,31,0.22)', borderRadius: isMobile ? 16 : 20, padding: isMobile ? '16px 12px' : '20px 24px', boxShadow: '5px 7px 0 rgba(10,61,31,0.1)', position: 'relative', overflow: 'hidden' }}>
             <StarDoodle size={isMobile ? 28 : 40} style={{ position: 'absolute', top: 12, right: 16, opacity: 0.15, transform: 'rotate(20deg)' }} />
             <StarDoodle size={isMobile ? 20 : 28} style={{ position: 'absolute', bottom: 12, left: 16, opacity: 0.12, transform: 'rotate(-10deg)' }} />
             <div className="stats-grid">
@@ -566,7 +566,7 @@ export default function DoctorsReview() {
           </motion.div> 
 
           {/* Trust badges */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: isMobile ? 16 : 28 }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: isMobile ? 12 : 16 }}>
             <div className="trust-grid">
               {[
                 { icon: '🔬', label: 'Third-Party Tested', sublabel: 'every single batch' },

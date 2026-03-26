@@ -167,7 +167,7 @@ export default function Blogsection() {
     const [featured, ...rest] = blogs;
 
     return (
-        <section ref={sectionRef} style={{ padding: '160px 0', background: C.white, position: 'relative', overflow: 'hidden' }}>
+        <section ref={sectionRef} style={{ padding: '32px 0', background: C.white, position: 'relative', overflow: 'hidden' }}>
             
             {/* Ambient Background Atmosphere */}
             <div style={{ position: 'absolute', top: '15%', left: '-5%', width: '40vw', height: '40vw', background: `radial-gradient(circle, ${C.forest}03 0%, transparent 70%)`, pointerEvents: 'none' }} />
@@ -176,17 +176,17 @@ export default function Blogsection() {
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
                 
                 {/* ── HEADER ROW ── */}
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 80, flexWrap: 'wrap', gap: 40 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 40 }}>
                     <div style={{ maxWidth: 640 }}>
                         <SectionBadge text="Research Library" icon={BookOpen} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '24px 0 0' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
                             Clinical Insights & <br /> <span style={{ color: C.leaf }}>Biometric Data.</span>
                         </h2>
                     </div>
 
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Link href="/blog" style={{
-                            display: 'flex', alignItems: 'center', gap: 12, padding: '16px 32px', borderRadius: 16,
+                            display: 'flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 16,
                             background: C.forest, color: C.white, fontFamily: FONTS.main, fontSize: 11, fontWeight: 900,
                             textTransform: 'uppercase', letterSpacing: '0.15em', boxShadow: '0 20px 40px rgba(10,61,31,0.15)'
                         }}>
@@ -213,7 +213,7 @@ export default function Blogsection() {
                             <ClinicalBlogCard key={blog.id} blog={blog} index={i + 1} size="small" />
                         ))}
                         
-                        <div style={{ marginTop: 'auto', padding: '32px', borderRadius: 24, background: C.offwhite, border: `1px solid ${C.forest}05`, textAlign: 'center' }}>
+                        <div style={{ marginTop: 'auto', padding: '20px', borderRadius: 24, background: C.offwhite, border: `1px solid ${C.forest}05`, textAlign: 'center' }}>
                             <p style={{ fontFamily: FONTS.accent, fontSize: 22, color: C.gold, margin: 0, fontWeight: 700 }}>✦ More clinical data arriving weekly ✦</p>
                         </div>
                     </div>
@@ -228,7 +228,7 @@ export default function Blogsection() {
                 .blog-grid {
                     display: grid;
                     grid-template-columns: minmax(0, 55fr) 45fr;
-                    gap: 64px;
+                    gap: 32px;
                 }
                 .blog-card.card-large {
                     flex-direction: column;
@@ -248,13 +248,13 @@ export default function Blogsection() {
                 .list-column {
                     display: flex;
                     flex-direction: column;
-                    gap: 32px;
+                    gap: 16px;
                 }
 
                 @media (max-width: 1024px) {
                     .blog-grid {
                         grid-template-columns: 1fr;
-                        gap: 48px;
+                        gap: 24px;
                     }
                     .blog-card.card-small {
                         flex-direction: column;

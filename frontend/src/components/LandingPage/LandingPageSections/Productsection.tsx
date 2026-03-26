@@ -35,7 +35,7 @@ function PremiumBackground() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
       {/* Off-white base */}
       <div className="absolute inset-0" style={{ background: C.offwhite }} />
-      
+
       {/* Ambient Light Peaks */}
       <div style={{
         position: 'absolute', inset: 0,
@@ -105,7 +105,7 @@ export default function ProductSection() {
       }} />
 
       <PremiumBackground />
-      
+
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
         {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: 80 }}>
@@ -118,23 +118,23 @@ export default function ProductSection() {
             <Sparkles size={14} color={C.gold} />
             <span style={{ fontSize: 10, fontWeight: 800, color: C.mid, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Elite Selection</span>
           </motion.div>
-          
+
           <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1 }}>
             Fuel <span style={{ fontFamily: FONTS.accent, color: C.mid, fontVariantCaps: 'normal' }}>Cycle.</span>
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
             <GoldUnderline width={220} />
           </div>
-          
-          <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.silver, marginTop: 24, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8 }}>
+
+          <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.ink, marginTop: 24, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8 }}>
             Elevate your daily ritual <span style={{ color: C.gold, margin: '0 8px' }}>—</span> Experience the shift.
           </p>
         </div>
 
         {/* Grid Section */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: 40,
           maxWidth: products.length === 1 ? 400 : 1200,
           margin: '0 auto'
@@ -162,22 +162,22 @@ export default function ProductSection() {
               {/* Immersive Image Area */}
               <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: `linear-gradient(135deg, ${C.offwhite} 0%, ${C.white} 100%)` }}>
                 {/* Visual Glow */}
-                <div style={{ 
-                    position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '120%', height: '80%', background: `radial-gradient(circle, ${C.glow} 0%, transparent 70%)`,
-                    opacity: 0.4
+                <div style={{
+                  position: 'absolute', top: '15%', left: '50%', transform: 'translate(-50%, -50%)',
+                  width: '120%', height: '80%', background: `radial-gradient(circle, ${C.glow} 0%, transparent 70%)`,
+                  opacity: 0.4
                 }} />
-                
+
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 1 }}
                   style={{ position: 'relative', width: '100%', height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <Image 
-                    src={p.packages?.[0]?.images?.[0] || '/images/Products/product.png'} 
+                  <Image
+                    src={p.packages?.[0]?.images?.[0] || '/images/Products/product.png'}
                     alt={p.name} fill
-                    style={{ objectFit: 'contain', padding: 30, filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.06))' }} 
+                    style={{ objectFit: 'contain', padding: 30, filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.06))' }}
                   />
                 </motion.div>
               </div>
@@ -186,7 +186,7 @@ export default function ProductSection() {
               <div style={{ position: 'absolute', top: 24, left: 24, zIndex: 10 }}>
                 <div style={{ padding: '6px 14px', borderRadius: 100, background: 'rgba(10, 61, 31, 0.05)', border: '1px solid rgba(10, 61, 31, 0.1)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Sparkles size={10} color={C.gold} />
-                  <span style={{ fontSize: 9, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Protocol {String(i+1).padStart(2, '0')}</span>
+                  <span style={{ fontSize: 9, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Protocol {String(i + 1).padStart(2, '0')}</span>
                 </div>
               </div>
 
