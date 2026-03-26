@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import { 
-    CheckCircle2, FlaskConical, Microscope, Info, 
+import {
+    CheckCircle2, FlaskConical, Microscope, Info,
     PlayCircle
 } from 'lucide-react';
 
@@ -59,15 +59,15 @@ export default function CanWeGetFromFood() {
 
     return (
         <section ref={sectionRef} style={{ background: C.offwhite, padding: '160px 0', position: 'relative', overflow: 'hidden' }}>
-            
+
             {/* Background Atmosphere */}
             <div style={{ position: 'absolute', top: '10%', right: '-10%', width: '50vw', height: '50vw', background: `radial-gradient(circle, ${C.forest}04 0%, transparent 70%)`, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: '10%', left: '-10%', width: '40vw', height: '40vw', background: `radial-gradient(circle, ${C.gold}04 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
-                
+
                 <div className="food-grid">
-                    
+
                     {/* LEFT — Scientific Integration (Display) */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -83,10 +83,10 @@ export default function CanWeGetFromFood() {
                         </div>
 
                         <div style={{ position: 'absolute', top: 32, left: 32, zIndex: 2 }}>
-                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                 <FlaskConical size={14} color={C.leaf} />
-                                 <span style={{ fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: C.white, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Biomarker Case Study</span>
-                             </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <FlaskConical size={14} color={C.leaf} />
+                                <span style={{ fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: C.white, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Biomarker Case Study</span>
+                            </div>
                         </div>
 
                         <div style={{ position: 'absolute', bottom: 32, left: 32, right: 32, zIndex: 2 }}>
@@ -132,10 +132,10 @@ export default function CanWeGetFromFood() {
                                 <span style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.leaf, fontWeight: 700 }}>Practical Choice.</span>
                             </div>
                         </motion.div>
-                        
+
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 48 }}>
-                             {[1, 2, 3].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.3 }} />)}
-                             <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.2em' }}>Consolidating the daily gap.</span>
+                            {[1, 2, 3].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.3 }} />)}
+                            <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.2em' }}>Consolidating the daily gap.</span>
                         </div>
                     </div>
 

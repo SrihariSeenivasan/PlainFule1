@@ -133,12 +133,7 @@ export default function WhatDoWeDoToday() {
                         </motion.div>
                     </div>
 
-                    <motion.div {...fadeUp(0.6)} style={{ marginTop: 80, padding: 64, borderRadius: 32, background: C.white, border: `1px solid ${C.forest}08`, textAlign: 'center' }}>
-                        <h4 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 32, fontWeight: 900, color: C.ink, marginBottom: 24 }}>Final thought</h4>
-                        <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, color: C.silver, maxWidth: 800, margin: '0 auto', lineHeight: 1.8 }}>
-                            Most health problems related to nutrition don’t happen suddenly. They build over time. Prevention is easier than correction. Instead of fixing deficiencies after they appear, it is better to consistently meet your daily nutritional needs. PlainFuel is built around that idea. A simple habit. Done daily. Making nutrition easier to manage.
-                        </p>
-                    </motion.div>
+
                 </div>
             </section>
         </>
