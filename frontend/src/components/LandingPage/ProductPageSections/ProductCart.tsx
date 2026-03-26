@@ -8,7 +8,7 @@ import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/AuthModal';
-import Navbar from '@/components/Navbar';
+import MainLayout from '@/components/MainLayout';
 
 const FD = "'Playfair Display', Georgia, serif";
 const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
@@ -73,9 +73,7 @@ export default function ProductCart() {
 
   if (items.length === 0) {
     return (
-      <div style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
-        <Navbar />
-
+      <MainLayout background={BG}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120, textAlign: 'center' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -209,14 +207,12 @@ export default function ProductCart() {
 
         {/* Auth Modal for empty cart */}
         <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-      </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
-      <Navbar />
-
+    <MainLayout background={BG}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120, position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <motion.div
@@ -658,6 +654,6 @@ export default function ProductCart() {
 
       {/* Auth Modal */}
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-    </div>
+    </MainLayout>
   );
 }

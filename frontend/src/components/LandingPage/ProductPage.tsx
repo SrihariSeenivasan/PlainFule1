@@ -1,16 +1,16 @@
 'use client';
 
-import Navbar from '../Navbar';
+import MainLayout from '../MainLayout';
 import Products from './ProductPageSections/Products';
+
+const C = {
+  offwhite: '#f7f8f5',
+};
 
 export default function ProductPage() {
   return (
-    <main style={{ minHeight: '100vh', background: '#fdfaf3' }}>
-      {/* This div clips horizontal overflow WITHOUT breaking sticky */}
-      <div style={{ overflowX: 'clip' }}>
-        <Navbar />
+    <MainLayout background={C.offwhite}>
         <Products />
-      </div>
-    </main>
+    </MainLayout>
   );
 }

@@ -1,29 +1,33 @@
 'use client';
 
-import { motion, useAnimationFrame, useMotionValue, useSpring } from 'framer-motion';
-import { useState, useCallback } from 'react';
-import { Target, Leaf, Sparkles, UserCheck } from 'lucide-react';
-import { StarDoodle, Sparkle, CircleDoodle } from '@/components/Elements/SvgDoodles';
+import { motion, useAnimationFrame, useMotionValue, useSpring, useInView } from 'framer-motion';
+import { useState, useCallback, useRef } from 'react';
+import { 
+    Target, Leaf, Sparkles, UserCheck, 
+    Dna, ShieldCheck, Check, FlaskConical
+} from 'lucide-react';
 
-/* ── THEME ── */
-const T = {
-    text:        '#1a1a1a',
-    textMid:     '#444444',
-    textSoft:    '#777777',
-    textFaint:   '#aaaaaa',
-    green:       '#15803d',
-    greenDark:   '#15803d',
-    greenBg:     'rgba(34,197,94,0.08)',
-    greenBorder: 'rgba(34,197,94,0.30)',
-    cardBg:      'rgba(0,0,0,0.03)',
-    cardBorder:  'rgba(0,0,0,0.09)',
-    panelBg:     'rgba(0,0,0,0.025)',
+/* ── Design Tokens (Standardized Glacier Elite) ── */
+const C = {
+    forest: '#0a3d1f',
+    deep: '#071a0d',
+    mid: '#14532d',
+    leaf: '#16a34a',
+    ink: '#070d08',
+    white: '#ffffff',
+    offwhite: '#fafafa',
+    silver: '#64748b',
+    mist: '#f1f5f9',
+    gold: '#854d0e',
+    goldLight: '#a16207',
+    glass: 'rgba(255, 255, 255, 0.75)',
+    border: 'rgba(0, 0, 0, 0.05)',
 };
 
-/* ── FONTS ── */
-const SANS  = "'DM Sans', 'Helvetica Neue', sans-serif";
-const SERIF = "'Playfair Display', 'Playfair', Georgia, serif";
-const HAND  = "'Caveat', cursive";
+const FONTS = {
+    main: "'Montserrat', sans-serif",
+    accent: "'Caveat', cursive",
+};
 
 /* ── DATA ── */
 const allCards = [
@@ -32,10 +36,9 @@ const allCards = [
         stat: '21', statSuffix: ' ingredients',
         statLabel: 'calibrated for Indian diet',
         title: 'Precision Dosage',
-        content: 'Our formula targets the specific dietary gaps in typical Indian meals — not generic Western bodies.',
+        content: 'Our formula targets specific dietary gaps in typical Indian meals — not generic Western bodies.',
         note: 'no guesswork!',
-        accent: '#15803d', accentBg: 'rgba(21,128,61,0.08)', accentBorder: 'rgba(21,128,61,0.25)',
-        rotate: '-rotate-1',
+        accent: C.forest,
     },
     {
         icon: <Leaf className="w-5 h-5" />,
@@ -44,8 +47,7 @@ const allCards = [
         title: 'Zero Filler Ethics',
         content: 'Most supplements are 80% maltodextrin. We use 100% active ingredients. Every milligram is functional.',
         note: 'zero junk!',
-        accent: '#d97706', accentBg: 'rgba(217,119,6,0.08)', accentBorder: 'rgba(217,119,6,0.25)',
-        rotate: 'rotate-1',
+        accent: C.gold,
     },
     {
         icon: <Sparkles className="w-5 h-5" />,
@@ -54,8 +56,7 @@ const allCards = [
         title: 'Invisible Utility',
         content: 'Tasteless and textureless. Mix into anything without changing the flavour of your favourite foods.',
         note: 'mix anywhere!',
-        accent: '#7c3aed', accentBg: 'rgba(124,58,237,0.08)', accentBorder: 'rgba(124,58,237,0.25)',
-        rotate: '-rotate-[0.5deg]',
+        accent: '#7c3aed',
     },
     {
         icon: <UserCheck className="w-5 h-5" />,
@@ -64,78 +65,16 @@ const allCards = [
         title: 'Bio-Identical Forms',
         content: 'Methylcobalamin B12, Calcium Citrate, Zinc Gluconate — forms your body recognises and absorbs fast.',
         note: 'absorbed fast!',
-        accent: '#db2777', accentBg: 'rgba(219,39,119,0.08)', accentBorder: 'rgba(219,39,119,0.25)',
-        rotate: 'rotate-[0.5deg]',
+        accent: '#db2777',
     },
     {
-        icon: <span className="text-xl">🧬</span>,
+        icon: <Dna className="w-5 h-5" />,
         stat: '0%', statSuffix: '',
         statLabel: 'amino acids',
-        title: 'Amino Acids',
-        content: 'No added amino acids — nothing to inflate our protein numbers or skew your macros.',
-        note: 'clean formula!',
-        accent: '#0ea5e9', accentBg: 'rgba(14,165,233,0.08)', accentBorder: 'rgba(14,165,233,0.30)',
-        rotate: '-rotate-1',
-    },
-    {
-        icon: <span className="text-xl">🌾</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'gluten',
-        title: 'Gluten',
-        content: 'Completely gluten-free. Safe for those with celiac disease or gluten sensitivity.',
-        note: 'gluten free!',
-        accent: '#f59e0b', accentBg: 'rgba(245,158,11,0.08)', accentBorder: 'rgba(245,158,11,0.30)',
-        rotate: 'rotate-1',
-    },
-    {
-        icon: <span className="text-xl">🍬</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'artificial sweeteners',
-        title: 'Artificial Sweeteners',
-        content: 'No aspartame, sucralose, or stevia. Pure and unadulterated from start to finish.',
-        note: 'truly sweet!',
-        accent: '#ec4899', accentBg: 'rgba(236,72,153,0.08)', accentBorder: 'rgba(236,72,153,0.30)',
-        rotate: '-rotate-[0.5deg]',
-    },
-    {
-        icon: <span className="text-xl">🎨</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'artificial flavours',
-        title: 'Artificial Flavours',
-        content: 'No lab-made taste additives. What you mix it into is exactly what you taste.',
-        note: 'all natural!',
-        accent: '#8b5cf6', accentBg: 'rgba(139,92,246,0.08)', accentBorder: 'rgba(139,92,246,0.30)',
-        rotate: 'rotate-[0.5deg]',
-    },
-    {
-        icon: <span className="text-xl">🍭</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'added sugar',
-        title: 'Added Sugar',
-        content: 'Zero grams of added sugar in every serving. Your sweet tooth stays your business.',
-        note: 'no sugar!',
-        accent: '#ef4444', accentBg: 'rgba(239,68,68,0.08)', accentBorder: 'rgba(239,68,68,0.30)',
-        rotate: '-rotate-1',
-    },
-    {
-        icon: <span className="text-xl">🔬</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'genetically modified organisms',
-        title: 'GMOs',
-        content: 'Every ingredient is sourced non-GMO. We believe in food that nature intended.',
-        note: 'non-GMO!',
-        accent: '#10b981', accentBg: 'rgba(16,185,129,0.08)', accentBorder: 'rgba(16,185,129,0.30)',
-        rotate: 'rotate-1',
-    },
-    {
-        icon: <span className="text-xl">🚫</span>,
-        stat: '0%', statSuffix: '',
-        statLabel: 'maltodextrin',
-        title: 'Maltodextrin',
-        content: "The cheap filler most brands hide behind. We don't use a single gram of it.",
-        note: 'zero filler!',
-        accent: '#f97316', accentBg: 'rgba(249,115,22,0.08)', accentBorder: 'rgba(249,115,22,0.30)',
-        rotate: '-rotate-[0.5deg]',
+        title: 'Clean Label DNA',
+        content: 'No amino spiking — nothing to inflate our protein numbers or skew your natural macros.',
+        note: 'pure science!',
+        accent: '#0ea5e9',
     },
 ];
 
@@ -156,54 +95,25 @@ const supplements = [
 ];
 
 const rdaBars = [
-    { label: 'B12',    pct: 77, color: '#15803d' },
-    { label: 'B6',     pct: 70, color: '#d97706' },
+    { label: 'B12',    pct: 77, color: C.forest },
+    { label: 'B6',     pct: 70, color: C.gold },
     { label: 'Folic',  pct: 73, color: '#7c3aed' },
     { label: 'D3',     pct: 66, color: '#db2777' },
-    { label: 'Vit C',  pct: 62, color: '#15803d' },
-    { label: 'B1',     pct: 61, color: '#d97706' },
-    { label: 'Biotin', pct: 65, color: '#7c3aed' },
+    { label: 'Vit C',  pct: 62, color: C.forest },
+    { label: 'B1',     pct: 61, color: C.gold },
 ];
 
-/* ── SVG ATOMS ── */
-function WiggleLine({ color = '#15803d', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 200 10" fill="none" className={className} aria-hidden="true">
-            <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5 S180 9,200 5"
-                stroke={color} strokeWidth="2" strokeLinecap="round" fill="none" />
-        </svg>
-    );
-}
-
-function DoodleCheck({ color = '#15803d', className = '' }: { color?: string; className?: string }) {
-    return (
-        <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden="true">
-            <path d="M3 11 L8 16 L17 5" stroke={color} strokeWidth="2.5"
-                strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        </svg>
-    );
-}
-
-function H({ children, className = '', style = {} }: {
-    children: React.ReactNode; className?: string; style?: React.CSSProperties
-}) {
-    return (
-        <span style={{ fontFamily: HAND, ...style }} className={className}>
-            {children}
-        </span>
-    );
-}
-
-function StickyNote({ text }: { text: string }) {
-    return (
-        <span style={{ fontFamily: HAND, background: '#fef08a', color: '#713f12' }}
-            className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded shadow rotate-2 select-none whitespace-nowrap border border-yellow-300/60">
-            {text}
-        </span>
-    );
-}
-
 /* ── SUB-COMPONENTS ── */
+
+function Chip({ text, icon: Icon }: { text: string; icon?: any }) {
+    return (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}>
+            {Icon && <Icon size={12} color={C.gold} />}
+            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+        </div>
+    );
+}
+
 function IngredientRow({ name, qty, rda, highlight, index }: {
     name: string; qty: string; rda: string; highlight: boolean; index: number;
 }) {
@@ -213,545 +123,193 @@ function IngredientRow({ name, qty, rda, highlight, index }: {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.06 }}
-            whileHover={{ x: 4 }}
-            className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl border transition-all cursor-default"
             style={{
-                borderColor: highlight ? T.greenBorder : 'rgba(0,0,0,0.08)',
-                background:  highlight ? T.greenBg    : 'rgba(0,0,0,0.02)',
+                display: 'flex', alignItems: 'center', justifyItems: 'space-between', gap: 12, padding: '12px 16px', borderRadius: 14,
+                border: highlight ? `1px solid ${C.leaf}25` : `1px solid ${C.border}`,
+                background: highlight ? `${C.leaf}05` : C.white,
+                marginBottom: 8, transition: 'all 0.3s'
             }}
         >
-            <div className="flex items-center gap-2 min-w-0">
-                {highlight
-                    ? <DoodleCheck color={T.green} className="w-3.5 h-3.5 shrink-0" />
-                    : <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: T.textFaint }} />
-                }
-                <span className="text-[11px] font-semibold truncate" style={{ fontFamily: SANS, color: T.textMid }}>{name}</span>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
+                {highlight ? <Check size={14} color={C.leaf} /> : <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.silver, opacity: 0.3 }} />}
+                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 600, color: C.ink }}>{name}</span>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-                <span className="text-[10px]" style={{ fontFamily: SERIF, color: T.textSoft }}>{qty}</span>
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
-                    style={{
-                        fontFamily: SANS,
-                        background: highlight ? T.greenBg : 'rgba(0,0,0,0.05)',
-                        color:      highlight ? T.greenDark : T.textSoft,
-                    }}>
-                    {rda}
-                </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontFamily: FONTS.main, fontSize: 11, color: C.silver }}>{qty}</span>
+                <span style={{ fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: highlight ? C.leaf : C.silver, background: highlight ? `${C.leaf}11` : C.mist, padding: '4px 10px', borderRadius: 100 }}>{rda}</span>
             </div>
         </motion.div>
     );
 }
-
-function SupplementBar({ label, cost, pct, accent, index }: {
-    label: string; cost: string; pct: number; accent: string; index: number;
-}) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: 18 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="flex items-center gap-3"
-        >
-            <span className="text-[11px] font-semibold w-24 text-right shrink-0" style={{ fontFamily: SANS, color: T.textMid }}>
-                {label}
-            </span>
-            <div className="flex-1 h-7 rounded-full overflow-hidden relative"
-                style={{ background: 'rgba(0,0,0,0.06)' }}>
-                <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="h-full rounded-full flex items-center justify-end pr-3"
-                    style={{ background: `${accent}22`, borderRight: `2.5px solid ${accent}` }}
-                >
-                    <span className="text-[10px] font-bold" style={{ fontFamily: SERIF, color: accent }}>{cost}</span>
-                </motion.div>
-            </div>
-        </motion.div>
-    );
-}
-
-function RdaBar({ label, pct, color, index }: {
-    label: string; pct: number; color: string; index: number;
-}) {
-    return (
-        <div className="flex flex-col items-center gap-2">
-            <span className="text-[13px] font-bold" style={{ fontFamily: SERIF, color }}>{pct}%</span>
-            <div className="relative w-10 h-32 flex items-end rounded-full overflow-hidden"
-                style={{ background: 'rgba(0,0,0,0.07)' }}>
-                <motion.div
-                    initial={{ height: 0 }}
-                    whileInView={{ height: `${pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.08 + 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                    className="w-full rounded-full"
-                    style={{ background: `${color}cc` }}
-                />
-            </div>
-            <span className="text-[10px] font-semibold text-center leading-tight" style={{ fontFamily: SANS, color: T.textSoft }}>{label}</span>
-        </div>
-    );
-}
-
-interface UnifiedCardItem {
-    icon: React.ReactNode;
-    stat: string; statSuffix: string; statLabel: string;
-    title: string; content: string; note: string;
-    accent: string; accentBg: string; accentBorder: string;
-    rotate: string;
-}
-
-/* ── TRAIN CAROUSEL ── */
-const ROW_1 = [...allCards.slice(0, 6), ...allCards.slice(0, 6)];
-const ROW_2 = [...allCards.slice(5), ...allCards.slice(5)];
 
 function TrainCard({ item, isHovered, onHover, onLeave }: {
-    item: UnifiedCardItem;
+    item: any;
     isHovered: boolean;
     onHover: () => void;
     onLeave: () => void;
 }) {
-    const tiltX = useSpring(0, { stiffness: 180, damping: 18 });
-    const tiltY = useSpring(0, { stiffness: 180, damping: 18 });
-
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        const el = e.currentTarget;
-        const rect = el.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        tiltY.set(((e.clientX - cx) / rect.width) * 14);
-        tiltX.set(-((e.clientY - cy) / rect.height) * 10);
-    }, [tiltX, tiltY]);
-
-    const handleMouseLeave = useCallback(() => {
-        tiltX.set(0);
-        tiltY.set(0);
-        onLeave();
-    }, [tiltX, tiltY, onLeave]);
-
     return (
         <motion.div
-            onMouseMove={handleMouseMove}
             onMouseEnter={onHover}
-            onMouseLeave={handleMouseLeave}
+            onMouseLeave={onLeave}
             style={{
-                rotateX: tiltX,
-                rotateY: tiltY,
-                transformStyle: 'preserve-3d',
-                width: 220,
-                flexShrink: 0,
-                perspective: 800,
-                background: item.accentBg,
-                border: `1.5px dashed ${item.accentBorder}`,
-                minHeight: 210,
-            } as React.CSSProperties}
-            animate={{
-                scale: isHovered ? 1.06 : 1,
-                zIndex: isHovered ? 20 : 1,
-                boxShadow: isHovered
-                    ? `0 20px 50px ${item.accent}33, 0 4px 16px ${item.accent}22`
-                    : '0 2px 8px rgba(0,0,0,0.06)',
+                width: 280, flexShrink: 0, padding: '24px', borderRadius: 28,
+                background: C.white, border: `1px solid ${C.border}`,
+                boxShadow: isHovered ? '0 32px 64px rgba(0,0,0,0.08)' : '0 10px 30px rgba(0,0,0,0.03)',
+                transition: 'all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1)'
             }}
-            transition={{ scale: { type: 'spring', stiffness: 320, damping: 24 } }}
-            className="group relative rounded-2xl p-5 overflow-hidden cursor-default flex flex-col"
+            animate={{ y: isHovered ? -10 : 0, scale: isHovered ? 1.02 : 1 }}
         >
-            {/* Corner arc */}
-            <svg className="absolute top-0 right-0 w-12 h-12 pointer-events-none" viewBox="0 0 60 60" fill="none" aria-hidden="true">
-                <path d="M60 0 C40 0,0 20,0 60" stroke={item.accent} strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.22" />
-            </svg>
-
-            {/* Sticky note */}
-            <div className="absolute top-2.5 right-2.5">
-                <StickyNote text={item.note} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: `${item.accent}11`, color: item.accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.icon}
+                </div>
+                <div>
+                   <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.statLabel}</div>
+                   <div style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 900, color: item.accent }}>{item.stat}<span style={{ fontSize: 12, opacity: 0.6 }}>{item.statSuffix}</span></div>
+                </div>
             </div>
-
-            {/* Icon */}
-            <motion.div
-                className="mb-3 w-9 h-9 flex items-center justify-center rounded-xl shrink-0"
-                style={{ background: `${item.accent}18`, color: item.accent }}
-                animate={{ rotate: isHovered ? 12 : 0, scale: isHovered ? 1.15 : 1 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-            >
-                {item.icon}
-            </motion.div>
-
-            {/* Stat */}
-            <div className="mb-2">
-                <H className="text-2xl font-bold leading-none" style={{ color: item.accent }}>
-                    {item.stat}<span className="text-base">{item.statSuffix}</span>
-                </H>
-                <H className="block text-[9px] uppercase tracking-wider mt-0.5" style={{ color: T.textSoft }}>
-                    {item.statLabel}
-                </H>
-            </div>
-
-            <h3 className="text-[13px] font-bold mb-1.5" style={{ color: T.text, fontFamily: SANS }}>{item.title}</h3>
-            <p className="text-[11px] leading-relaxed flex-1" style={{ color: T.textMid, fontFamily: SANS }}>{item.content}</p>
-
-            {/* Animated shimmer on hover */}
-            {isHovered && (
-                <motion.div
-                    className="absolute inset-0 pointer-events-none rounded-2xl"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    style={{
-                        background: `linear-gradient(115deg, transparent 20%, ${item.accent}12 50%, transparent 80%)`,
-                    }}
-                />
-            )}
-
-            <WiggleLine
-                color={item.accent}
-                className={`w-full h-2.5 mt-3 transition-opacity duration-300 ${isHovered ? 'opacity-70' : 'opacity-25'}`}
-            />
+            <h4 style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 800, color: C.ink, marginBottom: 8 }}>{item.title}</h4>
+            <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.silver, lineHeight: 1.6, margin: 0 }}>{item.content}</p>
         </motion.div>
     );
 }
 
-function TrainRow({
-    cards,
-    direction,
-    speed,
-    paused,
-}: {
-    cards: UnifiedCardItem[];
-    direction: 'left' | 'right';
-    speed: number;
-    paused: boolean;
-    sectionBg: string;
-}) {
+function TrainRow({ cards, direction, speed, paused }: { cards: any[]; direction: 'left' | 'right'; speed: number; paused: boolean }) {
     const x = useMotionValue(0);
     const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-    const CARD_W = 220 + 16;
-    const HALF = cards.length / 2;
-    const LOOP_W = HALF * CARD_W;
+    const CARD_W = 280 + 24;
+    const LOOP_W = (cards.length / 2) * CARD_W;
 
     useAnimationFrame((_, delta) => {
         if (paused && hoveredIdx !== null) return;
         const velocity = direction === 'left' ? -speed : speed;
         let next = x.get() + (velocity * delta) / 1000;
-
         if (direction === 'left' && next <= -LOOP_W) next += LOOP_W;
         if (direction === 'right' && next >= 0) next -= LOOP_W;
-
         x.set(next);
     });
 
     return (
-        <div className="relative" style={{ paddingTop: 12, paddingBottom: 12 }}>
-            {/* Scroll track */}
-            <div style={{ overflow: 'visible' }}>
-                <motion.div
-                    style={{ x, display: 'flex', gap: 16, willChange: 'transform' }}
-                >
-                    {cards.map((item, i) => (
-                        <TrainCard
-                            key={i}
-                            item={item}
-                            isHovered={hoveredIdx === i}
-                            onHover={() => setHoveredIdx(i)}
-                            onLeave={() => setHoveredIdx(null)}
-                        />
-                    ))}
-                </motion.div>
-            </div>
-        </div>
-    );
-}
-
-function TrainCarousel({ sectionBg }: { sectionBg: string }) {
-    const [paused, setPaused] = useState(false);
-
-    return (
-        <div
-            className="relative -mx-6 md:-mx-12 lg:-mx-16"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-        >
-            {/* Rail track decoration — top */}
-            <div className="relative mb-1">
-                <svg className="w-full" height="6" style={{ opacity: 0.12 }}>
-                    <line x1="0" y1="3" x2="100%" y2="3" stroke="#15803d" strokeWidth="1.5" strokeDasharray="12 8" />
-                </svg>
-            </div>
-
-            <div className="flex flex-col gap-4 py-2">
-                {/* Row 1 — scrolls left */}
-                <TrainRow
-                    cards={ROW_1}
-                    direction="left"
-                    speed={paused ? 18 : 52}
-                    paused={paused}
-                    sectionBg={sectionBg}
-                />
-
-                {/* Divider track */}
-                <div className="relative flex items-center gap-3 px-6 md:px-12 lg:px-16">
-                    <motion.div
-                        className="flex-1 h-px"
-                        style={{ background: 'repeating-linear-gradient(to right, rgba(21,128,61,0.2) 0, rgba(21,128,61,0.2) 12px, transparent 12px, transparent 22px)' }}
-                        animate={{ backgroundPositionX: ['0px', '-34px'] }}
-                        transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
-                    />
-                    <span style={{ fontFamily: SANS, fontSize: 14, color: 'rgb(0, 0, 0)', letterSpacing: '0.18em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                        ✦ what sets us apart ✦
-                    </span>
-                    <motion.div
-                        className="flex-1 h-px"
-                        style={{ background: 'repeating-linear-gradient(to right, rgba(21,128,61,0.2) 0, rgba(21,128,61,0.2) 12px, transparent 12px, transparent 22px)' }}
-                        animate={{ backgroundPositionX: ['0px', '34px'] }}
-                        transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
-                    />
-                </div>
-
-                {/* Row 2 — scrolls right */}
-                <TrainRow
-                    cards={ROW_2}
-                    direction="right"
-                    speed={paused ? 14 : 42}
-                    paused={paused}
-                    sectionBg={sectionBg}
-                />
-            </div>
-
-            {/* Rail track decoration — bottom */}
-            <div className="relative mt-1">
-                <svg className="w-full" height="6" style={{ opacity: 0.12 }}>
-                    <line x1="0" y1="3" x2="100%" y2="3" stroke="#15803d" strokeWidth="1.5" strokeDasharray="12 8" />
-                </svg>
-            </div>
-
-            {/* Hover hint */}
-            <motion.div
-                className="absolute bottom-3 right-6 md:right-12"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: paused ? 0 : 1 }}
-                transition={{ duration: 0.4 }}
-            >
-                <span style={{ fontFamily: SANS, fontSize: 10, color: 'rgba(0,0,0,0.28)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                    hover to slow
-                </span>
+        <div style={{ overflow: 'visible', padding: '20px 0' }}>
+            <motion.div style={{ x, display: 'flex', gap: 24 }}>
+                {cards.map((item, i) => (
+                    <TrainCard key={i} item={item} isHovered={hoveredIdx === i} onHover={() => setHoveredIdx(i)} onLeave={() => setHoveredIdx(null)} />
+                ))}
             </motion.div>
         </div>
     );
 }
 
-
 /* ── MAIN ── */
 export default function HAWDsection() {
-    // ── Change this value to match your actual page/section background color ──
-    // e.g. '#ffffff', '#fafaf9', '#f8f7f4', etc.
-    const SECTION_BG = '#ffffff';
+    const sectionRef = useRef(null);
+    const inView = useInView(sectionRef, { once: true, margin: '-100px' });
+    const ROW_CARDS = [...allCards, ...allCards];
 
     return (
-        <>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
-            `}</style>
+        <section ref={sectionRef} style={{ background: C.white, padding: '160px 0', overflow: 'hidden', position: 'relative' }}>
+            
+            {/* Ambient Background Elements */}
+            <div style={{ position: 'absolute', top: -100, left: -100, width: 600, height: 600, background: `radial-gradient(circle, ${C.forest}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: -100, right: -100, width: 600, height: 600, background: `radial-gradient(circle, ${C.gold}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
-            <section
-                className="relative overflow-hidden py-16 md:py-24"
-                style={{ background: SECTION_BG }}
-            >
+            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
+                
+                {/* ── TOP SECTION ── */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 480px', gap: 80, alignItems: 'flex-start', marginBottom: 120 }}>
+                    <div>
+                        <Chip text="The Simple Process" icon={ShieldCheck} />
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '24px 0' }}>
+                            What do we do <br /> <span style={{ color: C.leaf }}>today?</span>
+                        </h2>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, maxWidth: 520, marginBottom: 48 }}>
+                            To fill nutritional gaps, most people turn to multiple supplements. But this creates a new problem: it's hard to track and maintain in a busy life.
+                        </p>
 
-                {/* ambient doodles */}
-                <Sparkle color="#15803d" className="absolute top-10 left-[2%] w-6 h-6 opacity-20 rotate-12 pointer-events-none" />
-                <CircleDoodle color="#f59e0b" className="absolute top-20 right-[2%] w-10 h-10 opacity-15 -rotate-6 pointer-events-none" />
-                <Sparkle color="#8b5cf6" className="absolute bottom-16 left-[3%] w-5 h-5 opacity-15 pointer-events-none" />
-                <CircleDoodle color="#15803d" className="absolute bottom-8 right-[3%] w-7 h-7 opacity-10 rotate-3 pointer-events-none" />
-
-                <div className="relative max-w-screen-xl mx-auto px-6 md:px-12 lg:px-16">
-
-                    {/* ── TOP ROW ── */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start mb-12">
-
-                        {/* LEFT */}
-                        <div>
-                            <motion.div
-                                initial={{ opacity: 0, y: 16, rotate: -2 }}
-                                whileInView={{ opacity: 1, y: 0, rotate: -1.5 }}
-                                viewport={{ once: true }}
-                                className="flex items-center gap-2 mb-4"
-                            >
-                                <div style={{
-                                    background: 'rgba(21,128,61,0.09)',
-                                    border: '2px dashed #15803d',
-                                    borderRadius: 10,
-                                    padding: '8px 18px',
-                                    transform: 'rotate(-1.5deg)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 8,
-                                }}>
-                                    <StarDoodle size={14} color="#15803d" />
-                                    <span style={{
-                                        fontFamily: HAND,
-                                        fontSize: 15,
-                                        color: '#15803d',
-                                        fontWeight: 700,
-                                        letterSpacing: '0.05em',
-                                    }}>
-                                        What Sets Us Apart
-                                    </span>
-                                    <StarDoodle size={14} color="#15803d" />
-                                </div>
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, x: -14 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                className="flex items-center gap-2 mb-4"
-                            >
-                                <span className="text-base">✨</span>
-                                <H className="text-lg font-bold tracking-wide" style={{ color: T.green }}>The Complete Solution</H>
-                                <svg viewBox="0 0 120 10" fill="none" className="w-14 h-3 opacity-50">
-                                    <path d="M0 5 C25 1,50 9,75 5 S125 1,150 5" stroke={T.green} strokeWidth="2" strokeLinecap="round" fill="none" />
-                                </svg>
-                            </motion.div>
-
-                            <motion.h2
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.07 }}
-                                className="font-playfair text-3xl md:text-5xl font-black mb-5 leading-tight"
-                                style={{ color: T.text }}
-                            >
-                                One Scoop.{' '}
-                                <span className="relative inline-block">
-                                    <span className="gradient-text italic">Complete Daily Support.</span>
-                                    <svg viewBox="0 0 220 10" fill="none" className="absolute -bottom-1 left-0 w-full" aria-hidden="true">
-                                        <path d="M2 6 C55 1,130 9,180 5 S208 1,218 6"
-                                            stroke={T.green} strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.5" />
-                                    </svg>
-                                </span>
-                            </motion.h2>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 12 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.13 }}
-                                className="text-sm leading-relaxed mb-8 max-w-sm"
-                                style={{ color: T.textMid, fontFamily: SANS }}
-                            >
-                                Designed for professionals, women, and busy parents. All 15+ essential micronutrients to bridge the gap between volume and vitality.
-                                Zero sugar, zero compromises.
-                            </motion.p>
-
-                            {/* ingredient panel */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.18 }}
-                                className="relative rounded-2xl p-5 -rotate-[0.5deg]"
-                                style={{ background: T.greenBg, border: `1.5px dashed ${T.greenBorder}` }}
-                            >
-                                <svg className="absolute top-0 right-0 w-12 h-12 pointer-events-none" viewBox="0 0 50 50" fill="none" aria-hidden="true">
-                                    <path d="M50 0 C30 0,0 20,0 50" stroke={T.green} strokeWidth="1.5" fill="none" opacity="0.2" />
-                                </svg>
-
-                                <div className="flex items-center gap-3 mb-4">
-                                    <span className="text-sm font-bold" style={{ fontFamily: SERIF, color: T.text }}>What&apos;s actually inside</span>
-                                    <StickyNote text="per 40g" />
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    {ingredients.map((ing, i) => <IngredientRow key={i} {...ing} index={i} />)}
-                                </div>
-
-                                <div className="flex items-center gap-2 mt-4 pt-3"
-                                    style={{ borderTop: `1px dashed ${T.greenBorder}` }}>
-                                    <DoodleCheck color={T.green} className="w-4 h-4" />
-                                    <span className="text-xs font-semibold" style={{ fontFamily: SANS, color: T.greenDark }}>
-                                        21 total ingredients, 0 fillers
-                                    </span>
-                                </div>
-                            </motion.div>
-                        </div>
-
-                        {/* RIGHT */}
-                        <div className="flex flex-col gap-5">
-
-                            {/* cost comparison */}
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.15 }}
-                                className="relative rounded-2xl p-6 rotate-[0.5deg]"
-                                style={{ background: 'rgba(0,0,0,0.03)', border: '1.5px dashed rgba(0,0,0,0.1)' }}
-                            >
-                                <div className="flex items-center justify-between mb-5">
-                                    <span className="text-sm font-bold" style={{ fontFamily: SERIF, color: T.text }}>
-                                        Supplements you&apos;d need separately
-                                    </span>
-                                    <span style={{ fontFamily: SANS, background: '#fda4af', color: '#7f1d1d' }}
-                                        className="text-[10px] font-bold px-2.5 py-0.5 rounded -rotate-1 shadow shrink-0 border border-pink-300/50">
-                                        vs Plainfuel
-                                    </span>
-                                </div>
-
-                                <div className="flex flex-col gap-3 mb-6">
-                                    {supplements.map((s, i) => <SupplementBar key={i} {...s} index={i} />)}
-                                </div>
-
-                                {/* total vs all-in-1 */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="rounded-xl p-4 text-center"
-                                        style={{ background: 'rgba(219,39,119,0.07)', border: '1.5px dashed rgba(219,39,119,0.3)' }}>
-                                        <span className="block text-2xl font-bold" style={{ fontFamily: SERIF, color: '#be185d' }}>₹7,300</span>
-                                        <span className="text-[13px] block mt-0.5" style={{ fontFamily: SANS, color: T.text }}>/ month separately</span>
-                                    </div>
-
-                                    <div className="rounded-xl p-4 text-center relative"
-                                        style={{ background: T.greenBg, border: `1.5px solid ${T.greenBorder}` }}>
-                                        <svg className="absolute pointer-events-none"
-                                            style={{ inset: '-6px', width: 'calc(100% + 12px)', height: 'calc(100% + 12px)' }}
-                                            preserveAspectRatio="none" viewBox="0 0 130 70" fill="none" aria-hidden="true">
-                                            <path d="M7 10 C35 2,95 2,122 8 S130 22,128 52 S122 66,90 67 S24 68,7 62 S0 50,2 32 S4 17,7 10Z"
-                                                stroke={T.green} strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
-                                        </svg>
-                                        <span className="block text-2xl font-bold italic" style={{ fontFamily: SERIF, color: T.greenDark }}>All-in-1</span>
-                                        <span className="text-[13px] block mt-0.5" style={{ fontFamily: SANS, color: T.text }}>Plainfuel blend</span>
-                                    </div>
-                                </div>
-
-                                <span className="block text-center text-[15px] mt-4 italic " style={{ fontFamily: SANS, color: T.text }}>
-                                    Recommended intake vs available income.
-                                </span>
-                            </motion.div>
-
-                            {/* RDA bars panel */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.25 }}
-                                className="rounded-2xl p-6 -rotate-[0.5deg]"
-                                style={{ background: 'rgba(0,0,0,0.025)', border: '1px dashed rgba(0,0,0,0.08)' }}
-                            >
-                                <div className="flex items-center justify-between mb-5">
-                                    <span className="text-sm font-bold" style={{ fontFamily: SERIF, color: T.textMid }}>
-                                        % RDA covered per serving
-                                    </span>
-                                    <StickyNote text="per 40g scoop" />
-                                </div>
-                                <div className="flex items-end gap-4 justify-between">
-                                    {rdaBars.map((b, i) => <RdaBar key={i} {...b} index={i} />)}
-                                </div>
-                            </motion.div>
+                        <div style={{ padding: '40px', background: C.offwhite, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                                <FlaskConical size={18} color={C.forest} />
+                                <h4 style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: C.ink, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Laboratory Ingredients</h4>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {ingredients.map((ing, i) => <IngredientRow key={i} {...ing} index={i} />)}
+                            </div>
                         </div>
                     </div>
 
-                    {/* ── TRAIN CAROUSEL ── */}
-                    <TrainCarousel sectionBg={SECTION_BG} />
+                    <div style={{ padding: '48px', background: `${C.mist}50`, borderRadius: 40, border: `1px solid ${C.forest}05`, position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
+                             <Chip text="Market Analysis" />
+                        </div>
+                        
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: C.ink, marginBottom: 12 }}>The Complexity Barrier.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: 14, color: C.silver, marginBottom: 40 }}>The issue is not effort; the issue is that the system for meeting daily needs is too complex.</p>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginBottom: 48 }}>
+                            {supplements.map((s, i) => (
+                                <div key={i}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink }}>{s.label}</span>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 900, color: s.accent }}>{s.cost}</span>
+                                    </div>
+                                    <div style={{ height: 6, background: C.white, borderRadius: 10 }}>
+                                        <motion.div initial={{ width: 0 }} whileInView={{ width: `${s.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ height: '100%', background: s.accent, borderRadius: 10 }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ padding: '32px', background: C.forest, borderRadius: 24, textAlign: 'center', boxShadow: '0 20px 48px rgba(10,61,31,0.2)' }}>
+                            <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, color: `${C.white}70`, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>Total Investment</div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                                <span style={{ fontSize: 32, fontWeight: 900, color: C.white }}>₹7,300</span>
+                                <div style={{ height: 24, width: 1, background: `${C.white}30` }} />
+                                <span style={{ fontSize: 14, fontWeight: 800, color: C.leaf }}>All-In-One</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-        </>
+
+                {/* ── CAROUSEL SECTION ── */}
+                <div style={{ borderTop: `1px solid ${C.forest}08`, paddingTop: 80 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40 }}>
+                        <div>
+                             <h3 style={{ fontFamily: FONTS.main, fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>PlainFuel simplifies the process.</h3>
+                             <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.gold, margin: '8px 0 0' }}>One simple habit. Done daily. Making nutrition easier.</p>
+                        </div>
+                        <div style={{ display: 'flex', gap: 12 }}>
+                             {[1, 2, 3].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.3 + (i * 0.2) }} />)}
+                        </div>
+                    </div>
+                    
+                    <TrainRow direction="left" cards={ROW_CARDS} speed={50} paused={false} />
+                </div>
+
+                {/* ── RDA BARS ── */}
+                <div style={{ marginTop: 120, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 32 }}>
+                    {rdaBars.map((b, i) => (
+                        <motion.div 
+                            key={i} 
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: i * 0.1 }}
+                            style={{ textAlign: 'center', padding: '32px 24px', background: C.offwhite, borderRadius: 24, border: `1px solid ${C.forest}02` }}
+                        >
+                            <div style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: b.color, marginBottom: 12 }}>{b.pct}%</div>
+                            <div style={{ height: 120, width: 12, background: C.white, borderRadius: 10, margin: '0 auto 16px', position: 'relative', overflow: 'hidden' }}>
+                                <motion.div initial={{ height: 0 }} whileInView={{ height: `${b.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ width: '100%', background: `${b.color}cc`, position: 'absolute', bottom: 0 }} />
+                            </div>
+                            <div style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink }}>{b.label}</div>
+                        </motion.div>
+                    ))}
+                </div>
+
+            </div>
+
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+            `}</style>
+        </section>
     );
 }

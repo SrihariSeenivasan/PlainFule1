@@ -1,1015 +1,414 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { 
+  CheckCircle2, AlertCircle, TrendingDown, 
+  Calendar, Sparkles, Activity,
+  Microscope, FlaskConical, Target
+} from 'lucide-react';
+import Image from 'next/image';
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-const BAR_DATA = [8, 13, 18, 24, 32, 40, 48, 58, 68, 80, 90, 100];
-const BAR_COLORS = [
-    '#bbf7d0', '#bbf7d0', '#bbf7d0', '#bbf7d0',
-    '#fde68a', '#fde68a', '#fde68a', '#fde68a',
-    '#fca5a5', '#fca5a5', '#fca5a5', '#fca5a5',
-];
-const BAR_BORDERS = [
-    '#22c55e', '#22c55e', '#22c55e', '#22c55e',
-    '#d97706', '#d97706', '#d97706', '#d97706',
-    '#ef4444', '#ef4444', '#ef4444', '#ef4444',
-];
+/* ── Design Tokens (Glacier Elite Selection) ── */
+const C = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  mist: '#f1f5f9',
+  gold: '#854d0e',
+  goldLight: '#a16207',
+  champagne: '#fef3c7',
+  glass: 'rgba(255, 255, 255, 0.7)',
+  border: 'rgba(0, 0, 0, 0.05)',
+  glowGreen: 'rgba(22, 101, 52, 0.08)',
+  glowGold: 'rgba(184, 149, 58, 0.06)',
+};
 
-const NUTRIENTS = [
-    { sym: 'B12', name: 'Vitamin B12', role: 'Nerve health & energy', color: '#7c3aed', pct: 30 },
-    { sym: 'D3', name: 'Vitamin D3', role: 'Immunity & bone strength', color: '#d97706', pct: 38 },
-    { sym: 'Mg', name: 'Magnesium', role: 'Muscle & sleep quality', color: '#16a34a', pct: 44 },
-    { sym: 'Ca', name: 'Calcium', role: 'Bone density & teeth', color: '#0284c7', pct: 52 },
-    { sym: 'Fe', name: 'Iron', role: 'Oxygen transport & focus', color: '#dc2626', pct: 36 },
-];
+const FONTS = {
+  main: "'Montserrat', sans-serif",
+  accent: "'Caveat', cursive",
+};
 
-// ── SVG helpers ───────────────────────────────────────────────────────────────
-function WavyLine({ color = '#16a34a', w = 220 }: { color?: string; w?: number }) {
-    return (
-        <svg viewBox={`0 0 ${w} 12`} width={w} height={12} style={{ display: 'block', pointerEvents: 'none' }}>
-            <path d={`M2,8 Q${w * 0.18},2 ${w * 0.36},8 Q${w * 0.54},14 ${w * 0.72},8 Q${w * 0.9},2 ${w - 2},8`}
-                fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" opacity={0.55} />
-        </svg>
-    );
+/* ─────────────────────────────────────────────────────────────
+   HELPERS & SUB-COMPONENTS
+───────────────────────────────────────────────────────────── */
+
+function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: { 
+  eyebrow: string; title: string; subtitle?: string; align?: 'center' | 'left' 
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <div ref={ref} style={{ textAlign: align, marginBottom: 80, maxWidth: align === 'center' ? 800 : '100%', margin: align === 'center' ? '0 auto 80px' : '0 0 80px' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 24 }}
+      >
+        <Sparkles size={14} color={C.gold} />
+        <span style={{ fontSize: 10, fontWeight: 800, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{eyebrow}</span>
+      </motion.div>
+      
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}
+      >
+        {title}
+      </motion.h2>
+
+      {subtitle && (
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ fontFamily: FONTS.main, fontSize: 'clamp(16px, 1.8vw, 19px)', color: C.silver, marginTop: 24, lineHeight: 1.6, fontWeight: 400 }}
+        >
+          {subtitle}
+        </motion.p>
+      )}
+    </div>
+  );
 }
 
-function DoodleArrow({ color = '#16a34a', style = {} }: { color?: string; style?: React.CSSProperties }) {
-    return (
-        <svg viewBox="0 0 80 48" width={64} height={40} style={{ display: 'block', ...style }}>
-            <path d="M8,36 Q16,12 50,18 Q62,22 66,14" fill="none" stroke={color} strokeWidth="2.8"
-                strokeLinecap="round" strokeDasharray="6 3.5" opacity={0.7} />
-            <path d="M58,8 L68,18 L56,24" fill="none" stroke={color} strokeWidth="2.8"
-                strokeLinecap="round" strokeLinejoin="round" opacity={0.7} />
-        </svg>
-    );
+function GlacierCard({ children, style = {}, delay = 0, className = "" }: { children: React.ReactNode; style?: React.CSSProperties; delay?: number; className?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
+      style={{
+        background: C.glass,
+        backdropFilter: 'blur(32px)',
+        WebkitBackdropFilter: 'blur(32px)',
+        border: `1px solid ${C.white}50`,
+        borderRadius: 32,
+        padding: 48,
+        boxShadow: '0 40px 80px rgba(0, 0, 0, 0.05)',
+        position: 'relative',
+        overflow: 'hidden',
+        ...style
+      }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
-function CheckBox({ color = '#16a34a' }: { color?: string }) {
-    return (
-        <svg viewBox="0 0 26 26" width={24} height={24} fill="none" style={{ flexShrink: 0 }}>
-            <rect x="2" y="2" width="22" height="22" rx="6"
-                stroke={color} strokeWidth="2.2" strokeDasharray="6 3" fill={`${color}18`} />
-            <path d="M6,13 L11,18 L20,8" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
+/* ─────────────────────────────────────────────────────────────
+   MAIN COMPONENT
+───────────────────────────────────────────────────────────── */
 
-function CrossBox({ color = '#ef4444' }: { color?: string }) {
-    return (
-        <svg viewBox="0 0 26 26" width={24} height={24} fill="none" style={{ flexShrink: 0 }}>
-            <rect x="2" y="2" width="22" height="22" rx="6"
-                stroke={color} strokeWidth="2.2" strokeDasharray="6 3" fill="#fef2f2" />
-            <path d="M8,8 L18,18 M18,8 L8,18" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-    );
-}
-
-// ── Product image in a doodle ring ────────────────────────────────────────────
-function DoodleImgCircle({ src, size = 200, color = '#16a34a', rotate = '0deg', style = {} }:
-    { src: string; size?: number; color?: string; rotate?: string; style?: React.CSSProperties }) {
-    return (
-        <div style={{
-            position: 'relative', width: size, height: size, flexShrink: 0,
-            transform: `rotate(${rotate})`, ...style
-        }}>
-            <svg viewBox="0 0 100 100" width={size} height={size}
-                style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-                <ellipse cx="50" cy="50" rx="47" ry="47" fill="none"
-                    stroke={color} strokeWidth="2.6" strokeDasharray="9 5" strokeLinecap="round" opacity={0.65} />
-                <ellipse cx="52" cy="48" rx="41" ry="41" fill="none"
-                    stroke={color} strokeWidth="1.2" strokeDasharray="4 12" opacity={0.3} />
-            </svg>
-            <img src={src} alt="PlainFuel"
-                style={{
-                    position: 'absolute', inset: '8%', width: '84%', height: '84%',
-                    borderRadius: '50%', objectFit: 'cover',
-                    boxShadow: '0 8px 28px rgba(0,0,0,0.13)', border: '4px solid #fff',
-                }}
-            />
-        </div>
-    );
-}
-
-// ── Doodle decoration packs ───────────────────────────────────────────────────
-
-/** Hook: question marks, pill capsules, leaf, drop, sparkle */
-function HookDoodles() {
-    return (
-        <svg aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', zIndex: 1 }}>
-            {/* large leaf top-right */}
-            <g transform="translate(870,50) rotate(20)">
-                <path d="M0,0 Q22,-36 44,0 Q22,14 0,0Z" fill="none" stroke="#16a34a" strokeWidth="2" strokeDasharray="5 3" opacity={0.3} />
-                <line x1="22" y1="0" x2="22" y2="-34" stroke="#16a34a" strokeWidth="1.3" strokeDasharray="3 3" opacity={0.25} />
-            </g>
-            {/* small leaf mid-right */}
-            <g transform="translate(940,340) rotate(-18)">
-                <path d="M0,0 Q13,-22 26,0 Q13,9 0,0Z" fill="none" stroke="#22c55e" strokeWidth="1.6" strokeDasharray="4 3" opacity={0.28} />
-            </g>
-            {/* pill capsule top-left */}
-            <g transform="translate(55,170) rotate(-30)">
-                <rect x="-10" y="-26" width="20" height="52" rx="10" fill="none" stroke="#d97706" strokeWidth="2" strokeDasharray="5 3" opacity={0.28} />
-                <line x1="-10" y1="0" x2="10" y2="0" stroke="#d97706" strokeWidth="1.5" opacity={0.22} />
-            </g>
-            {/* water drop top-center */}
-            <g transform="translate(500,32)">
-                <path d="M0,-24 Q16,0 0,19 Q-16,0 0,-24Z" fill="none" stroke="#0284c7" strokeWidth="1.8" strokeDasharray="4 3" opacity={0.28} />
-            </g>
-            {/* sparkle bottom-left */}
-            <g transform="translate(80,520)">
-                <line x1="-14" y1="0" x2="14" y2="0" stroke="#d97706" strokeWidth="2.2" strokeLinecap="round" opacity={0.32} />
-                <line x1="0" y1="-14" x2="0" y2="14" stroke="#d97706" strokeWidth="2.2" strokeLinecap="round" opacity={0.32} />
-                <line x1="-10" y1="-10" x2="10" y2="10" stroke="#d97706" strokeWidth="1.4" strokeLinecap="round" opacity={0.2} />
-                <line x1="10" y1="-10" x2="-10" y2="10" stroke="#d97706" strokeWidth="1.4" strokeLinecap="round" opacity={0.2} />
-            </g>
-            {/* wavy squiggle bottom-right */}
-            <path d="M780,580 Q820,560 860,580 Q900,600 940,575" fill="none" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" strokeDasharray="5 3" opacity={0.28} />
-            {/* dots */}
-            <circle cx="960" cy="180" r="5" fill="#16a34a" opacity={0.18} />
-            <circle cx="30" cy="400" r="4" fill="#d97706" opacity={0.22} />
-            <circle cx="900" cy="520" r="6" fill="#bbf7d0" stroke="#16a34a" strokeWidth="1.5" opacity={0.32} />
-            {/* small star outline */}
-            <polygon points="140,540 143,550 153,550 145,556 148,566 140,560 132,566 135,556 127,550 137,550"
-                fill="none" stroke="#d97706" strokeWidth="1.5" strokeLinejoin="round" opacity={0.28} />
-        </svg>
-    );
-}
-
-/** Section 01: clock, leaf, pill, dot accents */
-function SlowDoodles() {
-    return (
-        <svg aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', zIndex: 1 }}>
-            {/* clock top-right */}
-            <g transform="translate(950,65)">
-                <circle cx="0" cy="0" r="26" fill="none" stroke="#16a34a" strokeWidth="2" strokeDasharray="6 3" opacity={0.28} />
-                <line x1="0" y1="0" x2="0" y2="-16" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" opacity={0.3} />
-                <line x1="0" y1="0" x2="12" y2="5" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" opacity={0.3} />
-            </g>
-            {/* leaf top-left */}
-            <g transform="translate(38,80) rotate(-10)">
-                <path d="M0,0 Q22,-36 44,0 Q22,15 0,0Z" fill="none" stroke="#16a34a" strokeWidth="1.8" strokeDasharray="5 3" opacity={0.3} />
-                <line x1="22" y1="0" x2="22" y2="-34" stroke="#16a34a" strokeWidth="1.2" strokeDasharray="3 3" opacity={0.25} />
-            </g>
-            {/* small leaf bottom-right */}
-            <g transform="translate(940,560) rotate(25)">
-                <path d="M0,0 Q11,-19 22,0 Q11,8 0,0Z" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeDasharray="4 3" opacity={0.28} />
-            </g>
-            {/* sparkle left-mid */}
-            <g transform="translate(28,400)">
-                <line x1="-12" y1="0" x2="12" y2="0" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                <line x1="0" y1="-12" x2="0" y2="12" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-            </g>
-            {/* pill bottom-left */}
-            <g transform="translate(60,570) rotate(20)">
-                <rect x="-8" y="-20" width="16" height="40" rx="8" fill="none" stroke="#d97706" strokeWidth="1.8" strokeDasharray="4 3" opacity={0.25} />
-                <line x1="-8" y1="0" x2="8" y2="0" stroke="#d97706" strokeWidth="1.2" opacity={0.2} />
-            </g>
-            {/* dots */}
-            <circle cx="970" cy="460" r="5" fill="#bbf7d0" stroke="#16a34a" strokeWidth="1.5" opacity={0.32} />
-            <circle cx="18" cy="260" r="3" fill="#16a34a" opacity={0.18} />
-        </svg>
-    );
-}
-
-/** Section 02 (diet): wheat stalks, bowl / dal, leaf, sparkle */
-function DietDoodles() {
-    return (
-        <svg aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', zIndex: 1 }}>
-            {/* wheat stalk far left (below product img) */}
-            <g transform="translate(38,260)">
-                <line x1="0" y1="80" x2="0" y2="0" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.32} />
-                {[-1, 0, 1].map((x, i) => (
-                    <ellipse key={i} cx={x * 11} cy={12 + i * 14} rx="7" ry="4"
-                        fill="none" stroke="#d97706" strokeWidth="1.5" strokeDasharray="3 2" opacity={0.28}
-                        transform={`rotate(${x * 30} ${x * 11} ${12 + i * 14})`} />
-                ))}
-            </g>
-            {/* wheat stalk far right (below product img) */}
-            <g transform="translate(962,250) scale(-1,1)">
-                <line x1="0" y1="80" x2="0" y2="0" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                {[-1, 0, 1].map((x, i) => (
-                    <ellipse key={i} cx={x * 11} cy={12 + i * 14} rx="7" ry="4"
-                        fill="none" stroke="#d97706" strokeWidth="1.5" strokeDasharray="3 2" opacity={0.22}
-                        transform={`rotate(${x * 30} ${x * 11} ${12 + i * 14})`} />
-                ))}
-            </g>
-            {/* bowl bottom-left */}
-            <g transform="translate(50,580)">
-                <path d="M-30,0 Q-30,30 0,30 Q30,30 30,0 Z" fill="none" stroke="#d97706" strokeWidth="2" strokeDasharray="5 3" opacity={0.28} />
-                <line x1="-30" y1="0" x2="30" y2="0" stroke="#d97706" strokeWidth="1.5" strokeDasharray="4 3" opacity={0.22} />
-                <path d="M-8,-8 Q-5,-16 -8,-24" fill="none" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" opacity={0.2} />
-                <path d="M0,-8  Q3,-18 0,-26" fill="none" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" opacity={0.2} />
-                <path d="M8,-8  Q5,-16 8,-24" fill="none" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" opacity={0.2} />
-            </g>
-            {/* leaf right-mid */}
-            <g transform="translate(960,430) rotate(15)">
-                <path d="M0,0 Q20,-32 40,0 Q20,13 0,0Z" fill="none" stroke="#16a34a" strokeWidth="1.8" strokeDasharray="5 3" opacity={0.28} />
-                <line x1="20" y1="0" x2="20" y2="-30" stroke="#16a34a" strokeWidth="1.2" strokeDasharray="3 3" opacity={0.22} />
-            </g>
-            {/* sparkle top-center */}
-            <g transform="translate(500,28)">
-                <line x1="-11" y1="0" x2="11" y2="0" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                <line x1="0" y1="-11" x2="0" y2="11" stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                <line x1="-8" y1="-8" x2="8" y2="8" stroke="#d97706" strokeWidth="1.2" strokeLinecap="round" opacity={0.18} />
-                <line x1="8" y1="-8" x2="-8" y2="8" stroke="#d97706" strokeWidth="1.2" strokeLinecap="round" opacity={0.18} />
-            </g>
-            {/* dots */}
-            <circle cx="960" cy="220" r="5" fill="#fde68a" stroke="#d97706" strokeWidth="1.5" opacity={0.38} />
-            <circle cx="22" cy="460" r="3" fill="#d97706" opacity={0.2} />
-        </svg>
-    );
-}
-
-/** Section 03 (blood): blood drops, DNA helix, medical cross, leaf */
-function BloodDoodles() {
-    return (
-        <svg aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', zIndex: 1 }}>
-            {/* blood drop top-left */}
-            <g transform="translate(42,80)">
-                <path d="M0,-30 Q20,0 0,24 Q-20,0 0,-30Z" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="5 3" opacity={0.3} />
-            </g>
-            {/* blood drop top-right */}
-            <g transform="translate(950,50)">
-                <path d="M0,-22 Q14,0 0,18 Q-14,0 0,-22Z" fill="none" stroke="#ef4444" strokeWidth="1.8" strokeDasharray="4 3" opacity={0.28} />
-            </g>
-            {/* DNA helix left */}
-            <g transform="translate(26,320)">
-                {[0, 1, 2, 3, 4].map(i => (
-                    <g key={i}>
-                        <path d={`M-14,${i * 22 - 44} Q0,${i * 22 - 33} 14,${i * 22 - 44}`} fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeDasharray="3 2" opacity={0.25} />
-                        <path d={`M-14,${i * 22 - 33} Q0,${i * 22 - 44} 14,${i * 22 - 33}`} fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" opacity={0.2} />
-                    </g>
-                ))}
-            </g>
-            {/* medical cross right */}
-            <g transform="translate(956,400)">
-                <rect x="-5" y="-18" width="10" height="36" rx="4" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="4 2" opacity={0.28} />
-                <rect x="-18" y="-5" width="36" height="10" rx="4" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="4 2" opacity={0.28} />
-            </g>
-            {/* sparkle bottom-right */}
-            <g transform="translate(940,580)">
-                <line x1="-13" y1="0" x2="13" y2="0" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                <line x1="0" y1="-13" x2="0" y2="13" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-            </g>
-            {/* leaf bottom-left */}
-            <g transform="translate(42,570) rotate(-20)">
-                <path d="M0,0 Q18,-28 36,0 Q18,12 0,0Z" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="4 3" opacity={0.25} />
-            </g>
-            {/* dots */}
-            <circle cx="960" cy="580" r="5" fill="#fca5a5" stroke="#ef4444" strokeWidth="1.5" opacity={0.32} />
-            <circle cx="500" cy="22" r="3" fill="#ef4444" opacity={0.18} />
-        </svg>
-    );
-}
-
-/** Payoff: sun rays, leaves, sparkle, pill, drop, star */
-function PayoffDoodles() {
-    return (
-        <svg aria-hidden style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', zIndex: 1 }}>
-            {/* sun rays top-right */}
-            <g transform="translate(930,70)">
-                {[0, 45, 90, 135, 180, 225, 270, 315].map(a => (
-                    <line key={a}
-                        x1={Math.cos(a * Math.PI / 180) * 20} y1={Math.sin(a * Math.PI / 180) * 20}
-                        x2={Math.cos(a * Math.PI / 180) * 36} y2={Math.sin(a * Math.PI / 180) * 36}
-                        stroke="#d97706" strokeWidth="2" strokeLinecap="round" opacity={0.28} />
-                ))}
-                <circle cx="0" cy="0" r="15" fill="none" stroke="#d97706" strokeWidth="2" strokeDasharray="5 3" opacity={0.32} />
-            </g>
-            {/* big leaf top-left */}
-            <g transform="translate(46,80) rotate(-15)">
-                <path d="M0,0 Q22,-36 44,0 Q22,15 0,0Z" fill="none" stroke="#16a34a" strokeWidth="2" strokeDasharray="5 3" opacity={0.32} />
-                <line x1="22" y1="0" x2="22" y2="-34" stroke="#16a34a" strokeWidth="1.3" strokeDasharray="3 3" opacity={0.26} />
-            </g>
-            {/* small leaf mid-left */}
-            <g transform="translate(28,430) rotate(10)">
-                <path d="M0,0 Q13,-21 26,0 Q13,9 0,0Z" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="4 3" opacity={0.26} />
-            </g>
-            {/* pill bottom-left */}
-            <g transform="translate(60,560) rotate(-25)">
-                <rect x="-9" y="-22" width="18" height="44" rx="9" fill="none" stroke="#16a34a" strokeWidth="1.8" strokeDasharray="4 3" opacity={0.25} />
-                <line x1="-9" y1="0" x2="9" y2="0" stroke="#16a34a" strokeWidth="1.2" opacity={0.2} />
-            </g>
-            {/* sparkle bottom-right */}
-            <g transform="translate(950,560)">
-                <line x1="-14" y1="0" x2="14" y2="0" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" opacity={0.32} />
-                <line x1="0" y1="-14" x2="0" y2="14" stroke="#16a34a" strokeWidth="2.2" strokeLinecap="round" opacity={0.32} />
-                <line x1="-10" y1="-10" x2="10" y2="10" stroke="#16a34a" strokeWidth="1.4" strokeLinecap="round" opacity={0.2} />
-                <line x1="10" y1="-10" x2="-10" y2="10" stroke="#16a34a" strokeWidth="1.4" strokeLinecap="round" opacity={0.2} />
-            </g>
-            {/* water drop mid-right */}
-            <g transform="translate(966,350)">
-                <path d="M0,-20 Q14,0 0,16 Q-14,0 0,-20Z" fill="none" stroke="#0284c7" strokeWidth="1.8" strokeDasharray="4 3" opacity={0.25} />
-            </g>
-            {/* star bottom-center */}
-            <g transform="translate(500,600)">
-                <polygon points="0,-15 3.9,-4.9 14,-4.9 6.4,1.6 9.7,12.4 0,6 -9.7,12.4 -6.4,1.6 -14,-4.9 -3.9,-4.9"
-                    fill="none" stroke="#d97706" strokeWidth="1.5" strokeLinejoin="round" opacity={0.28} />
-            </g>
-            {/* dots */}
-            <circle cx="80" cy="360" r="5" fill="#bbf7d0" stroke="#16a34a" strokeWidth="1.5" opacity={0.38} />
-            <circle cx="960" cy="180" r="3" fill="#16a34a" opacity={0.18} />
-            <circle cx="500" cy="28" r="3" fill="#d97706" opacity={0.2} />
-        </svg>
-    );
-}
-
-// Intersection Observer hook
-function useInView(threshold = 0.18) {
-    const ref = useRef<HTMLDivElement>(null);
-    const [inView, setInView] = useState(false);
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, [threshold]);
-    return { ref, inView };
-}
-
-// ── SECTION 1 — Hero Hook ─────────────────────────────────────────────────────
-function SectionHook() {
-    const { ref, inView } = useInView(0.1);
-    return (
-        <section ref={ref} className={`pf-section pf-hook${inView ? ' pf-in' : ''}`}>
-            <div className="pf-blob pf-blob-1" />
-            <div className="pf-blob pf-blob-2" />
-            <HookDoodles />
-
-            <div className="pf-hook-inner">
-                <div className="pf-tag pf-tag-green">
-                    <span className="pf-tag-dot pf-dot-green" />
-                    <span>The Real Problem</span>
-                </div>
-                <h1 className="pf-h1">
-                    Why is<br />
-                    <span className="pf-squiggle-wrap pf-green-text">
-                        PlainFuel
-                        <WavyLine color="#16a34a" w={220} />
-                    </span>{' '}
-                    needed?
-                </h1>
-                <p className="pf-lead">
-                    Most people assume deficiencies happen <em>suddenly, but that’s not true.</em>.
-                    <br />
-                    <strong>That's the biggest myth in nutrition.</strong>
-                </p>
-                <div className="pf-hook-pills">
-                    {[
-                        { icon: '🩸', label: '70% Indians are B12 deficient' },
-                        { icon: '☀️', label: '80% have low Vitamin D' },
-                        { icon: '🦴', label: '50% lack enough Calcium' },
-                    ].map(p => (
-                        <div key={p.label} className="pf-pill">
-                            <span>{p.icon}</span><span>{p.label}</span>
-                        </div>
-                    ))}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 8 }}>
-                    <DoodleArrow color="#16a34a" />
-                    <span className="pf-caveat" style={{ fontSize: 22, color: '#4a6741' }}>scroll to find out why →</span>
-                </div>
-            </div>
-
-            {/* Product image */}
-            <div className="pf-hook-img-wrap">
-                <DoodleImgCircle src="/images/DoodleImages/hero1.png" size={320} color="#16a34a" />
-            </div>
-        </section>
-    );
-}
-
-// ── SECTION 2 — Deficiencies build slowly ────────────────────────────────────
-function SectionSlow() {
-    const { ref, inView } = useInView();
-    const [chartAnim, setChartAnim] = useState(false);
-    useEffect(() => { if (inView) setTimeout(() => setChartAnim(true), 300); }, [inView]);
-
-    return (
-        <section ref={ref} className={`pf-section pf-slow${inView ? ' pf-in' : ''}`}>
-            <div className="pf-blob pf-blob-3" />
-            <SlowDoodles />
-
-            <div className="pf-two-col">
-                {/* LEFT */}
-                <div className="pf-col-text">
-                    <div className="pf-step-badge pf-step-green">01</div>
-                    <h2 className="pf-h2">
-                        Deficiencies<br />
-                        <span className="pf-squiggle-wrap pf-green-text">
-                            build slowly
-                            <WavyLine color="#16a34a" w={190} />
-                        </span>
-                    </h2>
-                    <p className="pf-body">
-                        They are the result of missing  {' '}
-                        <mark className="pf-mark-green">small amounts</mark> of nutrients every day for months.
-                    </p>
-
-                    <p className="pf-body">
-                        Your body runs on <strong>daily input</strong>. Just like missing homework every day leads to problems later, missing nutrients daily creates long-term gaps.
-                        <div className="pf-cards-col">
-                            {[
-                                { icon: '📅', title: 'Month 1–3', desc: 'No noticeable symptoms. Stores deplete silently.', color: '#16a34a' },
-                                { icon: '⚠️', title: 'Month 4–8', desc: 'Fatigue sets in. Focus drops. Mood shifts.', color: '#d97706' },
-                                { icon: '🚨', title: 'Month 9+', desc: 'Critical deficiency. Blood tests finally flag it.', color: '#ef4444' },
-                            ].map((c, i) => (
-                                <div key={i} className="pf-timeline-card" style={{ borderColor: `${c.color}44` }}>
-                                    <span style={{ fontSize: 24 }}>{c.icon}</span>
-                                    <div>
-                                        <div style={{ fontFamily: "'Nunito',sans-serif", fontWeight: 800, fontSize: 16, color: '#1a2e1a' }}>{c.title}</div>
-                                        <div style={{ fontFamily: "'Nunito',sans-serif", fontSize: 14, color: '#6b7280', marginTop: 3 }}>{c.desc}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </p>
-                    <p className="pf-body">
-                        Today, many of us have started paying attention to  {' '}
-                        <mark className="pf-mark-green">protein.</mark> But nutrition is not just about protein.
-
-                    </p>
-                </div>
-
-                {/* RIGHT: chart + product image below */}
-                <div className="pf-col-visual">
-                    <div className="pf-sticky-note pf-sticky-green pf-rotate-1" style={{ marginBottom: 32 }}>
-                        <div className="pf-sticky-tape" />
-                        <div className="pf-caveat" style={{ fontSize: 17, color: '#4a6741', marginBottom: 14 }}>
-                            📊 Deficiency gap — 12 months
-                        </div>
-                        <div style={{ position: 'relative', paddingBottom: 4 }}>
-                            {[35, 70, 105, 140].map(px => (
-                                <div key={px} style={{
-                                    position: 'absolute', left: 0, right: 0, bottom: px, height: 1,
-                                    borderTop: '1px dashed rgba(22,163,74,0.15)', pointerEvents: 'none'
-                                }} />
-                            ))}
-                            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, height: 148 }}>
-                                {BAR_DATA.map((h, i) => (
-                                    <div key={i} style={{
-                                        flex: 1, borderRadius: '4px 4px 0 0',
-                                        background: BAR_COLORS[i], border: `2px solid ${BAR_BORDERS[i]}`,
-                                        height: chartAnim ? `${(h / 100) * 148}px` : 0,
-                                        transition: `height 0.7s cubic-bezier(0.22,1,0.36,1) ${i * 55}ms`,
-                                    }} />
-                                ))}
-                            </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
-                            {['Jan', 'Jun', 'Dec'].map(m => (
-                                <span key={m} className="pf-caveat" style={{ fontSize: 15, color: '#4a6741' }}>{m}</span>
-                            ))}
-                        </div>
-                        <div style={{ display: 'flex', gap: 14, marginTop: 14, flexWrap: 'wrap' }}>
-                            {[['Normal', '#bbf7d0', '#22c55e'], ['Warning', '#fde68a', '#d97706'], ['Critical', '#fca5a5', '#ef4444']].map(([lbl, bg, bdr]) => (
-                                <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                    <div style={{ width: 12, height: 12, borderRadius: 3, background: bg as string, border: `2px solid ${bdr}` }} />
-                                    <span className="pf-caveat" style={{ fontSize: 15, color: '#4a6741' }}>{lbl as string}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Product image below chart */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                        <span className="pf-caveat" style={{ fontSize: 28, color: '#16a34a' }}>closes the gap ↓</span>
-                        <DoodleImgCircle src="/images/product.png" size={272} color="#22c55e" rotate="-3deg" />
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-// ── SECTION 3 — Indian diet reality ──────────────────────────────────────────
-function SectionDiet() {
-    const { ref, inView } = useInView();
-
-    return (
-        <section ref={ref} className={`pf-section pf-diet${inView ? ' pf-in' : ''}`}>
-            <div className="pf-blob pf-blob-4" />
-            <DietDoodles />
-
-
-
-            <div className="pf-section-header">
-                <div className="pf-step-badge pf-step-amber">02</div>
-                <h2 className="pf-h2" style={{ textAlign: 'center' }}>The Indian Diet Reality</h2>
-                <p className="pf-lead" style={{ textAlign: 'center', maxWidth: 560 }}>
-                    Our daily diet, especially in India, is heavily focused on:
-                </p>
-            </div>
-
-            <div className="pf-vs-grid">
-                <div className="pf-sticky-note pf-sticky-green pf-rotate-neg1">
-                    <div className="pf-sticky-tape" />
-                    <div className="pf-vs-label pf-green-text">
-                        <span style={{ fontSize: 18 }}>✅</span> Our diet HAS
-                    </div>
-                    {['Carbohydrates', 'Fats'].map(item => (
-                        <div key={item} className="pf-check-row pf-check-green">
-                            <CheckBox color="#16a34a" /><span>{item}</span>
-                        </div>
-                    ))}
-                    <div className="pf-mini-callout pf-callout-green">🌾 Mostly rice, wheat & dal-based</div>
-                </div>
-
-                <div className="pf-vs-bubble">
-                    <svg viewBox="0 0 60 60" width={56} height={56}>
-                        <ellipse cx="30" cy="30" rx="26" ry="26" fill="#fff"
-                            stroke="rgba(0,0,0,0.14)" strokeWidth="2" strokeDasharray="6 3" />
-                        <text x="30" y="36" textAnchor="middle"
-                            style={{ fontFamily: "'Caveat',cursive", fontSize: 18, fill: '#888' }}>vs</text>
-                    </svg>
-                </div>
-
-                <div className="pf-sticky-note pf-sticky-amber pf-rotate-1">
-                    <div className="pf-sticky-tape pf-tape-amber" />
-                    <div className="pf-vs-label" style={{ color: '#ef4444' }}>
-                        <span style={{ fontSize: 18 }}>❌</span> Often LACKS
-                    </div>
-                    {['Protein', 'Fiber', 'Essential Micronutrients'].map(item => (
-                        <div key={item} className="pf-check-row pf-check-red">
-                            <CrossBox color="#ef4444" /><span>{item}</span>
-                        </div>
-                    ))}
-                    <div className="pf-mini-callout pf-callout-red">🚨 Micronutrient gaps accumulate daily</div>
-                </div>
-            </div>
-
-
-        </section>
-    );
-}
-
-// ── SECTION 4 — Blood report ──────────────────────────────────────────────────
-function SectionBlood() {
-    const { ref, inView } = useInView();
-    const [barAnim, setBarAnim] = useState(false);
-    useEffect(() => { if (inView) setTimeout(() => setBarAnim(true), 250); }, [inView]);
-
-    return (
-        <section ref={ref} className={`pf-section pf-blood${inView ? ' pf-in' : ''}`}>
-            <div className="pf-blob pf-blob-5" />
-            <BloodDoodles />
-
-            <div className="pf-section-header">
-                <div className="pf-step-badge pf-step-red">03</div>
-                <h2 className="pf-h2" style={{ textAlign: 'center' }}>
-                    Blood reports reveal{' '}
-                    <span className="pf-squiggle-wrap" style={{ color: '#ef4444' }}>
-                        the real gaps
-                        <WavyLine color="#ef4444" w={200} />
-                    </span>
-                </h2>
-                <p className="pf-lead" style={{ textAlign: 'center', maxWidth: 520 }}>
-                    When we look at <em>blood reports</em> , the most common deficiencies are not protein — they are
-                </p>
-            </div>
-
-            <div className="pf-two-col pf-two-col-60-40">
-                <div className="pf-sticky-note pf-sticky-red pf-rotate-neg05" style={{ flex: '1 1 380px' }}>
-                    <div className="pf-sticky-tape pf-tape-red" />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                        <div>
-                            <div className="pf-caveat" style={{ fontSize: 26, color: '#af0000ff', fontWeight: 'bold' }}>Blood report — common deficiencies</div>
-                            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 20, fontWeight: 700, color: '#1a2e1a' }}>The most common deficiencies</div>
-                        </div>
-                        <div className="pf-badge-red">⚠ Deficient</div>
-                    </div>
-                    {NUTRIENTS.map((n, i) => (
-                        <div key={n.sym} className="pf-nutrient-row" style={{ borderColor: `${n.color}33` }}>
-                            <div className="pf-nutrient-sym" style={{ background: `${n.color}14`, borderColor: `${n.color}` }}>
-                                <span className="pf-caveat" style={{ fontSize: 15, color: n.color, fontWeight: 700 }}>{n.sym}</span>
-                            </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontFamily: "'Nunito',sans-serif", fontSize: 16, fontWeight: 800, color: '#1a2e1a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.name}</div>
-                                <div style={{ fontFamily: "'Nunito',sans-serif", fontSize: 14, color: '#000000ff', marginTop: 1 }}>{n.role}</div>
-                            </div>
-                            <div className="pf-bar-track">
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                                    <span className="Nunito',sans-serif" style={{ fontSize: 15, color: '#000000ff' }}>Level</span>
-                                    <span className="Nunito',sans-serif" style={{ fontSize: 15, color: '#ef4444' }}>Low</span>
-                                </div>
-                                <div style={{ height: 8, background: '#f3f4f6', borderRadius: 99, overflow: 'hidden', border: '1.5px dashed #e5e7eb' }}>
-                                    <div style={{
-                                        height: '100%', borderRadius: 99, background: n.color,
-                                        width: barAnim ? `${n.pct}%` : 0,
-                                        transition: `width 0.9s cubic-bezier(0.22,1,0.36,1) ${i * 110}ms`,
-                                    }} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    <div className="pf-info-bar">
-                        <span>ℹ️</span>
-                        <span>These are <strong>micronutrients</strong>, and they play a critical role in how our body functions.</span>
-                    </div>
-                </div>
-
-                <div className="pf-col-text" style={{ flex: '1 1 280px' }}>
-                    <p className="pf-body">
-                        Every Indian who gets a blood test is almost always told the <mark className="pf-mark-red">same things</mark>:
-                    </p>
-                    {[
-                        { label: 'Low B12', note: 'Extreme fatigue, brain fog, nerve issues', color: '#7c3aed' },
-                        { label: 'Low Vitamin D', note: 'Weak bones, poor immunity, mood swings', color: '#d97706' },
-                        { label: 'Low Iron', note: 'Anaemia, difficulty concentrating, pale skin', color: '#dc2626' },
-                    ].map((item, i) => (
-                        <div key={i} className="pf-explainer-card" style={{ borderLeft: `4px solid ${item.color}` }}>
-                            <div className="pf-caveat" style={{ fontSize: 20, fontWeight: 700, color: item.color }}>{item.label}</div>
-                            <div style={{ fontFamily: "'Nunito',sans-serif", fontSize: 15, color: '#6b7280', marginTop: 3 }}>{item.note}</div>
-                        </div>
-                    ))}
-                    <div className="pf-big-callout pf-callout-red" style={{ marginTop: 16 }}>
-                        <span style={{ fontSize: 20 }}>🔬</span>
-                        <span className="pf-caveat" style={{ fontSize: 19, color: '#991b1b' }}>
-                            Protein labs look fine. The real gaps are invisible till tested.
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-// ── SECTION 5 — Payoff / CTA ──────────────────────────────────────────────────
-function SectionPayoff() {
-    const { ref, inView } = useInView(0.15);
-
-    return (
-        <section ref={ref} className={`pf-section pf-payoff${inView ? ' pf-in' : ''}`}>
-            <div className="pf-blob pf-blob-6" />
-            <div className="pf-blob pf-blob-7" />
-            <PayoffDoodles />
-
-            <div className="pf-payoff-inner">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 28 }}>
-                    <div style={{ height: 2, width: 48, background: 'rgba(22,163,74,0.4)', borderRadius: 2 }} />
-                    <div className="pf-tag pf-tag-green">
-                        <span className="pf-tag-dot pf-dot-green" />
-                        <span>The Answer</span>
-                    </div>
-                    <div style={{ height: 2, width: 48, background: 'rgba(22,163,74,0.4)', borderRadius: 2 }} />
-                </div>
-
-                <h2 className="pf-h1" style={{ textAlign: 'center' }}>
-                    One scoop.<br />
-                    <span className="pf-squiggle-wrap pf-green-text">
-                        Everything your body needs.
-                        <WavyLine color="#16a34a" w={360} />
-                    </span>
-                </h2>
-
-                <p className="pf-lead" style={{ textAlign: 'center', maxWidth: 580, margin: '18px auto 36px' }}>
-                    PlainFuel closes the gap — combining protein, fiber and essential
-                    micronutrients in one daily system, designed for Indian bodies.
-                </p>
-
-                <div className="pf-chips">
-                    {['✅ Protein', '✅ Fiber', '✅ B12', '✅ D3', '✅ Magnesium', '✅ Calcium', '✅ Iron'].map(c => (
-                        <div key={c} className="pf-chip">{c}</div>
-                    ))}
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 40 }}>
-                    <a href="#order" className="pf-cta-btn">
-                        Start with PlainFuel
-                        <svg viewBox="0 0 18 18" width={17} height={17} fill="none">
-                            <path d="M3 9h12M9 3l6 6-6 6" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </a>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <DoodleArrow color="#16a34a" style={{ transform: 'scaleX(-1)' }} />
-                        <span className="pf-caveat" style={{ fontSize: 20, color: '#4a6741' }}>no commitment needed</span>
-                    </div>
-                </div>
-
-                <div className="pf-trust-row">
-                    {['🌿 100% Natural', '🔬 Lab Tested', '📦 Free Delivery', '⭐ 4.8/5 Rating'].map(t => (
-                        <div key={t} className="pf-trust-pill">{t}</div>
-                    ))}
-                </div>
-            </div>
-
-            {/* product image right */}
-            <div className="pf-payoff-img-wrap">
-                <DoodleImgCircle src="/images/product.png" size={320} color="#16a34a" rotate="4deg" />
-            </div>
-        </section>
-    );
-}
-
-// ── ROOT ──────────────────────────────────────────────────────────────────────
 export default function WhyPlainFuel() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartAnim, setChartAnim] = useState(false);
+  const inView = useInView(containerRef, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    if (inView) setTimeout(() => setChartAnim(true), 500);
+  }, [inView]);
+
+  const NUTRIENTS = [
+    { name: 'Vitamin B12', sym: 'B12', pct: 85, color: '#0a3d1f', role: 'Nerve function & metabolic energy.' },
+    { name: 'Vitamin D3', sym: 'D3', pct: 78, color: '#854d0e', role: 'Immune resilience & bone density.' },
+    { name: 'Magnesium', sym: 'Mg', pct: 92, color: '#0a3d1f', role: 'Muscular recovery & deep sleep.' },
+    { name: 'Calcium', sym: 'Ca', pct: 64, color: '#854d0e', role: 'Skeletal structural integrity.' },
+    { name: 'Iron', sym: 'Fe', pct: 72, color: '#0a3d1f', role: 'Oxygen transport & cognitive focus.' },
+  ];
+
+  return (
+    <div ref={containerRef} style={{ background: C.offwhite, overflow: 'hidden', position: 'relative' }}>
+        
+        {/* ── Ambient Background Radiance ── */}
+        <div style={{ position: 'absolute', top: '10%', right: '-10%', width: '60vw', height: '60vw', background: `radial-gradient(circle, ${C.forest}08 0%, transparent 70%)`, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '10%', left: '-10%', width: '50vw', height: '50vw', background: `radial-gradient(circle, ${C.gold}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
+
+        {/* ── SECTION 1: THE HOOK ── */}
+        <section style={{ padding: 'clamp(80px, 12vw, 160px) 24px 80px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+            <div className="hook-grid">
+                <div>
+                   <SectionHeader 
+                        align="left"
+                        eyebrow="The Scientific Need"
+                        title="Why is PlainFuel needed?"
+                        subtitle="Most people think deficiencies happen suddenly, but that’s not true. Deficiencies build slowly. They are the result of missing small amounts of nutrients every day for months. Your body works on daily input. Just like missing homework every day leads to problems later, missing nutrients daily creates long-term gaps."
+                   />
+
+                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: -40 }}>
+                        {[
+                            { icon: <Activity size={18} color={C.forest} />, label: '70% B12 Deficiency', sub: 'In the Indian population' },
+                            { icon: <Sparkles size={18} color={C.gold} />, label: '80% Low Vitamin D', sub: 'Due to sedentary lifestyles' },
+                        ].map((stat, i) => (
+                            <motion.div 
+                                key={i}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={inView ? { opacity: 1, x: 0 } : {}}
+                                transition={{ delay: 0.4 + i * 0.1 }}
+                                style={{ padding: '24px', borderRadius: 20, background: C.white, border: `1px solid ${C.forest}08`, boxShadow: '0 12px 24px rgba(0,0,0,0.02)', position: 'relative', overflow: 'hidden' }}
+                            >
+                                <div style={{ position: 'relative', zIndex: 1 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                                        <div style={{ width: 36, height: 36, borderRadius: 10, background: C.mist, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{stat.icon}</div>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 800, color: C.ink }}>{stat.label}</span>
+                                    </div>
+                                    <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.silver, margin: 0 }}>{stat.sub}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                   </div>
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9, rotate: -2 }}
+                    animate={inView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ position: 'relative', width: '100%', aspectRatio: '1/1', maxWidth: 500, margin: '0 auto' }}
+                >
+                    <div style={{ position: 'absolute', inset: -20, borderRadius: '50%', background: `radial-gradient(circle, ${C.forest}08 0%, transparent 70%)` }} />
+                    <div style={{ position: 'relative', width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', border: `8px solid ${C.white}`, boxShadow: '0 40px 100px rgba(0,0,0,0.1)', background: C.mist }}>
+                        <Image 
+                            src="/images/handpack.png" 
+                            alt="PlainFuel Handpack" fill style={{ objectFit: 'cover' }}
+                            priority
+                        />
+                    </div>
+                    <div style={{ position: 'absolute', top: -10, right: 20, padding: '12px 20px', background: C.white, borderRadius: 100, border: `1px solid ${C.forest}15`, boxShadow: '0 10px 30px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: 10, zIndex: 5 }}>
+                        <Target size={16} color={C.forest} />
+                        <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Precision Dosing</span>
+                    </div>
+                </motion.div>
+            </div>
+        </section>
+
+        {/* ── SECTION 2: DEFICIENCY ACCUMULATION ── */}
+        <section style={{ padding: '80px 24px', maxWidth: 1200, margin: '0 auto' }}>
+            <GlacierCard className="accumulator-card" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'center' }}>
+                <Image src="/images/why/bg-slow.png" alt="Slow" fill style={{ objectFit: 'cover', opacity: 0.05, pointerEvents: 'none' }} />
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '4px 12px', borderRadius: 4, background: C.mist, marginBottom: 20 }}>
+                        <Calendar size={12} color={C.forest} />
+                        <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: FONTS.main }}>Timeline Analysis</span>
+                   </div>
+                   <h3 style={{ fontFamily: FONTS.main, fontSize: 36, fontWeight: 900, color: C.ink, marginBottom: 24, lineHeight: 1.1 }}>Deficiencies build slowly.</h3>
+                   <p style={{ fontFamily: FONTS.main, fontSize: 16, color: C.silver, lineHeight: 1.7, marginBottom: 40 }}>
+                     Your body works on daily input. Just like missing homework every day leads to problems later, missing nutrients daily creates long-term gaps.
+                   </p>
+
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                        {[
+                            { label: 'Month 0-3', text: 'Stores deplete silently. Performance remains stable.', status: 'Silent' },
+                            { label: 'Month 4-8', text: 'Fatigue, focus drop, and inconsistent mood.', status: 'Sub-Optimal', color: C.gold },
+                            { label: 'Month 9+', text: 'Clinical deficiency. The body flags red alerts.', status: 'Critical', color: '#991b1b' },
+                        ].map((step, i) => (
+                            <div key={i} style={{ display: 'flex', gap: 16, padding: '16px 20px', borderRadius: 16, border: `1px solid ${C.forest}05`, background: 'rgba(255,255,255,0.8)' }}>
+                                <div style={{ minWidth: 80, fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{step.label}</div>
+                                <div style={{ width: 2, background: step.color || C.forest, opacity: 0.2 }} />
+                                <div>
+                                    <div style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: step.color || C.forest, marginBottom: 2 }}>{step.status}</div>
+                                    <p style={{ fontFamily: FONTS.main, fontSize: 13, color: '#4a554d', margin: 0, lineHeight: 1.5 }}>{step.text}</p>
+                                </div>
+                            </div>
+                        ))}
+                   </div>
+                </div>
+
+                <div style={{ padding: '32px', background: 'rgba(255,255,255,0.4)', borderRadius: 24, border: `1px solid ${C.forest}05`, backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+                        <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink, letterSpacing: '0.05em' }}>Biomarker Depletion Graph (12 Mo)</span>
+                        <TrendingDown size={18} color={C.gold} />
+                    </div>
+                    
+                    <div style={{ height: 240, display: 'flex', alignItems: 'flex-end', gap: 6, position: 'relative' }}>
+                        {[0, 1, 2, 3].map(l => (
+                            <div key={l} style={{ position: 'absolute', left: 0, right: 0, bottom: (l * 80), height: 1, borderTop: `1px solid ${C.forest}08` }} />
+                        ))}
+                        
+                        {[90, 85, 80, 72, 65, 58, 50, 42, 35, 28, 22, 15].map((h, i) => (
+                            <motion.div 
+                                key={i}
+                                initial={{ height: 0 }}
+                                animate={chartAnim ? { height: `${h}%` } : {}}
+                                transition={{ duration: 0.8, delay: i * 0.05 + 0.5 }}
+                                style={{ 
+                                    flex: 1, 
+                                    background: i > 8 ? `linear-gradient(to top, #991b1b, #ef4444)` : i > 4 ? `linear-gradient(to top, ${C.gold}, #f59e0b)` : `linear-gradient(to top, ${C.forest}, ${C.leaf})`,
+                                    borderRadius: '4px 4px 1px 1px',
+                                    opacity: 0.85
+                                }} 
+                            />
+                        ))}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
+                        {['Jan', 'Apr', 'Aug', 'Dec'].map(m => <span key={m} style={{ fontFamily: FONTS.main, fontSize: 10, color: C.silver, fontWeight: 700 }}>{m}</span>)}
+                    </div>
+                    
+                    <div style={{ marginTop: 32, padding: 16, background: C.white, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ padding: '8px', borderRadius: 8, background: `${C.gold}11` }}><Microscope size={16} color={C.gold} /></div>
+                        <p style={{ fontFamily: FONTS.accent, fontSize: 16, color: C.gold, margin: 0, fontWeight: 600 }}>Closing the Gap: Systematic Daily Restoration.</p>
+                    </div>
+                </div>
+            </GlacierCard>
+        </section>
+
+        {/* ── SECTION 3: THE INDIAN REALITY ── */}
+        <section style={{ padding: '80px 24px', maxWidth: 1200, margin: '0 auto' }}>
+            <SectionHeader eyebrow="Dietary Profile" title="Today, many of us have started paying attention to protein. But nutrition is not just about protein." subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients." />
+            
+            <div className="reality-grid">
+                <div style={{ padding: 48, borderRadius: 32, background: C.white, border: `1px solid ${C.forest}05`, boxShadow: '0 4px 20px rgba(0,0,0,0.02)', position: 'relative', overflow: 'hidden' }}>
+                    <Image src="/images/why/bg-diet.png" alt="Diet" fill style={{ objectFit: 'cover', opacity: 0.05 }} />
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                            <div style={{ width: 32, height: 32, borderRadius: 8, background: `${C.leaf}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <CheckCircle2 size={18} color={C.leaf} />
+                            </div>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: 18, fontWeight: 800, color: C.ink, margin: 0 }}>Heavily focused on:</h4>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            {['Carbohydrates', 'Fats'].map(tag => (
+                                <div key={tag} style={{ padding: '14px 20px', borderRadius: 12, background: 'rgba(255,255,255,0.7)', border: `1px solid ${C.forest}05`, fontFamily: FONTS.main, fontSize: 14, fontWeight: 600, color: C.forest }}>• {tag}</div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{ padding: 48, borderRadius: 32, background: C.white, border: `1px solid ${C.gold}15`, boxShadow: '0 4px 20px rgba(0,0,0,0.02)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                            <div style={{ width: 32, height: 32, borderRadius: 8, background: `${C.gold}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <AlertCircle size={18} color={C.gold} />
+                            </div>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: 18, fontWeight: 800, color: C.ink, margin: 0 }}>But often lacks:</h4>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            {['Protein', 'Fiber', 'Essential micronutrients'].map(tag => (
+                                <div key={tag} style={{ padding: '14px 20px', borderRadius: 12, background: 'rgba(255,255,255,0.7)', border: `1px solid ${C.gold}15`, fontFamily: FONTS.main, fontSize: 14, fontWeight: 600, color: C.gold }}>• {tag}</div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* ── SECTION 4: BEYOND THE SURFACE ── */}
+        <section style={{ padding: '80px 24px 160px', maxWidth: 1200, margin: '0 auto' }}>
+            <GlacierCard className="beyond-card" style={{ padding: 0, display: 'grid', gridTemplateColumns: '1fr 480px', overflow: 'hidden' }}>
+                <div style={{ padding: 'clamp(32px, 6vw, 64px)' }}>
+                   <Chip text="Laboratory Insights" />
+                   <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.ink, marginTop: 24, marginBottom: 24 }}>Beyond the Surface.</h3>
+                   <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, marginBottom: 48 }}>
+                     When we look at blood reports, the most common deficiencies are not protein — they are micronutrients, and they play a critical role in how our body functions.
+                   </p>
+                   
+                   <div className="vitamin-grid">
+                        {NUTRIENTS.map((n, i) => (
+                            <div key={n.sym} style={{ paddingBottom: 24, borderBottom: `1px solid ${C.forest}08` }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 12 }}>
+                                    <div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                                            <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 900, color: n.color, letterSpacing: '0.1em' }}>{n.sym}</span>
+                                            <h5 style={{ fontFamily: FONTS.main, fontSize: 16, fontWeight: 800, color: C.ink, margin: 0 }}>{n.name}</h5>
+                                        </div>
+                                        <p style={{ fontFamily: FONTS.main, fontSize: 12, color: C.silver, margin: 0, lineHeight: 1.4 }}>{n.role}</p>
+                                    </div>
+                                    <span style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: n.color, whiteSpace: 'nowrap' }}>{n.pct}%</span>
+                                </div>
+                                <div style={{ height: 6, background: C.mist, borderRadius: 10, overflow: 'hidden' }}>
+                                    <motion.div 
+                                        initial={{ width: 0 }}
+                                        animate={inView ? { width: `${n.pct}%` } : {}}
+                                        transition={{ duration: 1, delay: 0.8 + i * 0.1, ease: 'easeOut' }}
+                                        style={{ height: '100%', borderRadius: 10, background: n.color }} 
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                   </div>
+                </div>
+
+                <div className="beyond-image-area" style={{ position: 'relative', background: C.deep, borderLeft: `1px solid ${C.white}10`, minHeight: 300 }}>
+                    <Image 
+                        src="/images/why/bg-blood.png" 
+                        alt="Lab" fill style={{ objectFit: 'cover', opacity: 0.4 }}
+                        priority 
+                    />
+                    <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${C.deep} 0%, transparent 100%)`, zIndex: 1 }} />
+                    <div style={{ position: 'absolute', bottom: 48, left: 48, right: 48, zIndex: 2 }}>
+                        <div style={{ padding: '32px', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(30px)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.1)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                                <FlaskConical size={20} color={C.leaf} />
+                                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: C.white, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pharmacist Formulated</span>
+                            </div>
+                            <p style={{ fontFamily: FONTS.main, fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0 }}>
+                                "The real gap isn't hunger — it's systemic nutrient scarcity. PlainFuel was engineered to restore this balance daily."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </GlacierCard>
+        </section>
+
+        <style>{`
+            .hook-grid {
+                display: grid;
+                grid-template-columns: minmax(0, 1.2fr) 0.8fr;
+                gap: 80px;
+                align-items: center;
+            }
+            .reality-grid, .vitamin-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+            
+            @media (max-width: 1100px) {
+                .beyond-card {
+                    grid-template-columns: 1fr !important;
+                }
+                .beyond-image-area {
+                    display: none;
+                }
+            }
+            
+            @media (max-width: 900px) {
+                .hook-grid, .accumulator-card, .reality-grid {
+                    grid-template-columns: 1fr !important;
+                    gap: 48px;
+                }
+                .hook-grid > div:last-child {
+                    order: -1;
+                }
+            }
+            
+            @media (max-width: 640px) {
+                .vitamin-grid {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+        `}</style>
+
+    </div>
+  );
+}
+
+function Chip({ text }: { text: string }) {
     return (
-        <div className="why-plain-fuel-scope">
-            <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;600;700&display=swap');
-
-        .why-plain-fuel-scope *, .why-plain-fuel-scope *::before, .why-plain-fuel-scope *::after { box-sizing:border-box; margin:0; padding:0; }
-
-        @keyframes pf-fadeUp {
-          from { opacity:0; transform:translateY(28px); }
-          to   { opacity:1; transform:translateY(0); }
-        }
-        @keyframes pf-floatBlob {
-          0%,100% { transform:translate(0,0) scale(1); }
-          50%      { transform:translate(12px,-16px) scale(1.04); }
-        }
-
-        .pf-section {
-          position:relative; width:100%; overflow:hidden;
-          padding:clamp(40px,5vw,60px) clamp(20px,4vw,40px);
-        }
-        .pf-section::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background-image: url('/images/DoodleImages/doodle-bg.png');
-          background-repeat: repeat;
-          opacity: 0.04;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        /* entrance */
-        .pf-section > * { opacity:0; transform:translateY(24px); }
-        .pf-section.pf-in > * { animation:pf-fadeUp 0.68s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .pf-section.pf-in > *:nth-child(1){ animation-delay:0.04s; }
-        .pf-section.pf-in > *:nth-child(2){ animation-delay:0.10s; }
-        .pf-section.pf-in > *:nth-child(3){ animation-delay:0.16s; }
-        .pf-section.pf-in > *:nth-child(4){ animation-delay:0.22s; }
-        .pf-section.pf-in > *:nth-child(5){ animation-delay:0.28s; }
-        .pf-section.pf-in > *:nth-child(6){ animation-delay:0.34s; }
-        .pf-section.pf-in > *:nth-child(7){ animation-delay:0.40s; }
-
-        /* SVG overlays + blobs + absolute-positioned product frames bypass entrance */
-        .pf-section > svg,
-        .pf-section > div.pf-blob {
-          opacity:1 !important; transform:none !important; animation:none !important;
-        }
-
-        /* blobs */
-        .pf-blob {
-          position:absolute; border-radius:50%; filter:blur(60px);
-          pointer-events:none; z-index:0; animation:pf-floatBlob 9s ease-in-out infinite;
-        }
-        .pf-blob-1{ width:340px;height:280px;top:-80px;right:-60px;background:rgba(187,247,208,0.45); }
-        .pf-blob-2{ width:220px;height:200px;bottom:-40px;left:-40px;background:rgba(254,243,199,0.5);animation-delay:3s; }
-        .pf-blob-3{ width:280px;height:240px;bottom:-60px;right:-40px;background:rgba(187,247,208,0.35);animation-delay:2s; }
-        .pf-blob-4{ width:260px;height:220px;top:-50px;left:-50px;background:rgba(254,243,199,0.4);animation-delay:4s; }
-        .pf-blob-5{ width:300px;height:260px;bottom:-60px;left:-60px;background:rgba(254,226,226,0.4);animation-delay:1s; }
-        .pf-blob-6{ width:380px;height:300px;top:-80px;right:-80px;background:rgba(187,247,208,0.4);animation-delay:2.5s; }
-        .pf-blob-7{ width:240px;height:200px;bottom:-40px;left:-30px;background:rgba(254,243,199,0.4);animation-delay:5s; }
-
-        /* section backgrounds */
-        .pf-hook  { background:#f0fdf4; }
-        .pf-slow  { background:#f8faff; }
-        .pf-diet  { background:#fffbeb; }
-        .pf-blood { background:#fff5f5; }
-        .pf-payoff{ background:#f0fdf4; }
-
-        /* typography */
-        .pf-h1 {
-          font-family:'Playfair Display',serif;
-          font-size:clamp(2.8rem,5.5vw,4.4rem);
-          font-weight:900; color:#1a2e1a;
-          line-height:1.1; letter-spacing:-0.025em; margin-bottom:20px;
-        }
-        .pf-h2 {
-          font-family:'Playfair Display',serif;
-          font-size:clamp(2.2rem,3.8vw,3.2rem);
-          font-weight:900; color:#1a2e1a;
-          line-height:1.12; letter-spacing:-0.02em; margin-bottom:18px;
-        }
-        .pf-lead {
-          font-family:'Nunito',sans-serif;
-          font-size:clamp(18px,2.1vw,22px);
-          color:#4a6741; line-height:1.8; margin-bottom:14px;
-        }
-        .pf-body {
-          font-family:'Nunito',sans-serif;
-          font-size:clamp(16px,1.8vw,19px);
-          color:#4a6741; line-height:1.9; margin-bottom:16px;
-        }
-        .pf-caveat{ font-family:'Caveat',cursive; }
-        .pf-green-text{ color:#16a34a; }
-
-        .pf-squiggle-wrap{ position:relative; display:inline-block; font-style:italic; }
-        .pf-squiggle-wrap svg{ position:absolute; bottom:-8px; left:0; }
-
-        .pf-tag {
-          display:inline-flex; align-items:center; gap:7px;
-          border-radius:99px; padding:6px 16px;
-          font-family:'Nunito',sans-serif; font-size:12px;
-          font-weight:800; letter-spacing:0.18em; text-transform:uppercase;
-          margin-bottom:22px;
-        }
-        .pf-tag-green{ background:#dcfce7; border:2px dashed #16a34a; color:#14532d; }
-        .pf-tag-dot{ width:8px; height:8px; border-radius:50%; }
-        .pf-dot-green{ background:#16a34a; }
-
-        .pf-step-badge {
-          width:38px; height:38px; border-radius:50%;
-          display:flex; align-items:center; justify-content:center;
-          font-family:'Caveat',cursive; font-size:17px; font-weight:700;
-          margin-bottom:16px; flex-shrink:0;
-        }
-        .pf-step-green{ border:2.5px dashed #16a34a; background:#dcfce7; color:#16a34a; }
-        .pf-step-amber{ border:2.5px dashed #d97706; background:#fef3c7; color:#d97706; }
-        .pf-step-red  { border:2.5px dashed #ef4444; background:#fee2e2; color:#ef4444; }
-
-        .pf-mark-green{ background:#bbf7d0; color:#14532d; padding:2px 8px; border-radius:3px; font-style:italic; }
-        .pf-mark-red  { background:#fca5a5; color:#7f1d1d; padding:2px 8px; border-radius:3px; font-style:italic; }
-
-        /* layouts */
-        .pf-two-col {
-          display:flex; flex-wrap:wrap;
-          gap:clamp(24px,4vw,56px); align-items:flex-start;
-          position:relative; z-index:1;
-          width:100%; max-width:1100px; margin:0 auto;
-        }
-        .pf-two-col-60-40>*:first-child{ flex:1 1 380px; }
-        .pf-two-col-60-40>*:last-child { flex:1 1 260px; }
-        .pf-col-text  { flex:1 1 320px; }
-        .pf-col-visual{ flex:1 1 320px; }
-
-        .pf-section-header {
-          display:flex; flex-direction:column; align-items:center;
-          gap:6px; margin-bottom:36px; position:relative; z-index:1;
-        }
-
-        /* sticky notes */
-        .pf-sticky-note {
-          border-radius:4px; padding:24px 22px; position:relative;
-          box-shadow:3px 5px 14px rgba(0,0,0,0.1),1px 1px 0 rgba(0,0,0,0.05);
-        }
-        .pf-sticky-green{ background:#f0fdf4; }
-        .pf-sticky-amber{ background:#fffbeb; }
-        .pf-sticky-red  { background:#fff5f5; }
-        .pf-rotate-1    { transform:rotate(1deg); }
-        .pf-rotate-neg1 { transform:rotate(-1deg); }
-        .pf-rotate-neg05{ transform:rotate(-0.5deg); }
-
-        .pf-sticky-tape{
-          position:absolute; top:0; left:50%; transform:translateX(-50%);
-          width:44px; height:9px; border-radius:0 0 4px 4px; background:rgba(0,0,0,0.1);
-        }
-        .pf-tape-amber{ background:rgba(217,119,6,0.22); }
-        .pf-tape-red  { background:rgba(239,68,68,0.2); }
-
-        /* timeline */
-        .pf-cards-col{ display:flex; flex-direction:column; gap:10px; margin-top:20px; }
-        .pf-timeline-card{
-          display:flex; align-items:center; gap:14px;
-          background:#fff; border-radius:10px; border:2px dashed; padding:12px 16px;
-        }
-
-        /* VS grid */
-        .pf-vs-grid {
-          display:grid; grid-template-columns:1fr auto 1fr;
-          gap:16px; align-items:start;
-          position:relative; z-index:1;
-          width:100%; max-width:860px; margin:0 auto;
-        }
-        .pf-vs-bubble{ display:flex; align-items:center; justify-content:center; padding-top:48px; }
-        .pf-vs-label{
-          font-family:'Caveat',cursive; font-size:21px; font-weight:700;
-          display:flex; align-items:center; gap:8px; margin-bottom:16px;
-        }
-        .pf-check-row{
-          display:flex; align-items:center; gap:12px;
-          border-radius:8px; padding:13px 16px; margin-bottom:10px;
-          font-family:'Nunito',sans-serif; font-size:17px; font-weight:700;
-        }
-        .pf-check-green{ background:#dcfce7; border:2px dashed #22c55e; color:#14532d; }
-        .pf-check-red  { background:#fff7ed; border:2px dashed #ef4444; color:#7f1d1d; }
-        .pf-mini-callout{
-          border-radius:8px; padding:10px 16px; margin-top:8px;
-          font-family:'Caveat',cursive; font-size:17px;
-        }
-        .pf-callout-green{ background:#dcfce7; color:#166534; border:1.5px dashed #22c55e; }
-        .pf-callout-red  { background:#fee2e2; color:#991b1b; border:1.5px dashed #ef4444; }
-        .pf-callout-amber{ background:#fef3c7; color:#92400e; border:1.5px dashed #d97706; }
-
-        .pf-big-callout{
-          display:inline-flex; align-items:center; gap:14px;
-          border-radius:12px; padding:16px 24px; transform:rotate(-0.4deg);
-          box-shadow:3px 4px 10px rgba(0,0,0,0.07);
-          width:100%; max-width:680px; margin:0 auto;
-        }
-
-        /* nutrient rows */
-        .pf-nutrient-row{
-          display:flex; align-items:center; gap:12px;
-          padding:11px 13px; border-radius:10px; margin-bottom:8px;
-          background:#fff; border:2px dashed;
-        }
-        .pf-nutrient-sym{
-          width:42px; height:42px; border-radius:9px; border:2px dashed;
-          display:flex; align-items:center; justify-content:center; flex-shrink:0;
-        }
-        .pf-bar-track{ width:96px; flex-shrink:0; }
-        .pf-badge-red{
-          background:#fee2e2; border:2px dashed #ef4444;
-          border-radius:8px; padding:6px 14px;
-          font-family:'Caveat',cursive; font-size:16px; color:#dc2626; font-weight:700; white-space:nowrap;
-        }
-        .pf-info-bar{
-          margin-top:14px; padding:13px 16px;
-          background:#f0fdf4; border-radius:9px; border:2px dashed #22c55e;
-          display:flex; align-items:flex-start; gap:10px;
-          font-family:'Nunito',sans-serif; font-size:15px; color:#166534;
-        }
-        .pf-explainer-card{
-          background:#fff; border-radius:0 10px 10px 0;
-          padding:13px 16px; margin-bottom:12px;
-          box-shadow:2px 3px 8px rgba(0,0,0,0.06);
-        }
-
-        /* hook layout */
-        .pf-hook {
-          display:grid; grid-template-columns:1fr auto;
-          gap:clamp(24px,4vw,40px); align-items:center;
-        }
-        .pf-hook-inner{ position:relative; z-index:1; }
-        .pf-hook-pills{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
-        .pf-pill{
-          display:flex; align-items:center; gap:8px;
-          background:#fff; border:2px dashed #16a34a; border-radius:99px; padding:7px 14px;
-          font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; color:#14532d;
-          box-shadow:2px 2px 0 #bbf7d0;
-        }
-        .pf-hook-img-wrap{ position:relative; z-index:1; flex-shrink:0; }
-
-        /* payoff layout */
-        .pf-payoff {
-          display:grid; grid-template-columns:1fr auto;
-          gap:clamp(24px,4vw,40px); align-items:center;
-        }
-        .pf-payoff-inner{ position:relative; z-index:1; }
-        .pf-payoff-img-wrap{ position:relative; z-index:1; flex-shrink:0; }
-
-        /* chips */
-        .pf-chips{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:8px; }
-        .pf-chip{
-          background:#fff; border:2px dashed #16a34a; border-radius:99px; padding:8px 16px;
-          font-family:'Nunito',sans-serif; font-size:14px; font-weight:700; color:#14532d;
-          box-shadow:2px 2px 0 #bbf7d0;
-        }
-
-        /* CTA */
-        .pf-cta-btn{
-          display:inline-flex; align-items:center; gap:14px;
-          background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff;
-          font-family:'Nunito',sans-serif; font-size:16px; font-weight:800;
-          letter-spacing:0.06em; text-transform:uppercase;
-          padding:17px 44px; border-radius:14px; text-decoration:none;
-          box-shadow:4px 6px 0 #14532d,0 0 0 3px #16a34a;
-          border:2.5px solid #14532d; transition:all 0.18s;
-        }
-        .pf-cta-btn:hover{ transform:translate(-2px,-2px); box-shadow:6px 8px 0 #14532d,0 0 0 3px #16a34a; }
-
-        .pf-trust-row{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:32px; }
-        .pf-trust-pill{
-          background:rgba(255,255,255,0.85); border:1.5px dashed rgba(22,163,74,0.45);
-          border-radius:99px; padding:7px 16px;
-          font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#166534;
-        }
-
-        .pf-divider{
-          height:3px; width:100%;
-          background:repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(22,163,74,0.2) 8px,rgba(22,163,74,0.2) 16px);
-        }
-
-        /* responsive */
-        @media (max-width:860px) {
-          .pf-hook  { grid-template-columns:1fr; }
-          .pf-payoff{ grid-template-columns:1fr; }
-          .pf-hook-img-wrap  { display:none; }
-          .pf-payoff-img-wrap{ display:none; }
-          .pf-vs-grid{ grid-template-columns:1fr; }
-          .pf-vs-bubble{ display:none; }
-          .pf-bar-track{ display:none; }
-        }
-        @media (max-width:560px) {
-          .pf-two-col{ gap:20px; }
-          .pf-chips{ gap:8px; }
-          .pf-hook-pills{ gap:8px; }
-        }
-      `}</style>
-
-            <SectionHook />
-            <div className="pf-divider" aria-hidden />
-            <SectionSlow />
-            <div className="pf-divider" aria-hidden />
-            <SectionDiet />
-            <div className="pf-divider" aria-hidden />
-            <SectionBlood />
-            <div className="pf-divider" aria-hidden />
-            <SectionPayoff />
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)' }}>
+            <Sparkles size={12} color={C.gold} />
+            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }

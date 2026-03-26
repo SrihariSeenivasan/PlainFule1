@@ -248,9 +248,11 @@ export const userAPI = {
 export const orderAPI = {
   createOrder: (data: {
     items: Array<{ productId: number; packageId: string; quantity: number }>;
-    shippingAddress: string;
+    shippingAddress: string | object;
+    paymentMethod?: string;
+    totalAmount?: number;
   }) =>
-    apiRequest<{ message: string; order: Order; payment: Order['payment'] }>('/orders', {
+    apiRequest<{ message: string; order: Order; payment: Order['payment']; razorpayOrderId?: string }>('/orders', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
@@ -278,6 +280,16 @@ export const orderAPI = {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
+
+  verifyPayment: (data: {
+    orderId: number | string;
+    razorpayPaymentId: string;
+    razorpayOrderId: string;
+    razorpaySignature: string;
+  }) => apiRequest<{ message: string }>('/orders/verify', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
 };
 
 // Product APIs (public)
@@ -387,4 +399,18 @@ export const faqAPI = {
     apiRequest<{ message: string }>(`/faqs/${id}`, {
       method: 'DELETE',
     }),
+};
+
+// Consolidated API export
+export const api = {
+  auth: authAPI,
+  user: userAPI,
+  orders: {
+    ...orderAPI,
+    create: orderAPI.createOrder,
+  },
+  products: productAPI,
+  admin: adminAPI,
+  cart: cartAPI,
+  faq: faqAPI,
 };
