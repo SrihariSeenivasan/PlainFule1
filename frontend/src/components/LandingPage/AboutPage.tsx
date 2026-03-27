@@ -74,11 +74,16 @@ export default function AboutPage() {
         .text-balanced { text-wrap: balance; }
       `}</style>
 
-      <main className="hero-gradient" style={{ position: 'relative', zIndex: 1, paddingTop: 160, paddingBottom: 160 }}>
+      <div className="hero-gradient" style={{ position: 'relative', zIndex: 1, paddingTop: 60, paddingBottom: 60, overflow: 'hidden' }}>
+
+
+
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
           
           {/* HEADER / HERO */}
-          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: 80, alignItems: 'center', marginBottom: 160 }}>
+          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: 60, alignItems: 'center', marginBottom: 40 }}>
+
+
             <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -156,12 +161,16 @@ export default function AboutPage() {
           </section>
 
           {/* PILLARS OF TRUST */}
-          <div style={{ textAlign: 'center', marginBottom: 80 }}>
+          <div style={{ textAlign: 'center', marginBottom: 32 }}>
+
+
             <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 900, color: COLORS.forest, marginBottom: 12 }}>The Trust Layer</h2>
             <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, color: COLORS.silver, fontWeight: 500 }}>Standardized by pharmacists, designed for you.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 32, marginBottom: 120 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 32, marginBottom: 40 }}>
+
+
             <TrustCard index={0} direction="left">
                 <FlaskConical size={32} color={COLORS.leaf} style={{ marginBottom: 24 }} />
                 <h3 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 900, color: COLORS.forest, marginBottom: 16 }}>Biological Balance</h3>
@@ -193,12 +202,14 @@ export default function AboutPage() {
           <div style={{ 
             background: COLORS.forest, 
             borderRadius: 40, 
-            padding: '100px 80px', 
+            padding: '40px 40px', 
             color: '#fff',
             position: 'relative',
             overflow: 'hidden',
-            marginBottom: 120,
+            marginBottom: 40,
             boxShadow: '0 40px 100px rgba(10, 61, 31, 0.15)'
+
+
           }}>
              <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(#fff 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
              
@@ -248,9 +259,12 @@ export default function AboutPage() {
           </div>
 
           {/* CTA */}
-          <div style={{ textAlign: 'center', borderTop: `1px solid ${COLORS.mid}10`, paddingTop: 120 }}>
-             <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest, marginBottom: 24, letterSpacing: '-0.03em' }}>Ready to Standardize?</h2>
-             <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, color: COLORS.silver, marginBottom: 48, fontWeight: 500 }}>Join the 10,000+ people building their biological baseline daily.</p>
+          <div style={{ textAlign: 'center', borderTop: `1px solid ${COLORS.mid}10`, paddingTop: 40 }}>
+
+
+             <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest, marginBottom: 16, letterSpacing: '-0.03em' }}>Ready to Standardize?</h2>
+             <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, color: COLORS.silver, marginBottom: 32, fontWeight: 500 }}>Join the 10,000+ people building their biological baseline daily.</p>
+
              <motion.button 
                 whileHover={{ scale: 1.05, background: COLORS.leaf, boxShadow: `0 20px 40px ${COLORS.leaf}20` }}
                 whileTap={{ scale: 0.98 }}
@@ -266,10 +280,10 @@ export default function AboutPage() {
           </div>
 
         </div>
-      </main>
 
-      {/* Background Subtle Overlays */}
-      <div style={{ position: 'absolute', top: '10%', right: '-10%', width: 800, height: 800, background: `radial-gradient(circle, ${COLORS.mist} 0%, transparent 70%)`, opacity: 0.5, pointerEvents: 'none' }} />
+          {/* Background Subtle Overlays */}
+          <div style={{ position: 'absolute', top: '10%', right: '-10%', width: 800, height: 800, background: `radial-gradient(circle, ${COLORS.mist} 0%, transparent 70%)`, opacity: 0.5, pointerEvents: 'none', zIndex: -1 }} />
+        </div>
     </MainLayout>
   );
 }
