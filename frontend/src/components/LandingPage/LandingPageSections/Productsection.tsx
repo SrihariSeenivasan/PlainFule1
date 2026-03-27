@@ -97,7 +97,7 @@ export default function ProductSection() {
   if (loading || products.length === 0) return null;
 
   return (
-    <section id="products" style={{ position: 'relative', padding: '120px 0', overflow: 'hidden' }}>
+    <section id="products" style={{ position: 'relative', padding: '60px 0', overflow: 'hidden' }}>
       {/* Top Shimmer Border */}
       <div style={{
         position: 'absolute', top: 0, left: '10%', right: '10%', height: 1,
@@ -109,7 +109,7 @@ export default function ProductSection() {
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: 80 }}>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -136,7 +136,7 @@ export default function ProductSection() {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: 40,
+          gap: 24,
           maxWidth: products.length === 1 ? 400 : 1200,
           margin: '0 auto'
         }}>
@@ -150,7 +150,7 @@ export default function ProductSection() {
               whileHover={{ y: -8 }}
               style={{
                 position: 'relative',
-                height: 520, // Tightened height
+                height: 480, // Tightened height
                 borderRadius: 48,
                 overflow: 'hidden',
                 background: 'rgba(255, 255, 255, 0.45)', // Premium Light Glass
