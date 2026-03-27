@@ -188,14 +188,16 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 position: 'relative',
                 overflow: 'hidden',
                 transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
-                minHeight: 480
+                minHeight: 400
+
             }}
         >
             <Image
                 src={`/images/FiveInOne/${index + 1}.png`}
                 alt={data.headline}
                 fill
-                style={{ objectFit: 'cover', opacity: 0.05, pointerEvents: 'none' }}
+                style={{ objectFit: 'cover', opacity: 0.12, pointerEvents: 'none' }}
+
             />
 
             <div className={'clinical-inner-standard'} style={{ position: 'relative', zIndex: 2, height: '100%' }}>
@@ -205,13 +207,13 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                             {data.icon}
                         </div>
                         <div style={{ display: 'flex', gap: 6 }}>
-                            {[1, 2].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.2 }} />)}
+                            {[1, 2].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.ink, opacity: 0.2 }} />)}
                         </div>
                     </div>
 
                     <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>{data.headline}</h3>
 
-                    <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.silver, lineHeight: 1.7, fontWeight: 500 }}>
+                    <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.7, fontWeight: 500 }}>
                         {data.content}
                     </div>
 

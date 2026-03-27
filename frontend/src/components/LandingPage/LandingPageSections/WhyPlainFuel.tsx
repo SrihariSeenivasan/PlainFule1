@@ -271,7 +271,7 @@ They are the result of missing small amounts of nutrients every day for months."
                     eyebrow="Dietary Profile"
                     title="Today, many of us have started paying attention to protein. But nutrition is not just about protein."
                     subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients."
-                    titleSize={F_SIZE.lg}
+                    titleSize={F_SIZE.xl}
                 />
 
                 <motion.div
