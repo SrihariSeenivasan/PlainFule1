@@ -39,8 +39,8 @@ const FONTS = {
    HELPERS & SUB-COMPONENTS
 ───────────────────────────────────────────────────────────── */
 
-function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
-    eyebrow: string; title: string; subtitle?: string; align?: 'center' | 'left'
+function SectionHeader({ eyebrow, title, subtitle, align = 'center', titleSize = F_SIZE.xl }: {
+    eyebrow: string; title: string; subtitle?: string; align?: 'center' | 'left'; titleSize?: string
 }) {
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: '-100px' });
@@ -61,7 +61,7 @@ function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}
+                style={{ fontFamily: FONTS.main, fontSize: titleSize, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}
             >
                 {title}
             </motion.h2>
@@ -267,7 +267,12 @@ They are the result of missing small amounts of nutrients every day for months."
 
             {/* ── SECTION 3: THE INDIAN REALITY ── */}
             <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto' }}>
-                <SectionHeader eyebrow="Dietary Profile" title="Today, many of us have started paying attention to protein. But nutrition is not just about protein." subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients." />
+                <SectionHeader
+                    eyebrow="Dietary Profile"
+                    title="Today, many of us have started paying attention to protein. But nutrition is not just about protein."
+                    subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients."
+                    titleSize={F_SIZE.lg}
+                />
 
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
