@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { authAPI } from '@/lib/api';
+import { F_SIZE } from '@/lib/typography';
 
 interface ForgotPasswordProps {
   onSwitchView?: (view: 'login' | 'register' | 'forgot') => void;
@@ -37,20 +38,20 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
       >
         <div>
           {/* Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             {!submitted && (
-              <div className="flex justify-center mb-3">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15803d" strokeWidth={2}>
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center border border-green-100 shadow-sm">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0a3d1f" strokeWidth={2}>
                     <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
               </div>
             )}
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
+            <h1 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="font-extrabold mb-2 tracking-tight">
               Reset Password
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d', opacity: 0.8 }} className="font-medium leading-relaxed">
               {submitted
                 ? 'Check your email for reset link (Valid for 24 hours)'
                 : 'Enter your email and we\'ll send you a reset link'}
@@ -62,13 +63,19 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
               {/* Reset Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                    <p className="text-red-800 text-xs sm:text-sm">{error}</p>
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }}
+                    className="mb-6 p-4 bg-red-50/50 backdrop-blur-md border border-red-200 text-red-800 rounded-xl flex items-center gap-3 font-semibold"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    {error}
+                  </motion.div>
                 )}
 
-                <div>
-                  <label htmlFor="email" className="block text-xs sm:text-sm font-semibold text-gray-900 mb-1.5">
+                <div className="mb-6">
+                  <label htmlFor="email" style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
                     Email Address
                   </label>
                   <input
@@ -77,18 +84,20 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all duration-300 placeholder:text-gray-400 font-medium"
+                    style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }}
                     required
                     disabled={loading}
                   />
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, y: -1, boxShadow: '0 12px 24px rgba(10, 61, 31, 0.2)' }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 text-sm sm:text-base rounded-lg transition-all duration-300"
+                  className="w-full bg-gradient-to-br from-[#0a3d1f] to-[#14532d] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-[#0a3d1f]/10 uppercase tracking-widest mt-2"
+                  style={{ fontSize: '11px', fontFamily: "'Montserrat', sans-serif" }}
                 >
                   {loading ? 'Sending...' : 'Send Reset Link'}
                 </motion.button>
@@ -100,27 +109,40 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="space-y-4"
+                className="space-y-6"
               >
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-                  <p className="text-green-800 font-semibold mb-1 text-sm">Check your email!</p>
-                  <p className="text-green-700 text-xs sm:text-sm">
+                <div className="bg-green-50/50 backdrop-blur-md border border-green-100 rounded-2xl p-6 text-center shadow-sm">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-green-50 shadow-inner">
+                    <span className="text-2xl">✨</span>
+                  </div>
+                  <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif" }} className="text-green-900 font-extrabold mb-2">Check your email!</p>
+                  <p style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }} className="text-green-800 font-medium leading-relaxed">
                     Reset link sent to <strong>{email}</strong>
                   </p>
                 </div>
 
-                <div className="space-y-1.5 text-xs sm:text-sm text-gray-600">
-                  <p>• Check inbox and spam folder</p>
-                  <p>• Click link to reset password</p>
-                  <p>• Link expires in 24 hours</p>
+                <div style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }} className="space-y-2 text-gray-700 font-medium opacity-80 px-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <p>Check inbox and spam folder</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <p>Click link to reset password</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                    <p>Link expires in 24 hours</p>
+                  </div>
                 </div>
 
-                <div className="border-t pt-4">
+                <div className="border-t border-gray-100/50 pt-6">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, backgroundColor: 'rgba(10, 61, 31, 0.05)' }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setSubmitted(false)}
-                    className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-2 px-4 text-sm rounded-lg transition-all duration-300"
+                    className="w-full bg-white/40 border border-gray-200 text-[#0a3d1f] font-bold py-3.5 px-4 rounded-xl transition-all duration-300 uppercase tracking-widest"
+                    style={{ fontSize: '10px', fontFamily: "'Montserrat', sans-serif" }}
                   >
                     Try Another Email
                   </motion.button>

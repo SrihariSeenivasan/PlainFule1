@@ -150,6 +150,18 @@ export interface FAQ {
   updatedAt: string;
 }
 
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+  status: 'UNREAD' | 'READ' | 'REPLIED' | 'ARCHIVED';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthResponse {
   message: string;
   token: string;
@@ -248,9 +260,11 @@ export const userAPI = {
 export const orderAPI = {
   createOrder: (data: {
     items: Array<{ productId: number; packageId: string; quantity: number }>;
-    shippingAddress: string;
+    shippingAddress: string | object;
+    paymentMethod?: string;
+    totalAmount?: number;
   }) =>
-    apiRequest<{ message: string; order: Order; payment: Order['payment'] }>('/orders', {
+    apiRequest<{ message: string; order: Order; payment: Order['payment']; razorpayOrderId?: string }>('/orders', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
@@ -278,6 +292,16 @@ export const orderAPI = {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
+
+  verifyPayment: (data: {
+    orderId: number | string;
+    razorpayPaymentId: string;
+    razorpayOrderId: string;
+    razorpaySignature: string;
+  }) => apiRequest<{ message: string }>('/orders/verify', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
 };
 
 // Product APIs (public)
@@ -387,4 +411,41 @@ export const faqAPI = {
     apiRequest<{ message: string }>(`/faqs/${id}`, {
       method: 'DELETE',
     }),
+};
+
+// Contact APIs
+export const contactAPI = {
+  submitMessage: (data: Partial<ContactMessage>) =>
+    apiRequest<ContactMessage>('/contact', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getMessages: () => apiRequest<ContactMessage[]>('/contact'),
+
+  updateStatus: (id: number, status: ContactMessage['status']) =>
+    apiRequest<ContactMessage>(`/contact/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    }),
+
+  deleteMessage: (id: number) =>
+    apiRequest<{ message: string }>(`/contact/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Consolidated API export
+export const api = {
+  auth: authAPI,
+  user: userAPI,
+  orders: {
+    ...orderAPI,
+    create: orderAPI.createOrder,
+  },
+  products: productAPI,
+  admin: adminAPI,
+  cart: cartAPI,
+  faq: faqAPI,
+  contact: contactAPI,
 };

@@ -1,24 +1,42 @@
 'use client';
 
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, LogOut, User, Menu, X, ShoppingCart, Package, UserCircle } from 'lucide-react';
+import { Shield, LogOut, User, Menu, X, ShoppingCart, Package, UserCircle, ChevronDown, Sparkles } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '@/lib/auth-context';
 import { useCart } from '@/lib/cart-context';
 
-// ── Star Doodle ───────────────────────────────────────────────────────────────
-const StarDoodle = ({ size = 16, rotate = 0, style = {} }: {
-  size?: number; rotate?: number; style?: React.CSSProperties
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+const COLORS = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#f7f8f5',
+  silver: '#9eaaa0',
+  mist: '#eef4ee',
+  gold: '#b8953a',
+  goldLight: '#d4af5a',
+  champagne: '#f0e4c0',
+  glass: 'rgba(255, 255, 255, 0.45)',
+  glassDark: 'rgba(4, 14, 7, 0.65)',
+};
+
+// ── Doodle Elements ────────────────────────────────────────────────────────────
+const StarDoodle = ({ size = 16, rotation = 0, style = {}, color = COLORS.leaf }: {
+  size?: number; rotation?: number; style?: React.CSSProperties; color?: string
 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden
-    style={{ transform: `rotate(${rotate}deg)`, flexShrink: 0, ...style }}>
+    style={{ transform: `rotate(${rotation}deg)`, flexShrink: 0, ...style }}>
     <path d="M12,2 L13.2,9 L20,9 L14.6,13.4 L16.6,20 L12,15.8 L7.4,20 L9.4,13.4 L4,9 L10.8,9 Z"
-      fill="none" stroke="#15803d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -28,194 +46,329 @@ const NavLink = ({ href, children, accent = false, delay = 0, onClick }: {
 }) => {
   const [hovered, setHovered] = useState(false);
   return (
-    <motion.a
-      href={onClick ? undefined : href}
-      onClick={onClick ? (e: React.MouseEvent) => { e.preventDefault(); onClick(); } : undefined}
-      initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'relative', fontFamily: "'Caveat', cursive", fontWeight: 700, fontSize: 20,
-        letterSpacing: '0.06em', color: accent ? '#15803d' : hovered ? '#15803d' : 'rgba(0,0,0,0.55)',
-        textDecoration: 'none', padding: '4px 0', transition: 'color 0.2s', display: 'inline-block',
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -1 }}
     >
-      {children}
-      <svg viewBox="0 0 80 8" preserveAspectRatio="none" aria-hidden
-        style={{ position: 'absolute', bottom: -5, left: 0, width: '100%', height: 9, pointerEvents: 'none', opacity: hovered || accent ? 1 : 0, transition: 'opacity 0.2s' }}>
-        <motion.path d="M2,5 Q20,1 40,4 Q60,7 78,3" fill="none" stroke="#15803d" strokeWidth="2.5" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={{ pathLength: hovered || accent ? 1 : 0 }} transition={{ duration: 0.3 }} />
-      </svg>
-    </motion.a>
+      <Link
+        href={onClick ? '#' : href}
+        onClick={onClick ? (e: React.MouseEvent) => { e.preventDefault(); onClick(); } : undefined}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        style={{
+          position: 'relative',
+          fontFamily: "'Montserrat', sans-serif",
+          fontWeight: 700,
+          fontSize: 12.5,
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: hovered || accent ? COLORS.leaf : COLORS.mid,
+          textDecoration: 'none',
+          padding: '8px 14px',
+          transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+        }}
+      >
+        {children}
+        {hovered && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0, rotate: '-45deg' }}
+            animate={{ scale: 1, opacity: 1, rotate: '0deg' }}
+            style={{ position: 'absolute', top: -4, right: 0 }}
+          >
+            <StarDoodle size={10} rotation={15} color={COLORS.gold} />
+          </motion.div>
+        )}
+        <motion.span
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: hovered || accent ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: 'absolute',
+            bottom: 6,
+            left: 14,
+            width: '60%',
+            height: 1.5,
+            background: COLORS.leaf,
+            transformOrigin: 'left',
+            borderRadius: 1,
+            opacity: 0.7,
+          }}
+        />
+      </Link>
+    </motion.div>
   );
 };
 
 // ── Logo ──────────────────────────────────────────────────────────────────────
-const DoodleLogo = () => (
-  <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', flexShrink: 0 }}>
-    <Image src="/images/plainfuel.png" alt="PlainFuel" width={120} height={30} priority
-      style={{ height: 'auto', maxWidth: 120 }} />
-    <StarDoodle size={14} rotate={15} style={{ opacity: 0.6, marginLeft: -4 }} />
+const PremiumLogo = () => (
+  <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none', flexShrink: 0, position: 'relative' }}>
+    <motion.div
+      whileHover={{ scale: 1.05, rotate: ['-1deg', '1deg', '-1deg'] }}
+      transition={{ duration: 0.4 }}
+    >
+      <Image 
+        src="/images/plainfuel.png" 
+        alt="PlainFuel" 
+        width={130} 
+        height={32} 
+        priority
+        style={{ height: 'auto', maxWidth: 130 }} 
+      />
+    </motion.div>
+    <motion.div
+      animate={{ 
+        rotate: ['0deg', '360deg'],
+        scale: [1, 1.1, 1],
+      }}
+      transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+      style={{ position: 'absolute', top: -8, right: -12, opacity: 0.4 }}
+    >
+      <StarDoodle size={12} rotation={0} color={COLORS.gold} />
+    </motion.div>
   </Link>
 );
 
 // ── Desktop CTA ───────────────────────────────────────────────────────────────
-const DoodleCTA = ({ delay = 0 }: { delay?: number }) => {
+const PremiumCTA = ({ delay = 0 }: { delay?: number }) => {
   const [hovered, setHovered] = useState(false);
   return (
-    <motion.a href="/products"
-      transition={{ duration: 0.5, delay }}
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 6,
-        padding: '8px 18px', background: '#15803d', color: '#fff',
-        fontFamily: "'Permanent Marker', cursive", fontSize: 14, letterSpacing: '0.06em',
-        textDecoration: 'none', borderRadius: 12, border: '2px solid #15803d',
-        boxShadow: hovered ? '4px 5px 0 rgba(21,100,50,0.5)' : '3px 4px 0 rgba(21,100,50,0.4)',
-        transform: `rotate(${hovered ? 1 : -1}deg)`, transition: 'all 0.2s ease',
-        flexShrink: 0, cursor: 'pointer', whiteSpace: 'nowrap',
-      }}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      Get Started ✦
-    </motion.a>
+      <Link 
+        href="/products"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          background: `linear-gradient(135deg, ${COLORS.forest} 0%, ${COLORS.mid} 100%)`,
+          color: COLORS.white,
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: 10.5,
+          fontWeight: 800,
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          textDecoration: 'none',
+          borderRadius: 6,
+          padding: '12px 26px',
+          boxShadow: hovered 
+            ? '0 12px 24px rgba(10, 61, 31, 0.3), inset 0 1px 1px rgba(255,255,255,0.2)' 
+            : '0 6px 16px rgba(10, 61, 31, 0.2), inset 0 1px 1px rgba(255,255,255,0.1)',
+          transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+          cursor: 'pointer',
+          whiteSpace: 'nowrap',
+          border: `1px solid ${COLORS.mid}40`,
+          position: 'relative',
+          overflow: 'hidden',
+          transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
+        }}
+      >
+        {/* Shimmer effect */}
+        <motion.div
+          animate={{ x: hovered ? ['-100%', '200%'] : '-100%' }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '40%', height: '100%',
+            background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent)',
+            transform: 'skewX(-20deg)',
+          }}
+        />
+        Get Started
+        <motion.span
+          animate={{ x: hovered ? [0, 4, 0] : 0 }}
+          transition={{ duration: 0.3, repeat: hovered ? Infinity : 0 }}
+        >
+          <Sparkles size={12} />
+        </motion.span>
+      </Link>
+    </motion.div>
   );
 };
 
-// ── Desktop Login Button ──────────────────────────────────────────────────────
-const LoginButton = ({ delay = 0, onClick }: { delay?: number; onClick?: () => void }) => (
-  <motion.button onClick={onClick}
-    initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, delay }}
-    whileHover={{ scale: 1.03 }}
-    style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      padding: '8px 16px', background: 'transparent', color: '#15803d',
-      fontFamily: "'Caveat', cursive", fontSize: 15, fontWeight: 700,
-      borderRadius: 12, border: '2px dashed rgba(21,128,61,0.5)',
-      flexShrink: 0, cursor: 'pointer', whiteSpace: 'nowrap',
-    }}
-  >
-    Sign In
-  </motion.button>
-);
+// ── Icon Button ─────────────────────────────────────────────────────────────
+const PremiumIconBtn = ({ onClick, delay = 0, children, badge, ariaLabel }: {
+  onClick: () => void; delay?: number;
+  children: React.ReactNode; badge?: number; ariaLabel: string;
+}) => {
+  return (
+    <motion.button 
+      onClick={onClick}
+      initial={{ opacity: 0, scale: 0.8 }} 
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4, delay }}
+      whileHover={{ y: -3, scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      style={{
+        position: 'relative',
+        display: 'inline-flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        width: 42, 
+        height: 42,
+        background: 'rgba(255,255,255,0.1)',
+        backdropFilter: 'blur(8px)',
+        color: COLORS.forest,
+        border: `1px solid ${COLORS.mid}25`,
+        borderRadius: 12,
+        cursor: 'pointer', 
+        padding: 0,
+        transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+      }} 
+      aria-label={ariaLabel}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = COLORS.mid;
+        e.currentTarget.style.background = `${COLORS.white}`;
+        e.currentTarget.style.boxShadow = `0 8px 20px ${COLORS.mid}15`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = `${COLORS.mid}25`;
+        e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
+      }}
+    >
+      {children}
+      {badge != null && badge > 0 && (
+        <motion.span
+          initial={{ scale: 0, rotate: '-20deg' }} 
+          animate={{ scale: 1, rotate: '0deg' }}
+          style={{
+            position: 'absolute', 
+            top: -4, 
+            right: -4,
+            width: 20, 
+            height: 20,
+            background: COLORS.leaf, 
+            color: '#fff',
+            borderRadius: '50%',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: 10, 
+            fontWeight: 800,
+            border: `2.5px solid ${COLORS.white}`,
+            boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+          }}
+        >
+          {badge > 9 ? '9+' : badge}
+        </motion.span>
+      )}
+    </motion.button>
+  );
+};
 
 // ── Profile Dropdown ──────────────────────────────────────────────────────────
 const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: () => void; navigate: (path: string) => void }) => {
   const { logout, user } = useAuth();
   const handleLogout = () => { logout(); onClose(); window.location.href = '/'; };
-  const handleNav = (path: string) => {
-    onClose();
-    navigate(path);
-  };
-  const linkStyle = { display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#1a1a1a', fontFamily: "'Caveat', cursive", cursor: 'pointer' } as const;
+  const handleNav = (path: string) => { onClose(); navigate(path); };
+
+  const menuItems = user?.role !== 'ADMIN' ? [
+    { path: '/my-profile', icon: <UserCircle size={16} />, label: 'My Profile' },
+    { path: '/my-orders', icon: <Package size={16} />, label: 'My Orders' },
+    { path: '/cart', icon: <ShoppingCart size={16} />, label: 'Cart' },
+  ] : [];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -8, scale: 0.95 }}
-      animate={{ opacity: open ? 1 : 0, y: open ? 0 : -8, scale: open ? 1 : 0.95 }}
-      transition={{ duration: 0.18 }}
-      style={{
-        transformOrigin: 'top right', pointerEvents: open ? 'auto' : 'none',
-        position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-        background: '#fffef5', borderRadius: 14, padding: '10px 0',
-        border: '2px dashed rgba(21,128,61,0.4)', boxShadow: '4px 5px 0 rgba(21,128,61,0.15)',
-        zIndex: 300, minWidth: 200,
-      }}
-    >
-      <div style={{ padding: '10px 14px', borderBottom: '1.5px dashed rgba(21,128,61,0.2)' }}>
-        <p style={{ margin: 0, fontSize: 10, color: '#999', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Signed in as</p>
-        <p style={{ margin: '4px 0 0', fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: "'Caveat', cursive" }}>
-          {user?.firstName || 'User'}
-        </p>
-      </div>
-      {user?.role !== 'ADMIN' && (
-        <>
-          <motion.button onClick={() => handleNav('/my-profile')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
-            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent' }}>
-            <UserCircle size={16} /> My Profile
-          </motion.button>
-          <motion.button onClick={() => handleNav('/my-orders')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
-            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent' }}>
-            <Package size={16} /> My Orders
-          </motion.button>
-          <motion.button onClick={() => handleNav('/cart')} whileHover={{ backgroundColor: 'rgba(21,128,61,0.08)' }}
-            style={{ ...linkStyle, width: '100%', border: 'none', background: 'transparent', borderBottom: '1.5px dashed rgba(21,128,61,0.15)', paddingBottom: 11 }}>
-            <ShoppingCart size={16} /> Cart
-          </motion.button>
-        </>
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.94, rotateX: '-15deg' }}
+          animate={{ opacity: 1, y: 0, scale: 1, rotateX: '0deg' }}
+          exit={{ opacity: 0, y: 15, scale: 0.94 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            transformOrigin: 'top right',
+            perspective: '1000px',
+            position: 'absolute', 
+            top: 'calc(100% + 18px)', 
+            right: 0,
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(32px) saturate(160%)',
+            borderRadius: 16, 
+            padding: '10px',
+            border: `1px solid ${COLORS.white}`,
+            boxShadow: '0 24px 60px rgba(10, 61, 31, 0.18), 0 0 0 1px rgba(255,255,255,0.4)',
+            zIndex: 300, 
+            minWidth: 230,
+          }}
+        >
+          <div style={{
+            padding: '14px 16px',
+            marginBottom: 8,
+            background: `linear-gradient(135deg, ${COLORS.leaf}15 0%, ${COLORS.leaf}05 100%)`,
+            borderRadius: 10,
+            border: `1px solid ${COLORS.leaf}10`,
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            <p style={{ margin: 0, fontSize: 8.5, color: COLORS.mid, fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.7 }}>Account Member</p>
+            <p style={{ margin: '4px 0 0', fontSize: 16, fontWeight: 800, color: COLORS.forest, fontFamily: "'Montserrat', sans-serif" }}>
+              {user?.firstName || 'User'}
+            </p>
+            <StarDoodle size={10} style={{ position: 'absolute', top: 12, right: 12, opacity: 0.3 }} color={COLORS.gold} />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            {menuItems.map(({ path, icon, label }) => (
+              <motion.button 
+                key={path}
+                onClick={() => handleNav(path)}
+                whileHover={{ backgroundColor: `${COLORS.leaf}08`, x: 5 }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
+                  border: 'none', background: 'transparent', borderRadius: 8,
+                  fontFamily: "'Montserrat', sans-serif", fontSize: 13.5, fontWeight: 600,
+                  color: COLORS.forest, cursor: 'pointer', width: '100%', textAlign: 'left',
+                  transition: 'all 0.25s',
+                }}>
+                <span style={{ color: COLORS.leaf, display: 'flex' }}>{icon}</span> {label}
+              </motion.button>
+            ))}
+
+            {user?.role === 'ADMIN' && (
+              <motion.a href="/admin/dashboard" onClick={onClose}
+                whileHover={{ backgroundColor: 'rgba(239,68,68,0.05)', x: 5 }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
+                  textDecoration: 'none', borderRadius: 8,
+                  fontFamily: "'Montserrat', sans-serif", fontSize: 13.5, fontWeight: 600,
+                  color: '#ef4444', transition: 'all 0.25s',
+                }}>
+                <Shield size={16} /> Admin Panel
+              </motion.a>
+            )}
+
+            <div style={{ height: 1.5, background: `${COLORS.mid}08`, margin: '6px 12px' }} />
+
+            <motion.button onClick={handleLogout}
+              whileHover={{ backgroundColor: 'rgba(239,68,68,0.05)', x: 5 }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
+                border: 'none', background: 'transparent', borderRadius: 8,
+                fontFamily: "'Montserrat', sans-serif", fontSize: 13.5, fontWeight: 600,
+                color: '#ef4444', cursor: 'pointer', width: '100%', textAlign: 'left',
+                transition: 'all 0.25s',
+              }}>
+              <LogOut size={16} /> Logout
+            </motion.button>
+          </div>
+        </motion.div>
       )}
-      {user?.role === 'ADMIN' && (
-        <motion.a href="/admin/dashboard" onClick={onClose} whileHover={{ backgroundColor: 'rgba(239,68,68,0.08)' }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', textDecoration: 'none', fontSize: 14, fontWeight: 600, color: '#ef4444', fontFamily: "'Caveat', cursive", borderBottom: '1.5px dashed rgba(21,128,61,0.15)' }}>
-          <Shield size={16} /> Admin Panel
-        </motion.a>
-      )}
-      <motion.button onClick={handleLogout} whileHover={{ backgroundColor: 'rgba(239,68,68,0.08)' }}
-        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', border: 'none', background: 'transparent', fontSize: 14, fontWeight: 600, color: '#ef4444', cursor: 'pointer', fontFamily: "'Caveat', cursive" }}>
-        <LogOut size={16} /> Logout
-      </motion.button>
-    </motion.div>
+    </AnimatePresence>
   );
 };
 
-// ── Profile Icon Button ───────────────────────────────────────────────────────
-const ProfileIconButton = ({ onClick, delay = 0 }: { onClick: () => void; delay?: number }) => (
-  <motion.button onClick={onClick}
-    initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, delay }} whileHover={{ scale: 1.05 }}
-    style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      width: 36, height: 36, background: '#15803d', color: '#fff',
-      border: '2px solid #15803d', borderRadius: 10, cursor: 'pointer',
-      boxShadow: '2px 3px 0 rgba(21,100,50,0.3)', flexShrink: 0, padding: 0,
-    }} aria-label="Open profile menu"
-  >
-    <User size={16} />
-  </motion.button>
-);
-
-// ── Cart Icon Button ───────────────────────────────────────────────────────
-const CartIconButton = ({ onClick, totalItems, delay = 0 }: { onClick: () => void; totalItems: number; delay?: number }) => (
-  <motion.button onClick={onClick}
-    initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5, delay }} whileHover={{ scale: 1.05 }}
-    style={{
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      width: 36, height: 36, background: '#15803d', color: '#fff',
-      border: '2px solid #15803d', borderRadius: 10, cursor: 'pointer',
-      boxShadow: '2px 3px 0 rgba(21,100,50,0.3)', flexShrink: 0, padding: 0,
-      position: 'relative',
-    }} aria-label="View shopping cart"
-  >
-    <ShoppingCart size={16} />
-    {totalItems > 0 && (
-      <motion.span
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        style={{
-          position: 'absolute',
-          top: -8,
-          right: -8,
-          width: 24,
-          height: 24,
-          background: '#ef4444',
-          color: '#fff',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 11,
-          fontWeight: 700,
-          border: '2px solid #fffef5',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-        }}
-      >
-        {totalItems > 9 ? '9+' : totalItems}
-      </motion.span>
-    )}
-  </motion.button>
-);
-
-// ── Mobile Drawer — rendered OUTSIDE the pill, as a sibling ──────────────────
+// ── Mobile Drawer ─────────────────────────────────────────────────────────────
 const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogout, navigate }: {
   open: boolean; onClose: () => void;
   onOpenAuth: () => void; isAuthenticated: boolean;
@@ -228,159 +381,144 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
   ] as const;
 
   return (
-    <motion.div
-      initial={false}
-      animate={{ opacity: open ? 1 : 0, y: open ? 0 : -8, pointerEvents: open ? 'auto' : 'none' }}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        position: 'fixed',
-        /* sits just below the navbar — adjust top if needed */
-        top: 76,
-        left: 12, right: 12,
-        background: '#fffef5',
-        borderRadius: 16,
-        padding: '12px 14px',
-        border: '2px dashed rgba(21,128,61,0.3)',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.1), 3px 4px 0 rgba(21,128,61,0.1)',
-        zIndex: 99,
-        pointerEvents: open ? 'auto' : 'none',
-      }}
-    >
-      {/* subtle notebook lines */}
-      <div style={{
-        position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden', pointerEvents: 'none',
-        backgroundImage: 'repeating-linear-gradient(transparent, transparent 26px, rgba(21,128,61,0.06) 26px, rgba(21,128,61,0.06) 27px)',
-      }} />
-
-      <div style={{ position: 'relative' }}>
-        {/* Nav links */}
-        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-          {links.map((l, i) => (
-            <motion.a
-              key={l.href}
-              href={l.href}
-              onClick={() => { onClose(); }}
-              initial={{ opacity: 0, x: -6 }}
-              animate={{ opacity: open ? 1 : 0, x: open ? 0 : -6 }}
-              transition={{ delay: open ? 0.03 * i + 0.04 : 0 }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                fontFamily: "'Caveat', cursive", fontWeight: 700, fontSize: 15,
-                color: '#1a1a1a', textDecoration: 'none',
-                padding: '8px 0',
-                borderBottom: '1px dashed rgba(0,0,0,0.07)',
-              }}
-            >
-              <StarDoodle size={11} rotate={i * 15} />
-              {l.label}
-            </motion.a>
-          ))}
-        </div>
-
-        {/* Auth row */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: open ? 1 : 0 }}
-          transition={{ delay: open ? 0.14 : 0 }}
-        >
-          {isAuthenticated ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <p style={{ margin: '0 0 6px', fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700, color: '#15803d' }}>
-                Hey, {user?.firstName || 'there'} 👋
-              </p>
-              {user?.role !== 'ADMIN' ? (
-                <>
-                  {[
-                    { path: '/my-profile', icon: <UserCircle size={14} />, label: 'My Profile' },
-                    { path: '/my-orders',  icon: <Package size={14} />,    label: 'My Orders' },
-                    { path: '/cart',       icon: <ShoppingCart size={14} />, label: 'Cart' },
-                  ].map(({ path, icon, label }) => (
-                    <motion.button
-                      key={path}
-                      onClick={() => { navigate(path); onClose(); }}
-                      whileHover={{ backgroundColor: 'rgba(21,128,61,0.1)' }}
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(4,14,7,0.4)',
+              backdropFilter: 'blur(12px)', zIndex: 190,
+            }}
+          />
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+            style={{
+              position: 'fixed', top: 12, right: 12, bottom: 12,
+              width: '85%', maxWidth: 340,
+              background: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(32px) saturate(180%)',
+              zIndex: 200, padding: '80px 32px 40px',
+              display: 'flex', flexDirection: 'column',
+              borderRadius: 24,
+              border: '1px solid rgba(255,255,255,0.5)',
+              boxShadow: '-15px 0 50px rgba(0,0,0,0.15)',
+            }}
+          >
+            <StarDoodle size={40} rotation={15} style={{ position: 'absolute', top: 32, right: 32, opacity: 0.1 }} />
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {links.map((link, i) => (
+                  <motion.div key={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.1 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={onClose}
                       style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '8px 10px', background: 'rgba(21,128,61,0.04)',
-                        border: '1.5px dashed rgba(21,128,61,0.25)', borderRadius: 9,
-                        fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700,
-                        color: '#1a1a1a', cursor: 'pointer', width: '100%',
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontSize: 22, fontWeight: 800,
+                        color: COLORS.forest, textDecoration: 'none',
+                        letterSpacing: '0.02em',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
                       }}
                     >
-                      {icon} {label}
-                    </motion.button>
-                  ))}
-                  <button onClick={() => { onLogout(); onClose(); }}
+                      {link.label}
+                      <StarDoodle size={14} rotation={i * 20} style={{ opacity: 0.4 }} />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div style={{ height: 1, background: `linear-gradient(to right, ${COLORS.mid}30, transparent)` }} />
+
+              {!isAuthenticated ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <motion.button 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    onClick={() => { onOpenAuth(); onClose(); }}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      padding: '7px 10px', background: 'rgba(239,68,68,0.06)',
-                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
-                      fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700,
-                      color: '#ef4444', cursor: 'pointer', marginTop: 2,
+                      padding: '18px',
+                      background: COLORS.forest, color: COLORS.white,
+                      fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 800,
+                      letterSpacing: '0.2em', textTransform: 'uppercase',
+                      borderRadius: 12, border: 'none', cursor: 'pointer',
+                      boxShadow: '0 8px 24px rgba(10,61,31,0.2)',
                     }}
                   >
-                    <LogOut size={13} /> Logout
-                  </button>
-                </>
+                    Get Started
+                  </motion.button>
+                  <motion.button 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    onClick={() => { onOpenAuth(); onClose(); }}
+                    style={{
+                      padding: '18px',
+                      background: 'transparent', color: COLORS.forest,
+                      fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 800,
+                      letterSpacing: '0.2em', textTransform: 'uppercase',
+                      borderRadius: 12, border: `2px solid ${COLORS.forest}`,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Sign In
+                  </motion.button>
+                </div>
               ) : (
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <motion.a href="/admin/dashboard" onClick={onClose} whileHover={{ scale: 1.02 }}
-                    style={{
-                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      padding: '7px 10px', background: 'rgba(239,68,68,0.07)',
-                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
-                      textDecoration: 'none', fontFamily: "'Caveat', cursive",
-                      fontSize: 13, fontWeight: 700, color: '#ef4444',
-                    }}
-                  >
-                    <Shield size={13} /> Admin Panel
-                  </motion.a>
-                  <button onClick={() => { onLogout(); onClose(); }}
-                    style={{
-                      flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-                      padding: '7px 10px', background: 'rgba(239,68,68,0.06)',
-                      border: '1.5px dashed rgba(239,68,68,0.3)', borderRadius: 9,
-                      fontFamily: "'Caveat', cursive", fontSize: 13, fontWeight: 700,
-                      color: '#ef4444', cursor: 'pointer',
-                    }}
-                  >
-                    <LogOut size={13} /> Logout
-                  </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <p style={{ margin: 0, fontSize: 14, color: COLORS.mid, opacity: 0.7, fontFamily: "'Montserrat', sans-serif", fontWeight: 600 }}>Welcome back,</p>
+                    <p style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 900, color: COLORS.forest, fontFamily: "'Montserrat', sans-serif" }}>
+                      {user?.firstName}
+                    </p>
+                  </div>
+                  <button onClick={() => { navigate('/my-profile'); onClose(); }} style={mobileBtnStyle}>Profile</button>
+                  <button onClick={() => { navigate('/my-orders'); onClose(); }} style={mobileBtnStyle}>Orders</button>
+                  <button onClick={() => { navigate('/cart'); onClose(); }} style={mobileBtnStyle}>Cart</button>
+                  <button onClick={() => { onLogout(); onClose(); }} style={{ ...mobileBtnStyle, color: '#ef4444', background: 'rgba(239,68,68,0.05)', borderColor: 'rgba(239,68,68,0.1)' }}>Logout</button>
                 </div>
               )}
             </div>
-          ) : (
-            <div style={{ display: 'flex', gap: 8 }}>
-              {/* Compact inline CTA */}
-              <motion.a href="/products" whileHover={{ scale: 1.02 }}
-                style={{
-                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  padding: '8px 10px', background: '#15803d', color: '#fff',
-                  fontFamily: "'Permanent Marker', cursive", fontSize: 13,
-                  textDecoration: 'none', borderRadius: 10,
-                  border: '2px solid #15803d',
-                  boxShadow: '2px 3px 0 rgba(21,100,50,0.35)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Get Started ✦
-              </motion.a>
-              <button onClick={() => { onOpenAuth(); onClose(); }}
-                style={{
-                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  padding: '8px 10px', background: 'transparent', color: '#15803d',
-                  fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700,
-                  borderRadius: 10, border: '2px dashed rgba(21,128,61,0.45)',
-                  cursor: 'pointer', whiteSpace: 'nowrap',
-                }}
-              >
-                Sign In
-              </button>
+            
+            {/* Signature Doodle at bottom */}
+            <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', opacity: 0.2 }}>
+              <p style={{ fontFamily: "'Caveat', cursive", fontSize: 18, color: COLORS.mid }}>Fuel your day nicely ✨</p>
             </div>
-          )}
-        </motion.div>
-      </div>
-    </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
+};
+
+const mobileBtnStyle = {
+  padding: '16px 20px',
+  background: 'rgba(255,255,255,0.4)',
+  color: COLORS.forest,
+  fontFamily: "'Montserrat', sans-serif",
+  fontSize: 15,
+  fontWeight: 700,
+  borderRadius: 12,
+  border: `1px solid ${COLORS.mid}15`,
+  cursor: 'pointer',
+  textAlign: 'left' as const,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 };
 
 // ── Main Navbar ───────────────────────────────────────────────────────────────
@@ -396,8 +534,8 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const router = useRouter();
 
-  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 60));
-  React.useEffect(() => { setMounted(true); }, []);
+  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 20));
+  useEffect(() => { setMounted(true); }, []);
 
   const navigate = (path: string) => router.push(path);
   const handleLogout = () => { logout(); router.push('/'); };
@@ -406,104 +544,118 @@ export default function Navbar() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700;900&family=Permanent+Marker&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Caveat:wght@400;600;700&display=swap');
 
-        /* ── Responsive visibility ── */
-        .nav-desktop,
-        .nav-desktop-cta { display: flex; }
-        .nav-mobile-btn  { display: none; }
+        .nav-desktop { display: flex; align-items: center; gap: 4px; }
+        .nav-mobile-btn { display: none; }
 
-        @media (max-width: 767px) {
-          .nav-desktop,
-          .nav-desktop-cta { display: none !important; }
-          .nav-mobile-btn  { display: flex !important; }
-        }
-        @media (min-width: 768px) {
-          .nav-desktop,
-          .nav-desktop-cta { display: flex !important; }
-          .nav-mobile-btn  { display: none !important; }
+        @media (max-width: 860px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: flex !important; }
         }
       `}</style>
 
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        style={{ 
+          position: 'fixed', 
+          top: 0, left: 0, right: 0, 
+          zIndex: 1000,
+          padding: scrolled ? '12px 20px' : '20px 32px',
+          transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+        }}
       >
-        {/* ── Pill ── */}
         <div style={{
-          margin: scrolled ? '8px 12px' : '10px 12px',
-          borderRadius: 20,
-          background: scrolled ? 'rgba(255,254,245,0.97)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(24px)' : 'none',
-          boxShadow: scrolled ? '4px 5px 0 rgba(21,128,61,0.16), 0 2px 24px rgba(0,0,0,0.07)' : 'none',
-          border: scrolled ? '2px dashed rgba(21,128,61,0.28)' : '2px solid transparent',
-          transition: 'all 0.4s ease',
+          maxWidth: 1360,
+          margin: '0 auto',
+          height: scrolled ? 68 : 74,
+          background: scrolled ? 'rgba(255, 255, 255, 0.65)' : 'rgba(255, 255, 255, 0.15)',
+          backdropFilter: 'blur(36px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(36px) saturate(180%)',
+          borderRadius: scrolled ? 24 : 16,
+          border: `1px solid ${scrolled ? 'rgba(10, 61, 31, 0.12)' : 'rgba(255, 255, 255, 0.15)'}`,
+          boxShadow: scrolled ? '0 15px 45px rgba(10, 61, 31, 0.1), inset 0 0 0 1px rgba(255,255,255,0.4)' : 'none',
+          padding: '0 28px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
         }}>
-          <div style={{
-            maxWidth: 1200, margin: '0 auto',
-            padding: '0 16px',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: 12, height: 58,
-          }}>
-            {/* Logo */}
-            <DoodleLogo />
+          {/* Logo */}
+          <PremiumLogo />
 
-            {/* Desktop center nav */}
-            <nav className="nav-desktop" style={{ alignItems: 'center', gap: 30 }}>
-              <NavLink href="/about" delay={0.2}>About</NavLink>
-              <NavLink href="/products" delay={0.25}>Products</NavLink>
-            </nav>
-
-            {/* Right: desktop buttons + mobile hamburger */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-
-              {/* Desktop auth row — CSS class controls display */}
-              <div className="nav-desktop-cta" style={{ alignItems: 'center', gap: 8, position: 'relative' }}>
-                <DoodleCTA delay={0.6} />
-                <CartIconButton delay={0.62} onClick={handleCartClick} totalItems={totalItems} />
-                {mounted && isAuthenticated ? (
-                  <>
-                  <ProfileIconButton delay={0.65} onClick={() => setProfileDropdownOpen(v => !v)} />
-                    <ProfileDropdown open={profileDropdownOpen} onClose={() => setProfileDropdownOpen(false)} navigate={navigate} />
-                  </>
-                ) : mounted ? (
-                  <LoginButton delay={0.65} onClick={() => setAuthModalOpen(true)} />
-                ) : null}
-              </div>
-
-              {/* Mobile hamburger — CSS class controls display, NO inline display */}
-              <motion.button
-                onClick={() => setMenuOpen(v => !v)}
-                whileTap={{ scale: 0.88 }}
-                className="nav-mobile-btn"
-                style={{
-                  alignItems: 'center', justifyContent: 'center',
-                  width: 40, height: 40,
-                  background: menuOpen ? 'rgba(21,128,61,0.12)' : 'rgba(255,255,255,0.9)',
-                  border: '2px dashed rgba(21,128,61,0.4)',
-                  borderRadius: 10, cursor: 'pointer',
-                  transition: 'background 0.2s', padding: 0,
-                }}
-                aria-label="Toggle menu"
-              >
-                <motion.div
-                  animate={{ rotate: menuOpen ? 90 : 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  {menuOpen
-                    ? <X size={18} strokeWidth={2.5} color="#1a1a1a" />
-                    : <Menu size={18} strokeWidth={2.5} color="#1a1a1a" />
-                  }
-                </motion.div>
-              </motion.button>
+          {/* Core Navigation */}
+          <div className="nav-desktop">
+            <div style={{ display: 'flex', gap: 4, background: 'rgba(10,61,31,0.04)', padding: '4px', borderRadius: 14, marginRight: 12 }}>
+              <NavLink href="/about">About</NavLink>
+              <NavLink href="/products">Products</NavLink>
             </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <PremiumIconBtn 
+                onClick={handleCartClick} 
+                badge={totalItems} 
+                ariaLabel="Shopping cart"
+              >
+                <ShoppingCart size={19} strokeWidth={2.2} />
+              </PremiumIconBtn>
+
+              {mounted && isAuthenticated ? (
+                <div style={{ position: 'relative' }}>
+                  <PremiumIconBtn 
+                    onClick={() => setProfileDropdownOpen(v => !v)}
+                    ariaLabel="User profile"
+                  >
+                    <User size={19} strokeWidth={2.2} />
+                  </PremiumIconBtn>
+                  <ProfileDropdown 
+                    open={profileDropdownOpen} 
+                    onClose={() => setProfileDropdownOpen(false)} 
+                    navigate={navigate} 
+                  />
+                </div>
+              ) : (
+                <NavLink href="#" onClick={() => setAuthModalOpen(true)}>Sign In</NavLink>
+              )}
+
+              <PremiumCTA />
+            </div>
+          </div>
+
+          {/* Mobile hamburger */}
+          <div className="nav-mobile-btn" style={{ alignItems: 'center', gap: 14 }}>
+            <PremiumIconBtn 
+              onClick={handleCartClick} 
+              badge={totalItems} 
+              ariaLabel="Shopping cart"
+            >
+              <ShoppingCart size={19} strokeWidth={2.2} />
+            </PremiumIconBtn>
+            
+            <motion.button
+              onClick={() => setMenuOpen(v => !v)}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 44,
+                height: 44,
+                background: COLORS.forest,
+                borderRadius: 14,
+                border: 'none',
+                cursor: 'pointer',
+                color: COLORS.white,
+                boxShadow: '0 8px 16px rgba(10,61,31,0.15)',
+              }}
+            >
+              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            </motion.button>
           </div>
         </div>
 
-        {/* ── Mobile drawer — lives OUTSIDE pill, below it ── */}
         <MobileDrawer
           open={menuOpen}
           onClose={() => setMenuOpen(false)}
@@ -519,3 +671,4 @@ export default function Navbar() {
     </>
   );
 }
+

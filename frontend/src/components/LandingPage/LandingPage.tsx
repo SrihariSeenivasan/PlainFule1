@@ -1,5 +1,4 @@
-import Navbar from '@/components/Navbar';
-import FinalCTA from '@/components/FinalCTA';
+import MainLayout from '@/components/MainLayout';
 import Herosection from './LandingPageSections/Herosection';
 import Blogsection from './LandingPageSections/Blogsection';
 import Peoplesection from './LandingPageSections/Peoplesection';
@@ -15,10 +14,7 @@ import FiveInOneSection from './LandingPageSections/FiveInOneSection';
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-[var(--background)]">
-      {/* This div clips horizontal overflow WITHOUT breaking sticky */}
-      <div style={{ overflowX: 'clip' }}>
-        <Navbar />
+    <MainLayout background="var(--background)">
         <Herosection />
         <WhyPlainFuel />
         <CanWeGetFromFood />
@@ -29,8 +25,6 @@ export default function LandingPage() {
         <Blogsection />
         <Peoplesection />
         <DoctorsReview />
-        <FinalCTA />
-      </div>
-    </main>
+    </MainLayout>
   );
 }

@@ -68,8 +68,17 @@ export const uploadImages = async (req: Request, res: Response) => {
         throw new AppError(400, `File "${file.originalname}" exceeds the 10 MB limit`);
       }
 
-      // Validate file extension
-      const ext = file.originalname.split('.').pop()?.toLowerCase() || 'jpg';
+      // Detect file extension from mimetype or original name
+      const mimetypeMap: Record<string, string> = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp',
+        'image/svg+xml': 'svg',
+        'image/gif': 'gif'
+      };
+      
+      const ext = mimetypeMap[file.mimetype] || file.originalname.split('.').pop()?.toLowerCase() || 'jpg';
+      
       if (!ALLOWED_EXTENSIONS.includes(ext)) {
         throw new AppError(400, `File type ".${ext}" is not allowed`);
       }

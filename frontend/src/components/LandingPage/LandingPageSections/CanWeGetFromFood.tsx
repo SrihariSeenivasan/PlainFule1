@@ -1,289 +1,165 @@
 'use client';
 
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import Image from 'next/image';
+import {
+    CheckCircle2, FlaskConical, Microscope, Info,
+    PlayCircle
+} from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 
-// ── SVG doodles ───────────────────────────────────────────────────────────────
-function PulseDot() {
+/* ── Design Tokens (Glacier Scientific) ── */
+const C = {
+    forest: '#0a3d1f',
+    deep: '#071a0d',
+    mid: '#14532d',
+    leaf: '#16a34a',
+    ink: '#070d08',
+    white: '#ffffff',
+    offwhite: '#fafafa',
+    mist: '#f1f5f9',
+    gold: '#854d0e',
+    silver: '#64748b',
+    glass: 'rgba(255, 255, 255, 0.75)',
+    border: 'rgba(0, 0, 0, 0.05)',
+};
+
+const FONTS = {
+    main: "'Montserrat', sans-serif",
+    accent: "'Caveat', cursive",
+};
+
+/* ── SUB-COMPONENTS ── */
+
+function DataChip({ label, value, color = C.forest }: { label: string; value: string; color?: string }) {
     return (
-        <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: '#22c55e', marginRight: 8, animation: 'pfPulse 2s ease-in-out infinite', verticalAlign: 'middle' }} />
-    );
-}
-
-function CheckIcon({ color = '#15803d' }: { color?: string }) {
-    return (
-        <svg viewBox="0 0 16 16" width={14} height={14} fill="none" style={{ flexShrink: 0, marginTop: 3 }}>
-            <circle cx="8" cy="8" r="7" fill={color} opacity="0.12" />
-            <path d="M5 8.5l2 2 4-4" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
-function BulletItem({ children, accent }: { children: ReactNode; accent?: string }) {
-    return (
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 18 }}>
-            <CheckIcon color={accent || '#15803d'} />
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15.5, color: '#374151', lineHeight: 1.7, margin: 0 }}>
-                {children}
-            </p>
-        </div>
-    );
-}
-
-function Highlight({ children, color = '#dcfce7', text = '#0f4a23' }: { children: ReactNode; color?: string; text?: string }) {
-    return (
-        <span style={{
-            background: color,
-            color: text,
-            fontWeight: 700,
-            padding: '1px 7px',
-            borderRadius: 5,
-            display: 'inline',
-        }}>{children}</span>
-    );
-}
-
-// ── Video placeholder / slot ──────────────────────────────────────────────────
-function VideoPanel() {
-    return (
-        <div style={{
-            position: 'relative',
-            width: '100%',
-            aspectRatio: '9/16',
-            maxHeight: 560,
-            borderRadius: 20,
-            overflow: 'hidden',
-            border: '2.5px solid #0f4a23',
-            boxShadow: '7px 8px 0 #0f4a23',
-            background: '#0f4a23',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
-            {/*
-        Replace the div below with your <video> tag:
-        <video src="..." autoPlay muted loop playsInline style={{ width:'100%',height:'100%',objectFit:'cover' }} />
-      */}
-            <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.35)', fontFamily: "'DM Mono',monospace", fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                <svg viewBox="0 0 48 48" width={44} height={44} style={{ display: 'block', margin: '0 auto 12px', opacity: 0.4 }}>
-                    <circle cx="24" cy="24" r="22" fill="none" stroke="white" strokeWidth="2" />
-                    <path d="M19 16l14 8-14 8V16z" fill="white" opacity="0.6" />
-                </svg>
-                Video goes here
-            </div>
-
-            {/* Corner badge */}
-            <div style={{
-                position: 'absolute', top: 16, left: 16,
-                background: '#22c55e', borderRadius: 999,
-                padding: '4px 12px',
-                fontFamily: "'DM Mono',monospace", fontSize: 10, fontWeight: 700,
-                color: '#0f4a23', letterSpacing: '0.12em', textTransform: 'uppercase',
-            }}>
-                PlainFuel
-            </div>
-        </div>
-    );
-}
-
-// ── Text content panel ────────────────────────────────────────────────────────
-function ContentPanel({ animated }: { animated: boolean }) {
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 0, opacity: animated ? 1 : 0, transition: 'opacity 0.5s ease' }}>
-
-            {/* Eyebrow */}
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
-                <PulseDot />
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 14.5, color: '#15803d', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600 }}>The real question</span>
-            </div>
-
-            {/* Headline */}
-            <h2 style={{
-                fontFamily: "'Fraunces', serif",
-                fontSize: 'clamp(1.6rem, 3vw, 2.6rem)',
-                fontWeight: 900,
-                color: '#111410',
-                lineHeight: 1.1,
-                letterSpacing: '-0.03em',
-                marginBottom: 10,
-            }}>
-                Can we get{' '}
-                <span style={{ color: '#15803d', fontStyle: 'italic', position: 'relative', display: 'inline-block' }}>
-                    everything
-                    <svg viewBox="0 0 240 14" preserveAspectRatio="none" height={10} style={{ position: 'absolute', bottom: -4, left: 0, width: '100%', pointerEvents: 'none' }}>
-                        <path d="M4,9 Q60,3 120,7 Q180,11 236,5" fill="none" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" />
-                    </svg>
-                </span>
-                {' '}from food?
-            </h2>
-
-            {/* Subhead */}
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: '#374151', lineHeight: 1.7, marginBottom: 28 }}>
-                In theory, <strong style={{ color: '#0f4a23' }}>yes.</strong><br />
-                In reality, it is <strong style={{ color: '#0f4a23' }}>difficult to do consistently.</strong>
-            </p>
-
-            {/* Divider with label */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                <div style={{ height: 1.5, flex: 1, background: 'linear-gradient(90deg,#15803d,transparent)', opacity: 0.18 }} />
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 13.5, color: '#030303ff', letterSpacing: '0.15em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Let's look at simple examples</span>
-                <div style={{ height: 1.5, flex: 1, background: 'linear-gradient(270deg,#15803d,transparent)', opacity: 0.18 }} />
-            </div>
-
-            {/* Bullet items */}
-            <div style={{
-                background: '#fafaf7',
-                border: '1.5px solid rgba(15,74,35,0.12)',
-                borderRadius: 14,
-                padding: '20px 22px',
-                marginBottom: 22,
-            }}>
-                <BulletItem>
-                    <strong style={{ color: '#0f4a23' }}>Spinach</strong> is considered rich in iron — but to meet daily iron needs, you'd need around{' '}
-                    <Highlight color="#fee2e2" text="#991b1b">600 grams every day</Highlight>
-                </BulletItem>
-                <BulletItem>
-                    <strong style={{ color: '#0f4a23' }}>Ragi</strong> is rich in calcium — to meet daily calcium needs, you'd need around{' '}
-                    <Highlight color="#fef3c7" text="#92400e">300 grams daily</Highlight>
-                </BulletItem>
-                <BulletItem>
-                    <strong style={{ color: '#0f4a23' }}>Eggs</strong> provide Vitamin D3 — to meet daily requirements, you'd need{' '}
-                    <Highlight color="#fef9c3" text="#713f12">15 or more eggs every day</Highlight>
-                </BulletItem>
-            </div>
-
-            {/* Conclusion notepad strip */}
-            <div style={{
-                background: '#fffef0',
-                border: '2px solid #0f4a23',
-                borderRadius: 10,
-                boxShadow: '4px 5px 0 #0f4a23',
-                padding: '18px 20px 18px 28px',
-                position: 'relative',
-                overflow: 'hidden',
-                transform: 'rotate(-0.4deg)',
-                marginBottom: 24,
-            }}>
-                {/* Notepad lines */}
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(21,128,61,0.08) 27px, rgba(21,128,61,0.08) 28px)', backgroundPositionY: 28, pointerEvents: 'none' }} />
-                {/* Margin rule */}
-                <div style={{ position: 'absolute', left: 16, top: 0, bottom: 0, width: 2, background: 'rgba(21,128,61,0.2)' }} />
-
-                <div style={{ fontFamily: "'DM Mono',monospace", fontSize: 11.5, color: '#15803d', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10, position: 'relative', zIndex: 1 }}>
-                    The real insight
-                </div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15.5, color: '#0f4a23', lineHeight: 1.75, position: 'relative', zIndex: 1 }}>
-                    This is not practical for most people.<br />
-                    So the problem is not{' '}
-                    <span style={{ background: '#fee2e2', padding: '1px 6px', borderRadius: 4, fontWeight: 700, color: '#991b1b' }}>lack of knowledge</span>.<br />
-                    The problem is{' '}
-                    <span style={{ background: '#dcfce7', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>consistency and practicality</span>.
-                </p>
-            </div>
-
-            {/* PlainFuel CTA strip */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '16px 20px', borderRadius: 20, background: C.white, border: `1px solid ${C.border}`, boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <svg viewBox="0 0 80 40" width={40} style={{ opacity: 0.45 }}>
-                    <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" />
-                    <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 16.5, color: '#15803d', letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.75 }}>PlainFuel bridges this gap</span>
-                <svg viewBox="0 0 80 40" width={40} style={{ opacity: 0.45, transform: 'scaleX(-1)' }}>
-                    <path d="M4,20 Q30,8 60,20" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" />
-                    <path d="M52,10 L64,20 L52,30" fill="none" stroke="#15803d" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
+                <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.ink }}>{label}</div>
             </div>
+            <div style={{ paddingLeft: 18, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: color, lineHeight: 1.4 }}>{value}</div>
         </div>
     );
 }
 
-// ── Root export ───────────────────────────────────────────────────────────────
-export default function CanWeGetFromFoodVideo() {
-    const [animated, setAnimated] = useState(false);
-    const sectionRef = useRef<HTMLElement>(null);
+function SectionBadge({ text, icon: Icon }: { text: string; icon?: any }) {
+    return (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}>
+            {Icon && <Icon size={12} color={C.gold} />}
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+        </div>
+    );
+}
 
-    useEffect(() => {
-        const obs = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) { setAnimated(true); obs.disconnect(); }
-        }, { threshold: 0.15 });
-        if (sectionRef.current) obs.observe(sectionRef.current);
-        return () => obs.disconnect();
-    }, []);
+/* ── MAIN ── */
+export default function CanWeGetFromFood() {
+    const sectionRef = useRef(null);
+    const inView = useInView(sectionRef, { once: true, margin: '-100px' });
 
     return (
-        <>
-            <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,900;1,9..144,700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500;600&display=swap');
+        <section ref={sectionRef} style={{ background: C.offwhite, padding: '32px 0', position: 'relative', overflow: 'hidden' }}>
 
-        @keyframes pfPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(0.6);opacity:0.5} }
-        @keyframes cfvFadeUp {
-          from { opacity: 0; transform: translateY(22px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
+            {/* Background Atmosphere */}
+            <div style={{ position: 'absolute', top: '10%', right: '-10%', width: '50vw', height: '50vw', background: `radial-gradient(circle, ${C.forest}04 0%, transparent 70%)`, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: '10%', left: '-10%', width: '40vw', height: '40vw', background: `radial-gradient(circle, ${C.gold}04 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
-        .cfv-section {
-          background: #fafaf7;
-          padding: clamp(48px,8vw,88px) clamp(24px,5vw,56px);
-          position: relative;
-          overflow: hidden;
-        }
-        .cfv-section::before {
-          content: '';
-          position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(21,128,61,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(21,128,61,0.04) 1px, transparent 1px);
-          background-size: 44px 44px;
-          pointer-events: none;
-        }
+            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
 
-        .cfv-grid {
-          max-width: 1120px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: clamp(32px, 5vw, 64px);
-          align-items: center;
-        }
+                <div className="food-grid">
 
-        .cfv-animate {
-          opacity: 0;
-          animation: cfvFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
-        }
-        .cfv-animate.delay-1 { animation-delay: 0.1s; }
-        .cfv-animate.delay-2 { animation-delay: 0.25s; }
+                    {/* LEFT — Scientific Integration (Display) */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={inView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ position: 'relative', width: '100%', aspectRatio: '9/16', maxHeight: 600, borderRadius: 40, border: `1px solid ${C.white}80`, overflow: 'hidden', boxShadow: '0 48px 96px rgba(0,0,0,0.12)', background: C.deep }}
+                    >
+                        <Image src="/images/why/bg-diet.png" alt="Dietary Gap" fill style={{ objectFit: 'cover', opacity: 0.4 }} />
+                        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${C.deep} 0%, transparent 40%)`, zIndex: 1 }} />
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 40, zIndex: 2 }}>
+                            <PlayCircle size={64} color={C.white} strokeWidth={1} style={{ opacity: 0.4, marginBottom: 24 }} />
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.white, fontWeight: 700, margin: 0, opacity: 0.7 }}>The Feasibility Gap.</h4>
+                        </div>
 
-        @media (max-width: 780px) {
-          .cfv-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .cfv-video-col {
-            max-width: 340px;
-            margin: 0 auto;
-          }
-        }
-      `}</style>
+                        <div style={{ position: 'absolute', top: 32, left: 32, zIndex: 2 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <FlaskConical size={14} color={C.leaf} />
+                                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.white, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Biomarker Case Study</span>
+                            </div>
+                        </div>
 
-            <section className="cfv-section" ref={sectionRef}>
-                {/* Background doodles */}
-                <svg style={{ position: 'absolute', top: '5%', left: '2%', width: 110, opacity: 0.08, pointerEvents: 'none' }} viewBox="0 0 100 100">
-                    <ellipse cx="50" cy="50" rx="44" ry="42" fill="none" stroke="#15803d" strokeWidth="3" strokeDasharray="7 5" strokeLinecap="round" />
-                </svg>
-                <svg style={{ position: 'absolute', bottom: '5%', right: '2%', width: 80, opacity: 0.08, pointerEvents: 'none' }} viewBox="0 0 100 100">
-                    <polygon points="50,4 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" fill="none" stroke="#15803d" strokeWidth="2.5" />
-                </svg>
+                        <div style={{ position: 'absolute', bottom: 32, left: 32, right: 32, zIndex: 2 }}>
+                            <div style={{ padding: '24px', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(32px)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0 }}>Discover why reaching clinical nutritional thresholds through whole food alone is a modern logistical challenge.</p>
+                            </div>
+                        </div>
+                    </motion.div>
 
-                <div className="cfv-grid">
-                    {/* LEFT — video */}
-                    <div className={`cfv-video-col ${animated ? 'cfv-animate delay-1' : ''}`} style={{ opacity: animated ? undefined : 0 }}>
-                        <VideoPanel />
+                    {/* RIGHT — Analytical Content */}
+                    <div>
+                        <SectionBadge text="Theoretical vs Practical" icon={Microscope} />
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, lineHeight: 1.15, letterSpacing: '-0.03em', margin: '8px 0 12px' }}>
+                            Can we get everything <br /> from <span style={{ color: C.leaf }}>food?</span>
+                        </h2>
+
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.75, marginBottom: 12 }}>
+                            In theory, yes. In reality, it is difficult to do consistently. Let's look at simple examples:
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                            <DataChip label="Spinach is considered rich in iron" value="But to meet daily iron needs, you would need around 600 grams of spinach every day" color="#ef4444" />
+                            <DataChip label="Ragi is rich in calcium" value="To meet daily calcium needs, you would need around 300 grams of ragi daily" color={C.gold} />
+                            <DataChip label="Eggs provide Vitamin D3" value="To meet daily requirements, you would need 15 or more eggs every day" color="#f59e0b" />
+                        </div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={inView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            style={{ padding: '20px', background: C.white, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 20px 60px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                                <Info size={18} color={C.forest} style={{ opacity: 0.3 }} />
+                                <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.15em' }}>Consistency & Practicality</div>
+                            </div>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 800, color: C.ink, marginBottom: 12 }}>This is not practical for most people.</h4>
+                            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.7, margin: 0 }}>
+                                So the problem is not lack of knowledge. The problem is consistency and practicality.
+                            </p>
+                            <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <CheckCircle2 size={16} color={C.leaf} />
+                                <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: C.leaf, fontWeight: 700 }}>Practical Choice.</span>
+                            </div>
+                        </motion.div>
+
+
                     </div>
 
-                    {/* RIGHT — text content */}
-                    <div className={animated ? 'cfv-animate delay-2' : ''} style={{ opacity: animated ? undefined : 0 }}>
-                        <ContentPanel animated={animated} />
-                    </div>
                 </div>
-            </section>
-        </>
+
+            </div>
+
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+                
+                .food-grid {
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr) 1.1fr;
+                    gap: 32px;
+                    align-items: center;
+                }
+                @media (max-width: 1024px) {
+                    .food-grid {
+                        grid-template-columns: 1fr;
+                        gap: 24px;
+                    }
+                    .food-grid > div:first-child {
+                        max-height: 400px;
+                    }
+                }
+            `}</style>
+        </section>
     );
 }

@@ -23,6 +23,7 @@ import {
   Tag,
   RefreshCw,
 } from 'lucide-react';
+import NextImage from 'next/image';
 import { adminAPI, Product, ProductPackage } from '@/lib/api';
 
 /* ─── Types ─────────────────────────────────────────────── */
@@ -290,30 +291,59 @@ function NutrientInput({ items, onUpdate }: {
 /* ─── Package image uploader ─────────────────────────────── */
 function compressImage(file: File, targetKB = 500): Promise<Blob> {
   return new Promise((resolve, reject) => {
+    // If it's a GIF or SVG, don't compress (keep original)
+    if (file.type === 'image/gif' || file.type === 'image/svg+xml') {
+      return resolve(file);
+    }
+
     const img = new Image();
     const url = URL.createObjectURL(file);
     img.onload = () => {
       URL.revokeObjectURL(url);
       const canvas = document.createElement('canvas');
       let { width, height } = img;
+      
       const MAX = 2000;
       if (width > MAX || height > MAX) {
         if (width > height) { height = Math.round((height / width) * MAX); width = MAX; }
         else { width = Math.round((width / height) * MAX); height = MAX; }
       }
-      canvas.width = width; canvas.height = height;
-      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
-      let lo = 0.1, hi = 0.95;
-      let best: Blob | null = null;
+      
+      canvas.width = width; 
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      
+      // For PNGs, we want to preserve transparency
+      const isPNG = file.type === 'image/png';
+      const isWebP = file.type === 'image/webp';
+      
+      // If not PNG/WebP, we might want a white background instead of black if it's going to be a JPG
+      if (!isPNG && !isWebP) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+      }
+      
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Detect output format
+      const outputType = (isPNG || isWebP) ? file.type : 'image/jpeg';
+      
       const run = async () => {
-        for (let i = 0; i < 8; i++) {
-          const mid = (lo + hi) / 2;
-          const blob: Blob = await new Promise(res => canvas.toBlob(b => res(b!), 'image/jpeg', mid));
-          best = blob;
-          if (blob.size < targetKB * 1024) lo = mid; else hi = mid;
-          if (Math.abs(blob.size - targetKB * 1024) < 10240) break;
+        if (isPNG) {
+          // PNG doesn't support quality setting in toBlob, just return as is
+          canvas.toBlob(b => resolve(b!), 'image/png');
+        } else {
+          let lo = 0.1, hi = 0.95;
+          let best: Blob | null = null;
+          for (let i = 0; i < 8; i++) {
+            const mid = (lo + hi) / 2;
+            const blob: Blob = await new Promise(res => canvas.toBlob(b => res(b!), outputType, mid));
+            best = blob;
+            if (blob.size < targetKB * 1024) lo = mid; else hi = mid;
+            if (Math.abs(blob.size - targetKB * 1024) < 10240) break;
+          }
+          resolve(best!);
         }
-        resolve(best!);
       };
       run().catch(reject);
     };
@@ -559,7 +589,10 @@ export default function AdminProducts() {
     const fd = new FormData();
     for (const file of picked) {
       const blob = await compressImage(file);
-      fd.append('images', blob, file.name.replace(/\.[^.]+$/, '.jpg'));
+      // Determine the correct extension based on the blob's type
+      const ext = blob.type.split('/')[1] || 'jpg';
+      const cleanName = file.name.replace(/\.[^.]+$/, '');
+      fd.append('images', blob, `${cleanName}.${ext}`);
     }
 
     try {
@@ -869,8 +902,32 @@ export default function AdminProducts() {
               <div
                 key={product.id}
                 className="prod-card"
-                style={{ animationDelay: `${i * 0.04}s`, opacity: 0 }}
+                style={{ animationDelay: `${i * 0.04}s`, opacity: 0, display: 'flex', flexDirection: 'column' }}
               >
+                {/* Image Preview */}
+                <div style={{ 
+                  width: '100%', height: 160, background: '#0a0f1a', borderRadius: 9, 
+                  marginBottom: 14, overflow: 'hidden', position: 'relative',
+                  border: '1px solid rgba(255,255,255,0.04)'
+                }}>
+                  <NextImage 
+                    src={pkgs[0]?.images?.[0] || '/images/product.png'} 
+                    alt={product.name}
+                    fill
+                    unoptimized={true}
+                    style={{ objectFit: 'contain', padding: 12, backgroundColor: 'transparent' }}
+                  />
+                  {pkgs.length > 1 && (
+                    <div style={{ 
+                      position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,0.6)', 
+                      backdropFilter: 'blur(4px)', padding: '2px 6px', borderRadius: 6, fontSize: 10,
+                      color: '#fff', border: '1px solid rgba(255,255,255,0.1)'
+                    }}>
+                      +{pkgs.length - 1} variations
+                    </div>
+                  )}
+                </div>
+
                 {/* Card header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>

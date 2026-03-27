@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { StarDoodle, Scribble, ArrowDoodle } from '@/components/Elements/SvgDoodles';
+import { F_SIZE } from '@/lib/typography';
 
 // ─── Local SVG helpers ────────────────────────────────────────────────────────
 
@@ -53,11 +54,11 @@ const StatPill = ({ value, label, delay = 0, color = '#15803d' }: { value: strin
       }}
     >
       <span style={{
-        display: 'block', fontSize: '1.35rem', fontWeight: 900,
+        display: 'block', fontSize: F_SIZE.lg, fontWeight: 900,
         fontFamily: "'Permanent Marker', cursive", color, lineHeight: 1,
       }}>{value}</span>
       <span style={{
-        display: 'block', fontSize: '9px', textTransform: 'uppercase',
+        display: 'block', fontSize: F_SIZE.sm, textTransform: 'uppercase',
         letterSpacing: '0.13em',
         fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
         fontWeight: 600, color: 'rgba(0,0,0,0.45)', marginTop: 3,
@@ -95,14 +96,14 @@ const PillarRow = ({ icon, label, delay }: { icon: string; label: string; delay:
         boxShadow: hovered ? '2px 2px 0 #15803d' : 'none',
       }}
     >
-      <span style={{ color: '#15803d', fontSize: 13, flexShrink: 0 }}>{icon}</span>
+      <span style={{ color: '#15803d', fontSize: F_SIZE.sm, flexShrink: 0 }}>{icon}</span>
       <span style={{
         fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-        fontWeight: 600, fontSize: 12.5,
+        fontWeight: 600, fontSize: F_SIZE.sm,
         color: 'rgba(0,0,0,0.7)', letterSpacing: '0.01em',
         flex: 1,
       }}>{label}</span>
-      {hovered && <span style={{ fontSize: 11, color: '#15803d' }}>✓</span>}
+      {hovered && <span style={{ fontSize: F_SIZE.sm, color: '#15803d' }}>✓</span>}
     </motion.div>
   );
 };
@@ -134,7 +135,7 @@ const QuoteStrip = ({ text, delay }: { text: string; delay: number }) => (
     }} />
     <span style={{
       fontFamily: "'Playfair Display', Georgia, serif",
-      fontSize: 13.5, fontWeight: 500, fontStyle: 'italic',
+      fontSize: F_SIZE.sm, fontWeight: 500, fontStyle: 'italic',
       color: 'rgb(0, 0, 0)', lineHeight: 1.55, display: 'block',
     }}>
       &ldquo;{text}&rdquo;
@@ -159,10 +160,10 @@ const CalloutNote = ({ emoji, text, tint, delay, rotate = 0 }: { emoji: string; 
       transform: `rotate(${rotate}deg)`,
     }}
   >
-    <span style={{ fontSize: 15, flexShrink: 0 }}>{emoji}</span>
+    <span style={{ fontSize: F_SIZE.sm, flexShrink: 0 }}>{emoji}</span>
     <span style={{
       fontFamily: "'Playfair Display', Georgia, serif",
-      fontSize: 12.5, fontWeight: 600, fontStyle: 'italic',
+      fontSize: F_SIZE.sm, fontWeight: 600, fontStyle: 'italic',
       color: '#1a1a1a', lineHeight: 1.4,
     }}>{text}</span>
   </motion.div>
@@ -202,7 +203,7 @@ const SectionTag = ({ children, rotate = 0 }: { children: React.ReactNode; rotat
     transform: `rotate(${rotate}deg)`,
     boxShadow: '2px 2px 0 rgba(21,128,61,0.18)',
     fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-    fontSize: 10.5, fontWeight: 700, color: '#15803d',
+    fontSize: F_SIZE.sm, fontWeight: 700, color: '#15803d',
     letterSpacing: '0.07em', textTransform: 'uppercase' as const,
   }}>
     {children}
@@ -335,7 +336,7 @@ export default function Sciencesection() {
               }}>
                 <span style={{
                   fontFamily: "'Permanent Marker', cursive",
-                  fontSize: 11.5, color: '#15803d', letterSpacing: '0.07em',
+                  fontSize: F_SIZE.sm, color: '#15803d', letterSpacing: '0.07em',
                 }}>
                   ✦ The Science of Sufficiency ✦
                 </span>
@@ -346,7 +347,7 @@ export default function Sciencesection() {
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <h2 style={{
                 fontFamily: "'Permanent Marker', cursive",
-                fontSize: 'clamp(1.6rem, 4vw, 2.8rem)',
+                fontSize: F_SIZE.xl,
                 color: '#1a1a1a', margin: 0, lineHeight: 1.1,
               }}>
                 What&apos;s{' '}
@@ -363,7 +364,7 @@ export default function Sciencesection() {
             {/* sub-deck */}
             <p style={{
               fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-              fontSize: 13, color: 'rgba(0,0,0,0.48)',
+              fontSize: F_SIZE.sm, color: 'rgba(0,0,0,0.48)',
               marginTop: 14, maxWidth: 440, marginLeft: 'auto', marginRight: 'auto',
               lineHeight: 1.6, fontWeight: 400,
             }}>
@@ -393,7 +394,7 @@ export default function Sciencesection() {
               <span aria-hidden style={{
                 position: 'absolute', right: 10, top: -4,
                 fontFamily: "'Permanent Marker', cursive",
-                fontSize: 'clamp(56px,9vw,96px)', lineHeight: 1,
+                fontSize: F_SIZE.xl, lineHeight: 1,
                 color: '#15803d', opacity: 0.05,
                 userSelect: 'none', pointerEvents: 'none',
               }}>01</span>
@@ -482,7 +483,7 @@ export default function Sciencesection() {
               <span aria-hidden style={{
                 position: 'absolute', right: 10, top: -4,
                 fontFamily: "'Permanent Marker', cursive",
-                fontSize: 'clamp(56px,9vw,96px)', lineHeight: 1,
+                fontSize: F_SIZE.xl, lineHeight: 1,
                 color: '#15803d', opacity: 0.07,
                 userSelect: 'none', pointerEvents: 'none',
               }}>02</span>
@@ -577,7 +578,7 @@ export default function Sciencesection() {
             }}>
               <span style={{
                 fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-                fontSize: 10.5, fontWeight: 600,
+                fontSize: F_SIZE.sm, fontWeight: 600,
                 letterSpacing: '0.1em', color: 'rgb(0, 0, 0)',
                 textTransform: 'uppercase',
               }}>
@@ -599,7 +600,7 @@ export default function Sciencesection() {
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#15803d', flexShrink: 0 }} />
               <span style={{
                 fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif",
-                fontSize: 10.5, fontWeight: 600,
+                fontSize: F_SIZE.sm, fontWeight: 600,
                 letterSpacing: '0.1em', color: '#15803d',
                 textTransform: 'uppercase',
               }}>

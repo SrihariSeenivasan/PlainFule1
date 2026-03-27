@@ -1,701 +1,275 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import Navbar from '@/components/Navbar';
+import { motion, AnimatePresence } from 'framer-motion';
+import MainLayout from '@/components/MainLayout';
+import Image from 'next/image';
+import { Sparkles, Heart, Rocket, ShieldCheck, Users, ArrowRight, Zap, Target, BookOpen, Microscope, FlaskConical, Award } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 
-const FD = "'Caveat', 'Playfair Display', Georgia, serif";
-const FS = "'Nunito', 'DM Sans', 'Helvetica Neue', sans-serif";
-const G = '#15803d';
-const BG = '#fefdf7';
-
-/* ─────────────────────────────────────────────
-   SKETCH FILTER
-───────────────────────────────────────────── */
-const SketchFilter = () => (
-  <svg width="0" height="0" style={{ position: 'absolute' }}>
-    <defs>
-      <filter id="skAbout">
-        <feTurbulence type="turbulence" baseFrequency="0.018" numOctaves="3" seed="7" />
-        <feDisplacementMap in="SourceGraphic" scale="2.2" />
-      </filter>
-      <filter id="skWobbleAbout">
-        <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="12" />
-        <feDisplacementMap in="SourceGraphic" scale="2.8" />
-      </filter>
-    </defs>
-  </svg>
-);
-
-/* ─────────────────────────────────────────────
-   ANIMATED DOODLE CANVAS
-───────────────────────────────────────────── */
-const DoodleCanvas = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
-  const t = useRef(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = document.body.scrollHeight || window.innerHeight * 4;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Randomized doodle elements
-    const elements: any[] = [
-      // Floating speech bubbles
-      ...Array.from({ length: 5 }, (_, i) => ({
-        type: 'bubble', x: 5 + Math.random() * 90, y: 5 + Math.random() * 90,
-        w: 60 + Math.random() * 50, h: 36 + Math.random() * 20,
-        speed: 0.1 + Math.random() * 0.18, phase: Math.random() * Math.PI * 2,
-        opacity: 0.05 + Math.random() * 0.06,
-      })),
-      // Zigzag lines
-      ...Array.from({ length: 6 }, (_, i) => ({
-        type: 'zigzag', y: 10 + i * 15, speed: 0.06 + i * 0.015,
-        phase: Math.random() * Math.PI * 2, opacity: 0.03 + Math.random() * 0.04,
-        segments: 8 + Math.floor(Math.random() * 6),
-      })),
-      // Floating hearts
-      ...Array.from({ length: 8 }, (_, i) => ({
-        type: 'heart', x: Math.random() * 100, y: Math.random() * 100,
-        size: 10 + Math.random() * 18, speed: 0.12 + Math.random() * 0.22,
-        phase: Math.random() * Math.PI * 2, opacity: 0.05 + Math.random() * 0.07,
-      })),
-      // Stars
-      ...Array.from({ length: 20 }, (_, i) => ({
-        type: 'star', x: Math.random() * 100, y: Math.random() * 100,
-        size: 8 + Math.random() * 18, speed: 0.08 + Math.random() * 0.2,
-        phase: Math.random() * Math.PI * 2, opacity: 0.05 + Math.random() * 0.08,
-      })),
-      // Spirals
-      ...Array.from({ length: 7 }, (_, i) => ({
-        type: 'spiral', x: Math.random() * 100, y: Math.random() * 100,
-        size: 18 + Math.random() * 28, speed: 0.07 + Math.random() * 0.15,
-        phase: Math.random() * Math.PI * 2, opacity: 0.04 + Math.random() * 0.06,
-      })),
-      // Dashed ovals
-      ...Array.from({ length: 10 }, (_, i) => ({
-        type: 'oval', x: Math.random() * 100, y: Math.random() * 100,
-        rx: 22 + Math.random() * 40, ry: 14 + Math.random() * 24,
-        speed: 0.07 + Math.random() * 0.14, phase: Math.random() * Math.PI * 2,
-        opacity: 0.03 + Math.random() * 0.05,
-      })),
-      // Dots cluster
-      ...Array.from({ length: 35 }, (_, i) => ({
-        type: 'dot', x: Math.random() * 100, y: Math.random() * 100,
-        size: 2 + Math.random() * 4, speed: 0.04 + Math.random() * 0.12,
-        phase: Math.random() * Math.PI * 2, opacity: 0.06 + Math.random() * 0.08,
-      })),
-      // Curly braces / brackets
-      ...Array.from({ length: 4 }, (_, i) => ({
-        type: 'brace', x: Math.random() * 100, y: Math.random() * 100,
-        size: 30 + Math.random() * 30, speed: 0.08 + Math.random() * 0.16,
-        phase: Math.random() * Math.PI * 2, opacity: 0.04 + Math.random() * 0.05,
-        flip: i % 2 === 0,
-      })),
-      // Leaves
-      ...Array.from({ length: 12 }, (_, i) => ({
-        type: 'leaf', x: Math.random() * 100, y: Math.random() * 100,
-        size: 14 + Math.random() * 22, speed: 0.09 + Math.random() * 0.18,
-        phase: Math.random() * Math.PI * 2, opacity: 0.05 + Math.random() * 0.07,
-        rotation: Math.random() * Math.PI * 2,
-      })),
-    ];
-
-    const drawStar = (ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number) => {
-      ctx.beginPath();
-      for (let i = 0; i < 10; i++) {
-        const angle = (i * Math.PI) / 5 - Math.PI / 2;
-        const r = i % 2 === 0 ? size : size * 0.4;
-        const x = cx + Math.cos(angle) * r;
-        const y = cy + Math.sin(angle) * r;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-    };
-
-    const drawHeart = (ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number) => {
-      ctx.beginPath();
-      ctx.moveTo(cx, cy + size * 0.3);
-      ctx.bezierCurveTo(cx, cy - size * 0.1, cx - size, cy - size * 0.1, cx - size, cy + size * 0.3);
-      ctx.bezierCurveTo(cx - size, cy + size * 0.8, cx, cy + size * 1.2, cx, cy + size * 1.5);
-      ctx.bezierCurveTo(cx, cy + size * 1.2, cx + size, cy + size * 0.8, cx + size, cy + size * 0.3);
-      ctx.bezierCurveTo(cx + size, cy - size * 0.1, cx, cy - size * 0.1, cx, cy + size * 0.3);
-    };
-
-    const drawSpiral = (ctx: CanvasRenderingContext2D, cx: number, cy: number, maxR: number) => {
-      ctx.beginPath();
-      for (let angle = 0; angle <= Math.PI * 4; angle += 0.15) {
-        const r = (angle / (Math.PI * 4)) * maxR;
-        const x = cx + Math.cos(angle) * r;
-        const y = cy + Math.sin(angle) * r;
-        angle === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
-    };
-
-    const drawBubble = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => {
-      const r = 8;
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r + 10, y + h);
-      ctx.lineTo(x + r, y + h + 12);
-      ctx.lineTo(x + r + 5, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-    };
-
-    const drawLeaf = (ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number, rot: number) => {
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(rot);
-      ctx.beginPath();
-      ctx.moveTo(0, -size);
-      ctx.bezierCurveTo(size * 0.7, -size * 0.5, size * 0.7, size * 0.5, 0, size);
-      ctx.bezierCurveTo(-size * 0.7, size * 0.5, -size * 0.7, -size * 0.5, 0, -size);
-      ctx.closePath();
-      ctx.restore();
-    };
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      t.current += 0.007;
-      const W = canvas.width;
-      const H = canvas.height;
-
-      ctx.strokeStyle = G;
-      ctx.fillStyle = G;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      elements.forEach((el: any) => {
-        const floatY = Math.sin(t.current * el.speed + el.phase) * 14;
-        const floatX = Math.cos(t.current * el.speed * 0.65 + el.phase) * 9;
-        const cx = (el.x / 100) * W + floatX;
-        const cy = (el.y / 100) * H + floatY;
-        const pulse = 0.7 + 0.3 * Math.sin(t.current * el.speed * 1.8 + el.phase);
-
-        ctx.globalAlpha = el.opacity * pulse;
-
-        if (el.type === 'star') {
-          ctx.lineWidth = 1.5;
-          drawStar(ctx, cx, cy, el.size);
-          ctx.stroke();
-        } else if (el.type === 'heart') {
-          ctx.lineWidth = 1.5;
-          drawHeart(ctx, cx, cy - el.size * 0.75, el.size * 0.5);
-          ctx.stroke();
-        } else if (el.type === 'spiral') {
-          ctx.lineWidth = 1.5;
-          drawSpiral(ctx, cx, cy, el.size);
-          ctx.stroke();
-        } else if (el.type === 'bubble') {
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([5, 4]);
-          drawBubble(ctx, cx - el.w / 2, cy - el.h / 2, el.w, el.h);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        } else if (el.type === 'zigzag') {
-          ctx.lineWidth = 1.8;
-          const segW = W / el.segments;
-          ctx.beginPath();
-          for (let i = 0; i <= el.segments; i++) {
-            const x = i * segW;
-            const y = (el.y / 100) * H + (i % 2 === 0 ? -10 : 10) + Math.sin(t.current * el.speed + el.phase + i) * 6;
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-          }
-          ctx.stroke();
-        } else if (el.type === 'oval') {
-          ctx.lineWidth = 1.5;
-          ctx.setLineDash([6, 5]);
-          ctx.beginPath();
-          ctx.ellipse(cx, cy, el.rx, el.ry, t.current * el.speed * 0.3, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.setLineDash([]);
-        } else if (el.type === 'dot') {
-          ctx.beginPath();
-          ctx.arc(cx, cy, el.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (el.type === 'brace') {
-          ctx.lineWidth = 1.5;
-          const flip = el.flip ? -1 : 1;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy - el.size / 2);
-          ctx.bezierCurveTo(cx + flip * 12, cy - el.size / 2, cx + flip * 12, cy - 6, cx + flip * 18, cy);
-          ctx.bezierCurveTo(cx + flip * 12, cy + 6, cx + flip * 12, cy + el.size / 2, cx, cy + el.size / 2);
-          ctx.stroke();
-        } else if (el.type === 'leaf') {
-          ctx.lineWidth = 1.5;
-          const rot = el.rotation + t.current * el.speed * 0.4;
-          drawLeaf(ctx, cx, cy, el.size, rot);
-          ctx.stroke();
-        }
-      });
-
-      ctx.globalAlpha = 1;
-      ctx.setLineDash([]);
-      animRef.current = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: 'fixed', top: 0, left: 0,
-        width: '100%', height: '100%',
-        pointerEvents: 'none', zIndex: 0,
-      }}
-    />
-  );
+/* ─── Design Tokens ─────────────────────────────────────────── */
+const COLORS = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafbf9',
+  silver: '#9eaaa0',
+  mist: '#eef4ee',
+  gold: '#b8953a',
+  goldLight: '#d4af5a',
+  champagne: '#f0e4c0',
+  glass: 'rgba(255, 255, 255, 0.45)',
+  glassDark: 'rgba(4, 14, 7, 0.65)',
 };
 
-/* ─────────────────────────────────────────────
-   NOTEBOOK LINES
-───────────────────────────────────────────── */
-const NotebookLines = () => (
-  <>
-    {Array.from({ length: 50 }, (_, i) => (
-      <div key={i} style={{
-        position: 'fixed', left: 0, right: 0, top: 56 + i * 36,
-        height: 1, background: 'rgba(21,128,61,0.05)', pointerEvents: 'none', zIndex: 0,
-      }} />
-    ))}
-    <div style={{
-      position: 'fixed', left: 52, top: 0, bottom: 0,
-      width: 1.5, background: 'rgba(220,38,38,0.07)', pointerEvents: 'none', zIndex: 0,
-    }} />
-  </>
-);
-
-/* ─────────────────────────────────────────────
-   HAND UNDERLINE
-───────────────────────────────────────────── */
-const HandUnderline = ({ width = 200, color = G }: { width?: number; color?: string }) => (
-  <svg viewBox={`0 0 ${width} 10`} width={width} height={10} style={{ display: 'block', margin: '-2px auto 0' }}>
-    <path
-      d={`M4,7 Q${width * 0.25},2 ${width * 0.5},6 Q${width * 0.75},10 ${width - 4},4`}
-      fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.5}
-    />
+/* ─── Premium Doodle (Very Selective) ────────────────────────── */
+const StarDoodle = ({ size = 20, rotation = 0, color = COLORS.gold }: { size?: number; rotation?: number; color?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} style={{ transform: `rotate(${rotation}deg)`, opacity: 0.6 }}>
+    <path d="M12,2 L13.2,9 L20,9 L14.6,13.4 L16.6,20 L12,15.8 L7.4,20 L9.4,13.4 L4,9 L10.8,9 Z"
+      fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-/* ─────────────────────────────────────────────
-   DOODLE TAPE
-───────────────────────────────────────────── */
-const DoodleTape = ({ rotate = -1.5, color = 'rgba(21,128,61,0.12)' }: { rotate?: number; color?: string }) => (
-  <div style={{
-    position: 'absolute', top: -11, left: '50%',
-    transform: `translateX(-50%) rotate(${rotate}deg)`,
-    width: 76, height: 22, background: color,
-    borderRadius: 3, zIndex: 3,
-    border: '1px dashed rgba(21,128,61,0.22)',
-  }} />
-);
-
-/* ─────────────────────────────────────────────
-   DOODLE CARD
-───────────────────────────────────────────── */
-const DoodleCard = ({
-  children, style = {}, tapeColor, rotate = 0,
-}: { children: React.ReactNode; style?: React.CSSProperties; tapeColor?: string; rotate?: number }) => (
-  <motion.div
-    whileHover={{ y: -6, rotate: rotate + 0.5 }}
-    initial={{ rotate }}
-    style={{
-      background: '#fff',
-      border: '2.5px dashed rgba(21,128,61,0.22)',
-      borderRadius: 18,
-      position: 'relative',
-      boxShadow: '4px 6px 0px rgba(21,128,61,0.13), 0 2px 12px rgba(0,0,0,0.05)',
-      ...style,
-    }}
-  >
-    {tapeColor && <DoodleTape color={tapeColor} rotate={rotate > 0 ? 2 : -1.5} />}
-    {children}
-  </motion.div>
-);
-
-/* ─────────────────────────────────────────────
-   FLOATING DOODLE BADGE (decorative)
-───────────────────────────────────────────── */
-const FloatingDoodle = ({ children, style = {} }: { children: React.ReactNode; style?: React.CSSProperties }) => (
-  <motion.div
-    animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
-    transition={{ repeat: Infinity, duration: 4 + Math.random() * 2, ease: 'easeInOut' }}
-    style={{
-      position: 'absolute', zIndex: 2,
-      fontFamily: FD, fontSize: 13, color: G,
-      background: '#fffde6',
-      border: '2px dashed rgba(21,128,61,0.28)',
-      borderRadius: 30, padding: '5px 14px',
-      boxShadow: '2px 3px 0 rgba(21,128,61,0.18)',
-      filter: 'url(#skWobbleAbout)',
-      pointerEvents: 'none',
-      whiteSpace: 'nowrap',
-      ...style,
-    }}
-  >
-    {children}
-  </motion.div>
-);
-
-/* ─────────────────────────────────────────────
-   MAIN COMPONENT
-───────────────────────────────────────────── */
-export default function AboutPage() {
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
-  };
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.55, type: 'spring', stiffness: 90 } },
-  };
-
-  const tapeColors = [
-    'rgba(21,128,61,0.15)',
-    'rgba(250,204,21,0.22)',
-    'rgba(99,102,241,0.14)',
-    'rgba(236,72,153,0.12)',
-  ];
-
-  const features = [
-    {
-      title: 'Quality',
-      description: 'Placeholder: Describe your quality standards and certifications.',
-      emoji: '🏆', color: '#fef9c3', accent: '#ca8a04',
-    },
-    {
-      title: 'Innovation',
-      description: 'Placeholder: Explain your research and development approach.',
-      emoji: '🔬', color: '#f0fdf4', accent: G,
-    },
-    {
-      title: 'Transparency',
-      description: 'Placeholder: Share your commitment to transparency and honesty.',
-      emoji: '💎', color: '#eff6ff', accent: '#3b82f6',
-    },
-    {
-      title: 'Sustainability',
-      description: 'Placeholder: Discuss your environmental and social responsibility.',
-      emoji: '🌿', color: '#fdf4ff', accent: '#a855f7',
-    },
-  ];
-
+/* ─── Professional Card ───────────────────────────────────────── */
+function TrustCard({ children, index, delay = 0, direction = 'up' }: { children: React.ReactNode; index?: number; delay?: number; direction?: 'left' | 'right' | 'up' }) {
+  const initial = direction === 'left' ? { x: -60, opacity: 0 } : direction === 'right' ? { x: 60, opacity: 0 } : { y: 30, opacity: 0 };
+  
   return (
-    <div id="about" style={{ minHeight: '100vh', background: BG, fontFamily: FS, position: 'relative' }}>
-      <DoodleCanvas />
-      <SketchFilter />
-      <NotebookLines />
-      <Navbar />
+    <motion.div
+      initial={initial}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: false, margin: "-100px" }}
+      transition={{ duration: 0.8, delay: (index ?? 0) * 0.1 + delay, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        background: 'rgba(255, 255, 255, 0.55)',
+        backdropFilter: 'blur(32px) saturate(140%)',
+        borderRadius: 24,
+        padding: '40px',
+        border: '1px solid rgba(10, 61, 31, 0.08)',
+        boxShadow: '0 8px 32px rgba(10, 61, 31, 0.03)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      whileHover={{ y: -5, boxShadow: `0 20px 40px rgba(10, 61, 31, 0.08)`, borderColor: `${COLORS.leaf}30` }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-      {/* ── Floating decorative badges scattered around ── */}
-      <FloatingDoodle style={{ top: 140, left: '4%' }}>✨ Est. 2024</FloatingDoodle>
-      <FloatingDoodle style={{ top: 260, right: '3%' }}>🌱 100% Natural</FloatingDoodle>
-      <FloatingDoodle style={{ top: 500, left: '2%' }}>💚 Science-backed</FloatingDoodle>
-      <FloatingDoodle style={{ top: 700, right: '2%' }}>🧪 Lab tested</FloatingDoodle>
-      <FloatingDoodle style={{ top: 1000, left: '3%' }}>🏅 Premium quality</FloatingDoodle>
+/* ─── Main Component ─────────────────────────────────────────── */
+export default function AboutPage() {
+  return (
+    <MainLayout background={COLORS.offwhite}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@400;600;700;900&display=swap');
+        
+        .hero-gradient {
+            background: radial-gradient(circle at top right, ${COLORS.mist} 0%, transparent 70%),
+                        radial-gradient(circle at bottom left, ${COLORS.mist}30 0%, transparent 70%);
+        }
+        .text-balanced { text-wrap: balance; }
+      `}</style>
 
-      <div style={{ paddingTop: 110, padding: '110px 24px 64px', position: 'relative', zIndex: 1 }}>
-        <motion.div
-          className="max-w-4xl mx-auto"
-          style={{ maxWidth: 860, margin: '0 auto' }}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-
-          {/* ── Header ── */}
-          <motion.div variants={itemVariants} style={{ marginBottom: 56, textAlign: 'center', position: 'relative' }}>
-            {/* Decorative curvy arrow above title */}
+      <main className="hero-gradient" style={{ position: 'relative', zIndex: 1, paddingTop: 160, paddingBottom: 160 }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px' }}>
+          
+          {/* HEADER / HERO */}
+          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: 80, alignItems: 'center', marginBottom: 160 }}>
             <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
-              style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <svg width="44" height="36" viewBox="0 0 44 36">
-                <path d="M22,3 Q32,10 24,20 Q18,28 22,34" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" opacity={0.45} />
-                <path d="M22,34 L16,26 M22,34 L28,26" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" opacity={0.45} />
-              </svg>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                    <div style={{ width: 40, height: 2, background: COLORS.gold }}></div>
+                    <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: COLORS.forest, letterSpacing: '0.3em' }}>Pharmaceutical Excellence</span>
+                </div>
+                <h1 style={{ 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontSize: F_SIZE.xl, 
+                    fontWeight: 900, color: COLORS.forest, 
+                    margin: 0, letterSpacing: '-0.04em', lineHeight: 1.05 
+                }}>
+                    Integrity Over<br/>Complexity.
+                </h1>
+                <p style={{ 
+                    fontFamily: "'Montserrat', sans-serif", 
+                    fontSize: F_SIZE.md, color: '#4a5a4e', 
+                    marginTop: 32, lineHeight: 1.7, fontWeight: 500, maxWidth: 540
+                }}>
+                    PlainFuel is a nutritional science brand built to eliminate the noise. Founded by pharmacists and healthcare specialists, we standardize daily maintenance into one uncompromising baseline.
+                </p>
+                <div style={{ display: 'flex', gap: 24, marginTop: 48 }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest }}>100%</div>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: COLORS.silver, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Traceability</div>
+                    </div>
+                    <div style={{ width: 1, height: 60, background: `${COLORS.forest}20` }} />
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest }}>FSSAI</div>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: COLORS.silver, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Certified</div>
+                    </div>
+                    <div style={{ width: 1, height: 60, background: `${COLORS.forest}20` }} />
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest }}>USP</div>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: COLORS.silver, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Standards</div>
+                    </div>
+                </div>
             </motion.div>
 
-            <h1 style={{
-              fontFamily: FD,
-              fontSize: 'clamp(38px, 6vw, 58px)',
-              fontWeight: 900,
-              color: '#1a1a1a',
-              margin: '0 0 6px',
-              lineHeight: 1.1,
-              letterSpacing: -1,
-              filter: 'url(#skAbout)',
-            }}>
-              About PlainFuel
-            </h1>
-            <HandUnderline width={280} />
-
-            <motion.p
-              variants={itemVariants}
-              style={{ fontSize: 17, color: '#777', marginTop: 14, lineHeight: 1.7, fontFamily: FS }}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                style={{ position: 'relative' }}
             >
-              Our mission and story ✍️
-            </motion.p>
-
-            {/* Corner doodle decoration */}
-            <svg style={{ position: 'absolute', top: -10, right: 0, opacity: 0.12 }} width="60" height="60" viewBox="0 0 60 60">
-              <path d="M10,10 Q30,2 50,10 Q58,30 50,50 Q30,58 10,50 Q2,30 10,10" fill="none" stroke={G} strokeWidth="2" strokeDasharray="5 4" />
-              <circle cx="30" cy="30" r="6" fill="none" stroke={G} strokeWidth="2" />
-            </svg>
-          </motion.div>
-
-          {/* ── Introduction Card ── */}
-          <motion.div variants={itemVariants} style={{ marginBottom: 36 }}>
-            <DoodleCard tapeColor={tapeColors[0]} style={{ padding: 36 }}>
-              {/* Margin line inside card */}
-              <div style={{
-                position: 'absolute', left: 52, top: 0, bottom: 0,
-                width: 1, background: 'rgba(220,38,38,0.08)', pointerEvents: 'none',
-              }} />
-
-              <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-                <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
-                  style={{ fontSize: 40, flexShrink: 0, lineHeight: 1, marginTop: 4 }}
-                >
-                  📖
-                </motion.div>
-                <div>
-                  <h2 style={{ fontFamily: FD, fontSize: 26, fontWeight: 800, color: G, margin: '0 0 12px', filter: 'url(#skAbout)' }}>
-                    Our Story
-                  </h2>
-                  <HandUnderline width={110} color={G} />
-                  <p style={{ fontSize: 16, lineHeight: 1.85, color: '#444', margin: '12px 0 0', fontFamily: FS }}>
-                    <strong style={{ fontFamily: FD, fontSize: 18, color: '#1a1a1a' }}>Placeholder content for About page.</strong> This section introduces PlainFuel and our commitment to providing high-quality, science-backed nutritional supplements. Share your brand story, values, and what makes your products unique.
-                  </p>
+                <div style={{ 
+                    borderRadius: 32, overflow: 'hidden', 
+                    boxShadow: '0 40px 80px rgba(10, 61, 31, 0.12)',
+                    border: '1px solid rgba(255,255,255,0.8)',
+                    position: 'relative'
+                }}>
+                    <Image 
+                        src="/images/lab_hero.png" 
+                        alt="Pharmaceutical Laboratory" 
+                        width={600} 
+                        height={600} 
+                        style={{ objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 80px rgba(10, 61, 31, 0.05)' }} />
                 </div>
-              </div>
-
-              {/* Inline doodle star */}
-              <svg style={{ position: 'absolute', bottom: 16, right: 20, opacity: 0.1 }} width="36" height="36" viewBox="0 0 36 36">
-                <path d="M18,3 L20.5,13 L30,13 L22.5,19.5 L25,30 L18,24 L11,30 L13.5,19.5 L6,13 L15.5,13 Z" fill="none" stroke={G} strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </DoodleCard>
-          </motion.div>
-
-          {/* ── Features Grid ── */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 22,
-              marginBottom: 44,
-            }}
-          >
-            {features.map((feature, i) => (
-              <motion.div key={i} variants={itemVariants}>
-                <DoodleCard
-                  tapeColor={tapeColors[i]}
-                  rotate={[-0.8, 0.6, -0.5, 0.7][i]}
-                  style={{ padding: 26, background: feature.color }}
-                >
-                  {/* Doodle corner detail */}
-                  <svg style={{ position: 'absolute', bottom: 8, right: 10, opacity: 0.08 }} width="28" height="28" viewBox="0 0 28 28">
-                    <circle cx="14" cy="14" r="12" fill="none" stroke={feature.accent} strokeWidth="2" strokeDasharray="4 3" />
-                  </svg>
-
-                  <motion.div
-                    animate={{ y: [0, -6, 0], rotate: [-4, 4, -4] }}
-                    transition={{ repeat: Infinity, duration: 3 + i * 0.5, ease: 'easeInOut' }}
-                    style={{ fontSize: 36, marginBottom: 12, display: 'block', lineHeight: 1 }}
-                  >
-                    {feature.emoji}
-                  </motion.div>
-
-                  <h3 style={{
-                    fontFamily: FD,
-                    fontSize: 24,
-                    fontWeight: 800,
-                    color: feature.accent,
-                    margin: '0 0 6px',
-                    filter: 'url(#skAbout)',
-                  }}>
-                    {feature.title}
-                  </h3>
-                  <HandUnderline width={80} color={feature.accent} />
-                  <p style={{ fontSize: 13.5, lineHeight: 1.65, color: '#666', margin: '10px 0 0', fontFamily: FS }}>
-                    {feature.description}
-                  </p>
-                </DoodleCard>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* ── Team Section ── */}
-          <motion.div
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            style={{ marginBottom: 36 }}
-          >
-            <DoodleCard tapeColor="rgba(250,204,21,0.25)" style={{ padding: 36 }}>
-              <div style={{ position: 'absolute', left: 52, top: 0, bottom: 0, width: 1, background: 'rgba(220,38,38,0.08)', pointerEvents: 'none' }} />
-
-              <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-                <motion.div
-                  animate={{ rotate: [0, -8, 8, 0] }}
-                  transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-                  style={{ fontSize: 40, flexShrink: 0, lineHeight: 1, marginTop: 4 }}
-                >
-                  👥
-                </motion.div>
-                <div style={{ flex: 1 }}>
-                  <h2 style={{ fontFamily: FD, fontSize: 26, fontWeight: 800, color: '#1a1a1a', margin: '0 0 6px', filter: 'url(#skAbout)' }}>
-                    Our Team
-                  </h2>
-                  <HandUnderline width={110} />
-                  <p style={{ fontSize: 16, lineHeight: 1.85, color: '#444', margin: '12px 0 0', fontFamily: FS }}>
-                    Placeholder: Tell your visitors about the team behind PlainFuel. Share team member bios, expertise, and what drives your team to create exceptional products.
-                  </p>
+                <div style={{ position: 'absolute', top: -30, right: -30, background: '#fff', padding: '16px 24px', borderRadius: 20, boxShadow: '0 20px 40px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: COLORS.leaf, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 900, color: COLORS.forest }}>GMP Certified</div>
+                        <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, color: COLORS.silver }}>Quality Assurance</div>
+                    </div>
                 </div>
-              </div>
+                <StarDoodle size={48} rotation={15} color={COLORS.gold} />
+            </motion.div>
+          </section>
 
-              {/* Decorative pencil doodle */}
-              <svg style={{ position: 'absolute', bottom: 18, right: 24, opacity: 0.1 }} width="44" height="44" viewBox="0 0 44 44">
-                <rect x="10" y="6" width="8" height="28" rx="2" fill="none" stroke={G} strokeWidth="2" />
-                <path d="M10,34 L14,42 L18,34" fill="none" stroke={G} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <rect x="10" y="6" width="8" height="6" rx="2" fill="none" stroke={G} strokeWidth="2" />
-              </svg>
-            </DoodleCard>
-          </motion.div>
+          {/* PILLARS OF TRUST */}
+          <div style={{ textAlign: 'center', marginBottom: 80 }}>
+            <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 900, color: COLORS.forest, marginBottom: 12 }}>The Trust Layer</h2>
+            <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, color: COLORS.silver, fontWeight: 500 }}>Standardized by pharmacists, designed for you.</p>
+          </div>
 
-          {/* ── Fun stats row ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, staggerChildren: 0.1 }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 16,
-              marginBottom: 48,
-            }}
-          >
-            {[
-              { num: '10K+', label: 'Happy Customers', emoji: '😊' },
-              { num: '5★', label: 'Average Rating', emoji: '⭐' },
-              { num: '100%', label: 'Natural Ingredients', emoji: '🌿' },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.85 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1, type: 'spring', stiffness: 120 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5, rotate: i % 2 === 0 ? 1 : -1 }}
-                style={{
-                  background: '#fff',
-                  border: '2.5px dashed rgba(21,128,61,0.22)',
-                  borderRadius: 16,
-                  padding: '22px 16px',
-                  textAlign: 'center',
-                  boxShadow: '3px 4px 0 rgba(21,128,61,0.13)',
-                  position: 'relative',
-                  overflow: 'hidden',
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 32, marginBottom: 120 }}>
+            <TrustCard index={0} direction="left">
+                <FlaskConical size={32} color={COLORS.leaf} style={{ marginBottom: 24 }} />
+                <h3 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 900, color: COLORS.forest, marginBottom: 16 }}>Biological Balance</h3>
+                <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, lineHeight: 1.7, color: '#4a5a4e', fontWeight: 500 }}>
+                    We avoid "super-dosing". Our formula is engineered around human body's daily metabolic baselines. No fillers, no spikes—just what your body can actually absorb.
+                </p>
+                <div style={{ marginTop: 24, padding: '12px 20px', background: COLORS.mist, borderRadius: 12, border: '1px solid rgba(10, 61, 31, 0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: F_SIZE.sm, fontWeight: 800, color: COLORS.mid }}>
+                        <BookOpen size={16} /> Data-Driven Method
+                    </div>
+                </div>
+            </TrustCard>
+
+            <TrustCard index={1} direction="right">
+                <Microscope size={32} color={COLORS.gold} style={{ marginBottom: 24 }} />
+                <h3 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 900, color: COLORS.forest, marginBottom: 16 }}>Clinical Standards</h3>
+                <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, lineHeight: 1.7, color: '#4a5a4e', fontWeight: 500 }}>
+                    Every batch of PlainFuel undergoes three-stage quality control. We standardize against the Pharmaceutical grade to ensure 100% potency until the day of expiry.
+                </p>
+                <div style={{ marginTop: 24, padding: '12px 20px', background: COLORS.mist, borderRadius: 12, border: '1px solid rgba(10, 61, 31, 0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: F_SIZE.sm, fontWeight: 800, color: COLORS.mid }}>
+                        <Award size={16} /> Lab Certified Purity
+                    </div>
+                </div>
+            </TrustCard>
+          </div>
+
+          {/* TEAM / PROFESSIONAL CREDIBILITY */}
+          <div style={{ 
+            background: COLORS.forest, 
+            borderRadius: 40, 
+            padding: '100px 80px', 
+            color: '#fff',
+            position: 'relative',
+            overflow: 'hidden',
+            marginBottom: 120,
+            boxShadow: '0 40px 100px rgba(10, 61, 31, 0.15)'
+          }}>
+             <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(#fff 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+             
+             <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 80, alignItems: 'center' }}>
+                <motion.div
+                   initial={{ x: -80, opacity: 0 }}
+                   whileInView={{ x: 0, opacity: 1 }}
+                   viewport={{ once: false, margin: "-100px" }}
+                   transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                >
+                   <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, marginBottom: 32, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Built by the<br/>Science-Obsessed.</h2>
+                   <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, lineHeight: 1.8, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
+                      PlainFuel was established by a collective of pharmacists and nutritional clinicians who were tired of the "marketing-first" approach to wellness. We don't sell instant results—we provide long-term standard.
+                   </p>
+                   <div style={{ marginTop: 40, display: 'flex', gap: 32 }}>
+                      <div>
+                         <div style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.gold }}>12+</div>
+                         <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>Specialists</div>
+                      </div>
+                      <div style={{ width: 1, height: 50, background: 'rgba(255,255,255,0.1)' }} />
+                      <div>
+                         <div style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.gold }}>240+</div>
+                         <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>Formulations</div>
+                      </div>
+                   </div>
+                </motion.div>
+                <motion.div 
+                   initial={{ x: 80, opacity: 0 }}
+                   whileInView={{ x: 0, opacity: 1 }}
+                   viewport={{ once: false, margin: "-100px" }}
+                   transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                   style={{ textAlign: 'center', position: 'relative' }}
+                >
+                   <div style={{ 
+                      width: 240, height: 240, borderRadius: '50%', background: `linear-gradient(135deg, ${COLORS.mid} 0%, ${COLORS.leaf} 100%)`, 
+                      margin: '0 auto 32px', border: '8px solid rgba(255,255,255,0.1)', overflow: 'hidden', padding: 24,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                   }}>
+                      {/* Pharmaceutical Illustration Placeholder */}
+                      <Microscope size={120} color="#fff" strokeWidth={1} />
+                   </div>
+                   <h3 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.lg, fontWeight: 800, margin: 0 }}>Dr. S Seenivasan</h3>
+                   <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, color: COLORS.goldLight, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: 8 }}>Founder & Chief Formulator</p>
+                   <p style={{ fontFamily: "'Caveat', cursive", fontSize: F_SIZE.lg, color: '#fff', opacity: 0.6, marginTop: 12 }}>"Standardizing nutrition for every biological potential." ✨</p>
+                </motion.div>
+             </div>
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: 'center', borderTop: `1px solid ${COLORS.mid}10`, paddingTop: 120 }}>
+             <h2 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.xl, fontWeight: 900, color: COLORS.forest, marginBottom: 24, letterSpacing: '-0.03em' }}>Ready to Standardize?</h2>
+             <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.md, color: COLORS.silver, marginBottom: 48, fontWeight: 500 }}>Join the 10,000+ people building their biological baseline daily.</p>
+             <motion.button 
+                whileHover={{ scale: 1.05, background: COLORS.leaf, boxShadow: `0 20px 40px ${COLORS.leaf}20` }}
+                whileTap={{ scale: 0.98 }}
+                style={{ 
+                    padding: '24px 64px', background: COLORS.forest, color: '#fff', 
+                    borderRadius: 100, border: 'none', fontFamily: "'Montserrat', sans-serif", 
+                    fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', 
+                    letterSpacing: '0.25em', cursor: 'pointer', transition: 'all 0.4s' 
                 }}
-              >
-                <div style={{ fontSize: 28, marginBottom: 4 }}>{stat.emoji}</div>
-                <div style={{ fontFamily: FD, fontSize: 32, fontWeight: 900, color: G, filter: 'url(#skAbout)' }}>{stat.num}</div>
-                <div style={{ fontFamily: FS, fontSize: 12, color: '#888', marginTop: 4 }}>{stat.label}</div>
-                {/* bg circle doodle */}
-                <svg style={{ position: 'absolute', bottom: -10, right: -10, opacity: 0.06 }} width="50" height="50" viewBox="0 0 50 50">
-                  <circle cx="25" cy="25" r="22" fill={G} />
-                </svg>
-              </motion.div>
-            ))}
-          </motion.div>
+             >
+                Explore Products <ArrowRight size={18} style={{ display: 'inline', marginLeft: 12 }} />
+             </motion.button>
+          </div>
 
-          {/* ── CTA ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: 'center', paddingTop: 8, paddingBottom: 24, position: 'relative' }}
-          >
-            {/* Doodle arrows pointing to CTA */}
-            <svg style={{ position: 'absolute', left: '18%', top: -20, opacity: 0.25 }} width="60" height="50" viewBox="0 0 60 50">
-              <path d="M10,5 Q30,10 42,36" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="4 3" />
-              <path d="M42,36 L34,30 M42,36 L44,26" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
-            <svg style={{ position: 'absolute', right: '18%', top: -20, opacity: 0.25, transform: 'scaleX(-1)' }} width="60" height="50" viewBox="0 0 60 50">
-              <path d="M10,5 Q30,10 42,36" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="4 3" />
-              <path d="M42,36 L34,30 M42,36 L44,26" fill="none" stroke={G} strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
+        </div>
+      </main>
 
-            <motion.a
-              href="/products"
-              whileHover={{ scale: 1.05, y: -3 }}
-              whileTap={{ scale: 0.96 }}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 10,
-                padding: '14px 36px',
-                background: `linear-gradient(135deg, ${G}, #1a7a36 60%, #22a349)`,
-                color: '#fff',
-                textDecoration: 'none',
-                borderRadius: 14,
-                fontFamily: FD, fontSize: 20, fontWeight: 800,
-                border: 'none',
-                boxShadow: `4px 5px 0px rgba(21,128,61,0.35), 0 8px 20px rgba(21,128,61,0.2)`,
-                filter: 'url(#skWobbleAbout)',
-                cursor: 'pointer',
-                letterSpacing: 0.3,
-              }}
-            >
-              🛍️ Explore Our Products →
-            </motion.a>
-
-            {/* Tiny hand-drawn underline beneath CTA */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
-              <svg viewBox="0 0 200 8" width={200} height={8}>
-                <path d="M10,5 Q60,1 100,5 Q140,9 190,4" fill="none" stroke={G} strokeWidth="1.5" strokeLinecap="round" opacity={0.2} />
-              </svg>
-            </div>
-          </motion.div>
-
-        </motion.div>
-      </div>
-
-      {/* ── Global font import ── */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap');
-      `}</style>
-    </div>
+      {/* Background Subtle Overlays */}
+      <div style={{ position: 'absolute', top: '10%', right: '-10%', width: 800, height: 800, background: `radial-gradient(circle, ${COLORS.mist} 0%, transparent 70%)`, opacity: 0.5, pointerEvents: 'none' }} />
+    </MainLayout>
   );
 }

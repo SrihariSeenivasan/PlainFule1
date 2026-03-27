@@ -7,6 +7,7 @@ import {
   LayoutDashboard, Package, CreditCard,
   ShoppingBag, Users, Home, LogOut,
   MoreHorizontal, X, Boxes, HelpCircle, RotateCcw,
+  Mail,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 
@@ -28,6 +29,7 @@ const ALL_ITEMS: NavItem[] = [
   { href: '/admin/products',  icon: ShoppingBag,     label: 'Products'  },
   { href: '/admin/inventory', icon: Boxes,           label: 'Inventory' },
   { href: '/admin/users',     icon: Users,           label: 'Users'     },
+  { href: '/admin/messages',  icon: Mail,            label: 'Messages'  },
   { href: '/admin/faq',       icon: HelpCircle,      label: 'FAQs'      },
 ];
 
@@ -42,6 +44,7 @@ const MORE_ITEMS: NavItem[] = [
   { href: '/admin/returns',   icon: RotateCcw,   label: 'Returns'   },
   { href: '/admin/inventory', icon: Boxes,       label: 'Inventory' },
   { href: '/admin/users',     icon: Users,       label: 'Users'     },
+  { href: '/admin/messages',  icon: Mail,        label: 'Messages'  },
   { href: '/admin/faq',       icon: HelpCircle,  label: 'FAQs'      },
 ];
 

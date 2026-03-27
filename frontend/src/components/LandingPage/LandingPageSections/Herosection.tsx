@@ -1,569 +1,547 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useInView, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { F_SIZE } from '@/lib/typography';
 
-// ── Design tokens ─────────────────────────────────────────────────────────────
+// ── Design Tokens (Refined Light Theme) ───────────────────────────────────────
 const C = {
-  forest: '#0f4a23',
-  mid: '#15803d',
-  leaf: '#22c55e',
-  lime: '#a3e635',
-  mist: '#f0fdf4',
-  paper: '#fffef9',
-  cream: '#fafaf5',
-  ink: '#0d1f10',
-  ash: '#5a6b5c',
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
   white: '#ffffff',
-  yellow: '#fef08a',
-  amber: '#fbbf24',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  mist: '#f1f5f9',
+  gold: '#854d0e',
+  goldLight: '#a16207',
+  champagne: '#fef3c7',
+  glassDark: 'rgba(255, 255, 255, 0.88)',
 };
 
-// ── Slides ────────────────────────────────────────────────────────────────────
+// ── Slides data ───────────────────────────────────────────────────────────────
 const SLIDES = [
-  { src: '/images/Products/product_premium.png', alt: 'Lemon Lime', label: 'Lemon Lime', tag: '01', accent: '#bbf7d0', spot: 'rgba(34,197,94,0.18)' },
-  { src: '/images/Products/product.png', alt: 'Berry Blast', label: 'Berry Blast', tag: '02', accent: '#bae6fd', spot: 'rgba(56,189,248,0.15)' },
+  {
+    src: '/images/Products/product_premium.png',
+    alt: 'Lemon Lime',
+    label: 'Lemon Lime',
+    tag: '01',
+    sub: 'Citrus — Light & Refreshing',
+    glow: 'rgba(74,222,128,0.22)',
+    specs: [
+      { k: 'Protein', v: '25g' },
+      { k: 'Fiber', v: '8g' },
+      { k: 'Calories', v: '140' },
+    ],
+  },
+  {
+    src: '/images/Products/product.png',
+    alt: 'Berry Blast',
+    label: 'Berry Blast',
+    tag: '02',
+    sub: 'Mixed Berry — Bold & Sweet',
+    glow: 'rgba(167,139,250,0.22)',
+    specs: [
+      { k: 'Protein', v: '25g' },
+      { k: 'Fiber', v: '8g' },
+      { k: 'Calories', v: '140' },
+    ],
+  },
 ];
 
-// ── Scattered background hand-drawn marks ─────────────────────────────────────
-function BgMarks() {
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function GoldLine({ style }: { style?: React.CSSProperties }) {
   return (
-    <svg viewBox="0 0 1200 820" fill="none" aria-hidden
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-
-      {/* Large loose circle — top right */}
-      <ellipse cx="1050" cy="130" rx="88" ry="82" stroke={C.leaf} strokeWidth="2"
-        strokeDasharray="9 6" opacity="0.18" transform="rotate(-8 1050 130)" />
-
-      {/* Wobbly circle — bottom left */}
-      <path d="M110 640 Q145 600 175 635 Q205 668 172 700 Q138 730 108 700 Q76 668 110 640Z"
-        stroke={C.mid} strokeWidth="2" fill="none" opacity="0.12" />
-
-      {/* Double-line underline squiggle — center-bottom */}
-      <path d="M380 760 Q430 750 480 760 Q530 770 580 760 Q630 750 680 760"
-        stroke={C.leaf} strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.2" />
-      <path d="M390 772 Q440 763 490 772 Q540 781 590 772 Q635 763 675 772"
-        stroke={C.leaf} strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.12" />
-
-      {/* Floating asterisk — top left */}
-      {[0, 60, 120].map(a => (
-        <line key={a} x1={68 + Math.cos(a * Math.PI / 180) * 14} y1={72 + Math.sin(a * Math.PI / 180) * 14}
-          x2={68 - Math.cos(a * Math.PI / 180) * 14} y2={72 - Math.sin(a * Math.PI / 180) * 14}
-          stroke={C.leaf} strokeWidth="2.2" strokeLinecap="round" opacity="0.35" />
-      ))}
-
-      {/* 4-point star — bottom right */}
-      <path d="M1090 680 L1093 670 L1100 668 L1093 665 L1090 655 L1087 665 L1080 668 L1087 670Z"
-        fill={C.leaf} opacity="0.28" />
-
-      {/* Tiny x marks */}
-      <path d="M230 180 L238 188 M238 180 L230 188" stroke={C.leaf} strokeWidth="2" strokeLinecap="round" opacity="0.3" />
-      <path d="M950 560 L958 568 M958 560 L950 568" stroke={C.mid} strokeWidth="2" strokeLinecap="round" opacity="0.22" />
-      <path d="M60 340 L66 346 M66 340 L60 346" stroke={C.leaf} strokeWidth="1.8" strokeLinecap="round" opacity="0.28" />
-
-      {/* Dot cluster — right mid */}
-      {[0, 1, 2].map(r => [0, 1, 2].map(c => (
-        <circle key={`${r}${c}`} cx={1130 + c * 14} cy={400 + r * 14} r="2.2" fill={C.mid} opacity="0.12" />
-      )))}
-
-      {/* Wavy vertical line — left edge */}
-      <path d="M28 200 Q36 240 28 280 Q20 320 28 360 Q36 400 28 440"
-        stroke={C.leaf} strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.14" />
-
-      {/* Graph-paper light grid */}
-      {Array.from({ length: 14 }, (_, i) => (
-        <line key={`h${i}`} x1="0" y1={i * 60} x2="1200" y2={i * 60}
-          stroke={C.mid} strokeWidth="0.5" opacity="0.04" />
-      ))}
-      {Array.from({ length: 22 }, (_, i) => (
-        <line key={`v${i}`} x1={i * 60} y1="0" x2={i * 60} y2="820"
-          stroke={C.mid} strokeWidth="0.5" opacity="0.04" />
-      ))}
-    </svg>
+    <div style={{
+      height: 1, width: '100%',
+      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      ...style,
+    }} />
   );
 }
 
-// ── Doodle pill badge ─────────────────────────────────────────────────────────
-function DoodlePill({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: 6,
-      fontFamily: "'DM Mono', monospace",
-      fontSize: 10.5, letterSpacing: '0.16em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 600,
-      background: C.mist,
-      border: `2px solid ${C.forest}`,
-      borderRadius: 99, padding: '5px 14px',
-      boxShadow: `3px 3px 0 ${C.forest}`,
-      ...style,
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
+      color: C.forest, fontWeight: 700,
+      border: `1px solid ${C.forest}40`,
+      borderRadius: 2, padding: '5px 14px',
+      backgroundColor: 'rgba(10, 61, 31, 0.05)',
     }}>{children}</span>
   );
 }
 
-// ── Scribble underline ────────────────────────────────────────────────────────
-function ScribbleUnder({ color = C.leaf, wide = false }: { color?: string; wide?: boolean }) {
-  return (
-    <svg viewBox="0 0 220 16" fill="none" aria-hidden
-      style={{ position: 'absolute', bottom: -10, left: 0, width: wide ? '100%' : '105%', height: 14, pointerEvents: 'none' }}>
-      <path d="M4 10 Q30 3 58 10 Q86 17 114 10 Q142 3 170 10 Q196 17 216 10"
-        stroke={color} strokeWidth="3.8" strokeLinecap="round" fill="none" />
-      <path d="M10 14 Q50 10 90 14 Q130 18 170 14"
-        stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.35" />
-    </svg>
-  );
-}
-
-// ── Highlight blob (marker-pen style) ────────────────────────────────────────
-function MarkerHighlight({ children, color = C.yellow }: { children: React.ReactNode; color?: string }) {
-  return (
-    <span style={{ position: 'relative', display: 'inline' }}>
-      <span style={{
-        position: 'absolute', inset: '-2px -4px',
-        background: color, borderRadius: 2, zIndex: 0, transform: 'rotate(-0.6deg) scaleX(1.04)',
-        opacity: 0.55,
-      }} />
-      <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
-    </span>
-  );
-}
-
-// ── Hand-drawn arrow SVG ──────────────────────────────────────────────────────
-function HandArrow({ style }: { style?: React.CSSProperties }) {
-  return (
-    <svg viewBox="0 0 56 32" fill="none" width={56} height={32} aria-hidden style={style}>
-      <path d="M4 20 Q16 6 36 10 Q46 12 50 18"
-        stroke={C.mid} strokeWidth="2.2" strokeLinecap="round" fill="none" />
-      <path d="M44 12 L52 20 L42 22" stroke={C.mid} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </svg>
-  );
-}
-
-// ── Notebook lines decoration ─────────────────────────────────────────────────
-function NotebookLines() {
-  return (
-    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-      {[80, 108, 136, 164, 192, 220].map(y => (
-        <div key={y} style={{
-          position: 'absolute', left: 0, right: 0, top: y,
-          height: 1, background: `${C.mid}`, opacity: 0.05,
-        }} />
-      ))}
-      {/* Red margin line */}
-      <div style={{
-        position: 'absolute', top: 0, bottom: 0, left: 52,
-        width: 1, background: '#fca5a5', opacity: 0.3,
-      }} />
-    </div>
-  );
-}
-
-// ── Product carousel ──────────────────────────────────────────────────────────
-function ProductCarousel() {
+// ── Product Panel ────────────────────────────────────────────────────────────
+function ProductPanel() {
   const [idx, setIdx] = useState(0);
   const [dir, setDir] = useState(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-120, 120], [5, -5]);
-  const rotateY = useTransform(mouseX, [-120, 120], [-5, 5]);
 
   const resetTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { setDir(1); setIdx(i => (i + 1) % SLIDES.length); }, 4200);
+    timerRef.current = setInterval(() => {
+      setDir(1);
+      setIdx(i => (i + 1) % SLIDES.length);
+    }, 5000);
   };
-  useEffect(() => { resetTimer(); return () => { if (timerRef.current) clearInterval(timerRef.current); }; }, []);
 
-  const advance = (next: number) => { setDir(next > idx ? 1 : -1); setIdx(next); resetTimer(); };
+  useEffect(() => {
+    resetTimer();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, []);
+
+  const advance = (next: number) => {
+    setDir(next > idx ? 1 : -1);
+    setIdx(next);
+    resetTimer();
+  };
+
   const slide = SLIDES[idx];
+  const OVERLAY_HEIGHT = 220;
+  const CARD_HEIGHT = 620;
+  const IMAGE_AREA = CARD_HEIGHT - OVERLAY_HEIGHT;
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{
+      position: 'relative',
+      borderRadius: 12,
+      overflow: 'hidden',
+      height: CARD_HEIGHT,
+      width: '100%',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)',
+      background: C.white,
+      border: '1px solid rgba(0,0,0,0.05)',
+    }}>
 
-      {/* Floating label top-right */}
-      <motion.div
-        animate={{ rotate: [0, 2, -2, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          position: 'absolute', top: -18, right: -12, zIndex: 10,
-          background: C.yellow,
-          border: `2px solid ${C.ink}`,
-          boxShadow: `3px 3px 0 ${C.ink}`,
-          borderRadius: 4, padding: '4px 10px',
-          fontFamily: "'DM Mono', monospace",
-          fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink,
-          transform: 'rotate(4deg)',
-        }}
-      >New Drop ✦</motion.div>
-
-      {/* 3-D tilt card — hard doodle shadow */}
-      <motion.div
-        onMouseMove={e => {
-          const r = e.currentTarget.getBoundingClientRect();
-          mouseX.set(e.clientX - r.left - r.width / 2);
-          mouseY.set(e.clientY - r.top - r.height / 2);
-        }}
-        onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
-        style={{ perspective: 800 }}
-      >
-        <motion.div style={{
-          rotateX, rotateY, transformStyle: 'preserve-3d',
-          background: C.paper,
-          border: `2.5px solid ${C.forest}`,
-          boxShadow: `8px 10px 0 ${C.forest}`,
-          borderRadius: 18,
-          overflow: 'hidden',
-          minHeight: 440,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          position: 'relative',
-        }}>
-
-          {/* Notebook lines inside card */}
-          <NotebookLines />
-
-          {/* Doodle corner spirals */}
-          <svg viewBox="0 0 40 40" width={36} height={36} fill="none" aria-hidden
-            style={{ position: 'absolute', top: 10, left: 10, opacity: 0.18 }}>
-            <path d="M20 20 Q20 8 30 8 Q38 8 38 18 Q38 30 26 32 Q14 34 10 24 Q6 12 18 10"
-              stroke={C.mid} strokeWidth="2" fill="none" />
-          </svg>
-          <svg viewBox="0 0 40 40" width={36} height={36} fill="none" aria-hidden
-            style={{ position: 'absolute', bottom: 64, right: 10, opacity: 0.15, transform: 'scaleX(-1)' }}>
-            <path d="M20 20 Q20 8 30 8 Q38 8 38 18 Q38 30 26 32 Q14 34 10 24 Q6 12 18 10"
-              stroke={C.mid} strokeWidth="2" fill="none" />
-          </svg>
-
-          {/* Slide tag */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`bg-${idx}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.7 }}
+          style={{ position: 'absolute', inset: 0, zIndex: 0 }}
+        >
           <div style={{
-            position: 'absolute', top: 14, right: 16,
-            fontFamily: "'DM Mono', monospace", fontSize: 10, color: C.ash,
-            letterSpacing: '0.14em', zIndex: 5,
-          }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</div>
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(160deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
+          }} />
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%', transform: 'translateX(-50%)',
+            width: 500, height: IMAGE_AREA,
+            background: `radial-gradient(ellipse at 50% 55%, ${slide.glow} 0%, transparent 65%)`,
+            opacity: 0.15,
+          }} />
+          <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.08 }}>
+            <defs>
+              <pattern id="dotgrid" width="28" height="28" patternUnits="userSpaceOnUse">
+                <circle cx="14" cy="14" r="0.9" fill={C.gold} />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#dotgrid)" />
+          </svg>
+        </motion.div>
+      </AnimatePresence>
 
-          {/* Ambient glow */}
-          <AnimatePresence mode="wait">
-            <motion.div key={`g-${idx}`}
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.7 }}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 2, zIndex: 20,
+        background: `linear-gradient(to right, transparent 5%, ${C.goldLight}44 35%, ${C.goldLight} 50%, ${C.goldLight}44 65%, transparent 95%)`,
+      }} />
+
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 15,
+        padding: '20px 24px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <span style={{
+          fontFamily: "'Caveat', cursive",
+          fontSize: F_SIZE.md, letterSpacing: '0.04em',
+          color: `${C.ink}44`, fontWeight: 700,
+        }}>PlainFuel — Daily Edition</span>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => advance(i)}
+              aria-label={`Slide ${i + 1}`}
               style={{
-                position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-                background: `radial-gradient(ellipse at 50% 55%, ${slide.spot} 0%, transparent 68%)`,
+                width: i === idx ? 28 : 7, height: 3,
+                border: 'none', cursor: 'pointer', padding: 0,
+                background: i === idx ? C.forest : `${C.silver}33`,
+                borderRadius: 1.5, transition: 'all 0.35s ease',
               }}
             />
-          </AnimatePresence>
-
-          {/* Orbit ring */}
-          <svg viewBox="0 0 300 300" fill="none"
-            style={{
-              position: 'absolute', width: 270, height: 270, top: '50%', left: '50%',
-              transform: 'translate(-50%,-50%)', zIndex: 1, pointerEvents: 'none'
-            }}>
-            <ellipse cx="150" cy="150" rx="130" ry="120"
-              stroke={C.leaf} strokeWidth="1.5" strokeDasharray="7 5" opacity="0.22"
-              transform="rotate(-15 150 150)" />
-          </svg>
-
-          {/* Product image */}
-          <AnimatePresence mode="wait" custom={dir}>
-            <motion.div key={`i-${idx}`}
-              initial={{ opacity: 0, x: dir * 50, rotate: dir * 4 }}
-              animate={{ opacity: 1, x: 0, rotate: 0 }}
-              exit={{ opacity: 0, x: dir * -50, rotate: dir * -4 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              style={{ position: 'relative', zIndex: 2, padding: '36px 28px 60px' }}
-            >
-              <motion.img
-                src={slide.src} alt={slide.alt}
-                animate={{ y: [0, -14, 0] }}
-                transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut' }}
-                style={{
-                  width: '100%', maxWidth: 270, height: 'auto',
-                  objectFit: 'contain', display: 'block',
-                  filter: `drop-shadow(0 24px 48px rgba(15,74,35,0.28))`,
-                }}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Flavor label + dots */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0,
-            borderTop: `1.5px dashed ${C.forest}28`,
-            background: `linear-gradient(to right, ${slide.accent}55, transparent)`,
-            padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 5
-          }}>
-            <AnimatePresence mode="wait">
-              <motion.span key={`l-${idx}`}
-                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                style={{
-                  fontFamily: "'Fraunces', serif", fontSize: 16, fontWeight: 700,
-                  fontStyle: 'italic', color: C.forest
-                }}>
-                {slide.label}
-              </motion.span>
-            </AnimatePresence>
-            <div style={{ display: 'flex', gap: 6 }}>
-              {SLIDES.map((_, i) => (
-                <button key={i} onClick={() => advance(i)} aria-label={`Slide ${i + 1}`}
-                  style={{
-                    width: i === idx ? 20 : 7, height: 7, borderRadius: 4,
-                    border: `2px solid ${C.forest}`, cursor: 'pointer', padding: 0,
-                    background: i === idx ? C.mid : 'transparent', transition: 'all 0.25s'
-                  }} />
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Stats row */}
-      <div style={{ display: 'flex', gap: 2, marginTop: 2 }}>
-        {[['1.2K+', 'Users'], ['100%', 'Clean'], ['1', 'Scoop']].map(([v, l], i) => (
-          <div key={i} style={{
-            flex: 1, background: C.mist,
-            border: `1.5px solid ${C.forest}22`,
-            borderTop: 'none',
-            padding: '10px 12px',
-            borderRadius: i === 0 ? '0 0 0 12px' : i === 2 ? '0 0 12px 0' : 0,
-          }}>
-            <div style={{
-              fontFamily: "'Fraunces', serif", fontSize: 20,
-              fontWeight: 900, color: C.forest, lineHeight: 1
-            }}>{v}</div>
-            <div style={{
-              fontFamily: "'DM Mono', monospace", fontSize: 9.5,
-              letterSpacing: '0.14em', textTransform: 'uppercase', color: C.ash, marginTop: 3
-            }}>{l}</div>
-          </div>
-        ))}
+          ))}
+          <span style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: F_SIZE.sm, letterSpacing: '0.2em',
+            color: `${C.ink}33`, fontWeight: 700, marginLeft: 4,
+          }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</span>
+        </div>
       </div>
 
-      {/* Hand-drawn arrow pointing up at card */}
-      <HandArrow style={{ position: 'absolute', bottom: -44, left: 16, transform: 'rotate(160deg)', opacity: 0.4 }} />
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0,
+        height: IMAGE_AREA,
+        zIndex: 5,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <AnimatePresence mode="wait" custom={dir}>
+          <motion.div
+            key={`img-${idx}`}
+            initial={{ opacity: 0, x: dir * 60, scale: 0.92 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: dir * -50, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as any }}
+            style={{ width: '72%', maxWidth: 280 }}
+          >
+            <motion.img
+              src={slide.src}
+              alt={slide.alt}
+              animate={{ y: [0, -14, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                width: '100%',
+                height: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+                filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 4px 8px rgba(0,0,0,0.05))',
+              }}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div style={{
+        position: 'absolute',
+        bottom: 0, left: 0, right: 0,
+        height: OVERLAY_HEIGHT,
+        zIndex: 10,
+        background: 'rgba(255, 255, 255, 0.92)',
+        backdropFilter: 'blur(22px)',
+        WebkitBackdropFilter: 'blur(22px)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <div style={{ height: 1, width: '100%', background: 'rgba(0,0,0,0.05)' }} />
+
+        <div style={{ padding: '18px 24px 0', flex: 0 }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`info-${idx}`}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.38 }}
+            >
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4 }}>
+                <span style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: F_SIZE.lg, fontWeight: 800,
+                  color: C.ink, letterSpacing: '-0.02em', lineHeight: 1,
+                }}>{slide.label}</span>
+                <span style={{
+                  fontFamily: "'Caveat', cursive",
+                  fontSize: F_SIZE.md, color: C.forest, fontWeight: 700,
+                  letterSpacing: '0.02em',
+                }}>Flavor</span>
+              </div>
+              <div style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: F_SIZE.sm, letterSpacing: '0.18em',
+                textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 600,
+                marginBottom: 0,
+              }}>{slide.sub}</div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <div style={{ margin: '14px 24px 0', height: 1, background: 'rgba(0,0,0,0.05)' }} />
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          flex: 1,
+          padding: '0',
+        }}>
+          {slide.specs.map(({ k, v }, i) => (
+            <div key={k} style={{
+              padding: '12px 24px',
+              borderRight: i < 2 ? `1px solid rgba(0,0,0,0.05)` : 'none',
+              display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
+            }}>
+              <span style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: F_SIZE.lg, fontWeight: 800,
+                color: C.ink, lineHeight: 1,
+              }}>{v}</span>
+              <span style={{
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: F_SIZE.sm, letterSpacing: '0.24em',
+                textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
+              }}>{k}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          borderTop: `1px solid rgba(0,0,0,0.05)`,
+          padding: '11px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flex: 0,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <div style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: '#16a34a',
+              boxShadow: '0 0 7px rgba(22,163,74,0.4)',
+            }} />
+            <span style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: F_SIZE.sm, letterSpacing: '0.16em',
+              textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
+            }}>In Stock — Ships in 2 days</span>
+          </div>
+          <a href="#order" style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: F_SIZE.sm, letterSpacing: '0.2em',
+            textTransform: 'uppercase', color: C.forest, fontWeight: 900,
+            textDecoration: 'none',
+            display: 'flex', alignItems: 'center', gap: 6,
+            transition: 'opacity 0.2s',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.6')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            Order Now
+            <svg viewBox="0 0 16 16" width={10} height={10} fill="none">
+              <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
 
-// ── Left content ──────────────────────────────────────────────────────────────
+// ── Left Content ─────────────────────────────────────────────────────────────
 function AboutLeft({ inView }: { inView: boolean }) {
   const paragraphs = [
-    "PlainFuel is a daily nutrition supplement designed to simplify how we meet our body’s needs.",
-    "Instead of taking multiple supplements or tracking different nutrients, PlainFuel brings everything together in one scoop. It combines protein, essential micronutrients, and fiber in a structured way so that your body gets consistent support every day.",
+    "PlainFuel is a daily nutrition supplement designed to simplify how we meet our body's needs.",
+    "Instead of taking multiple supplements or tracking different nutrients, PlainFuel brings everything together in one sachet. It combines protein, essential micronutrients, and fiber in a structured way so that your body gets consistent support every day.",
     "This is not just another protein powder. It is designed to act as a daily nutrition system — something you can rely on without overthinking.",
   ];
 
+  const fromLeft = (delay: number) => ({
+    initial: { opacity: 0, x: -40 },
+    animate: inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 },
+    transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] as any },
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-      {/* Eyebrow — stamp style */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.45, type: 'spring', stiffness: 200 }}
-        style={{ marginBottom: 22, display: 'flex', alignItems: 'center', gap: 10 }}
-      >
-        <DoodlePill>
-          <svg viewBox="0 0 14 14" width={12} height={12} fill="none">
-            <circle cx="7" cy="7" r="5" stroke={C.leaf} strokeWidth="1.8" />
-            <circle cx="7" cy="7" r="2" fill={C.leaf} />
-          </svg>
+      <motion.div {...fromLeft(0.05)} style={{ marginBottom: 30, display: 'flex', alignItems: 'center', gap: 16 }}>
+        <Chip>
+          <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={C.mid} /></svg>
           Daily Nutrition
-        </DoodlePill>
-        {/* Wavy dots trail */}
-        <svg viewBox="0 0 48 12" width={44} height={12} fill="none" aria-hidden>
-          {[0, 1, 2, 3].map(i => (
-            <circle key={i} cx={6 + i * 13} cy={6 + Math.sin(i) * 3} r="2.5"
-              fill={C.leaf} opacity={0.18 + i * 0.16} />
-          ))}
-        </svg>
+        </Chip>
+        <div style={{
+          width: 52, height: 1,
+          background: `linear-gradient(to right, ${C.gold}99, transparent)`,
+        }} />
       </motion.div>
 
-      {/* MAIN HEADING — Plain + Fuel on one line */}
-      <div style={{ overflow: 'hidden', marginBottom: 20 }}>
-        <motion.h2
-          initial={{ y: 80, opacity: 0 }} animate={inView ? { y: 0, opacity: 1 } : {}}
-          transition={{ duration: 0.68, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            fontFamily: "'Fraunces', serif",
-            fontSize: 'clamp(3rem, 6.5vw, 5.2rem)',
+      <motion.div {...fromLeft(0.12)} style={{ marginBottom: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 'clamp(8px,1.2vw,16px)', flexWrap: 'nowrap' }}>
+          <h2 style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: F_SIZE.xl,
             fontWeight: 900, lineHeight: 0.88,
-            letterSpacing: '-0.035em', margin: 0,
-            display: 'flex', alignItems: 'baseline',
-            gap: 'clamp(8px,1.2vw,18px)', flexWrap: 'nowrap',
-          }}
-        >
-          <span style={{ color: C.ink }}>Plain</span>
-          <span style={{ color: C.mid, fontStyle: 'italic' }}>Fuel</span>
-        </motion.h2>
-      </div>
-
-      {/* Sub-heading with double scribble underline */}
-      <motion.div
-        initial={{ opacity: 0, y: 18 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.56, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-        style={{ position: 'relative', display: 'inline-block', marginBottom: 36 }}
-      >
-        <h3 style={{
-          fontFamily: "'Fraunces', serif",
-          fontSize: 'clamp(1.1rem, 2.2vw, 1.7rem)',
-          fontWeight: 700, fontStyle: 'italic', color: C.mid,
-          margin: 0, lineHeight: 1.2, paddingBottom: 14,
-        }}>
-          A <MarkerHighlight color={C.yellow}>Simple</MarkerHighlight> Approach to Daily Nutrition
-        </h3>
-        <ScribbleUnder color={C.leaf} wide />
+            letterSpacing: '-0.04em', margin: 0, color: C.ink,
+          }}>Plain</h2>
+          <h2 style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: F_SIZE.xl,
+            fontWeight: 300, lineHeight: 0.88,
+            letterSpacing: '-0.04em', margin: 0, color: C.forest,
+          }}>Fuel</h2>
+        </div>
       </motion.div>
 
-
-
-      {/* "What is PlainFuel?" — torn paper badge */}
       <motion.div
-        initial={{ opacity: 0, rotate: -4, scale: 0.9 }} animate={inView ? { opacity: 1, rotate: 0, scale: 1 } : {}}
-        transition={{ delay: 0.3, type: 'spring', stiffness: 220 }}
-        style={{ marginBottom: 20, display: 'inline-block' }}
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] as any }}
+        style={{ originX: 0, marginBottom: 22 }}
       >
+        <GoldLine />
+      </motion.div>
+
+      <motion.p {...fromLeft(0.28)} style={{
+        fontFamily: "'Caveat', cursive",
+        fontSize: F_SIZE.lg,
+        fontWeight: 700, color: C.forest,
+        margin: '0 0 38px 0', letterSpacing: '0.01em',
+      }}>
+        A Simple Approach to Daily Nutrition
+      </motion.p>
+
+      <motion.div {...fromLeft(0.34)} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
+        <div style={{ width: 20, height: 1, background: C.gold }} />
         <span style={{
-          display: 'inline-block',
-          fontFamily: "'DM Mono', monospace",
-          fontSize: 16.5, color: C.forest,
-          letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600,
-          background: C.mist,
-          padding: '6px 14px',
-          borderRadius: 4,
-          border: `2px solid ${C.forest}`,
-          boxShadow: `3px 3px 0 ${C.forest}`,
-          position: 'relative',
-        }}>
-          ✦ What is PlainFuel?
-        </span>
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: F_SIZE.sm, letterSpacing: '0.28em',
+          textTransform: 'uppercase', color: C.forest, fontWeight: 900,
+        }}>What is PlainFuel?</span>
       </motion.div>
 
-      {/* Paragraphs — left-bar style */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 38 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 46 }}>
         {paragraphs.map((text, i) => (
-          <motion.p key={i}
-            initial={{ opacity: 0, x: -18 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.36 + i * 0.1 }}
+          <motion.p key={i} {...fromLeft(0.42 + i * 0.1)}
             style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 'clamp(16px, 1.8vw, 18px)',
-              color: '#3a4a3c', lineHeight: 1.8, margin: 0,
-              paddingLeft: 14,
-              borderLeft: `3px solid ${i === 0 ? C.leaf : i === 1 ? C.lime : '#86efac'}`,
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: F_SIZE.md,
+              fontWeight: 500, color: '#3c4a3e',
+              lineHeight: 1.9, margin: 0,
+              paddingLeft: 18,
+              borderLeft: `2px solid ${i === 0 ? C.gold : i === 1 ? C.leaf : 'rgba(22,101,52,0.15)'}`,
             }}
           >{text}</motion.p>
         ))}
       </div>
 
-      {/* CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.48, delay: 0.66 }}
-        style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}
-      >
+      <motion.div {...fromLeft(0.72)} style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
         <a href="#order" style={{
-          display: 'inline-flex', alignItems: 'center', gap: 10,
-          background: C.mid, color: C.white,
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 13, fontWeight: 700,
-          letterSpacing: '0.07em', textTransform: 'uppercase',
-          padding: '13px 26px', borderRadius: 10,
-          border: `2.5px solid ${C.forest}`,
-          boxShadow: `6px 7px 0 ${C.forest}`,
-          textDecoration: 'none', transition: 'transform 0.12s, box-shadow 0.12s',
+          display: 'inline-flex', alignItems: 'center', gap: 12,
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: F_SIZE.sm, fontWeight: 900,
+          letterSpacing: '0.22em', textTransform: 'uppercase',
+          color: C.white, background: C.forest,
+          padding: '15px 30px', borderRadius: 3,
+          textDecoration: 'none',
+          boxShadow: '0 8px 32px rgba(10,61,31,0.12)',
+          transition: 'all 0.25s ease',
         }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-2px,-2px)'; e.currentTarget.style.boxShadow = `8px 9px 0 ${C.forest}`; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `6px 7px 0 ${C.forest}`; }}
+          onMouseEnter={e => { e.currentTarget.style.background = C.mid; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(10,61,31,0.2)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = C.forest; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 32px rgba(10,61,31,0.12)'; }}
         >
           Get PlainFuel
-          <svg viewBox="0 0 16 16" width={13} height={13} fill="none">
+          <svg viewBox="0 0 16 16" width={11} height={11} fill="none">
             <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </a>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ display: 'flex' }}>
-            {['#3d9a5c', '#2d7a46', '#4aaf6e'].map((bg, i) => (
+            {['#2d6a3f', '#235233', '#3a8055'].map((bg, i) => (
               <div key={i} style={{
                 width: 28, height: 28, borderRadius: '50%',
-                border: `2.5px solid ${C.white}`,
-                background: bg, marginLeft: i > 0 ? -8 : 0,
-                boxShadow: '0 1px 4px rgba(15,74,35,0.18)',
+                border: `2px solid ${C.white}`,
+                background: bg, marginLeft: i > 0 ? -9 : 0,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
               }} />
             ))}
           </div>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: C.ash }}>
-            1,200+ daily users
-          </span>
+          <div>
+            <div style={{ display: 'flex', gap: 2, marginBottom: 3 }}>
+              {[1, 2, 3, 4, 5].map(s => (
+                <svg key={s} viewBox="0 0 10 10" width={9} height={9}>
+                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={C.gold} />
+                </svg>
+              ))}
+            </div>
+            <span style={{
+              fontFamily: "'Caveat', cursive",
+              fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700,
+            }}>1,200+ daily users</span>
+          </div>
         </div>
       </motion.div>
-
-
     </div>
   );
 }
 
-// ── Root ──────────────────────────────────────────────────────────────────────
-export default function PlainFuelAbout() {
+// ── Root Component ───────────────────────────────────────────────────────────
+export default function PlainFuelHero() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: '-60px' });
+  const inView = useInView(sectionRef, { once: true, margin: '-80px' });
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700;1,9..144,900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
+        
         .pfa-section {
-          background: #fffef9;
+          background: #fafafa;
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: clamp(60px, 9vw, 108px) clamp(22px, 5.5vw, 72px);
+          padding: clamp(64px, 9vw, 112px) clamp(24px, 5.5vw, 72px);
           position: relative;
           overflow: hidden;
         }
 
-        /* Warm paper tint in corner */
+        .pfa-section::before {
+          content: '';
+          position: absolute; inset: 0;
+          background:
+            radial-gradient(ellipse at 10% 55%, rgba(22,101,52,0.035) 0%, transparent 52%),
+            radial-gradient(ellipse at 90% 15%, rgba(133,77,14,0.02) 0%, transparent 48%);
+          pointer-events: none;
+        }
+
         .pfa-section::after {
           content: '';
-          position: absolute;
-          top: 0; right: 0;
-          width: 38%; height: 45%;
-          background: radial-gradient(ellipse at top right, rgba(254,240,138,0.18) 0%, transparent 70%);
+          position: absolute; top: 0; bottom: 0;
+          left: calc(50% - 40px);
+          width: 1px;
+          background: linear-gradient(to bottom,
+            transparent,
+            rgba(0,0,0,0.04) 20%,
+            rgba(0,0,0,0.04) 80%,
+            transparent
+          );
           pointer-events: none;
         }
 
         .pfa-inner {
-          max-width: 1120px; width: 100%;
+          max-width: 1160px; width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: clamp(44px, 6.5vw, 92px);
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: clamp(48px, 6.5vw, 88px);
           align-items: center;
           position: relative; z-index: 1;
         }
 
-        @media (max-width: 880px) {
-          .pfa-inner { grid-template-columns: 1fr !important; gap: 44px !important; }
-          .pfa-carousel-col { order: -1; max-width: 400px; margin: 0 auto; width: 100%; }
-        }
-        @media (max-width: 480px) {
-          .pfa-section { padding: 42px 18px 58px; min-height: auto; }
-          .pfa-inner { gap: 34px !important; }
-          .pfa-carousel-col { max-width: 100% !important; }
+        @media (max-width: 900px) {
+          .pfa-inner { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .pfa-panel-col { order: -1; width: 100%; max-width: 480px; margin: 0 auto; }
+          .pfa-section::after { display: none; }
         }
       `}</style>
 
       <section className="pfa-section">
-        <BgMarks />
-
         <div className="pfa-inner" ref={sectionRef}>
           <AboutLeft inView={inView} />
-
-          <motion.div className="pfa-carousel-col"
-            initial={{ opacity: 0, x: 28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.62, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          <motion.div
+            className="pfa-panel-col"
+            initial={{ opacity: 0, x: 60 }}
+            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
+            transition={{ duration: 0.72, delay: 0.1, ease: [0.22, 1, 0.36, 1] as any }}
           >
-            <ProductCarousel />
+            <ProductPanel />
           </motion.div>
         </div>
       </section>

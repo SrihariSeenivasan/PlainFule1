@@ -41,7 +41,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(4, 14, 7, 0.4)',
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
           zIndex: 999,
         }}
       />
@@ -68,18 +70,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3 }}
           style={{
-            maxHeight: '85vh',
+            maxHeight: '90vh',
             overflowY: 'auto',
-            maxWidth: 'clamp(300px, 100%, 450px)',
+            maxWidth: currentView === 'register' ? '650px' : '480px',
             width: '100%',
+            transition: 'max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            msOverflowStyle: 'none', // IE and Edge
+            scrollbarWidth: 'none', // Firefox
           }}
+          className="auth-modal-scroll-container"
         >
           <div
             style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: 'clamp(20px, 5vw, 28px)',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+              backgroundColor: 'rgba(255, 255, 255, 0.65)',
+              backdropFilter: 'blur(40px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+              borderRadius: '24px',
+              padding: 'clamp(32px, 8vw, 48px)',
+              boxShadow: '0 32px 80px rgba(10, 61, 31, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.4)',
+              border: '1px solid rgba(10, 61, 31, 0.1)',
               position: 'relative',
             }}
           >
@@ -88,20 +97,34 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             onClick={handleClose}
             style={{
               position: 'absolute',
-              top: '16px',
-              right: '16px',
-              background: 'none',
-              border: 'none',
-              fontSize: '24px',
+              top: '24px',
+              right: '24px',
+              background: 'rgba(10, 61, 31, 0.05)',
+              border: '1px solid rgba(10, 61, 31, 0.1)',
+              borderRadius: '12px',
+              fontSize: '18px',
+              color: '#0a3d1f',
               cursor: 'pointer',
               padding: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(10, 61, 31, 0.1)';
+              e.currentTarget.style.transform = 'rotate(90deg)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(10, 61, 31, 0.05)';
+              e.currentTarget.style.transform = 'rotate(0deg)';
             }}
           >
             ✕
           </button>
 
           {/* Modal Content */}
-          <div style={{ marginTop: currentView === 'login' ? 0 : '0' }}>
+          <div key={currentView || 'default'} style={{ marginTop: currentView === 'login' ? 0 : '0' }}>
             {currentView === 'login' && <LoginPage onSwitchView={handleSwitchView} onSuccess={handleClose} />}
 
             {currentView === 'register' && <RegisterPage onSwitchView={handleSwitchView} onSuccess={handleClose} />}
@@ -111,17 +134,20 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
           {/* Navigation Links */}
           {currentView === 'login' && (
-            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '14px' }}>
-              <span style={{ color: '#666' }}>Don&apos;t have an account? </span>
+            <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', fontFamily: "'Montserrat', sans-serif" }}>
+              <span style={{ color: '#0a3d1f', opacity: 0.7 }}>Don&apos;t have an account? </span>
               <button
                 onClick={() => handleSwitchView('register')}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#15803d',
-                  fontWeight: 'bold',
+                  color: '#16a34a',
+                  fontWeight: '800',
                   cursor: 'pointer',
-                  textDecoration: 'underline',
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase',
+                  fontSize: '12px',
+                  marginLeft: '4px',
                 }}
               >
                 Sign up
@@ -130,17 +156,20 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           )}
 
           {currentView === 'register' && (
-            <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '14px' }}>
-              <span style={{ color: '#666' }}>Already have an account? </span>
+            <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '14px', fontFamily: "'Montserrat', sans-serif" }}>
+              <span style={{ color: '#0a3d1f', opacity: 0.7 }}>Already have an account? </span>
               <button
                 onClick={() => handleSwitchView('login')}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#15803d',
-                  fontWeight: 'bold',
+                  color: '#16a34a',
+                  fontWeight: '800',
                   cursor: 'pointer',
-                  textDecoration: 'underline',
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase',
+                  fontSize: '12px',
+                  marginLeft: '4px',
                 }}
               >
                 Sign in
