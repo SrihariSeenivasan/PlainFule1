@@ -7,6 +7,7 @@ import {
     CheckCircle2, FlaskConical, Microscope, Info,
     PlayCircle
 } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens (Glacier Scientific) ── */
 const C = {
@@ -36,9 +37,9 @@ function DataChip({ label, value, color = C.forest }: { label: string; value: st
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '16px 20px', borderRadius: 20, background: C.white, border: `1px solid ${C.border}`, boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
-                <div style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: C.ink }}>{label}</div>
+                <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.ink }}>{label}</div>
             </div>
-            <div style={{ paddingLeft: 18, fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: color, lineHeight: 1.4 }}>{value}</div>
+            <div style={{ paddingLeft: 18, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: color, lineHeight: 1.4 }}>{value}</div>
         </div>
     );
 }
@@ -47,7 +48,7 @@ function SectionBadge({ text, icon: Icon }: { text: string; icon?: any }) {
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}>
             {Icon && <Icon size={12} color={C.gold} />}
-            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }
@@ -79,19 +80,19 @@ export default function CanWeGetFromFood() {
                         <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${C.deep} 0%, transparent 40%)`, zIndex: 1 }} />
                         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: 40, zIndex: 2 }}>
                             <PlayCircle size={64} color={C.white} strokeWidth={1} style={{ opacity: 0.4, marginBottom: 24 }} />
-                            <h4 style={{ fontFamily: FONTS.main, fontSize: 16, color: C.white, fontWeight: 700, margin: 0, opacity: 0.7 }}>The Feasibility Gap.</h4>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.white, fontWeight: 700, margin: 0, opacity: 0.7 }}>The Feasibility Gap.</h4>
                         </div>
 
                         <div style={{ position: 'absolute', top: 32, left: 32, zIndex: 2 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                                 <FlaskConical size={14} color={C.leaf} />
-                                <span style={{ fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: C.white, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Biomarker Case Study</span>
+                                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.white, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Biomarker Case Study</span>
                             </div>
                         </div>
 
                         <div style={{ position: 'absolute', bottom: 32, left: 32, right: 32, zIndex: 2 }}>
                             <div style={{ padding: '24px', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(32px)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.1)' }}>
-                                <p style={{ fontFamily: FONTS.main, fontSize: 13, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0 }}>Discover why reaching clinical nutritional thresholds through whole food alone is a modern logistical challenge.</p>
+                                <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0 }}>Discover why reaching clinical nutritional thresholds through whole food alone is a modern logistical challenge.</p>
                             </div>
                         </div>
                     </motion.div>
@@ -99,11 +100,11 @@ export default function CanWeGetFromFood() {
                     {/* RIGHT — Analytical Content */}
                     <div>
                         <SectionBadge text="Theoretical vs Practical" icon={Microscope} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4.5vw, 48px)', fontWeight: 900, color: C.ink, lineHeight: 1.15, letterSpacing: '-0.03em', margin: '8px 0 12px' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, lineHeight: 1.15, letterSpacing: '-0.03em', margin: '8px 0 12px' }}>
                             Can we get everything <br /> from <span style={{ color: C.leaf }}>food?</span>
                         </h2>
 
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.ink, lineHeight: 1.75, marginBottom: 12 }}>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.75, marginBottom: 12 }}>
                             In theory, yes. In reality, it is difficult to do consistently. Let's look at simple examples:
                         </p>
 
@@ -121,15 +122,15 @@ export default function CanWeGetFromFood() {
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                                 <Info size={18} color={C.forest} style={{ opacity: 0.3 }} />
-                                <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.15em' }}>Consistency & Practicality</div>
+                                <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: C.forest, letterSpacing: '0.15em' }}>Consistency & Practicality</div>
                             </div>
-                            <h4 style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 800, color: C.ink, marginBottom: 12 }}>This is not practical for most people.</h4>
-                            <p style={{ fontFamily: FONTS.main, fontSize: 15, color: C.ink, lineHeight: 1.7, margin: 0 }}>
+                            <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 800, color: C.ink, marginBottom: 12 }}>This is not practical for most people.</h4>
+                            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.7, margin: 0 }}>
                                 So the problem is not lack of knowledge. The problem is consistency and practicality.
                             </p>
                             <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <CheckCircle2 size={16} color={C.leaf} />
-                                <span style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.leaf, fontWeight: 700 }}>Practical Choice.</span>
+                                <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: C.leaf, fontWeight: 700 }}>Practical Choice.</span>
                             </div>
                         </motion.div>
 

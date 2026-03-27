@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 import Image from 'next/image';
 import Link from 'next/link';
 import { productAPI, type Product as BackendProduct } from '@/lib/api';
@@ -116,17 +117,17 @@ export default function ProductSection() {
             style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: `${C.white}88`, border: `1px solid ${C.mid}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}
           >
             <Sparkles size={14} color={C.gold} />
-            <span style={{ fontSize: 10, fontWeight: 800, color: C.mid, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Elite Selection</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.mid, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Elite Selection</span>
           </motion.div>
 
-          <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1 }}>
             Fuel <span style={{ fontFamily: FONTS.accent, color: C.mid, fontVariantCaps: 'normal' }}>Cycle.</span>
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
             <GoldUnderline width={220} />
           </div>
 
-          <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.ink, marginTop: 24, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8 }}>
+          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.ink, marginTop: 24, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8 }}>
             Elevate your daily ritual <span style={{ color: C.gold, margin: '0 8px' }}>—</span> Experience the shift.
           </p>
         </div>
@@ -186,7 +187,7 @@ export default function ProductSection() {
               <div style={{ position: 'absolute', top: 24, left: 24, zIndex: 10 }}>
                 <div style={{ padding: '6px 14px', borderRadius: 100, background: 'rgba(10, 61, 31, 0.05)', border: '1px solid rgba(10, 61, 31, 0.1)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Sparkles size={10} color={C.gold} />
-                  <span style={{ fontSize: 9, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Protocol {String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Protocol {String(i + 1).padStart(2, '0')}</span>
                 </div>
               </div>
 
@@ -207,8 +208,8 @@ export default function ProductSection() {
                 display: 'flex', flexDirection: 'column', gap: 12
               }}>
                 <div>
-                  <h3 style={{ fontFamily: FONTS.main, fontSize: 26, fontWeight: 900, color: C.ink, margin: '0 0 4px', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.name}</h3>
-                  <p style={{ fontFamily: FONTS.main, fontSize: 13, color: '#4a554d', lineHeight: 1.5, margin: 0, fontWeight: 500, opacity: 0.85 }}>
+                  <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '0 0 4px', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.name}</h3>
+                  <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: '#4a554d', lineHeight: 1.5, margin: 0, fontWeight: 500, opacity: 0.85 }}>
                     Scientifically distilled for performance excellence.
                   </p>
                 </div>
@@ -218,11 +219,11 @@ export default function ProductSection() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: C.ink }}>
                       <Star size={14} fill={C.gold} color={C.gold} />
-                      <span style={{ fontSize: 16, fontWeight: 900 }}>{p.rating || 5.0}</span>
+                      <span style={{ fontSize: F_SIZE.md, fontWeight: 900 }}>{p.rating || 5.0}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', marginRight: 4 }}>INR</span>
-                      <span style={{ fontSize: 20, fontWeight: 900, color: C.mid }}>{p.packages?.[0]?.price?.toLocaleString()}</span>
+                      <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', marginRight: 4 }}>INR</span>
+                      <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.mid }}>{p.packages?.[0]?.price?.toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -235,7 +236,7 @@ export default function ProductSection() {
                         color: C.white,
                         padding: '12px 24px',
                         borderRadius: 100,
-                        fontSize: 13,
+                        fontSize: F_SIZE.sm,
                         fontWeight: 900,
                         display: 'flex',
                         alignItems: 'center',

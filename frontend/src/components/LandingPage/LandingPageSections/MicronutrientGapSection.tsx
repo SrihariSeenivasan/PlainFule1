@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, type ReactNode } from 'react';
+import { F_SIZE } from '@/lib/typography';
 
 const PRODUCT_ROUTES = {
   b12: '/products/vitamin-b-complex',
@@ -85,7 +86,7 @@ function StickyNote({ children, color = '#fef08a', rotate = -2, style }: { child
       style={{
         background: color, padding: '10px 13px', borderRadius: 4,
         boxShadow: '3px 4px 10px rgba(0,0,0,0.13), inset 0 -2px 0 rgba(0,0,0,0.07)',
-        fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 12, fontWeight: 500,
+        fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: F_SIZE.sm, fontWeight: 500,
         color: T.inkLight, lineHeight: 1.5, ...style,
       }}
     >
@@ -103,9 +104,9 @@ function ChapterLabel({ chapter, title, color }: { chapter: string; title: strin
       transition={{ duration: 0.5 }}
       style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}
     >
-      <div style={{ background: color, color: '#fff', fontFamily: "'Permanent Marker', cursive", fontSize: 12, padding: '3px 12px', borderRadius: 20, letterSpacing: '0.12em', boxShadow: `2px 2px 0 ${color}50`, whiteSpace: 'nowrap' }}>{chapter}</div>
+      <div style={{ background: color, color: '#fff', fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.sm, padding: '3px 12px', borderRadius: 20, letterSpacing: '0.12em', boxShadow: `2px 2px 0 ${color}50`, whiteSpace: 'nowrap' }}>{chapter}</div>
       <div style={{ flex: 1, height: 1.5, background: `linear-gradient(to right, ${color}60, transparent)` }} />
-      <h3 style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 22, color: T.ink, whiteSpace: 'nowrap' }}>{title}</h3>
+      <h3 style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.lg, color: T.ink, whiteSpace: 'nowrap' }}>{title}</h3>
       <div style={{ flex: 1, height: 1.5, background: `linear-gradient(to left, ${color}60, transparent)` }} />
     </motion.div>
   );
@@ -178,7 +179,7 @@ function FactBadge({ emoji, text, color, rotate = 0 }: { emoji: string; text: st
       }}
     >
       <span style={{ fontSize: 14 }}>{emoji}</span>
-      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 600, color, lineHeight: 1.3 }}>{text}</span>
+      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 600, color, lineHeight: 1.3 }}>{text}</span>
     </motion.div>
   );
 }
@@ -233,12 +234,12 @@ function Ch1VideoRight() {
       minWidth: 66, maxWidth: 82,
     }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-        <span style={{ fontFamily: "'Caveat', cursive", fontSize: 12, fontWeight: 700, color: T.green, transform: 'rotate(-5deg)', display: 'block' }}>Real story→</span>
+        <span style={{ fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.green, transform: 'rotate(-5deg)', display: 'block' }}>Real story→</span>
         <ArrowLeft color={T.green} size={44} />
       </div>
       <div style={{ height: 6 }} />
       <SquigglyBrace color={T.orange} height={80} side="right" />
-      <span style={{ fontFamily: "'Caveat', cursive", fontSize: 12, fontWeight: 700, color: T.orange, transform: 'rotate(4deg)', textAlign: 'center', display: 'block', lineHeight: 1.3 }}>Yours too?</span>
+      <span style={{ fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.orange, transform: 'rotate(4deg)', textAlign: 'center', display: 'block', lineHeight: 1.3 }}>Yours too?</span>
       <div style={{ height: 6 }} />
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}>
         <DoodleStarburst color={T.amber} size={36} />
@@ -261,7 +262,7 @@ function Ch1VideoRight() {
           borderRadius: 5,
           padding: '5px 8px',
           fontFamily: "'Caveat', cursive",
-          fontSize: 11,
+          fontSize: F_SIZE.sm,
           fontWeight: 600,
           color: T.inkLight,
           transform: 'rotate(6deg)',
@@ -311,7 +312,7 @@ function Ch1StepCard({ icon, step, label, title, desc, color, rotate, delay }: {
         <div style={{
           width: 26, height: 26, borderRadius: '50%',
           background: color, color: '#fff',
-          fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700,
+          fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: `2px 2px 0 ${color}44`,
         }}>{step}</div>
@@ -321,16 +322,16 @@ function Ch1StepCard({ icon, step, label, title, desc, color, rotate, delay }: {
       {/* Text content */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 700,
+          fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700,
           color, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 1,
         }}>{label}</div>
         <div style={{
-          fontFamily: "'Playfair Display', Georgia, serif", fontSize: 15, fontWeight: 600,
+          fontFamily: "'Playfair Display', Georgia, serif", fontSize: F_SIZE.md, fontWeight: 600,
           color: T.ink, lineHeight: 1.2, marginBottom: 3,
         }}>{title}</div>
         <InkUnderline color={color} width={60} />
         <div style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: T.ink,
+          fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.ink,
           lineHeight: 1.5, marginTop: 3,
         }}>{desc}</div>
       </div>
@@ -355,7 +356,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', top: 5, left: '16%',
           background: `${T.orange}18`, border: `1.5px solid ${T.orange}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.orange,
+          fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.orange,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-2deg)',
           zIndex: 5,
         }}
@@ -368,7 +369,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', top: 5, right: '10%',
           background: `${T.green}18`, border: `1.5px solid ${T.green}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.green,
+          fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.green,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(2deg)',
           zIndex: 5,
         }}
@@ -391,7 +392,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', bottom: 5, left: '12%',
           background: `${T.blue}18`, border: `1.5px solid ${T.blue}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.blue,
+          fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.blue,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(-1.5deg)',
           zIndex: 5,
         }}
@@ -404,7 +405,7 @@ function Ch3VideoDecorations() {
           position: 'absolute', bottom: 5, right: '8%',
           background: `${T.teal}18`, border: `1.5px solid ${T.teal}`,
           borderRadius: 20, padding: '2px 9px',
-          fontFamily: "'Caveat', cursive", fontSize: 14, fontWeight: 700, color: T.teal,
+          fontFamily: "'Caveat', cursive", fontSize: F_SIZE.sm, fontWeight: 700, color: T.teal,
           pointerEvents: 'none', whiteSpace: 'nowrap', transform: 'rotate(1.5deg)',
           zIndex: 5,
         }}
@@ -552,7 +553,7 @@ export default function MicronutrientGapSection() {
               style={{
                 display: 'inline-block', background: `${T.green}14`,
                 border: `1.5px dashed ${T.green}`, borderRadius: 7, padding: '4px 14px',
-                fontFamily: "'Kalam', cursive", fontSize: 11, fontWeight: 700,
+                fontFamily: "'Kalam', cursive", fontSize: F_SIZE.sm, fontWeight: 700,
                 color: T.green, letterSpacing: '0.1em', marginBottom: 18,
               }}
             >
@@ -561,7 +562,7 @@ export default function MicronutrientGapSection() {
 
             <div>
               <motion.h2 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
-                style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 'clamp(28px, 6vw, 54px)', color: T.ink, lineHeight: 1.1, display: 'block' }}>
+                style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.xl, color: T.ink, lineHeight: 1.1, display: 'block' }}>
                 The Micronutrient
               </motion.h2>
               <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.22 }}
@@ -577,7 +578,7 @@ export default function MicronutrientGapSection() {
             </motion.div>
 
             <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.45 }}
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: T.ink, maxWidth: 500, margin: '0 auto', lineHeight: 1.7 }}>
+              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.md, color: T.ink, maxWidth: 500, margin: '0 auto', lineHeight: 1.7 }}>
               You eat three meals a day. You feel tired anyway.<br />
               <strong style={{ color: T.ink }}>Here&apos;s why your plate is lying to you.</strong> 👇
             </motion.p>
@@ -617,7 +618,7 @@ export default function MicronutrientGapSection() {
             {/* RIGHT: 4 step cards + sticky note */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{
-                fontFamily: "'Caveat', cursive", fontSize: 24, fontWeight: 700,
+                fontFamily: "'Caveat', cursive", fontSize: F_SIZE.lg, fontWeight: 700,
                 color: T.green, letterSpacing: '0.06em', marginBottom: 2,
                 display: 'flex', alignItems: 'center', gap: 6,
               }}>
@@ -675,12 +676,12 @@ export default function MicronutrientGapSection() {
                     <span style={{ fontSize: 16 }}>{item.icon}</span>
                   </div>
                   <div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, fontWeight: 700, color: item.color, lineHeight: 1 }}>{item.stat}</div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: T.ink, lineHeight: 1.35 }}>{item.label}</div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: F_SIZE.lg, fontWeight: 700, color: item.color, lineHeight: 1 }}>{item.stat}</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.ink, lineHeight: 1.35 }}>{item.label}</div>
                   </div>
                 </motion.div>
               ))}
-              <StickyNote color="#fef9c3" rotate={-2} style={{ alignSelf: 'flex-start', maxWidth: 240, marginTop: 2, fontSize: 11 }}>
+              <StickyNote color="#fef9c3" rotate={-2} style={{ alignSelf: 'flex-start', maxWidth: 240, marginTop: 2, fontSize: F_SIZE.sm }}>
                 ✏️ &ldquo;Eating enough&rdquo; ≠ &ldquo;Getting enough nutrients.&rdquo; That&apos;s the hidden gap.
               </StickyNote>
             </div>
@@ -697,7 +698,7 @@ export default function MicronutrientGapSection() {
             <div style={{ flex: 1, height: 2, background: `linear-gradient(to right, transparent, ${T.green}50)` }} />
             <motion.div animate={{ rotate: [0, 4, -4, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               style={{
-                fontFamily: "'Permanent Marker', cursive", fontSize: 13, color: T.green,
+                fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.sm, color: T.green,
                 padding: '5px 16px', border: `1.5px dashed ${T.green}`, borderRadius: 20,
                 background: `${T.green}08`, whiteSpace: 'nowrap',
               }}>
@@ -713,7 +714,7 @@ export default function MicronutrientGapSection() {
 
             {/* LEFT: 5 gap cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 700, color: T.blue, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 2, paddingLeft: 3 }}>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: T.blue, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 2, paddingLeft: 3 }}>
                 — The 5 Gaps
               </div>
               {gapItems.map((item, i) => (
@@ -732,14 +733,14 @@ export default function MicronutrientGapSection() {
                     minHeight: 72,
                   }}>
                   <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 3, background: item.color, borderRadius: '11px 0 0 11px' }} />
-                  <div style={{ flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: `${item.color}18`, border: `1.5px solid ${item.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13 }}>{item.icon}</div>
+                  <div style={{ flexShrink: 0, width: 26, height: 26, borderRadius: '50%', background: `${item.color}18`, border: `1.5px solid ${item.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: F_SIZE.sm }}>{item.icon}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 1 }}>
-                      <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 13, fontWeight: 700, color: T.ink }}>{item.title}</span>
-                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 700, color: '#fff', background: item.color, padding: '1px 5px', borderRadius: 7 }}>{item.badge}</span>
+                      <span style={{ fontFamily: "'Playfair Display', serif", fontSize: F_SIZE.sm, fontWeight: 700, color: T.ink }}>{item.title}</span>
+                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: '#fff', background: item.color, padding: '1px 5px', borderRadius: 7 }}>{item.badge}</span>
                     </div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, fontWeight: 600, color: item.color, marginBottom: 1 }}>{item.values}</div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: T.ink, lineHeight: 1.4 }}>{item.desc}</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 600, color: item.color, marginBottom: 1 }}>{item.values}</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.ink, lineHeight: 1.4 }}>{item.desc}</div>
                   </div>
                 </motion.div>
               ))}
@@ -778,7 +779,7 @@ export default function MicronutrientGapSection() {
                 }}
               >
                 <div style={{ position: 'absolute', top: -6, left: '28%', width: 44, height: 13, background: 'rgba(253,230,138,0.80)', borderRadius: 3, transform: 'rotate(-2deg)' }} />
-                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 11, color: T.blue, letterSpacing: '0.08em', marginBottom: 8, marginTop: 2 }}>
+                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.sm, color: T.blue, letterSpacing: '0.08em', marginBottom: 8, marginTop: 2 }}>
                   DID YOU KNOW?
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8 }}>
@@ -790,7 +791,7 @@ export default function MicronutrientGapSection() {
                       {cup}
                     </motion.span>
                   ))}
-                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 18, color: T.blue, margin: '0 4px' }}>=</span>
+                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.md, color: T.blue, margin: '0 4px' }}>=</span>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }} transition={{ delay: 0.55, type: 'spring', bounce: 0.5 }}
@@ -799,12 +800,12 @@ export default function MicronutrientGapSection() {
                   </motion.div>
                 </div>
                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 16, color: T.blue }}>1 Sachet of PlainFuel</span>
+                  <span style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.md, color: T.blue }}>1 Sachet of PlainFuel</span>
                   <div style={{ position: 'absolute', bottom: -2, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
                     <InkUnderline color={T.blue} width={140} wobble={1.5} />
                   </div>
                 </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: '#888', fontStyle: 'italic', marginTop: 8 }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: '#888', fontStyle: 'italic', marginTop: 8 }}>
                   …minus the calories, the bloat, the hassle. ✨
                 </div>
               </motion.div>
@@ -812,7 +813,7 @@ export default function MicronutrientGapSection() {
 
             {/* RIGHT: stat cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 700, color: T.amber, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 2, paddingLeft: 3 }}>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: T.amber, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 2, paddingLeft: 3 }}>
                 — The Numbers
               </div>
               {statItems.map((stat, i) => (
@@ -830,10 +831,10 @@ export default function MicronutrientGapSection() {
                     minHeight: 72,
                   }}>
                   <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 3, background: stat.color, borderRadius: '11px 0 0 11px' }} />
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: stat.color, lineHeight: 1, flexShrink: 0, minWidth: 48, textAlign: 'center' }}>{stat.num}</div>
+                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: F_SIZE.xl, fontWeight: 700, color: stat.color, lineHeight: 1, flexShrink: 0, minWidth: 48, textAlign: 'center' }}>{stat.num}</div>
                   <div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: T.ink, fontWeight: 700, lineHeight: 1.3, marginBottom: 2 }}>{stat.label}</div>
-                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11.5, color: T.ink, fontStyle: 'italic' }}>{stat.sublabel}</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.ink, fontWeight: 700, lineHeight: 1.3, marginBottom: 2 }}>{stat.label}</div>
+                    <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.ink, fontStyle: 'italic' }}>{stat.sublabel}</div>
                     <div style={{ marginTop: 3 }}><InkUnderline color={stat.color} width={36} /></div>
                   </div>
                 </motion.div>
@@ -868,12 +869,12 @@ export default function MicronutrientGapSection() {
               </motion.div>
 
               <div style={{ flex: 1, minWidth: 160, textAlign: 'center' }}>
-                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: 12, color: T.green, letterSpacing: '0.1em', marginBottom: 4 }}>✨ THE FIX IS SIMPLE</div>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(18px, 2.5vw, 28px)', fontWeight: 700, color: T.ink, lineHeight: 1.2, marginBottom: 6 }}>
+                <div style={{ fontFamily: "'Permanent Marker', cursive", fontSize: F_SIZE.sm, color: T.green, letterSpacing: '0.1em', marginBottom: 4 }}>✨ THE FIX IS SIMPLE</div>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: F_SIZE.lg, fontWeight: 700, color: T.ink, lineHeight: 1.2, marginBottom: 6 }}>
                   One Scoop. All 5 Gaps Closed.
                 </h3>
                 <InkUnderline color={T.green} width={150} wobble={2} />
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: T.green, fontWeight: 600, lineHeight: 1.45, marginTop: 6 }}>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.green, fontWeight: 600, lineHeight: 1.45, marginTop: 6 }}>
                   Precision dosing. Zero compromise. Every day.
                 </p>
               </div>
@@ -885,7 +886,7 @@ export default function MicronutrientGapSection() {
                     viewport={{ once: true }} transition={{ delay: 0.25 + i * 0.08 }}
                     style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                     <CheckMark color={T.green} size={16} />
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: T.inkLight, fontWeight: 500 }}>{point}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: T.inkLight, fontWeight: 500 }}>{point}</span>
                   </motion.div>
                 ))}
                 <motion.div

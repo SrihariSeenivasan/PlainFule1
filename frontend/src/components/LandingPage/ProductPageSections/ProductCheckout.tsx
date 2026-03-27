@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import MainLayout from '@/components/MainLayout';
+import { F_SIZE } from '@/lib/typography';
 
 const G = '#15803d';
 const BG = '#fdfaf3';
@@ -152,8 +153,8 @@ export default function Checkout() {
             <div style={{ width: 80, height: 80, background: 'rgba(21,128,61,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
               <CheckCircle size={40} color={G} />
             </div>
-            <h1 style={{ fontFamily: FD, fontSize: 32, fontWeight: 800, color: '#1a1a1a', margin: '0 0 12px' }}>Order Confirmed!</h1>
-            <p style={{ color: '#666', fontSize: 16, marginBottom: 32 }}>Thank you for your purchase. Your order ID is <strong style={{color: G}}>#{orderId}</strong>. We've sent a confirmation email to {formData.email}.</p>
+            <h1 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', margin: '0 0 12px' }}>Order Confirmed!</h1>
+            <p style={{ color: '#666', fontSize: F_SIZE.md, marginBottom: 32 }}>Thank you for your purchase. Your order ID is <strong style={{color: G}}>#{orderId}</strong>. We've sent a confirmation email to {formData.email}.</p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
               <button 
                 onClick={() => router.push('/my-orders')}
@@ -177,7 +178,7 @@ export default function Checkout() {
   return (
     <MainLayout background={BG}>
       <div style={{ maxWidth: 1200, margin: '140px auto 100px', padding: '0 24px' }}>
-        <h1 style={{ fontFamily: FD, fontSize: 36, fontWeight: 800, color: '#1a1a1a', marginBottom: 40 }}>Checkout</h1>
+        <h1 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', marginBottom: 40 }}>Checkout</h1>
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 40 }}>
           {/* Checkout Steps */}
@@ -229,7 +230,7 @@ export default function Checkout() {
               border: '2px solid rgba(21,128,61,0.1)',
               boxShadow: '0 10px 30px rgba(0,0,0,0.03)'
             }}>
-              <h3 style={{ fontFamily: FD, fontSize: 22, fontWeight: 800, marginBottom: 24 }}>Order Summary</h3>
+              <h3 style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, marginBottom: 24 }}>Order Summary</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
                 {items.map(item => (
@@ -239,8 +240,8 @@ export default function Checkout() {
                         <Image src={item.image} alt={item.productName} width={48} height={48} style={{ objectFit: 'contain' }} />
                       </div>
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: 14 }}>{item.productName}</div>
-                        <div style={{ fontSize: 12, color: '#666' }}>qty: {item.quantity} · {item.packageName}</div>
+                        <div style={{ fontWeight: 700, fontSize: F_SIZE.sm }}>{item.productName}</div>
+                        <div style={{ fontSize: F_SIZE.sm, color: '#666' }}>qty: {item.quantity} · {item.packageName}</div>
                       </div>
                     </div>
                     <div style={{ fontWeight: 700 }}>₹{(item.price * item.quantity).toLocaleString()}</div>
@@ -266,7 +267,7 @@ export default function Checkout() {
                 <div style={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
-                  fontSize: 20, 
+                  fontSize: F_SIZE.lg, 
                   fontWeight: 800, 
                   marginTop: 8,
                   fontFamily: FD,
@@ -278,7 +279,7 @@ export default function Checkout() {
               </div>
 
               {error && (
-                <div style={{ marginTop: 20, padding: 12, background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
+                <div style={{ marginTop: 20, padding: 12, background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderRadius: 8, fontSize: F_SIZE.sm, fontWeight: 600 }}>
                   {error}
                 </div>
               )}
@@ -294,7 +295,7 @@ export default function Checkout() {
                   border: 'none', 
                   borderRadius: 16, 
                   fontWeight: 800, 
-                  fontSize: 16,
+                  fontSize: F_SIZE.md,
                   marginTop: 24,
                   cursor: (isProcessing || items.length === 0) ? 'not-allowed' : 'pointer',
                   boxShadow: '0 10px 20px rgba(21,128,61,0.2)',
@@ -306,7 +307,7 @@ export default function Checkout() {
 
               <div style={{ display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'center', marginTop: 16, opacity: 0.5 }}>
                 <ShieldCheck size={16} />
-                <span style={{ fontSize: 12, fontWeight: 600 }}>Secure 256-bit SSL encrypted payment</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 600 }}>Secure 256-bit SSL encrypted payment</span>
               </div>
             </div>
           </div>
@@ -326,7 +327,7 @@ function CheckoutCard({ children, title, active }: any) {
       boxShadow: active ? '0 10px 30px rgba(0,0,0,0.03)' : 'none',
       opacity: active ? 1 : 0.6
     }}>
-      <h2 style={{ fontFamily: FD, fontSize: 24, fontWeight: 800, marginBottom: 24, color: '#1a1a1a' }}>{title}</h2>
+      <h2 style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, marginBottom: 24, color: '#1a1a1a' }}>{title}</h2>
       {children}
     </div>
   );
@@ -335,14 +336,14 @@ function CheckoutCard({ children, title, active }: any) {
 function Input({ label, ...props }: any) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label style={{ fontSize: 12, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
+      <label style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
       <input 
         style={{ 
           padding: '12px 16px', 
           borderRadius: 12, 
           border: '2px solid #eee', 
           fontFamily: FS,
-          fontSize: 14,
+          fontSize: F_SIZE.sm,
           outline: 'none',
           transition: '0.2s'
         }}
@@ -382,7 +383,7 @@ function PaymentOption({ title, desc, icon, selected, onClick }: any) {
       </div>
       <div>
         <div style={{ fontWeight: 800, color: '#1a1a1a' }}>{title}</div>
-        <div style={{ fontSize: 13, color: '#666' }}>{desc}</div>
+        <div style={{ fontSize: F_SIZE.sm, color: '#666' }}>{desc}</div>
       </div>
       <div style={{ 
         marginLeft: 'auto', 

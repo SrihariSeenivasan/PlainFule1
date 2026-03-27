@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { getApiUrl } from '@/lib/api';
+import { F_SIZE } from '@/lib/typography';
 
 // ── Theme Constants ──
 const FD = "'Playfair Display', Georgia, serif";
@@ -102,14 +103,14 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
         <p style={{
           fontFamily: "'Permanent Marker', cursive",
-          fontSize: 18, color: '#0a0a0a', margin: 0, lineHeight: 1.4, flex: 1,
+          fontSize: F_SIZE.md, color: '#0a0a0a', margin: 0, lineHeight: 1.4, flex: 1,
         }}>{q}</p>
         <motion.span
           animate={{ rotate: open ? 45 : 0 }}
           transition={{ duration: 0.25 }}
           style={{
             fontFamily: "'Caveat', cursive",
-            fontSize: 22, color: '#15803d', fontWeight: 900,
+            fontSize: F_SIZE.lg, color: '#15803d', fontWeight: 900,
             lineHeight: 1, flexShrink: 0,
           }}
         >+</motion.span>
@@ -124,7 +125,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
         <div style={{ paddingTop: 10, borderTop: '1.5px dashed rgba(34,197,94,0.3)', marginTop: 12 }}>
           <p style={{
             fontFamily: "'Caveat', cursive",
-            fontSize: 20, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.6, margin: 0,
+            fontSize: F_SIZE.lg, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.6, margin: 0,
           }}>{a}</p>
         </div>
       </motion.div>
@@ -206,7 +207,7 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
             transform: 'rotate(-1deg)',
             boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
           }}>
-            <span style={{ fontFamily: "'Caveat',cursive", fontSize: 17, fontWeight: 700, color: '#1a1a1a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <span style={{ fontFamily: "'Caveat',cursive", fontSize: F_SIZE.md, fontWeight: 700, color: '#1a1a1a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               ❓ Product FAQs
             </span>
           </div>
@@ -214,7 +215,7 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <h3 style={{
               fontFamily: "'Permanent Marker',cursive",
-              fontSize: 'clamp(2rem,4vw,3rem)',
+              fontSize: F_SIZE.xl,
               color: '#0a0a0a',
               margin: 0,
               lineHeight: 1.1,
@@ -255,13 +256,13 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
             border: '2px dashed rgba(21,128,61,0.2)',
           }}
         >
-          <p style={{ fontFamily: FS, fontSize: 14, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
+          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
             Still have questions?
           </p>
-          <h4 style={{ fontFamily: FD, fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#1a1a1a', margin: '0 0 16px' }}>
+          <h4 style={{ fontFamily: FD, fontSize: F_SIZE.xl, color: '#1a1a1a', margin: '0 0 16px' }}>
             Get in touch with our team
           </h4>
-          <p style={{ fontFamily: FS, fontSize: 14, color: '#666', marginBottom: 20 }}>
+          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#666', marginBottom: 20 }}>
             Reach out at <strong>support@plainfuel.com</strong> or use our contact form
           </p>
           <motion.button
@@ -270,7 +271,7 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
             onClick={() => window.location.href = 'mailto:support@plainfuel.com'}
             style={{
               padding: '10px 24px', background: G, color: '#fff',
-              fontFamily: "'Caveat', cursive", fontWeight: 600, fontSize: 16,
+              fontFamily: "'Caveat', cursive", fontWeight: 600, fontSize: F_SIZE.md,
               border: 'none', borderRadius: 12, cursor: 'pointer',
               boxShadow: '3px 4px 0 rgba(21,128,61,0.2)',
             }}

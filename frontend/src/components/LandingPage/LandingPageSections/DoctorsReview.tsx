@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useRef, useState, ReactNode, useCallback, useEffect } from 'react';
+import { F_SIZE } from '@/lib/typography';
 
 // ── Hand-drawn SVG Doodles ──
 const Squiggle = ({ width = 120, style = {} }) => (
@@ -137,7 +138,7 @@ function RatingStars({ rating }: { rating: number }) {
           <StarDoodle size={16} />
         </motion.div>
       ))}
-      <span style={{ fontSize: 12, color: '#0a3d1f', marginLeft: 8, fontFamily: "'DM Sans', sans-serif", fontWeight: 600, letterSpacing: '0.03em' }}>
+      <span style={{ fontSize: F_SIZE.sm, color: '#0a3d1f', marginLeft: 8, fontFamily: "'DM Sans', sans-serif", fontWeight: 600, letterSpacing: '0.03em' }}>
         {rating}.0 / 5.0
       </span>
     </div>
@@ -154,8 +155,8 @@ function TrustBadge({ icon, label, sublabel, index }: { icon: ReactNode; label: 
       <div style={{ width: 46, height: 46, background: 'rgba(10,61,31,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', fontSize: 22, border: '2px dashed rgba(10,61,31,0.3)' }}>
         {icon}
       </div>
-      <p style={{ fontSize: 13, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{label}</p>
-      {sublabel && <p style={{ fontSize: 11, color: '#0a3d1f', margin: 0, fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>{sublabel}</p>}
+      <p style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{label}</p>
+      {sublabel && <p style={{ fontSize: F_SIZE.sm, color: '#0a3d1f', margin: 0, fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>{sublabel}</p>}
       <StarDoodle size={14} style={{ position: 'absolute', top: 10, right: 10, opacity: 0.3 }} />
     </motion.div>
   );
@@ -188,9 +189,9 @@ function CarouselSlideMobile({ doctor }: { doctor: typeof DOCTORS[0] }) {
         </motion.div>
         {/* Name + title */}
         <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.18, duration: 0.4 }} style={{ flex: 1, minWidth: 0 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.2 }}>{doctor.name}</h3>
-          <p style={{ fontSize: 12, fontWeight: 600, color: '#0a3d1f', margin: '0 0 4px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}>✦ {doctor.title}</p>
-          <p style={{ fontSize: 11, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", lineHeight: 1.35, fontWeight: 400 }}>{doctor.specialization}</p>
+          <h3 style={{ fontSize: F_SIZE.md, fontWeight: 700, color: '#111', margin: '0 0 3px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.2 }}>{doctor.name}</h3>
+          <p style={{ fontSize: F_SIZE.sm, fontWeight: 600, color: '#0a3d1f', margin: '0 0 4px 0', fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}>✦ {doctor.title}</p>
+          <p style={{ fontSize: F_SIZE.sm, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", lineHeight: 1.35, fontWeight: 400 }}>{doctor.specialization}</p>
         </motion.div>
       </div>
 
@@ -198,7 +199,7 @@ function CarouselSlideMobile({ doctor }: { doctor: typeof DOCTORS[0] }) {
       <div style={{ padding: '10px 20px', borderBottom: '1px solid rgba(10,61,31,0.1)', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {doctor.certifications.map((cert, i) => (
           <motion.span key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.28 + i * 0.06 }}
-            style={{ fontSize: 10, background: 'rgba(10,61,31,0.1)', border: '1.5px solid rgba(10,61,31,0.3)', borderRadius: 7, padding: '3px 8px', color: '#0a3d1f', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
+            style={{ fontSize: F_SIZE.sm, background: 'rgba(10,61,31,0.1)', border: '1.5px solid rgba(10,61,31,0.3)', borderRadius: 7, padding: '3px 8px', color: '#0a3d1f', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, display: 'flex', alignItems: 'center', gap: 3 }}>
             <span style={{ fontSize: 8 }}>✦</span> {cert}
           </motion.span>
         ))}
@@ -212,13 +213,13 @@ function CarouselSlideMobile({ doctor }: { doctor: typeof DOCTORS[0] }) {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.26, duration: 0.5 }}
           style={{ background: `linear-gradient(135deg, ${doctor.accent}, rgba(255,254,245,0.5))`, border: '1.5px dashed rgba(10,61,31,0.3)', borderRadius: 14, padding: '18px 16px 14px', position: 'relative' }}>
           <QuoteOpen size={24} style={{ position: 'absolute', top: -12, left: 10 }} />
-          <p style={{ fontSize: 13.5, lineHeight: 1.7, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", fontWeight: 400, paddingTop: 4 }}>
+          <p style={{ fontSize: F_SIZE.sm, lineHeight: 1.7, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", fontWeight: 400, paddingTop: 4 }}>
             {doctor.review}
           </p>
           <StarDoodle size={15} style={{ position: 'absolute', bottom: 8, right: 10, opacity: 0.22 }} />
         </motion.div>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.44 }}
-          style={{ fontSize: 11, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
+          style={{ fontSize: F_SIZE.sm, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
           Verified medical professional · Independently reviewed
         </motion.p>
       </div>
@@ -270,15 +271,15 @@ function CarouselSlide({ doctor, direction, isMobile }: { doctor: typeof DOCTORS
           </motion.div>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22, duration: 0.45 }} style={{ textAlign: 'center', zIndex: 1 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 700, color: '#070d08', margin: '0 0 5px 0', fontFamily: "'Montserrat', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.2 }}>{doctor.name}</h3>
-          <p style={{ fontSize: 13, fontWeight: 600, color: '#0a3d1f', margin: '0 0 6px 0', fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}>✦ {doctor.title}</p>
-          <p style={{ fontSize: 12, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", lineHeight: 1.4, fontWeight: 400 }}>{doctor.specialization}</p>
+          <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 700, color: '#070d08', margin: '0 0 5px 0', fontFamily: "'Montserrat', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.2 }}>{doctor.name}</h3>
+          <p style={{ fontSize: F_SIZE.sm, fontWeight: 600, color: '#0a3d1f', margin: '0 0 6px 0', fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}>✦ {doctor.title}</p>
+          <p style={{ fontSize: F_SIZE.sm, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", lineHeight: 1.4, fontWeight: 400 }}>{doctor.specialization}</p>
         </motion.div>
         <Squiggle width={160} />
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center', zIndex: 1 }}>
           {doctor.certifications.map((cert, i) => (
             <motion.span key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.35 + i * 0.07 }}
-              style={{ fontSize: 11, background: 'rgba(10,61,31,0.1)', border: '1.5px solid rgba(10,61,31,0.3)', borderRadius: 8, padding: '4px 10px', color: '#0a3d1f', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+              style={{ fontSize: F_SIZE.sm, background: 'rgba(10,61,31,0.1)', border: '1.5px solid rgba(10,61,31,0.3)', borderRadius: 8, padding: '4px 10px', color: '#0a3d1f', fontFamily: "'DM Sans', sans-serif", fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
               <span style={{ fontSize: 9 }}>✦</span> {cert}
             </motion.span>
           ))}
@@ -293,7 +294,7 @@ function CarouselSlide({ doctor, direction, isMobile }: { doctor: typeof DOCTORS
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.26, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ background: `linear-gradient(135deg, ${doctor.accent}, rgba(255,254,245,0.5))`, border: '1.5px dashed rgba(10,61,31,0.3)', borderRadius: 16, padding: '24px 22px 20px 22px', position: 'relative' }}>
           <QuoteOpen size={30} style={{ position: 'absolute', top: -15, left: 12 }} />
-          <p style={{ fontSize: 15, lineHeight: 1.75, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", fontWeight: 400, paddingTop: 6 }}>
+          <p style={{ fontSize: F_SIZE.md, lineHeight: 1.75, color: '#3c4a3e', margin: 0, fontFamily: "'Montserrat', sans-serif", fontWeight: 400, paddingTop: 6 }}>
             {doctor.review}
           </p>
           <StarDoodle size={18} style={{ position: 'absolute', bottom: 10, right: 12, opacity: 0.25 }} />
@@ -302,7 +303,7 @@ function CarouselSlide({ doctor, direction, isMobile }: { doctor: typeof DOCTORS
           <WavyLine width={200} />
         </motion.div>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.44 }}
-          style={{ fontSize: 12.5, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
+          style={{ fontSize: F_SIZE.sm, color: 'rgb(0, 0, 0)', margin: 0, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.5, fontStyle: 'italic' }}>
           Verified medical professional · Independently reviewed
         </motion.p>
       </div>
@@ -454,14 +455,14 @@ export default function DoctorsReview() {
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ display: 'flex', justifyContent: 'center', marginBottom: isMobile ? 12 : 16 }}>
             <div style={{ background: 'rgba(10,61,31,0.09)', border: '2px dashed #15803d', borderRadius: 10, padding: '7px 18px', transform: 'rotate(-1.5deg)', display: 'flex', alignItems: 'center', gap: 8 }}>
               <StarDoodle size={13} />
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: isMobile ? 11 : 13, color: '#0a3d1f', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trusted by Experts</span>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: '#0a3d1f', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trusted by Experts</span>
               <StarDoodle size={13} />
             </div>
           </motion.div>
 
           {/* Heading */}
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 14, padding: '0 8px' }}>
-            <h2 style={{ fontSize: isMobile ? '1.75rem' : 'clamp(2rem, 5.5vw, 3.6rem)', fontFamily: "'Montserrat', sans-serif", fontWeight: 900, lineHeight: 1.1, color: '#070d08', margin: '0 0 4px 0', letterSpacing: '-0.03em' }}>
+            <h2 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", fontWeight: 900, lineHeight: 1.1, color: '#070d08', margin: '0 0 4px 0', letterSpacing: '-0.03em' }}>
               Endorsed by{' '}
               <span style={{ color: '#0a3d1f', position: 'relative', display: 'inline-block' }}>
                 Medical Experts
@@ -475,7 +476,7 @@ export default function DoctorsReview() {
           </motion.div>
 
           <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
-            style={{ fontSize: isMobile ? 14 : 'clamp(15px, 2vw, 17px)', fontFamily: "'Montserrat', sans-serif", fontWeight: 400, color: '#3c4a3e', textAlign: 'center', maxWidth: 540, margin: `0 auto ${isMobile ? '20px' : '32px'} auto`, lineHeight: 1.7, letterSpacing: '-0.005em', padding: '0 8px' }}>
+            style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", fontWeight: 400, color: '#3c4a3e', textAlign: 'center', maxWidth: 540, margin: `0 auto ${isMobile ? '20px' : '32px'} auto`, lineHeight: 1.7, letterSpacing: '-0.005em', padding: '0 8px' }}>
             Leading doctors, nutritionists, and scientists recommend PlainFuel for its precision, transparency, and evidence-based formulation.
           </motion.p>
 
@@ -484,11 +485,11 @@ export default function DoctorsReview() {
 
             {/* Counter + auto-play indicator */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, padding: '0 2px' }}>
-              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: '#0a3d1f', fontWeight: 600 }}>
+              <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: F_SIZE.sm, color: '#0a3d1f', fontWeight: 600 }}>
                 ✦ Expert {current + 1} of {DOCTORS.length}
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, fontWeight: 700, color: '#0a3d1f', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: F_SIZE.sm, fontWeight: 700, color: '#0a3d1f', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                   {paused ? 'PAUSED' : 'AUTO'}
                 </span>
                 <div style={{ width: isMobile ? 56 : 80, height: 4, background: 'rgba(10,61,31,0.15)', borderRadius: 99, overflow: 'hidden' }}>
@@ -538,7 +539,7 @@ export default function DoctorsReview() {
 
             
             {isMobile && (
-              <p style={{ textAlign: 'center', marginTop: 10, fontSize: 11, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.03em' }}>
+              <p style={{ textAlign: 'center', marginTop: 10, fontSize: F_SIZE.sm, fontFamily: "'DM Sans', sans-serif", color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.03em' }}>
                 swipe left or right to explore
               </p>
             )}
@@ -557,9 +558,9 @@ export default function DoctorsReview() {
                 { num: 'FSSAI', label: 'Certified', sub: 'India-approved' },
               ].map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 + i * 0.1 }} style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: isMobile ? '1.6rem' : 'clamp(26px,4vw,38px)', fontFamily: "'DM Sans', sans-serif", fontWeight: 800, color: '#0a3d1f', lineHeight: 1, marginBottom: 4 }}>{stat.num}</div>
-                  <div style={{ fontSize: isMobile ? 12 : 14, fontWeight: 600, color: '#111', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{stat.label}</div>
-                  <div style={{ fontSize: isMobile ? 11 : 12, color: 'rgb(0, 0, 0)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
+                  <div style={{ fontSize: F_SIZE.xl, fontFamily: "'DM Sans', sans-serif", fontWeight: 800, color: '#0a3d1f', lineHeight: 1, marginBottom: 4 }}>{stat.num}</div>
+                  <div style={{ fontSize: F_SIZE.sm, fontWeight: 600, color: '#111', fontFamily: "'DM Sans', sans-serif", letterSpacing: '-0.01em' }}>{stat.label}</div>
+                  <div style={{ fontSize: F_SIZE.sm, color: 'rgb(0, 0, 0)', fontFamily: "'DM Sans', sans-serif", fontWeight: 400, marginTop: 2 }}>{stat.sub}</div>
                 </motion.div>
               ))}
             </div>

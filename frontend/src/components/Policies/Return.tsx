@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Navbar from '@/components/Navbar';
+import MainLayout from '@/components/MainLayout';
+import { F_SIZE } from '@/lib/typography';
 
 export default function ReturnPolicy() {
   const containerVariants = {
@@ -21,8 +22,7 @@ export default function ReturnPolicy() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
-      <Navbar />
+    <MainLayout background="linear-gradient(to bottom right, #f0fdf4, #ffffff)">
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
       <motion.div
         className="max-w-4xl mx-auto"
@@ -48,7 +48,7 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
               Our Return Guarantee
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
               At PlainFuel, we stand behind our products with confidence. If you&apos;re not completely satisfied with your purchase, we offer a hassle-free return and refund policy designed with your peace of mind in mind.
             </p>
             <div className="bg-green-50 p-4 rounded-lg border border-green-200 mt-4">
@@ -68,7 +68,7 @@ export default function ReturnPolicy() {
             <p className="text-gray-700 leading-relaxed mb-4">
               To be eligible for a return, your item must meet the following criteria:
             </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
+            <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
               <li>Return request must be made within 30 days of purchase date</li>
               <li>Product must be unopened and unused</li>
               <li>Product must be in original, resellable condition</li>
@@ -130,7 +130,7 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
               Refund Processing
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
               Here&apos;s what you can expect during the refund process:
             </p>
             <div className="space-y-3 mt-4">
@@ -180,7 +180,7 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
               Returning Defective or Damaged Items
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
               If you receive a defective or damaged item, we&apos;ll make it right! Follow these steps:
             </p>
             <ul className="list-disc list-inside text-gray-700 space-y-2 mt-4">
@@ -201,7 +201,7 @@ export default function ReturnPolicy() {
             <p className="text-gray-700 leading-relaxed mb-3">
               Unfortunately, the following items cannot be returned:
             </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
+            <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
               <li>Clearance or final sale items (marked as such at time of purchase)</li>
               <li>Opened food items for health and safety reasons</li>
               <li>Custom or personalized orders</li>
@@ -217,7 +217,7 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
               Exchanges
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
               Want to exchange an item for a different size, color, or product? We make exchanges easy! Simply follow our return process and place a new order, or contact customer support for assistance. If the new item costs more, you&apos;ll only pay the difference. If it costs less, we&apos;ll refund the difference.
             </p>
           </motion.section>
@@ -228,7 +228,7 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
               Return Shipping
             </h2>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
+            <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
               <li>Free return shipping provided via prepaid label</li>
               <li>Use the provided label for quickest processing</li>
               <li>Drop off at any authorized carrier location</li>
@@ -243,28 +243,28 @@ export default function ReturnPolicy() {
               <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
               Store Credit Alternative
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
               As an alternative to refunds, we offer store credit with a 15% bonus! For example, a $100 return could become $115 in store credit. This is a great way to try other products while supporting PlainFuel.
             </p>
           </motion.section>
 
           {/* Contact Section */}
           <motion.section variants={itemVariants} className="border-t pt-8 space-y-4">
-            <h2 className="text-2xl font-bold text-gray-900">Need Help with Your Return?</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="font-bold">Need Help with Your Return?</h2>
+            <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="leading-relaxed font-medium opacity-80 text-gray-700">
               Our customer service team is here to help make returns as easy as possible:
             </p>
-            <div className="bg-green-50 p-6 rounded-lg space-y-3">
-              <p className="text-gray-700"><strong>Email:</strong> support@plainfuel.com</p>
-              <p className="text-gray-700"><strong>Phone:</strong> 1-800-PLAINFUEL</p>
-              <p className="text-gray-700"><strong>Live Chat:</strong> Available on our website during business hours</p>
-              <p className="text-gray-700"><strong>Hours:</strong> Monday-Friday, 9 AM - 5 PM EST</p>
-              <p className="text-gray-700"><strong>Response Time:</strong> We aim to respond within 24 hours</p>
+            <div className="bg-green-50 p-6 rounded-2xl shadow-sm space-y-3 border border-green-100">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="opacity-80 font-medium"><strong>Email:</strong> support@plainfuel.com</p>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="opacity-80 font-medium"><strong>Phone:</strong> 1-800-PLAINFUEL</p>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="opacity-80 font-medium"><strong>Live Chat:</strong> Available on our website during business hours</p>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="opacity-80 font-medium"><strong>Hours:</strong> Monday-Friday, 9 AM - 5 PM EST</p>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="opacity-80 font-medium"><strong>Response Time:</strong> We aim to respond within 24 hours</p>
             </div>
           </motion.section>
         </motion.div>
       </motion.div>
       </div>
-    </div>
+    </MainLayout>
   );
 }

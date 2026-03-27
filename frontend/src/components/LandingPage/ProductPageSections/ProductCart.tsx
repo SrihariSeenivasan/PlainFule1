@@ -9,6 +9,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/AuthModal';
 import MainLayout from '@/components/MainLayout';
+import { F_SIZE } from '@/lib/typography';
 
 const FD = "'Playfair Display', Georgia, serif";
 const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
@@ -97,7 +98,7 @@ export default function ProductCart() {
 
                 <h1 style={{
                   fontFamily: FD,
-                  fontSize: 'clamp(28px, 5vw, 42px)',
+                  fontSize: F_SIZE.xl,
                   fontWeight: 800,
                   color: '#1a1a1a',
                   margin: '0 0 12px',
@@ -106,7 +107,7 @@ export default function ProductCart() {
                 </h1>
 
                 <p style={{
-                  fontSize: 16,
+                  fontSize: F_SIZE.md,
                   color: '#666',
                   marginBottom: 32,
                   maxWidth: 400,
@@ -127,7 +128,7 @@ export default function ProductCart() {
                     border: 'none',
                     borderRadius: 12,
                     fontFamily: FD,
-                    fontSize: 16,
+                    fontSize: F_SIZE.md,
                     fontWeight: 700,
                     cursor: 'pointer',
                     display: 'inline-flex',
@@ -158,7 +159,7 @@ export default function ProductCart() {
 
                 <h1 style={{
                   fontFamily: FD,
-                  fontSize: 'clamp(28px, 5vw, 42px)',
+                  fontSize: F_SIZE.xl,
                   fontWeight: 800,
                   color: '#1a1a1a',
                   margin: '0 0 12px',
@@ -167,7 +168,7 @@ export default function ProductCart() {
                 </h1>
 
                 <p style={{
-                  fontSize: 16,
+                  fontSize: F_SIZE.md,
                   color: '#666',
                   marginBottom: 32,
                   maxWidth: 400,
@@ -188,7 +189,7 @@ export default function ProductCart() {
                     border: 'none',
                     borderRadius: 12,
                     fontFamily: FD,
-                    fontSize: 16,
+                    fontSize: F_SIZE.md,
                     fontWeight: 700,
                     cursor: 'pointer',
                     display: 'inline-flex',
@@ -233,7 +234,7 @@ export default function ProductCart() {
               background: 'transparent',
               color: G,
               fontFamily: FS,
-              fontSize: 14,
+              fontSize: F_SIZE.sm,
               fontWeight: 600,
               cursor: 'pointer',
               marginBottom: 16,
@@ -245,7 +246,7 @@ export default function ProductCart() {
 
           <h1 style={{
             fontFamily: FD,
-            fontSize: 'clamp(28px, 5vw, 42px)',
+            fontSize: F_SIZE.xl,
             fontWeight: 800,
             color: '#1a1a1a',
             margin: 0,
@@ -253,7 +254,7 @@ export default function ProductCart() {
             Shopping Cart
           </h1>
           <p style={{
-            fontSize: 16,
+            fontSize: F_SIZE.md,
             color: '#666',
             marginTop: 8,
           }}>
@@ -284,7 +285,7 @@ export default function ProductCart() {
               }}>
                 <h2 style={{
                   fontFamily: FD,
-                  fontSize: 20,
+                  fontSize: F_SIZE.lg,
                   fontWeight: 800,
                   color: '#1a1a1a',
                   margin: 0,
@@ -336,7 +337,7 @@ export default function ProductCart() {
                         <div>
                           <h3 style={{
                             fontFamily: FD,
-                            fontSize: 16,
+                            fontSize: F_SIZE.md,
                             fontWeight: 700,
                             color: '#1a1a1a',
                             margin: '0 0 4px',
@@ -344,7 +345,7 @@ export default function ProductCart() {
                             {item.productName}
                           </h3>
                           <p style={{
-                            fontSize: 13,
+                            fontSize: F_SIZE.sm,
                             color: '#666',
                             margin: '0 0 8px',
                           }}>
@@ -357,7 +358,7 @@ export default function ProductCart() {
                           }}>
                             <span style={{
                               fontFamily: FD,
-                              fontSize: 16,
+                              fontSize: F_SIZE.md,
                               fontWeight: 700,
                               color: G,
                             }}>
@@ -365,7 +366,7 @@ export default function ProductCart() {
                             </span>
                             {item.origPrice && item.origPrice > item.price && (
                               <span style={{
-                                fontSize: 13,
+                                fontSize: F_SIZE.sm,
                                 color: '#999',
                                 textDecoration: 'line-through',
                               }}>
@@ -411,7 +412,7 @@ export default function ProductCart() {
                             </motion.button>
                             <span style={{
                               fontFamily: FS,
-                              fontSize: 14,
+                              fontSize: F_SIZE.sm,
                               fontWeight: 600,
                               color: '#1a1a1a',
                               minWidth: 30,
@@ -454,7 +455,7 @@ export default function ProductCart() {
                               borderRadius: 6,
                               color: '#ef4444',
                               fontFamily: FS,
-                              fontSize: 12,
+                              fontSize: F_SIZE.sm,
                               fontWeight: 600,
                               cursor: 'pointer',
                               transition: 'all 0.2s',
@@ -486,7 +487,7 @@ export default function ProductCart() {
                       border: `1px dashed rgba(239,68,68,0.3)`,
                       color: '#ef4444',
                       fontFamily: FS,
-                      fontSize: 13,
+                      fontSize: F_SIZE.sm,
                       fontWeight: 600,
                       cursor: 'pointer',
                       borderRadius: 8,
@@ -517,7 +518,7 @@ export default function ProductCart() {
           >
             <h3 style={{
               fontFamily: FD,
-              fontSize: 18,
+              fontSize: F_SIZE.md,
               fontWeight: 800,
               color: '#1a1a1a',
               margin: '0 0 20px',
@@ -528,14 +529,14 @@ export default function ProductCart() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* Price breakdown */}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 14, color: '#666' }}>Subtotal ({totalItems} items)</span>
+                <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Subtotal ({totalItems} items)</span>
                 <span style={{ fontWeight: 600, color: '#1a1a1a' }}>
                   ₹{totalPrice.toLocaleString()}
                 </span>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 14, color: '#666' }}>Shipping</span>
+                <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Shipping</span>
                 <span style={{ fontWeight: 600, color: G }}>Free</span>
               </div>
 
@@ -545,8 +546,8 @@ export default function ProductCart() {
                 paddingTop: 16,
                 borderTop: '2px dashed rgba(21,128,61,0.15)',
               }}>
-                <span style={{ fontFamily: FD, fontSize: 16, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
-                <span style={{ fontFamily: FD, fontSize: 20, fontWeight: 800, color: G }}>
+                <span style={{ fontFamily: FD, fontSize: F_SIZE.md, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
+                <span style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, color: G }}>
                   ₹{totalPrice.toLocaleString()}
                 </span>
               </div>
@@ -564,7 +565,7 @@ export default function ProductCart() {
                   border: 'none',
                   color: '#fff',
                   fontFamily: FD,
-                  fontSize: 15,
+                  fontSize: F_SIZE.sm,
                   fontWeight: 700,
                   borderRadius: 12,
                   cursor: isCheckingOut ? 'not-allowed' : 'pointer',
@@ -601,7 +602,7 @@ export default function ProductCart() {
                   }}>
                     ✓
                   </div>
-                  <span style={{ fontSize: 12, color: '#666' }}>Secure Checkout</span>
+                  <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Secure Checkout</span>
                 </div>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <div style={{
@@ -615,7 +616,7 @@ export default function ProductCart() {
                   }}>
                     ✓
                   </div>
-                  <span style={{ fontSize: 12, color: '#666' }}>Easy Returns</span>
+                  <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Easy Returns</span>
                 </div>
               </div>
             </div>
@@ -640,7 +641,7 @@ export default function ProductCart() {
               padding: '16px 24px',
               borderRadius: 12,
               fontFamily: FS,
-              fontSize: 14,
+              fontSize: F_SIZE.sm,
               fontWeight: 600,
               boxShadow: '0 8px 24px rgba(21,128,61,0.3)',
               zIndex: 1000,

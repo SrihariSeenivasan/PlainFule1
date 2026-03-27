@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { F_SIZE } from "@/lib/typography";
 
 const carouselImages = [
   {
@@ -208,14 +209,14 @@ export default function ProblemSection() {
         }
         .card-content { position: relative; z-index: 1; padding: 20px 20px 20px 36px; }
         .card-icon { font-size: 32px; margin-bottom: 14px; display: block; }
-        .card-title {
+         .card-title {
           font-family: 'Playfair Display', serif;
-          font-size: 18px; font-weight: 700; color: #15803d;
+          font-size: ${F_SIZE.md}; font-weight: 700; color: #15803d;
           margin: 0 0 10px 0; line-height: 1.2;
         }
         .card-body {
           font-family: 'DM Sans', sans-serif;
-          font-size: 14px; color: #15803d; line-height: 1.6; margin: 0; font-weight: 400;
+          font-size: ${F_SIZE.sm}; color: #15803d; line-height: 1.6; margin: 0; font-weight: 400;
         }
 
         .underline-sketch { position: relative; display: inline-block; }
@@ -244,17 +245,17 @@ export default function ProblemSection() {
           className="fade-in"
         >
           {/* Left: Heading */}
-          <div style={{ maxWidth: 480 }}>
+           <div style={{ maxWidth: 480 }}>
             <span style={{
-              display: "block", fontSize: 11, fontWeight: 600,
+              display: "block", fontSize: F_SIZE.sm, fontWeight: 600,
               letterSpacing: "0.15em", textTransform: "uppercase",
               color: "#e11d48", marginBottom: 14, fontFamily: "'DM Sans', sans-serif",
             }}>
               The Problem
             </span>
-            <h2 style={{
+             <h2 style={{
               fontFamily: "'DM Serif Display', serif",
-              fontSize: "clamp(1.9rem, 3.5vw, 3rem)",
+              fontSize: F_SIZE.xl,
               fontWeight: 400, lineHeight: 1.15,
               letterSpacing: "-0.02em", color: "#111827",
               margin: "0 0 18px 0",
@@ -262,9 +263,9 @@ export default function ProblemSection() {
               Why Are We Still{" "}
               <span className="underline-sketch" style={{ color: "#111827" }}>Tired</span>
               <br />
-              <em style={{ color: "#6b7280" }}>Despite Eating Every Day?</em>
+               <em style={{ color: "#6b7280" }}>Despite Eating Every Day?</em>
             </h2>
-            <p style={{ fontSize: 15, color: "#1a1a1a", lineHeight: 1.75, maxWidth: 400, margin: 0 }}>
+            <p style={{ fontSize: F_SIZE.sm, color: "#1a1a1a", lineHeight: 1.75, maxWidth: 400, margin: 0 }}>
               Modern meals fill the stomach. They don&apos;t always nourish the body.
               Something vital is missing every single day.
             </p>

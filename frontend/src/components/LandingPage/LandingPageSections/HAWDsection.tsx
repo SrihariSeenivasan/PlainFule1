@@ -6,6 +6,7 @@ import {
     Target, Leaf, Sparkles, UserCheck, 
     Dna, ShieldCheck, Check, FlaskConical
 } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens (Standardized Glacier Elite) ── */
 const C = {
@@ -109,7 +110,7 @@ function Chip({ text, icon: Icon }: { text: string; icon?: any }) {
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}>
             {Icon && <Icon size={12} color={C.gold} />}
-            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }
@@ -132,11 +133,11 @@ function IngredientRow({ name, qty, rda, highlight, index }: {
         >
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
                 {highlight ? <Check size={14} color={C.leaf} /> : <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.silver, opacity: 0.3 }} />}
-                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 600, color: C.ink }}>{name}</span>
+                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 600, color: C.ink }}>{name}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontFamily: FONTS.main, fontSize: 11, color: C.silver }}>{qty}</span>
-                <span style={{ fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: highlight ? C.leaf : C.silver, background: highlight ? `${C.leaf}11` : C.mist, padding: '4px 10px', borderRadius: 100 }}>{rda}</span>
+                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver }}>{qty}</span>
+                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: highlight ? C.leaf : C.silver, background: highlight ? `${C.leaf}11` : C.mist, padding: '4px 10px', borderRadius: 100 }}>{rda}</span>
             </div>
         </motion.div>
     );
@@ -165,12 +166,12 @@ function TrainCard({ item, isHovered, onHover, onLeave }: {
                     {item.icon}
                 </div>
                 <div>
-                   <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.statLabel}</div>
-                   <div style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 900, color: item.accent }}>{item.stat}<span style={{ fontSize: 12, opacity: 0.6 }}>{item.statSuffix}</span></div>
+                   <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.statLabel}</div>
+                   <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: item.accent }}>{item.stat}<span style={{ fontSize: F_SIZE.sm, opacity: 0.6 }}>{item.statSuffix}</span></div>
                 </div>
             </div>
-            <h4 style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 800, color: C.ink, marginBottom: 8 }}>{item.title}</h4>
-            <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.silver, lineHeight: 1.6, margin: 0 }}>{item.content}</p>
+            <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: C.ink, marginBottom: 8 }}>{item.title}</h4>
+            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver, lineHeight: 1.6, margin: 0 }}>{item.content}</p>
         </motion.div>
     );
 }
@@ -220,17 +221,17 @@ export default function HAWDsection() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 480px', gap: 40, alignItems: 'flex-start', marginBottom: 48 }}>
                     <div>
                         <Chip text="The Simple Process" icon={ShieldCheck} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0' }}>
                             What do we do <br /> <span style={{ color: C.leaf }}>today?</span>
                         </h2>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, maxWidth: 520, marginBottom: 24 }}>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.silver, lineHeight: 1.7, maxWidth: 520, marginBottom: 24 }}>
                             To fill nutritional gaps, most people turn to multiple supplements. But this creates a new problem: it's hard to track and maintain in a busy life.
                         </p>
 
                         <div style={{ padding: '24px', background: C.offwhite, borderRadius: 32, border: `1px solid ${C.forest}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                                 <FlaskConical size={18} color={C.forest} />
-                                <h4 style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: C.ink, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Laboratory Ingredients</h4>
+                                <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.ink, textTransform: 'uppercase', letterSpacing: '0.1em', margin: 0 }}>Laboratory Ingredients</h4>
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                                 {ingredients.map((ing, i) => <IngredientRow key={i} {...ing} index={i} />)}
@@ -243,15 +244,15 @@ export default function HAWDsection() {
                              <Chip text="Market Analysis" />
                         </div>
                         
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: C.ink, marginBottom: 12 }}>The Complexity Barrier.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 14, color: C.silver, marginBottom: 20 }}>The issue is not effort; the issue is that the system for meeting daily needs is too complex.</p>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, marginBottom: 12 }}>The Complexity Barrier.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver, marginBottom: 20 }}>The issue is not effort; the issue is that the system for meeting daily needs is too complex.</p>
                         
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
                             {supplements.map((s, i) => (
                                 <div key={i}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                                        <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink }}>{s.label}</span>
-                                        <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 900, color: s.accent }}>{s.cost}</span>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.ink }}>{s.label}</span>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: s.accent }}>{s.cost}</span>
                                     </div>
                                     <div style={{ height: 6, background: C.white, borderRadius: 10 }}>
                                         <motion.div initial={{ width: 0 }} whileInView={{ width: `${s.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ height: '100%', background: s.accent, borderRadius: 10 }} />
@@ -261,11 +262,11 @@ export default function HAWDsection() {
                         </div>
 
                         <div style={{ padding: '20px', background: C.forest, borderRadius: 24, textAlign: 'center', boxShadow: '0 20px 48px rgba(10,61,31,0.2)' }}>
-                            <div style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, color: `${C.white}70`, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>Total Investment</div>
+                            <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: `${C.white}70`, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 8 }}>Total Investment</div>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-                                <span style={{ fontSize: 32, fontWeight: 900, color: C.white }}>₹7,300</span>
+                                <span style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.white }}>₹7,300</span>
                                 <div style={{ height: 24, width: 1, background: `${C.white}30` }} />
-                                <span style={{ fontSize: 14, fontWeight: 800, color: C.leaf }}>All-In-One</span>
+                                <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.leaf }}>All-In-One</span>
                             </div>
                         </div>
                     </div>
@@ -275,8 +276,8 @@ export default function HAWDsection() {
                 <div style={{ borderTop: `1px solid ${C.forest}08`, paddingTop: 32 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
                         <div>
-                             <h3 style={{ fontFamily: FONTS.main, fontSize: 28, fontWeight: 900, color: C.ink, margin: 0 }}>PlainFuel simplifies the process.</h3>
-                             <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: C.gold, margin: '8px 0 0' }}>One simple habit. Done daily. Making nutrition easier.</p>
+                             <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: 0 }}>PlainFuel simplifies the process.</h3>
+                             <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: C.gold, margin: '8px 0 0' }}>One simple habit. Done daily. Making nutrition easier.</p>
                         </div>
                         <div style={{ display: 'flex', gap: 12 }}>
                              {[1, 2, 3].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.silver, opacity: 0.3 + (i * 0.2) }} />)}
@@ -296,11 +297,11 @@ export default function HAWDsection() {
                             transition={{ delay: i * 0.1 }}
                             style={{ textAlign: 'center', padding: '20px 16px', background: C.offwhite, borderRadius: 24, border: `1px solid ${C.forest}02` }}
                         >
-                            <div style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: b.color, marginBottom: 12 }}>{b.pct}%</div>
+                            <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: b.color, marginBottom: 12 }}>{b.pct}%</div>
                             <div style={{ height: 120, width: 12, background: C.white, borderRadius: 10, margin: '0 auto 12px', position: 'relative', overflow: 'hidden' }}>
                                 <motion.div initial={{ height: 0 }} whileInView={{ height: `${b.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ width: '100%', background: `${b.color}cc`, position: 'absolute', bottom: 0 }} />
                             </div>
-                            <div style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink }}>{b.label}</div>
+                            <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.ink }}>{b.label}</div>
                         </motion.div>
                     ))}
                 </div>

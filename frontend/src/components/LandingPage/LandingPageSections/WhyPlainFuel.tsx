@@ -7,6 +7,7 @@ import {
     Calendar, Sparkles, Activity,
     Microscope, FlaskConical, Target
 } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 import Image from 'next/image';
 
 /* ── Design Tokens (Glacier Elite Selection) ── */
@@ -53,14 +54,14 @@ function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)', marginBottom: 24 }}
             >
                 <Sparkles size={14} color={C.gold} />
-                <span style={{ fontSize: 10, fontWeight: 800, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{eyebrow}</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{eyebrow}</span>
             </motion.div>
 
             <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}
+                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}
             >
                 {title}
             </motion.h2>
@@ -70,7 +71,7 @@ function SectionHeader({ eyebrow, title, subtitle, align = 'center' }: {
                     initial={{ opacity: 0, y: 20 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    style={{ fontFamily: FONTS.main, fontSize: 'clamp(16px, 1.8vw, 19px)', color: C.ink, marginTop: 12, lineHeight: 1.6, fontWeight: 400 }}
+                    style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, marginTop: 12, lineHeight: 1.6, fontWeight: 400 }}
                 >
                     {subtitle}
                 </motion.p>
@@ -163,9 +164,9 @@ They are the result of missing small amounts of nutrients every day for months."
                                     <div style={{ position: 'relative', zIndex: 1 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                                             <div style={{ width: 36, height: 36, borderRadius: 10, background: C.mist, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{stat.icon}</div>
-                                            <span style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 800, color: C.ink }}>{stat.label}</span>
+                                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: C.ink }}>{stat.label}</span>
                                         </div>
-                                        <p style={{ fontFamily: FONTS.main, fontSize: 13, color: C.silver, margin: 0 }}>{stat.sub}</p>
+                                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver, margin: 0 }}>{stat.sub}</p>
                                     </div>
                                 </motion.div>
                             ))}
@@ -188,7 +189,7 @@ They are the result of missing small amounts of nutrients every day for months."
                         </div>
                         <div style={{ position: 'absolute', top: -10, right: 20, padding: '12px 20px', background: C.white, borderRadius: 100, border: `1px solid ${C.forest}15`, boxShadow: '0 10px 30px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: 10, zIndex: 5 }}>
                             <Target size={16} color={C.forest} />
-                            <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Precision Dosing</span>
+                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Precision Dosing</span>
                         </div>
                     </motion.div>
                 </div>
@@ -201,10 +202,10 @@ They are the result of missing small amounts of nutrients every day for months."
                     <div style={{ position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '4px 12px', borderRadius: 4, background: C.mist, marginBottom: 20 }}>
                             <Calendar size={12} color={C.forest} />
-                            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: FONTS.main }}>Timeline Analysis</span>
+                            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.15em', fontFamily: FONTS.main }}>Timeline Analysis</span>
                         </div>
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 36, fontWeight: 900, color: C.ink, marginBottom: 12, lineHeight: 1.1 }}>Your body works on daily input.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 16, color: C.ink, lineHeight: 1.7, marginBottom: 20 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, marginBottom: 12, lineHeight: 1.1 }}>Your body works on daily input.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.7, marginBottom: 20 }}>
                             Just like missing homework every day leads to problems later, missing nutrients daily creates long-term gaps.
                         </p>
 
@@ -215,11 +216,11 @@ They are the result of missing small amounts of nutrients every day for months."
                                 { label: 'Month 9+', text: 'Clinical deficiency. The body flags red alerts.', status: 'Critical', color: '#991b1b' },
                             ].map((step, i) => (
                                 <div key={i} style={{ display: 'flex', gap: 16, padding: '16px 20px', borderRadius: 16, border: `1px solid ${C.forest}05`, background: 'rgba(255,255,255,0.8)' }}>
-                                    <div style={{ minWidth: 80, fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{step.label}</div>
+                                    <div style={{ minWidth: 80, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{step.label}</div>
                                     <div style={{ width: 2, background: step.color || C.forest, opacity: 0.2 }} />
                                     <div>
-                                        <div style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: step.color || C.forest, marginBottom: 2 }}>{step.status}</div>
-                                        <p style={{ fontFamily: FONTS.main, fontSize: 13, color: '#4a554d', margin: 0, lineHeight: 1.5 }}>{step.text}</p>
+                                        <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: step.color || C.forest, marginBottom: 2 }}>{step.status}</div>
+                                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: '#4a554d', margin: 0, lineHeight: 1.5 }}>{step.text}</p>
                                     </div>
                                 </div>
                             ))}
@@ -228,7 +229,7 @@ They are the result of missing small amounts of nutrients every day for months."
 
                     <div style={{ padding: '24px', background: 'rgba(255,255,255,0.4)', borderRadius: 24, border: `1px solid ${C.forest}05`, backdropFilter: 'blur(20px)', position: 'relative', zIndex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-                            <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.ink, letterSpacing: '0.05em' }}>Biomarker Depletion Graph (12 Mo)</span>
+                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.ink, letterSpacing: '0.05em' }}>Biomarker Depletion Graph (12 Mo)</span>
                             <TrendingDown size={18} color={C.gold} />
                         </div>
 
@@ -253,12 +254,12 @@ They are the result of missing small amounts of nutrients every day for months."
                             ))}
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
-                            {['Jan', 'Apr', 'Aug', 'Dec'].map(m => <span key={m} style={{ fontFamily: FONTS.main, fontSize: 10, color: C.silver, fontWeight: 700 }}>{m}</span>)}
+                            {['Jan', 'Apr', 'Aug', 'Dec'].map(m => <span key={m} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700 }}>{m}</span>)}
                         </div>
 
                         <div style={{ marginTop: 20, padding: 16, background: C.white, borderRadius: 12, display: 'flex', alignItems: 'center', gap: 12 }}>
                             <div style={{ padding: '8px', borderRadius: 8, background: `${C.gold}11` }}><Microscope size={16} color={C.gold} /></div>
-                            <p style={{ fontFamily: FONTS.accent, fontSize: 16, color: C.gold, margin: 0, fontWeight: 600 }}>Closing the Gap: Systematic Daily Restoration.</p>
+                            <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: C.gold, margin: 0, fontWeight: 600 }}>Closing the Gap: Systematic Daily Restoration.</p>
                         </div>
                     </div>
                 </GlacierCard>
@@ -297,7 +298,7 @@ They are the result of missing small amounts of nutrients every day for months."
                                     <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${C.leaf} 0%, #15803d 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(22, 163, 74, 0.3)` }}>
                                         <CheckCircle2 size={24} color={C.white} />
                                     </div>
-                                    <h4 style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 800, color: C.white, margin: 0 }}>Heavily focused on:</h4>
+                                    <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 800, color: C.white, margin: 0 }}>Heavily focused on:</h4>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                                     {['Carbohydrates', 'Fats'].map((tag, i) => (
@@ -311,7 +312,7 @@ They are the result of missing small amounts of nutrients every day for months."
                                             style={{ padding: '16px 24px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.08)`, display: 'flex', alignItems: 'center', gap: 12, transition: 'background 0.3s ease' }}
                                         >
                                             <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.leaf, boxShadow: `0 0 8px ${C.leaf}` }} />
-                                            <span style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 700, color: C.white }}>{tag}</span>
+                                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.white }}>{tag}</span>
                                         </motion.div>
                                     ))}
                                 </div>
@@ -325,7 +326,7 @@ They are the result of missing small amounts of nutrients every day for months."
                                     <div style={{ width: 48, height: 48, borderRadius: 16, background: `linear-gradient(135deg, ${C.gold} 0%, #d4af37 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(184, 149, 58, 0.3)` }}>
                                         <AlertCircle size={24} color={C.white} />
                                     </div>
-                                    <h4 style={{ fontFamily: FONTS.main, fontSize: 20, fontWeight: 800, color: C.ink, margin: 0 }}>But often lacks:</h4>
+                                    <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 800, color: C.ink, margin: 0 }}>But often lacks:</h4>
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexGrow: 1 }}>
                                     {['Protein', 'Fiber', 'Essential micronutrients'].map((tag, i) => (
@@ -339,7 +340,7 @@ They are the result of missing small amounts of nutrients every day for months."
                                             style={{ padding: '16px 24px', borderRadius: 16, background: C.white, border: `1px solid ${C.gold}20`, boxShadow: `0 8px 20px ${C.gold}08`, display: 'flex', alignItems: 'center', gap: 12 }}
                                         >
                                             <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.gold, boxShadow: `0 0 8px ${C.gold}` }} />
-                                            <span style={{ fontFamily: FONTS.main, fontSize: 15, fontWeight: 700, color: C.forest }}>{tag}</span>
+                                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.forest }}>{tag}</span>
                                         </motion.div>
                                     ))}
                                 </div>
@@ -355,8 +356,8 @@ They are the result of missing small amounts of nutrients every day for months."
                 <GlacierCard className="beyond-card" style={{ padding: 0, display: 'grid', gridTemplateColumns: '1fr 480px', overflow: 'hidden' }}>
                     <div style={{ padding: '24px' }}>
                         <Chip text="Laboratory Insights" />
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900, color: C.ink, marginTop: 16, marginBottom: 16 }}>Beyond the Surface.</h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: C.silver, lineHeight: 1.7, marginBottom: 24 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, marginTop: 16, marginBottom: 16 }}>Beyond the Surface.</h3>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.silver, lineHeight: 1.7, marginBottom: 24 }}>
                             When we look at blood reports, the most common deficiencies are not protein —  these are micronutrients, and they play a critical role in how our body functions.
                         </p>
 
@@ -366,12 +367,12 @@ They are the result of missing small amounts of nutrients every day for months."
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 12 }}>
                                         <div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                                                <span style={{ fontFamily: FONTS.main, fontSize: 12, fontWeight: 900, color: n.color, letterSpacing: '0.1em' }}>{n.sym}</span>
-                                                <h5 style={{ fontFamily: FONTS.main, fontSize: 16, fontWeight: 800, color: C.ink, margin: 0 }}>{n.name}</h5>
+                                                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: n.color, letterSpacing: '0.1em' }}>{n.sym}</span>
+                                                <h5 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: C.ink, margin: 0 }}>{n.name}</h5>
                                             </div>
-                                            <p style={{ fontFamily: FONTS.main, fontSize: 12, color: C.silver, margin: 0, lineHeight: 1.4 }}>{n.role}</p>
+                                            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.silver, margin: 0, lineHeight: 1.4 }}>{n.role}</p>
                                         </div>
-                                        <span style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 800, color: n.color, whiteSpace: 'nowrap' }}>{n.pct}%</span>
+                                        <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: n.color, whiteSpace: 'nowrap' }}>{n.pct}%</span>
                                     </div>
                                     <div style={{ height: 6, background: C.mist, borderRadius: 10, overflow: 'hidden' }}>
                                         <motion.div
@@ -398,9 +399,9 @@ They are the result of missing small amounts of nutrients every day for months."
                             <div style={{ padding: '32px', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(16px)', borderRadius: 24, border: '1px solid rgba(255,255,255,0.8)', boxShadow: '0 20px 40px rgba(0,0,0,0.05)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                                     <FlaskConical size={20} color={C.forest} />
-                                    <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pharmacist Formulated</span>
+                                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pharmacist Formulated</span>
                                 </div>
-                                <p style={{ fontFamily: FONTS.main, fontSize: 14, color: C.ink, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
+                                <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: C.ink, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
                                     "The real gap isn't hunger — it's systemic nutrient scarcity. PlainFuel was engineered to restore this balance daily."
                                 </p>
                             </div>
@@ -456,7 +457,7 @@ function Chip({ text }: { text: string }) {
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)' }}>
             <Sparkles size={12} color={C.gold} />
-            <span style={{ fontSize: 13, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }

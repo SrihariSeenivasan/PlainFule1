@@ -8,6 +8,7 @@ import {
     Fingerprint, CheckCircle2,
     Microscope, Activity, Dna
 } from 'lucide-react';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens (Glacier Professional) ── */
 const C = {
@@ -83,9 +84,9 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
         <div ref={ref} style={{ marginBottom: 32 }}>
             <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                 <div style={{ width: 40, height: 2, background: C.leaf, borderRadius: 2 }} />
-                <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: C.leaf, letterSpacing: '0.2em' }}>{eyebrow}</span>
+                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: C.leaf, letterSpacing: '0.2em' }}>{eyebrow}</span>
             </motion.div>
-            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.1 }} style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>{title}</motion.h2>
+            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.1 }} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>{title}</motion.h2>
         </div>
     );
 }
@@ -125,10 +126,10 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                         <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${C.gold} 0%, #d4af37 100%)`, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(184, 149, 58, 0.4)` }}>
                             {data.icon}
                         </div>
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 900, color: C.white, letterSpacing: '-0.02em', margin: 0, lineHeight: 1.1 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.white, letterSpacing: '-0.02em', margin: 0, lineHeight: 1.1 }}>
                             {data.headline}
                         </h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: 18, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0, maxWidth: 400 }}>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0, maxWidth: 400 }}>
                             {data.content}
                         </p>
                     </div>
@@ -143,9 +144,9 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                                             <div style={{ width: 28, height: 28, borderRadius: 8, background: `${C.leaf}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.leaf }}>
                                                 <CheckCircle2 size={14} />
                                             </div>
-                                            <strong style={{ color: C.white, fontFamily: FONTS.main, fontSize: 15 }}>{it.title}</strong>
+                                            <strong style={{ color: C.white, fontFamily: FONTS.main, fontSize: F_SIZE.md }}>{it.title}</strong>
                                         </div>
-                                        <div style={{ color: 'rgba(255,255,255,0.5)', fontFamily: FONTS.main, fontSize: 14, lineHeight: 1.5 }}>
+                                        <div style={{ color: 'rgba(255,255,255,0.5)', fontFamily: FONTS.main, fontSize: F_SIZE.sm, lineHeight: 1.5 }}>
                                             {it.desc}
                                         </div>
                                     </div>
@@ -155,7 +156,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
 
                         {data.note && (
                             <div style={{ paddingTop: 16, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
-                                <p style={{ fontFamily: FONTS.accent, fontSize: 22, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
+                                <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
                             </div>
                         )}
                     </div>
@@ -208,14 +209,14 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                         </div>
                     </div>
 
-                    <h3 style={{ fontFamily: FONTS.main, fontSize: 24, fontWeight: 900, color: C.ink, letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>{data.headline}</h3>
+                    <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>{data.headline}</h3>
 
-                    <div style={{ fontFamily: FONTS.main, fontSize: 16, color: C.silver, lineHeight: 1.7, fontWeight: 500 }}>
+                    <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.silver, lineHeight: 1.7, fontWeight: 500 }}>
                         {data.content}
                     </div>
 
                     <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
-                        <p style={{ fontFamily: FONTS.accent, fontSize: 20, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
+                        <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
                     </div>
                 </div>
             </div>
@@ -242,7 +243,7 @@ export default function FiveInOneSection() {
                         { icon: <Activity size={18} />, text: "Optimized Bio-Availability" },
                         { icon: <Dna size={18} />, text: "Zero Amino Spiking" }
                     ].map((t, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: C.ink, fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: C.ink, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             <span style={{ color: C.leaf }}>{t.icon}</span>
                             {t.text}
                         </div>
@@ -272,12 +273,12 @@ export default function FiveInOneSection() {
                     <div style={{ padding: '32px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                             <div style={{ width: 10, height: 10, borderRadius: '50%', background: C.leaf, boxShadow: `0 0 20px ${C.leaf}` }} />
-                            <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, color: C.leaf, textTransform: 'uppercase', letterSpacing: '0.25em' }}>Closing Perspective</span>
+                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.leaf, textTransform: 'uppercase', letterSpacing: '0.25em' }}>Closing Perspective</span>
                         </div>
 
                         <h4 style={{
                             fontFamily: FONTS.main,
-                            fontSize: 'clamp(2.2rem, 4vw, 3.8rem)',
+                            fontSize: F_SIZE.xl,
                             fontWeight: 900,
                             color: C.white,
                             marginBottom: 20,
@@ -288,7 +289,7 @@ export default function FiveInOneSection() {
                         <div style={{ position: 'relative', borderLeft: `3px solid ${C.leaf}30`, paddingLeft: 32, marginBottom: 16 }}>
                             <p style={{
                                 fontFamily: FONTS.main,
-                                fontSize: 18,
+                                fontSize: F_SIZE.md,
                                 color: 'rgba(255,255,255,0.75)',
                                 lineHeight: 1.8,
                                 fontWeight: 500,
@@ -298,7 +299,7 @@ export default function FiveInOneSection() {
                             </p>
                             <p style={{
                                 fontFamily: FONTS.main,
-                                fontSize: 18,
+                                fontSize: F_SIZE.md,
                                 color: 'rgba(255,255,255,0.75)',
                                 lineHeight: 1.8,
                                 fontWeight: 500,
@@ -311,7 +312,7 @@ export default function FiveInOneSection() {
 
                         <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 20 }}>
                             <div style={{ width: 48, height: 1, background: 'rgba(22, 163, 74, 0.4)' }} />
-                            <span style={{ fontFamily: FONTS.accent, fontSize: 28, color: C.leaf, fontWeight: 700 }}>The New Standard for Tomorrow.</span>
+                            <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.leaf, fontWeight: 700 }}>The New Standard for Tomorrow.</span>
                         </div>
                     </div>
 

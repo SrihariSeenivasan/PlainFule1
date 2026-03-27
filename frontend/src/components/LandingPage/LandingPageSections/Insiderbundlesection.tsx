@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { WiggleLine, Sparkle, CircleDoodle as DoodleCircle } from "@/components/Elements/SvgDoodles";
+import { F_SIZE } from "@/lib/typography";
 
 /* ── Local SVG Helper ── */
 function DoodleStar({ color = "#15803d", className = "" }: { color?: string; className?: string }) {
@@ -39,8 +40,8 @@ function StickyNote({ text, rotate = "rotate-2", bg = "#fef08a", textColor = "#7
 }) {
     return (
         <span
-            style={{ fontFamily: "'Caveat', cursive", background: bg, color: textColor }}
-            className={`inline-block text-xs font-bold px-3 py-1 rounded shadow-md ${rotate} select-none whitespace-nowrap border border-yellow-300/40`}
+            style={{ fontFamily: "'Caveat', cursive", background: bg, color: textColor, fontSize: F_SIZE.sm }}
+            className={`inline-block font-bold px-3 py-1 rounded shadow-md ${rotate} select-none whitespace-nowrap border border-yellow-300/40`}
         >
             {text}
         </span>
@@ -54,8 +55,8 @@ function StatPill({ label, value, accent }: { label: string; value: string; acce
             className="flex flex-col items-center px-5 py-3 rounded-2xl border border-dashed transition-all hover:-translate-y-1"
             style={{ background: `${accent}10`, borderColor: `${accent}40` }}
         >
-            <H className="text-2xl font-bold leading-none" style={{ color: accent }}>{value}</H>
-            <H className="text-[10px] font-bold mt-0.5 uppercase tracking-wider" style={{ color: "#777" }}>{label}</H>
+            <H className="font-bold leading-none" style={{ color: accent, fontSize: F_SIZE.lg }}>{value}</H>
+            <H className="font-bold mt-0.5 uppercase tracking-wider" style={{ color: "#777", fontSize: F_SIZE.sm }}>{label}</H>
         </div>
     );
 }
@@ -247,7 +248,7 @@ export default function InsiderBundleSection() {
                                     animation: 'dotPulse 1.8s ease-in-out infinite',
                                     flexShrink: 0, display: 'inline-block',
                                 }} />
-                                <H className="text-xs font-bold uppercase tracking-widest relative z-10" style={{ color: '#15803d' }}>
+                                <H className="font-bold uppercase tracking-widest relative z-10" style={{ color: '#15803d', fontSize: F_SIZE.sm }}>
                                     Best Value
                                 </H>
                             </div>
@@ -259,7 +260,7 @@ export default function InsiderBundleSection() {
                                         <StarIcon delay={d} />
                                     </div>
                                 ))}
-                                <H className="text-xs font-bold ml-2" style={{ color: '#888' }}>4.9 · 2.4k reviews</H>
+                                <H className="font-bold ml-2" style={{ color: '#888', fontSize: F_SIZE.sm }}>4.9 · 2.4k reviews</H>
                             </div>
                         </div>
 
@@ -267,7 +268,7 @@ export default function InsiderBundleSection() {
                         <div>
                             <H
                                 className="block font-bold leading-none"
-                                style={{ fontSize: 'clamp(56px, 8vw, 96px)', color: '#1a1a1a', lineHeight: 0.92 }}
+                                style={{ fontSize: F_SIZE.xl, color: '#1a1a1a', lineHeight: 0.92 }}
                             >
                                 INSIDER
                             </H>
@@ -275,7 +276,7 @@ export default function InsiderBundleSection() {
                                 <H
                                     className="block font-bold"
                                     style={{
-                                        fontSize: 'clamp(56px, 8vw, 96px)',
+                                        fontSize: F_SIZE.xl,
                                         lineHeight: 0.92,
                                         background: 'linear-gradient(90deg, #15803d 0%, #15803d 55%, #15803d 100%)',
                                         backgroundSize: '200% auto',
@@ -304,10 +305,10 @@ export default function InsiderBundleSection() {
 
                         {/* description — Caveat */}
                         <div className="max-w-sm">
-                            <H className="text-xl leading-snug" style={{ color: '#555' }}>
+                            <H className="leading-snug" style={{ color: '#555', fontSize: F_SIZE.md }}>
                                 Get your favorite flavors and unlock the best value with the INSIDER Bundle.{' '}
                             </H>
-                            <H className="text-xl font-bold" style={{ color: '#1a1a1a' }}>
+                            <H className="font-bold" style={{ color: '#1a1a1a', fontSize: F_SIZE.md }}>
                                 It&apos;s the surest way to Stay Salty.
                             </H>
                         </div>
@@ -331,7 +332,7 @@ export default function InsiderBundleSection() {
                                         <path d="M3 11 L8 16 L17 5" stroke={p.accent} strokeWidth="2.5"
                                             strokeLinecap="round" strokeLinejoin="round" fill="none" />
                                     </svg>
-                                    <H className="text-sm" style={{ color: '#555' }}>{p.text}</H>
+                                    <H style={{ color: '#555', fontSize: F_SIZE.sm }}>{p.text}</H>
                                 </div>
                             ))}
                         </div>
@@ -353,7 +354,7 @@ export default function InsiderBundleSection() {
                                         style={{ transition: 'fill 0.3s' }}
                                     />
                                 </svg>
-                                <H className="relative z-10 text-xl font-bold" style={{ color: '#051a0b' }}>
+                                <H className="relative z-10 font-bold" style={{ color: '#051a0b', fontSize: F_SIZE.md }}>
                                     Get Yours →
                                 </H>
                             </button>
@@ -455,7 +456,7 @@ export default function InsiderBundleSection() {
                                         <path d="M5 8 C30 2,80 2,105 7 S110 16,108 34 S103 42,76 43 S20 44,5 40 S0 32,1 22 S3 12,5 8Z"
                                             fill="#15803d" />
                                     </svg>
-                                    <H className="relative z-10 text-base font-bold block text-center" style={{ color: '#051a0b' }}>
+                                    <H className="relative z-10 font-bold block text-center" style={{ color: '#051a0b', fontSize: F_SIZE.md }}>
                                         SAVE 30% 🔥
                                     </H>
                                 </div>
@@ -474,10 +475,10 @@ export default function InsiderBundleSection() {
                                         boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
                                     }}
                                 >
-                                    <H className="block text-xs font-bold uppercase tracking-wide" style={{ color: '#92400e' }}>
+                                    <H className="block font-bold uppercase tracking-wide" style={{ color: '#92400e', fontSize: F_SIZE.sm }}>
                                         🔥 Trending
                                     </H>
-                                    <H className="block text-sm font-bold mt-0.5" style={{ color: '#1a1a1a' }}>
+                                    <H className="block font-bold mt-0.5" style={{ color: '#1a1a1a', fontSize: F_SIZE.sm }}>
                                         847 sold this week
                                     </H>
                                 </div>
@@ -500,7 +501,7 @@ export default function InsiderBundleSection() {
                 <div className="relative z-10 px-6 md:px-12 lg:px-16 pb-8 -mt-2">
                     <div className="flex items-center gap-4 max-w-screen-xl mx-auto">
                         <WiggleLine color="rgba(21,128,61,0.2)" className="flex-1 h-3" />
-                        <H className="text-xs whitespace-nowrap" style={{ color: '#bbb' }}>✦ fuel smarter every day ✦</H>
+                        <H className="whitespace-nowrap" style={{ color: '#bbb', fontSize: F_SIZE.sm }}>✦ fuel smarter every day ✦</H>
                         <WiggleLine color="rgba(21,128,61,0.2)" className="flex-1 h-3" />
                     </div>
                 </div>

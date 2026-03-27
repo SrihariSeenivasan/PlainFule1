@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Navbar from '@/components/Navbar';
+import MainLayout from '@/components/MainLayout';
+import { F_SIZE } from '@/lib/typography';
 
 export default function PaymentPolicy() {
   const containerVariants = {
@@ -21,8 +22,7 @@ export default function PaymentPolicy() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
-      <Navbar />
+    <MainLayout background="linear-gradient(to bottom right, #f0fdf4, #ffffff)">
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
         <motion.div
           className="max-w-4xl mx-auto"
@@ -32,10 +32,10 @@ export default function PaymentPolicy() {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="font-extrabold mb-4 tracking-tight">
               Payment Policy
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: '#14532d', opacity: 0.8 }} className="font-medium">
               Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </motion.div>
@@ -48,10 +48,10 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
                 Accepted Payment Methods
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Plainfuel accepts the following payment methods:
               </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Credit Cards (Visa, Mastercard, American Express)</li>
                 <li>Debit Cards</li>
                 <li>Digital Wallets (Apple Pay, Google Pay)</li>
@@ -66,7 +66,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
                 Payment Security
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 All transactions on Plainfuel are processed through secure, encrypted channels. We do not store your credit card information. All payment processing is handled by industry-leading payment gateways that comply with PCI DSS standards.
               </p>
             </motion.section>
@@ -77,7 +77,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
                 Billing & Invoicing
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Invoices will be sent to the email address provided during checkout. You can also access your invoices from your user dashboard. Invoices are typically generated within 24 hours of payment completion.
               </p>
             </motion.section>
@@ -88,7 +88,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 Subscription Billing
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you have an active subscription, your payment method will be automatically charged on the renewal date. You will receive a reminder email 3 days before your billing date. You can update or change your payment method from your account settings at any time.
               </p>
             </motion.section>
@@ -99,7 +99,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 Failed Payments
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If a payment fails, we will attempt to charge your payment method again up to 3 times over a 5-day period. If all attempts fail, your subscription will be suspended until payment is successfully processed. Please update your payment information to reactivate your subscription.
               </p>
             </motion.section>
@@ -110,7 +110,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
                 Currency & Taxes
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Prices are displayed in your local currency based on your location. Applicable taxes may be added at checkout depending on your jurisdiction. We will provide a full breakdown of costs before you complete your purchase.
               </p>
             </motion.section>
@@ -121,7 +121,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
                 Disputes & Chargebacks
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you have a legitimate payment dispute, please contact our support team before initiating a chargeback. We will work with you to resolve the issue promptly. Chargebacks may result in additional fees and suspension of your account.
               </p>
             </motion.section>
@@ -132,7 +132,7 @@ export default function PaymentPolicy() {
                 <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
                 Contact Us
               </h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 For payment-related questions or concerns, please contact our support team:
               </p>
               <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded">
@@ -144,6 +144,6 @@ export default function PaymentPolicy() {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </MainLayout>
   );
 }

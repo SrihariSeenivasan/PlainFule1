@@ -8,6 +8,7 @@ import { ShoppingCart, Star, ArrowRight, Sparkles, Check } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { productAPI, Product } from '@/lib/api';
 import ProductDetail from './ProductDetail';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
@@ -118,7 +119,7 @@ export default function Products() {
             transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
             style={{ width: 40, height: 40, border: `3px solid ${C.mid}22`, borderTopColor: C.mid, borderRadius: '50%', margin: '0 auto 20px' }}
           />
-          <p style={{ fontSize: 13, fontWeight: 700, color: C.mid, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Synchronizing Protocols...</p>
+          <p style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: C.mid, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Synchronizing Protocols...</p>
         </div>
       </div>
     );
@@ -144,17 +145,17 @@ export default function Products() {
             style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: `${C.white}88`, border: `1px solid ${C.mid}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}
           >
             <Sparkles size={14} color={C.gold} />
-            <span style={{ fontSize: 10, fontWeight: 800, color: C.mid, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Elite Selection</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.mid, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Elite Selection</span>
           </motion.div>
           
-          <h2 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+          <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}>
             Available <span style={{ fontFamily: FONTS.accent, color: C.mid, fontVariantCaps: 'normal' }}>Protocols.</span>
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
             <GoldUnderline width={240} />
           </div>
           
-          <p style={{ fontSize: 14, color: C.silver, marginTop: 32, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8, maxWidth: 500, margin: '32px auto 0', lineHeight: 1.6 }}>
+          <p style={{ fontSize: F_SIZE.sm, color: C.silver, marginTop: 32, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, opacity: 0.8, maxWidth: 500, margin: '32px auto 0', lineHeight: 1.6 }}>
             Select your daily fuel system formulated for <span style={{ color: C.mid }}>maximum bio-efficiency</span> and performance.
           </p>
         </div>
@@ -214,7 +215,7 @@ export default function Products() {
               <div style={{ position: 'absolute', top: 32, left: 32, zIndex: 10 }}>
                 <div style={{ padding: '8px 16px', borderRadius: 100, background: 'rgba(10, 61, 31, 0.05)', border: '1px solid rgba(10, 61, 31, 0.1)', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Sparkles size={12} color={C.gold} />
-                  <span style={{ fontSize: 10, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>P-{String(i+1).padStart(2, '0')}</span>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>P-{String(i+1).padStart(2, '0')}</span>
                 </div>
               </div>
 
@@ -235,8 +236,8 @@ export default function Products() {
                 display: 'flex', flexDirection: 'column', gap: 16
               }}>
                 <div>
-                  <h3 style={{ fontSize: 28, fontWeight: 900, color: C.ink, margin: '0 0 4px', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.name}</h3>
-                  <p style={{ fontSize: 14, color: '#4a554d', lineHeight: 1.6, margin: 0, fontWeight: 500, opacity: 0.85 }}>
+                  <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '0 0 4px', letterSpacing: '-0.02em', lineHeight: 1 }}>{p.name}</h3>
+                  <p style={{ fontSize: F_SIZE.sm, color: '#4a554d', lineHeight: 1.6, margin: 0, fontWeight: 500, opacity: 0.85 }}>
                     Scientifically engineered for cellular efficiency.
                   </p>
                 </div>
@@ -245,11 +246,11 @@ export default function Products() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: C.gold }}>
                       <Star size={16} fill={C.gold} />
-                      <span style={{ fontSize: 18, fontWeight: 900, color: C.ink }}>{p.rating || 5.0}</span>
+                      <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink }}>{p.rating || 5.0}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', marginRight: 4 }}>INR</span>
-                      <span style={{ fontSize: 24, fontWeight: 900, color: C.mid }}>{p.packages?.[0]?.price?.toLocaleString()}</span>
+                      <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', marginRight: 4 }}>INR</span>
+                      <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.mid }}>{p.packages?.[0]?.price?.toLocaleString()}</span>
                     </div>
                   </div>
 
@@ -261,7 +262,7 @@ export default function Products() {
                       color: C.white,
                       padding: '12px 24px',
                       borderRadius: 100,
-                      fontSize: 13,
+                      fontSize: F_SIZE.sm,
                       fontWeight: 900,
                       display: 'flex',
                       alignItems: 'center',

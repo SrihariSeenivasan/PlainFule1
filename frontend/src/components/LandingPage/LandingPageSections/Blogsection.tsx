@@ -8,6 +8,7 @@ import {
     LucideIcon
 } from 'lucide-react';
 import { useRef } from 'react';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens (Glacier Elite) ── */
 const C = {
@@ -80,7 +81,7 @@ function SectionBadge({ text, icon: Icon }: { text: string; icon?: LucideIcon })
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: C.white, border: `1px solid ${C.forest}15`, backdropFilter: 'blur(10px)' }}>
             {Icon && <Icon size={12} color={C.gold} />}
-            <span style={{ fontSize: 9, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
         </div>
     );
 }
@@ -117,7 +118,7 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
                 <Image src={blog.image} alt={blog.title} fill style={{ objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${C.deep}50 0%, transparent 50%)` }} />
                 <div style={{ position: 'absolute', top: 16, left: 16 }}>
-                     <div style={{ background: C.white, padding: '4px 12px', borderRadius: 100, fontFamily: FONTS.main, fontSize: 9, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{blog.tag}</div>
+                     <div style={{ background: C.white, padding: '4px 12px', borderRadius: 100, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.forest, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{blog.tag}</div>
                 </div>
             </div>
 
@@ -125,14 +126,14 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
             <div style={{ display: 'flex', flexDirection: 'column', gap: isLarge ? 16 : 8, flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <Calendar size={14} color={C.silver} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 700, color: C.silver }}>{blog.date}</span>
+                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.silver }}>{blog.date}</span>
                     <span style={{ width: 1, height: 12, background: C.border }} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: C.forest }}>{blog.readTime}</span>
+                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.forest }}>{blog.readTime}</span>
                 </div>
 
                 <h3 style={{
                     fontFamily: FONTS.main,
-                    fontSize: isLarge ? 24 : 16,
+                    fontSize: isLarge ? F_SIZE.lg : F_SIZE.md,
                     fontWeight: 900,
                     color: C.ink,
                     margin: 0,
@@ -142,7 +143,7 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
 
                 <p style={{
                     fontFamily: FONTS.main,
-                    fontSize: isLarge ? 15 : 13,
+                    fontSize: isLarge ? F_SIZE.md : F_SIZE.sm,
                     color: C.silver,
                     lineHeight: 1.6,
                     margin: 0,
@@ -152,7 +153,7 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
                     overflow: 'hidden'
                 }}>{blog.excerpt}</p>
 
-                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontFamily: FONTS.main, fontSize: 12, fontWeight: 800, color: C.leaf }}>
+                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: C.leaf }}>
                     READ ANALYSIS <ArrowRight size={14} />
                 </div>
             </div>
@@ -179,7 +180,7 @@ export default function Blogsection() {
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 40 }}>
                     <div style={{ maxWidth: 640 }}>
                         <SectionBadge text="Research Library" icon={BookOpen} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
+                        <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
                             Clinical Insights & <br /> <span style={{ color: C.leaf }}>Biometric Data.</span>
                         </h2>
                     </div>
@@ -187,7 +188,7 @@ export default function Blogsection() {
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Link href="/blog" style={{
                             display: 'flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 16,
-                            background: C.forest, color: C.white, fontFamily: FONTS.main, fontSize: 11, fontWeight: 900,
+                            background: C.forest, color: C.white, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900,
                             textTransform: 'uppercase', letterSpacing: '0.15em', boxShadow: '0 20px 40px rgba(10,61,31,0.15)'
                         }}>
                             All Research Papers <ChevronRight size={16} />
@@ -205,7 +206,7 @@ export default function Blogsection() {
 
                     {/* Secondary List */}
                     <div className="list-column">
-                        <div style={{ paddingBottom: 24, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12, color: C.silver, fontFamily: FONTS.main, fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        <div style={{ paddingBottom: 24, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', gap: 12, color: C.silver, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             <Bookmark size={14} color={C.gold} />
                             Trending Peer Reviews
                         </div>
@@ -214,7 +215,7 @@ export default function Blogsection() {
                         ))}
                         
                         <div style={{ marginTop: 'auto', padding: '20px', borderRadius: 24, background: C.offwhite, border: `1px solid ${C.forest}05`, textAlign: 'center' }}>
-                            <p style={{ fontFamily: FONTS.accent, fontSize: 22, color: C.gold, margin: 0, fontWeight: 700 }}>✦ More clinical data arriving weekly ✦</p>
+                            <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.gold, margin: 0, fontWeight: 700 }}>✦ More clinical data arriving weekly ✦</p>
                         </div>
                     </div>
 

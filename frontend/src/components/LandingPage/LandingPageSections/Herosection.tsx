@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { F_SIZE } from '@/lib/typography';
 
 // ── Design Tokens (Refined Light Theme) ───────────────────────────────────────
 const C = {
@@ -66,7 +67,7 @@ function Chip({ children }: { children: React.ReactNode }) {
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 9, letterSpacing: '0.26em', textTransform: 'uppercase',
+      fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
       color: C.forest, fontWeight: 700,
       border: `1px solid ${C.forest}40`,
       borderRadius: 2, padding: '5px 14px',
@@ -161,7 +162,7 @@ function ProductPanel() {
       }}>
         <span style={{
           fontFamily: "'Caveat', cursive",
-          fontSize: 15, letterSpacing: '0.04em',
+          fontSize: F_SIZE.md, letterSpacing: '0.04em',
           color: `${C.ink}44`, fontWeight: 700,
         }}>PlainFuel — Daily Edition</span>
 
@@ -181,7 +182,7 @@ function ProductPanel() {
           ))}
           <span style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 8.5, letterSpacing: '0.2em',
+            fontSize: F_SIZE.sm, letterSpacing: '0.2em',
             color: `${C.ink}33`, fontWeight: 700, marginLeft: 4,
           }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</span>
         </div>
@@ -247,18 +248,18 @@ function ProductPanel() {
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4 }}>
                 <span style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  fontSize: 22, fontWeight: 800,
+                  fontSize: F_SIZE.lg, fontWeight: 800,
                   color: C.ink, letterSpacing: '-0.02em', lineHeight: 1,
                 }}>{slide.label}</span>
                 <span style={{
                   fontFamily: "'Caveat', cursive",
-                  fontSize: 16, color: C.forest, fontWeight: 700,
+                  fontSize: F_SIZE.md, color: C.forest, fontWeight: 700,
                   letterSpacing: '0.02em',
                 }}>Flavor</span>
               </div>
               <div style={{
                 fontFamily: "'Montserrat', sans-serif",
-                fontSize: 9, letterSpacing: '0.18em',
+                fontSize: F_SIZE.sm, letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 600,
                 marginBottom: 0,
               }}>{slide.sub}</div>
@@ -282,12 +283,12 @@ function ProductPanel() {
             }}>
               <span style={{
                 fontFamily: "'Montserrat', sans-serif",
-                fontSize: 20, fontWeight: 800,
+                fontSize: F_SIZE.lg, fontWeight: 800,
                 color: C.ink, lineHeight: 1,
               }}>{v}</span>
               <span style={{
                 fontFamily: "'Montserrat', sans-serif",
-                fontSize: 7.5, letterSpacing: '0.24em',
+                fontSize: F_SIZE.sm, letterSpacing: '0.24em',
                 textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
               }}>{k}</span>
             </div>
@@ -308,13 +309,13 @@ function ProductPanel() {
             }} />
             <span style={{
               fontFamily: "'Montserrat', sans-serif",
-              fontSize: 8, letterSpacing: '0.16em',
+              fontSize: F_SIZE.sm, letterSpacing: '0.16em',
               textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
             }}>In Stock — Ships in 2 days</span>
           </div>
           <a href="#order" style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 8.5, letterSpacing: '0.2em',
+            fontSize: F_SIZE.sm, letterSpacing: '0.2em',
             textTransform: 'uppercase', color: C.forest, fontWeight: 900,
             textDecoration: 'none',
             display: 'flex', alignItems: 'center', gap: 6,
@@ -365,13 +366,13 @@ function AboutLeft({ inView }: { inView: boolean }) {
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 'clamp(8px,1.2vw,16px)', flexWrap: 'nowrap' }}>
           <h2 style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 'clamp(3rem, 6.5vw, 5.4rem)',
+            fontSize: F_SIZE.xl,
             fontWeight: 900, lineHeight: 0.88,
             letterSpacing: '-0.04em', margin: 0, color: C.ink,
           }}>Plain</h2>
           <h2 style={{
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: 'clamp(3rem, 6.5vw, 5.4rem)',
+            fontSize: F_SIZE.xl,
             fontWeight: 300, lineHeight: 0.88,
             letterSpacing: '-0.04em', margin: 0, color: C.forest,
           }}>Fuel</h2>
@@ -389,7 +390,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
 
       <motion.p {...fromLeft(0.28)} style={{
         fontFamily: "'Caveat', cursive",
-        fontSize: 'clamp(17px, 1.9vw, 21px)',
+        fontSize: F_SIZE.lg,
         fontWeight: 700, color: C.forest,
         margin: '0 0 38px 0', letterSpacing: '0.01em',
       }}>
@@ -400,7 +401,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
         <div style={{ width: 20, height: 1, background: C.gold }} />
         <span style={{
           fontFamily: "'Montserrat', sans-serif",
-          fontSize: 8.5, letterSpacing: '0.28em',
+          fontSize: F_SIZE.sm, letterSpacing: '0.28em',
           textTransform: 'uppercase', color: C.forest, fontWeight: 900,
         }}>What is PlainFuel?</span>
       </motion.div>
@@ -410,7 +411,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
           <motion.p key={i} {...fromLeft(0.42 + i * 0.1)}
             style={{
               fontFamily: "'Montserrat', sans-serif",
-              fontSize: 'clamp(13px, 1.45vw, 15.5px)',
+              fontSize: F_SIZE.md,
               fontWeight: 500, color: '#3c4a3e',
               lineHeight: 1.9, margin: 0,
               paddingLeft: 18,
@@ -424,7 +425,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
         <a href="#order" style={{
           display: 'inline-flex', alignItems: 'center', gap: 12,
           fontFamily: "'Montserrat', sans-serif",
-          fontSize: 9, fontWeight: 900,
+          fontSize: F_SIZE.sm, fontWeight: 900,
           letterSpacing: '0.22em', textTransform: 'uppercase',
           color: C.white, background: C.forest,
           padding: '15px 30px', borderRadius: 3,
@@ -462,7 +463,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
             </div>
             <span style={{
               fontFamily: "'Caveat', cursive",
-              fontSize: 14, color: C.silver, fontWeight: 700,
+              fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700,
             }}>1,200+ daily users</span>
           </div>
         </div>

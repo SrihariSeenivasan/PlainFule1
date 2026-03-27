@@ -9,6 +9,7 @@ import {
     GraduationCap, Sun
 } from 'lucide-react';
 import Image from 'next/image';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── DESIGN TOKENS ── */
 const C = {
@@ -191,7 +192,7 @@ function ImageCell({ image, isChanging, style }: any) {
                     padding: '4px 10px',
                     borderRadius: 100,
                     background: C.white,
-                    fontSize: 10,
+                    fontSize: F_SIZE.sm,
                     fontWeight: 800
                 }}>
                     {image.category}
@@ -238,7 +239,7 @@ export default function PeopleSection() {
                     textAlign: 'center',
                     fontFamily: FONTS.main,
                     fontWeight: 900,
-                    fontSize: '3rem'
+                    fontSize: F_SIZE.xl
                 }}>
                     One Sachet. For Everyone.
                 </h2>

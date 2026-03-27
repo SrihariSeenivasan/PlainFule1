@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getApiUrl } from '@/lib/api';
 import AuthModal from '@/components/AuthModal';
+import { F_SIZE } from '@/lib/typography';
 
 // ── Theme Constants ──
 const FD = "'Playfair Display', Georgia, serif";
@@ -62,10 +63,10 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
 
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
       <div>
-        <p style={{ fontFamily: FS, fontWeight: 700, fontSize: 14, color: '#1a1a1a', margin: 0 }}>
+        <p style={{ fontFamily: FS, fontWeight: 700, fontSize: F_SIZE.sm, color: '#1a1a1a', margin: 0 }}>
           {review.user.firstName} {review.user.lastName}
         </p>
-        <p style={{ fontFamily: FS, fontSize: 12, color: '#999', margin: '4px 0 0' }}>
+        <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: '4px 0 0' }}>
           {new Date(review.createdAt).toLocaleDateString()}
         </p>
       </div>
@@ -75,7 +76,7 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
       <StarRating rating={review.rating} size={14} />
     </div>
 
-    <p style={{ fontFamily: FS, fontSize: 14, color: '#555', lineHeight: 1.6, margin: 0 }}>
+    <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#555', lineHeight: 1.6, margin: 0 }}>
       {review.text}
     </p>
   </motion.div>
@@ -195,10 +196,10 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
           viewport={{ once: true }}
           style={{ textAlign: 'center', marginBottom: 48 }}
         >
-          <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, color: '#1a1a1a', margin: 0 }}>
+          <h2 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', margin: 0 }}>
             What People Are Saying
           </h2>
-          <p style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: 'clamp(14px, 2vw, 16px)', color: '#666', marginTop: 12 }}>
+          <p style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: F_SIZE.md, color: '#666', marginTop: 12 }}>
             Join {(stats.totalReviews || 324).toLocaleString()} satisfied customers
           </p>
         </motion.div>
@@ -208,18 +209,18 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
           background: '#fff', borderRadius: 16, padding: '32px', border: '2px solid rgba(21,128,61,0.15)',
           marginBottom: 48, textAlign: 'center', boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
         }}>
-          <p style={{ fontFamily: FS, fontSize: 14, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
+          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
             Average Rating
           </p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <StarRating rating={stats.averageRating || 0} size={18} />
-              <span style={{ fontFamily: FD, fontSize: 32, fontWeight: 800, color: '#1a1a1a' }}>
+              <span style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a' }}>
                 {(stats.averageRating || 0).toFixed(1)}
               </span>
             </div>
           </div>
-          <p style={{ fontFamily: FS, fontSize: 14, color: '#666', margin: 0 }}>
+          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#666', margin: 0 }}>
             Based on {stats.totalReviews || 324} verified reviews
           </p>
         </div>
@@ -234,7 +235,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
             marginBottom: 48, boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
           }}
         >
-          <h3 style={{ fontFamily: FD, fontSize: 24, color: '#1a1a1a', margin: '0 0 24px', fontWeight: 800 }}>
+          <h3 style={{ fontFamily: FD, fontSize: F_SIZE.lg, color: '#1a1a1a', margin: '0 0 24px', fontWeight: 800 }}>
             {isAuthenticated ? 'Share Your Experience' : 'Share Your Review'}
           </h3>
 
@@ -242,7 +243,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
             <div style={{
               background: 'rgba(21, 128, 61, 0.1)', padding: 16, borderRadius: 8, marginBottom: 24, border: `2px solid ${G}`,
             }}>
-              <p style={{ fontFamily: FS, fontSize: 14, color: '#333', margin: 0 }}>
+              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#333', margin: 0 }}>
                 👤 <strong>Please log in to post a review</strong>
               </p>
             </div>
@@ -252,7 +253,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
             <div style={{
               background: '#fee', padding: 16, borderRadius: 8, marginBottom: 16, borderLeft: `4px solid #f33`,
             }}>
-              <p style={{ fontFamily: FS, fontSize: 14, color: '#c33', margin: 0 }}>{error}</p>
+              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#c33', margin: 0 }}>{error}</p>
             </div>
           )}
 
@@ -260,13 +261,13 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
             <div style={{
               background: '#efe', padding: 16, borderRadius: 8, marginBottom: 16, borderLeft: `4px solid #3a3`,
             }}>
-              <p style={{ fontFamily: FS, fontSize: 14, color: '#3a3', margin: 0 }}>{success}</p>
+              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#3a3', margin: 0 }}>{success}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmitReview} style={{ display: 'grid', gap: 20 }}>
             <div>
-              <label style={{ fontFamily: FS, fontSize: 14, fontWeight: 600, color: '#333', display: 'block', marginBottom: 12 }}>
+              <label style={{ fontFamily: FS, fontSize: F_SIZE.sm, fontWeight: 600, color: '#333', display: 'block', marginBottom: 12 }}>
                 Rating *
               </label>
               <div style={{ cursor: isAuthenticated ? 'pointer' : 'default' }}>
@@ -280,7 +281,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
             </div>
 
             <div>
-              <label style={{ fontFamily: FS, fontSize: 14, fontWeight: 600, color: '#333', display: 'block', marginBottom: 8 }}>
+              <label style={{ fontFamily: FS, fontSize: F_SIZE.sm, fontWeight: 600, color: '#333', display: 'block', marginBottom: 8 }}>
                 Your Review *
               </label>
               <textarea
@@ -290,11 +291,11 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                 disabled={!isAuthenticated}
                 rows={5}
                 style={{
-                  width: '100%', padding: '12px', fontFamily: FS, fontSize: 14, border: '1.5px solid #ddd',
+                  width: '100%', padding: '12px', fontFamily: FS, fontSize: F_SIZE.sm, border: '1.5px solid #ddd',
                   borderRadius: 8, boxSizing: 'border-box', resize: 'vertical', opacity: isAuthenticated ? 1 : 0.6,
                 }}
               />
-              <p style={{ fontFamily: FS, fontSize: 12, color: '#999', margin: '8px 0 0' }}>
+              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: '8px 0 0' }}>
                 {formData.text.length} characters
               </p>
             </div>
@@ -306,7 +307,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                 onClick={() => setShowAuthModal(true)}
                 style={{
                   padding: '12px 24px', background: G, color: '#fff', fontFamily: FS, fontWeight: 600,
-                  border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 16,
+                  border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: F_SIZE.md,
                 }}
               >
                 Login to Review
@@ -318,7 +319,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                 disabled={submitting}
                 style={{
                   padding: '12px 24px', background: submitting ? '#ccc' : G, color: '#fff', fontFamily: FS, fontWeight: 600,
-                  border: 'none', borderRadius: 8, cursor: submitting ? 'not-allowed' : 'pointer', fontSize: 16,
+                  border: 'none', borderRadius: 8, cursor: submitting ? 'not-allowed' : 'pointer', fontSize: F_SIZE.md,
                 }}
               >
                 {submitting ? 'Posting...' : 'Post Review'}
@@ -334,7 +335,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
           </div>
         ) : reviews.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <p style={{ fontFamily: FS, color: '#999', fontSize: 16 }}>No reviews yet. Be the first to review!</p>
+            <p style={{ fontFamily: FS, color: '#999', fontSize: F_SIZE.md }}>No reviews yet. Be the first to review!</p>
           </div>
         ) : (
           <div style={{

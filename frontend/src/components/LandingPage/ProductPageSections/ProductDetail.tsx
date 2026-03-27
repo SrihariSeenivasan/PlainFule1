@@ -10,6 +10,7 @@ import { useAuth } from '@/lib/auth-context';
 import AuthModal from '@/components/AuthModal';
 import ProductFAQ from './ProductFAQ';
 import ReviewsSection from './ReviewsSection';
+import { F_SIZE } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
@@ -111,7 +112,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
           style={{
             display: 'flex', alignItems: 'center', gap: 8,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: C.mid, fontWeight: 700, fontSize: 14,
+            color: C.mid, fontWeight: 700, fontSize: F_SIZE.sm,
             marginBottom: 32, textTransform: 'uppercase', letterSpacing: '0.1em'
           }}
         >
@@ -204,18 +205,18 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: C.gold }}>
                     <Star size={16} fill={C.gold} />
-                    <span style={{ fontSize: 16, fontWeight: 800, color: C.ink }}>{product.rating || 5.0}</span>
+                    <span style={{ fontSize: F_SIZE.md, fontWeight: 800, color: C.ink }}>{product.rating || 5.0}</span>
                   </div>
-                  <span style={{ color: C.silver, fontSize: 13, fontWeight: 500 }}>• {(product.reviews || 0).toLocaleString()} Verified Reviews</span>
+                  <span style={{ color: C.silver, fontSize: F_SIZE.sm, fontWeight: 500 }}>• {(product.reviews || 0).toLocaleString()} Verified Reviews</span>
               </div>
-              <h1 style={{ fontSize: 'clamp(32px, 4vw, 42px)', fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.02em' }}>{product.name}</h1>
-              <p style={{ fontFamily: FONTS.accent, fontSize: 24, color: C.mid, margin: '4px 0 20px' }}>Distilled Perfection</p>
-              <p style={{ fontSize: 15, color: '#4a554d', lineHeight: 1.8, margin: 0 }}>{product.description}</p>
+              <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.02em' }}>{product.name}</h1>
+              <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.mid, margin: '4px 0 20px' }}>Distilled Perfection</p>
+              <p style={{ fontSize: F_SIZE.sm, color: '#4a554d', lineHeight: 1.8, margin: 0 }}>{product.description}</p>
             </div>
 
             {/* Package Selector */}
             <div>
-               <p style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', color: C.silver, marginBottom: 16 }}>Select Protocol</p>
+               <p style={{ fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', color: C.silver, marginBottom: 16 }}>Select Protocol</p>
                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                  {(product.packages || []).map((pkg, i) => (
                    <button
@@ -228,9 +229,9 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                       minWidth: 140, flex: 1
                     }}
                    >
-                     <div style={{ fontSize: 15, fontWeight: 800, color: i === selectedPackage ? C.mid : C.ink }}>{pkg.duration}</div>
-                     <div style={{ fontSize: 12, color: C.silver, marginTop: 2 }}>{pkg.pouches} Pouches</div>
-                     {pkg.savePct && <div style={{ fontSize: 10, fontWeight: 800, color: C.leaf, marginTop: 4 }}>Save {pkg.savePct}</div>}
+                     <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: i === selectedPackage ? C.mid : C.ink }}>{pkg.duration}</div>
+                     <div style={{ fontSize: F_SIZE.sm, color: C.silver, marginTop: 2 }}>{pkg.pouches} Pouches</div>
+                     {pkg.savePct && <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.leaf, marginTop: 4 }}>Save {pkg.savePct}</div>}
                    </button>
                  ))}
                </div>
@@ -242,9 +243,9 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               display: 'flex', flexDirection: 'column', gap: 24
             }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-                <span style={{ fontSize: 36, fontWeight: 900, color: C.mid }}>₹{price.toLocaleString()}</span>
+                <span style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.mid }}>₹{price.toLocaleString()}</span>
                 {packageData.origPrice && packageData.origPrice > price && (
-                   <span style={{ fontSize: 18, color: C.silver, textDecoration: 'line-through' }}>₹{packageData.origPrice.toLocaleString()}</span>
+                   <span style={{ fontSize: F_SIZE.md, color: C.silver, textDecoration: 'line-through' }}>₹{packageData.origPrice.toLocaleString()}</span>
                 )}
               </div>
 
@@ -255,7 +256,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                   border: '1px solid #e5e7eb'
                 }}>
                   <button onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 24, padding: 0, color: C.mid }}>-</button>
-                  <span style={{ fontSize: 18, fontWeight: 800, minWidth: 20, textAlign: 'center' }}>{quantity}</span>
+                  <span style={{ fontSize: F_SIZE.md, fontWeight: 800, minWidth: 20, textAlign: 'center' }}>{quantity}</span>
                   <button onClick={() => setQuantity(quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 24, padding: 0, color: C.mid }}>+</button>
                 </div>
 
@@ -265,7 +266,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                   onClick={handleAddToCart}
                   style={{
                     flex: 1, background: C.deep, color: C.white, border: 'none',
-                    borderRadius: 100, fontSize: 13, fontWeight: 900,
+                    borderRadius: 100, fontSize: F_SIZE.sm, fontWeight: 900,
                     textTransform: 'uppercase', letterSpacing: '0.15em',
                     padding: '18px', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
@@ -279,11 +280,11 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               <div style={{ display: 'flex', gap: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <RotateCcw size={14} color={C.mid} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: '#4a554d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Easy Returns</span>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: '#4a554d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Easy Returns</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Truck size={14} color={C.mid} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: '#4a554d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fast Shipping</span>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: '#4a554d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fast Shipping</span>
                 </div>
               </div>
             </div>
@@ -298,7 +299,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                <div style={{ padding: 10, background: `${C.leaf}10`, borderRadius: 12 }}>
                  <Zap size={20} color={C.leaf} />
                </div>
-               <h3 style={{ fontSize: 20, fontWeight: 800, margin: 0 }}>Core Benefits</h3>
+               <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 800, margin: 0 }}>Core Benefits</h3>
              </div>
              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                {(packageData.benefits || []).map((b: string, i: number) => (
@@ -306,7 +307,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                    <div style={{ width: 20, height: 20, borderRadius: '50%', background: `${C.leaf}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                      <Check size={12} color={C.leaf} strokeWidth={4} />
                    </div>
-                   <span style={{ fontSize: 14, fontWeight: 500, color: '#4a554d' }}>{b}</span>
+                   <span style={{ fontSize: F_SIZE.sm, fontWeight: 500, color: '#4a554d' }}>{b}</span>
                  </div>
                ))}
              </div>
@@ -318,15 +319,15 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                <div style={{ padding: 10, background: `${C.gold}10`, borderRadius: 12 }}>
                  <BarChart3 size={20} color={C.gold} />
                </div>
-               <h3 style={{ fontSize: 20, fontWeight: 800, margin: 0 }}>Nutrient Profile</h3>
+               <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 800, margin: 0 }}>Nutrient Profile</h3>
              </div>
              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                {(packageData.nutrients || []).map((n: ProductNutrient, i: number) => (
                  <div key={i} style={{ padding: '16px', borderRadius: 16, background: C.offwhite, position: 'relative' }}>
                    <span style={{ fontSize: 22, position: 'absolute', right: 12, top: 12, opacity: 0.2 }}>{n.emoji}</span>
-                   <div style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{n.label}</div>
-                   <div style={{ fontSize: 22, fontWeight: 900, color: C.mid, margin: '2px 0' }}>{n.amount}</div>
-                   <div style={{ fontSize: 11, color: '#4a554d', fontWeight: 500 }}>{n.friendly}</div>
+                   <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{n.label}</div>
+                   <div style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.mid, margin: '2px 0' }}>{n.amount}</div>
+                   <div style={{ fontSize: F_SIZE.sm, color: '#4a554d', fontWeight: 500 }}>{n.friendly}</div>
                  </div>
                ))}
              </div>
@@ -350,7 +351,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
             style={{
               position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)',
               background: C.deep, color: C.white, padding: '16px 32px', borderRadius: 100,
-              fontSize: 14, fontWeight: 700, zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+              fontSize: F_SIZE.sm, fontWeight: 700, zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
             }}
           >
             {toastMessage}
