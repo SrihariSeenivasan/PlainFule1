@@ -2,24 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { F_SIZE } from '@/lib/typography';
-
-// ── Design Tokens (Refined Light Theme) ───────────────────────────────────────
-const C = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
-  white: '#ffffff',
-  offwhite: '#fafafa',
-  silver: '#64748b',
-  mist: '#f1f5f9',
-  gold: '#854d0e',
-  goldLight: '#a16207',
-  champagne: '#fef3c7',
-  glassDark: 'rgba(255, 255, 255, 0.88)',
-};
+import { F_SIZE, COLORS, FONTS, BRAND } from '@/lib/typography';
 
 // ── Slides data ───────────────────────────────────────────────────────────────
 const SLIDES = [
@@ -56,7 +39,7 @@ function GoldLine({ style }: { style?: React.CSSProperties }) {
   return (
     <div style={{
       height: 1, width: '100%',
-      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      background: `linear-gradient(to right, transparent, ${BRAND.burgundy}99, transparent)`,
       ...style,
     }} />
   );
@@ -66,10 +49,10 @@ function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 700,
-      border: `1px solid ${C.forest}40`,
+      color: BRAND.espresso, fontWeight: 700,
+      border: `1px solid ${BRAND.espresso}40`,
       borderRadius: 2, padding: '5px 14px',
       backgroundColor: 'rgba(10, 61, 31, 0.05)',
     }}>{children}</span>
@@ -114,7 +97,7 @@ function ProductPanel() {
       height: CARD_HEIGHT,
       width: '100%',
       boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)',
-      background: C.white,
+      background: COLORS.white,
       border: '1px solid rgba(0,0,0,0.05)',
     }}>
 
@@ -142,7 +125,7 @@ function ProductPanel() {
           <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.08 }}>
             <defs>
               <pattern id="dotgrid" width="28" height="28" patternUnits="userSpaceOnUse">
-                <circle cx="14" cy="14" r="0.9" fill={C.gold} />
+                <circle cx="14" cy="14" r="0.9" fill={BRAND.burgundy} />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#dotgrid)" />
@@ -152,7 +135,7 @@ function ProductPanel() {
 
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 2, zIndex: 20,
-        background: `linear-gradient(to right, transparent 5%, ${C.goldLight}44 35%, ${C.goldLight} 50%, ${C.goldLight}44 65%, transparent 95%)`,
+        background: `linear-gradient(to right, transparent 5%, ${BRAND.burgundy}44 35%, ${BRAND.burgundy} 50%, ${BRAND.burgundy}44 65%, transparent 95%)`,
       }} />
 
       <div style={{
@@ -161,9 +144,9 @@ function ProductPanel() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <span style={{
-          fontFamily: "'Caveat', cursive",
+          fontFamily: FONTS.accent,
           fontSize: F_SIZE.md, letterSpacing: '0.04em',
-          color: `${C.ink}44`, fontWeight: 700,
+          color: `${COLORS.ink}44`, fontWeight: 700,
         }}>PlainFuel — Daily Edition</span>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -175,15 +158,15 @@ function ProductPanel() {
               style={{
                 width: i === idx ? 28 : 7, height: 3,
                 border: 'none', cursor: 'pointer', padding: 0,
-                background: i === idx ? C.forest : `${C.silver}33`,
+                background: i === idx ? BRAND.espresso : `${COLORS.silver}33`,
                 borderRadius: 1.5, transition: 'all 0.35s ease',
               }}
             />
           ))}
           <span style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-            color: `${C.ink}33`, fontWeight: 700, marginLeft: 4,
+            color: `${COLORS.ink}33`, fontWeight: 700, marginLeft: 4,
           }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</span>
         </div>
       </div>
@@ -247,20 +230,20 @@ function ProductPanel() {
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4 }}>
                 <span style={{
-                  fontFamily: "'Montserrat', sans-serif",
+                  fontFamily: FONTS.main,
                   fontSize: F_SIZE.lg, fontWeight: 800,
-                  color: C.ink, letterSpacing: '-0.02em', lineHeight: 1,
+                  color: COLORS.ink, letterSpacing: '-0.02em', lineHeight: 1,
                 }}>{slide.label}</span>
                 <span style={{
-                  fontFamily: "'Caveat', cursive",
-                  fontSize: F_SIZE.md, color: C.forest, fontWeight: 700,
+                  fontFamily: FONTS.accent,
+                  fontSize: F_SIZE.md, color: BRAND.espresso, fontWeight: 700,
                   letterSpacing: '0.02em',
                 }}>Flavor</span>
               </div>
               <div style={{
-                fontFamily: "'Montserrat', sans-serif",
+                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.18em',
-                textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 600,
+                textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 600,
                 marginBottom: 0,
               }}>{slide.sub}</div>
             </motion.div>
@@ -282,14 +265,14 @@ function ProductPanel() {
               display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
             }}>
               <span style={{
-                fontFamily: "'Montserrat', sans-serif",
+                fontFamily: FONTS.main,
                 fontSize: F_SIZE.lg, fontWeight: 800,
-                color: C.ink, lineHeight: 1,
+                color: COLORS.ink, lineHeight: 1,
               }}>{v}</span>
               <span style={{
-                fontFamily: "'Montserrat', sans-serif",
+                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.24em',
-                textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
+                textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 700,
               }}>{k}</span>
             </div>
           ))}
@@ -304,19 +287,19 @@ function ProductPanel() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <div style={{
               width: 6, height: 6, borderRadius: '50%',
-              background: '#16a34a',
+              background: '#72383D',
               boxShadow: '0 0 7px rgba(22,163,74,0.4)',
             }} />
             <span style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: FONTS.main,
               fontSize: F_SIZE.sm, letterSpacing: '0.16em',
-              textTransform: 'uppercase', color: `${C.silver}`, fontWeight: 700,
+              textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 700,
             }}>In Stock — Ships in 2 days</span>
           </div>
           <a href="#order" style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-            textTransform: 'uppercase', color: C.forest, fontWeight: 900,
+            textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
             textDecoration: 'none',
             display: 'flex', alignItems: 'center', gap: 6,
             transition: 'opacity 0.2s',
@@ -353,28 +336,28 @@ function AboutLeft({ inView }: { inView: boolean }) {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <motion.div {...fromLeft(0.05)} style={{ marginBottom: 30, display: 'flex', alignItems: 'center', gap: 16 }}>
         <Chip>
-          <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={C.mid} /></svg>
+          <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={BRAND.espresso} /></svg>
           Daily Nutrition
         </Chip>
         <div style={{
           width: 52, height: 1,
-          background: `linear-gradient(to right, ${C.gold}99, transparent)`,
+          background: `linear-gradient(to right, ${BRAND.burgundy}99, transparent)`,
         }} />
       </motion.div>
 
       <motion.div {...fromLeft(0.12)} style={{ marginBottom: 6 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 'clamp(8px,1.2vw,16px)', flexWrap: 'nowrap' }}>
           <h2 style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 900, lineHeight: 0.88,
-            letterSpacing: '-0.04em', margin: 0, color: C.ink,
+            letterSpacing: '-0.04em', margin: 0, color: COLORS.ink,
           }}>Plain</h2>
           <h2 style={{
-            fontFamily: "'Montserrat', sans-serif",
+            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 300, lineHeight: 0.88,
-            letterSpacing: '-0.04em', margin: 0, color: C.forest,
+            letterSpacing: '-0.04em', margin: 0, color: BRAND.espresso,
           }}>Fuel</h2>
         </div>
       </motion.div>
@@ -389,20 +372,20 @@ function AboutLeft({ inView }: { inView: boolean }) {
       </motion.div>
 
       <motion.p {...fromLeft(0.28)} style={{
-        fontFamily: "'Caveat', cursive",
+        fontFamily: FONTS.accent,
         fontSize: F_SIZE.lg,
-        fontWeight: 700, color: C.forest,
+        fontWeight: 700, color: BRAND.espresso,
         margin: '0 0 38px 0', letterSpacing: '0.01em',
       }}>
         A Simple Approach to Daily Nutrition
       </motion.p>
 
       <motion.div {...fromLeft(0.34)} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
-        <div style={{ width: 20, height: 1, background: C.gold }} />
+        <div style={{ width: 20, height: 1, background: BRAND.burgundy }} />
         <span style={{
-          fontFamily: "'Montserrat', sans-serif",
+          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, letterSpacing: '0.28em',
-          textTransform: 'uppercase', color: C.forest, fontWeight: 900,
+          textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
         }}>What is PlainFuel?</span>
       </motion.div>
 
@@ -410,12 +393,12 @@ function AboutLeft({ inView }: { inView: boolean }) {
         {paragraphs.map((text, i) => (
           <motion.p key={i} {...fromLeft(0.42 + i * 0.1)}
             style={{
-              fontFamily: "'Montserrat', sans-serif",
+              fontFamily: FONTS.main,
               fontSize: F_SIZE.md,
               fontWeight: 500, color: '#3c4a3e',
               lineHeight: 1.9, margin: 0,
               paddingLeft: 18,
-              borderLeft: `2px solid ${i === 0 ? C.gold : i === 1 ? C.leaf : 'rgba(22,101,52,0.15)'}`,
+              borderLeft: `2px solid ${i === 0 ? BRAND.burgundy : i === 1 ? BRAND.burgundy : 'rgba(22,101,52,0.15)'}`,
             }}
           >{text}</motion.p>
         ))}
@@ -424,17 +407,17 @@ function AboutLeft({ inView }: { inView: boolean }) {
       <motion.div {...fromLeft(0.72)} style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
         <a href="#order" style={{
           display: 'inline-flex', alignItems: 'center', gap: 12,
-          fontFamily: "'Montserrat', sans-serif",
+          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, fontWeight: 900,
           letterSpacing: '0.22em', textTransform: 'uppercase',
-          color: C.white, background: C.forest,
+          color: COLORS.white, background: BRAND.espresso,
           padding: '15px 30px', borderRadius: 3,
           textDecoration: 'none',
           boxShadow: '0 8px 32px rgba(10,61,31,0.12)',
           transition: 'all 0.25s ease',
         }}
-          onMouseEnter={e => { e.currentTarget.style.background = C.mid; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(10,61,31,0.2)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = C.forest; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 32px rgba(10,61,31,0.12)'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = BRAND.espresso; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(10,61,31,0.2)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = BRAND.espresso; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 32px rgba(10,61,31,0.12)'; }}
         >
           Get PlainFuel
           <svg viewBox="0 0 16 16" width={11} height={11} fill="none">
@@ -447,7 +430,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
             {['#2d6a3f', '#235233', '#3a8055'].map((bg, i) => (
               <div key={i} style={{
                 width: 28, height: 28, borderRadius: '50%',
-                border: `2px solid ${C.white}`,
+                border: `2px solid ${COLORS.white}`,
                 background: bg, marginLeft: i > 0 ? -9 : 0,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
               }} />
@@ -457,13 +440,13 @@ function AboutLeft({ inView }: { inView: boolean }) {
             <div style={{ display: 'flex', gap: 2, marginBottom: 3 }}>
               {[1, 2, 3, 4, 5].map(s => (
                 <svg key={s} viewBox="0 0 10 10" width={9} height={9}>
-                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={C.gold} />
+                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={BRAND.burgundy} />
                 </svg>
               ))}
             </div>
             <span style={{
-              fontFamily: "'Caveat', cursive",
-              fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700,
+              fontFamily: FONTS.accent,
+              fontSize: F_SIZE.sm, color: COLORS.silver, fontWeight: 700,
             }}>1,200+ daily users</span>
           </div>
         </div>
@@ -483,7 +466,7 @@ export default function PlainFuelHero() {
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
         
         .pfa-section {
-          background: #fafafa;
+          background: ${BRAND.cream};
           min-height: 100vh;
           display: flex;
           align-items: center;

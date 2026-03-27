@@ -10,20 +10,20 @@ import { useAuth } from '@/lib/auth-context';
 import AuthModal from '@/components/AuthModal';
 import ProductFAQ from './ProductFAQ';
 import ReviewsSection from './ReviewsSection';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
+  forest: BRAND.espresso,
+  deep: BRAND.espresso,
+  mid: BRAND.espresso,
+  leaf: BRAND.burgundy,
+  ink: BRAND.espresso,
   white: '#ffffff',
-  offwhite: '#fafafa',
+  offwhite: BRAND.cream,
   silver: '#64748b',
-  mist: '#f1f5f9',
-  gold: '#854d0e',
+  mist: BRAND.stone,
+  gold: BRAND.burgundy,
   goldLight: '#a16207',
   champagne: '#fef3c7',
   glass: 'rgba(255, 255, 255, 0.92)',
@@ -52,8 +52,8 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 700,
-      border: `1px solid ${C.forest}40`,
+      color: BRAND.espresso, fontWeight: 700,
+      border: `1px solid ${BRAND.espresso}40`,
       borderRadius: 2, padding: '5px 14px',
       backgroundColor: 'rgba(10, 61, 31, 0.05)',
     }}>{children}</span>
@@ -132,7 +132,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
   if (!packageData) return null;
 
   return (
-    <div style={{ fontFamily: FONTS.main, minHeight: '100vh', background: C.offwhite }}>
+    <div style={{ fontFamily: FONTS.main, minHeight: '100vh', background: BRAND.cream }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '120px 24px 80px' }}>
         
         {/* Back Button */}
@@ -142,7 +142,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
           style={{
             display: 'flex', alignItems: 'center', gap: 12,
             background: 'none', border: 'none', cursor: 'pointer',
-            color: C.forest, fontWeight: 900, fontSize: F_SIZE.sm,
+            color: BRAND.espresso, fontWeight: 900, fontSize: F_SIZE.sm,
             marginBottom: 32, textTransform: 'uppercase', letterSpacing: '0.2em'
           }}
         >
@@ -202,10 +202,10 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               {images.length > 1 && (
                 <>
                   <button onClick={handlePrevImage} style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', background: C.white, border: 'none', borderRadius: '50%', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10 }}>
-                    <ChevronLeft size={22} color={C.forest} />
+                    <ChevronLeft size={22} color={BRAND.espresso} />
                   </button>
                   <button onClick={handleNextImage} style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', background: C.white, border: 'none', borderRadius: '50%', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 10 }}>
-                    <ChevronRight size={22} color={C.forest} />
+                    <ChevronRight size={22} color={BRAND.espresso} />
                   </button>
                 </>
               )}
@@ -219,7 +219,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                     key={i}
                     onClick={() => setCurrentImageIndex(i)}
                     style={{
-                      width: 72, height: 72, borderRadius: 8, overflow: 'hidden', border: i === currentImageIndex ? `2.5px solid ${C.forest}` : '2.5px solid transparent',
+                      width: 72, height: 72, borderRadius: 8, overflow: 'hidden', border: i === currentImageIndex ? `2.5px solid ${BRAND.espresso}` : '2.5px solid transparent',
                       background: C.white, cursor: 'pointer', transition: 'all 0.2s', padding: 4
                     }}
                   >
@@ -242,7 +242,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               </div>
 
               <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: C.ink, margin: '0 0 8px', letterSpacing: '-0.03em', lineHeight: 1 }}>{product.name}</h1>
-              <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.forest, fontWeight: 700, marginBottom: 20 }}>Optimal Formulation Edition</p>
+              <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.espresso, fontWeight: 700, marginBottom: 20 }}>Optimal Formulation Edition</p>
               
               <GoldLine style={{ marginBottom: 28, opacity: 0.6 }} />
               
@@ -260,7 +260,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                  <div style={{ width: 20, height: 1, background: C.gold }} />
                  <span style={{
                    fontFamily: FONTS.main, fontSize: F_SIZE.sm, letterSpacing: '0.24em',
-                   textTransform: 'uppercase', color: C.forest, fontWeight: 900,
+                   textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
                  }}>Select Duration</span>
                </div>
                
@@ -270,18 +270,18 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                     key={pkg.id}
                     onClick={() => { setSelectedPackage(i); setCurrentImageIndex(0); }}
                     style={{
-                      padding: '20px 24px', borderRadius: 8, border: i === selectedPackage ? `2.5px solid ${C.forest}` : '1.5px solid rgba(0,0,0,0.08)',
-                      background: i === selectedPackage ? `${C.forest}04` : C.white,
+                      padding: '20px 24px', borderRadius: 8, border: i === selectedPackage ? `2.5px solid ${BRAND.espresso}` : '1.5px solid rgba(0,0,0,0.08)',
+                      background: i === selectedPackage ? `${BRAND.espresso}04` : C.white,
                       cursor: 'pointer', transition: 'all 0.2s', textAlign: 'left',
                       position: 'relative'
                     }}
                    >
-                     <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: i === selectedPackage ? C.forest : C.ink }}>{pkg.duration}</div>
+                     <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: i === selectedPackage ? BRAND.espresso : C.ink }}>{pkg.duration}</div>
                      <div style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, marginTop: 4, letterSpacing: '0.04em' }}>{pkg.pouches} Pouches</div>
                      {pkg.savePct && (
                        <div style={{ 
                          position: 'absolute', top: 12, right: 12, padding: '4px 10px', 
-                         background: C.leaf, color: C.white, fontSize: 10, fontWeight: 900, borderRadius: 2
+                         background: BRAND.burgundy, color: C.white, fontSize: 10, fontWeight: 900, borderRadius: 2
                        }}>SAVE {pkg.savePct}</div>
                      )}
                    </button>
@@ -295,7 +295,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
               display: 'flex', flexDirection: 'column', gap: 24, boxShadow: '0 10px 30px -10px rgba(0,0,0,0.03)'
             }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 16 }}>
-                <span style={{ fontSize: '2.5rem', fontWeight: 900, color: C.forest, letterSpacing: '-0.02em' }}>₹{price.toLocaleString()}</span>
+                <span style={{ fontSize: '2.5rem', fontWeight: 900, color: BRAND.espresso, letterSpacing: '-0.02em' }}>₹{price.toLocaleString()}</span>
                 {packageData.origPrice && packageData.origPrice > price && (
                    <span style={{ fontSize: F_SIZE.lg, color: C.silver, fontWeight: 600, textDecoration: 'line-through' }}>₹{packageData.origPrice.toLocaleString()}</span>
                 )}
@@ -307,17 +307,17 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                   background: C.white, padding: '0 24px', borderRadius: 6,
                   border: '1px solid rgba(0,0,0,0.08)', height: 62
                 }}>
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 28, padding: 0, color: C.forest, fontWeight: 800 }}>−</button>
+                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 28, padding: 0, color: BRAND.espresso, fontWeight: 800 }}>−</button>
                   <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, minWidth: 24, textAlign: 'center', color: C.ink }}>{quantity}</span>
-                  <button onClick={() => setQuantity(quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 24, padding: 0, color: C.forest, fontWeight: 800 }}>+</button>
+                  <button onClick={() => setQuantity(quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 24, padding: 0, color: BRAND.espresso, fontWeight: 800 }}>+</button>
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                  whileHover={{ scale: 1.01, backgroundColor: BRAND.espresso }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleAddToCart}
                   style={{
-                    flex: 1, background: C.forest, color: C.white, border: 'none',
+                    flex: 1, background: BRAND.espresso, color: C.white, border: 'none',
                     borderRadius: 6, fontSize: F_SIZE.sm, fontWeight: 900,
                     textTransform: 'uppercase', letterSpacing: '0.22em',
                     padding: '18px', cursor: 'pointer',
@@ -331,11 +331,11 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
 
               <div style={{ display: 'flex', gap: 32, opacity: 0.8 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <RotateCcw size={16} color={C.mid} />
+                  <RotateCcw size={16} color={BRAND.espresso} />
                   <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Easy Returns</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Truck size={16} color={C.mid} />
+                  <Truck size={16} color={BRAND.espresso} />
                   <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Express Delivery</span>
                 </div>
               </div>
@@ -352,15 +352,15 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
              border: '1px solid rgba(0,0,0,0.05)'
            }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32 }}>
-               <div style={{ width: 48, height: 48, background: `${C.leaf}10`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                 <Zap size={22} color={C.leaf} />
+               <div style={{ width: 48, height: 48, background: `${BRAND.burgundy}10`, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <Zap size={22} color={BRAND.burgundy} />
                </div>
                <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, margin: 0, letterSpacing: '-0.01em' }}>Core Benefits</h3>
              </div>
              <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                {(packageData.benefits || []).map((b: string, i: number) => (
                  <div key={i} style={{ display: 'flex', alignItems: 'start', gap: 16 }}>
-                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.leaf, marginTop: 8 }} />
+                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.burgundy, marginTop: 8 }} />
                    <span style={{ fontSize: F_SIZE.md, fontWeight: 600, color: '#3c4a3e', lineHeight: 1.4 }}>{b}</span>
                  </div>
                ))}
@@ -383,7 +383,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
                {(packageData.nutrients || []).map((n: ProductNutrient, i: number) => (
                  <div key={i} style={{ padding: '24px', borderRadius: 8, background: C.mist, border: '1px solid rgba(0,0,0,0.03)' }}>
                    <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 6 }}>{n.label}</div>
-                   <div style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.forest, lineHeight: 1 }}>{n.amount}</div>
+                   <div style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, lineHeight: 1 }}>{n.amount}</div>
                    <div style={{ fontSize: 11, color: C.gold, fontWeight: 800, marginTop: 8, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{n.friendly}</div>
                  </div>
                ))}
@@ -407,7 +407,7 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
             exit={{ opacity: 0, y: 50 }}
             style={{
               position: 'fixed', bottom: 40, left: '50%', x: '-50%',
-              background: C.forest, color: C.white, padding: '16px 32px', borderRadius: 100,
+              background: BRAND.espresso, color: C.white, padding: '16px 32px', borderRadius: 100,
               fontSize: F_SIZE.sm, fontWeight: 900, zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
               textTransform: 'uppercase', letterSpacing: '0.1em'
             }}
@@ -425,3 +425,6 @@ export default function ProductDetail({ product, onBack }: ProductDetailProps) {
     </div>
   );
 }
+
+
+

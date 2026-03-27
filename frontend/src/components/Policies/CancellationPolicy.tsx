@@ -1,8 +1,9 @@
+
 'use client';
 
 import { motion } from 'framer-motion';
 import MainLayout from '@/components/MainLayout';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from "@/lib/typography";
 
 export default function CancellationPolicy() {
   const containerVariants = {
@@ -22,7 +23,7 @@ export default function CancellationPolicy() {
   };
 
   return (
-    <MainLayout background="linear-gradient(to bottom right, #f0fdf4, #ffffff)">
+    <MainLayout background="linear-gradient(to bottom right, BRAND.cream, #ffffff)">
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
         <motion.div
           className="max-w-4xl mx-auto"
@@ -32,10 +33,10 @@ export default function CancellationPolicy() {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="font-extrabold mb-4 tracking-tight">
+            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-extrabold mb-4 tracking-tight">
               Cancellation Policy
             </h1>
-            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: '#14532d', opacity: 0.8 }} className="font-medium">
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso, opacity: 0.8 }} className="font-medium">
               Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </motion.div>
@@ -45,10 +46,10 @@ export default function CancellationPolicy() {
             {/* Section 1 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 style={{ fontSize: F_SIZE.lg }} className="font-bold text-gray-900 flex items-center gap-3">
-                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">1</span>
+                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold">1</span>
                 Cancellation Rights
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 At Plainfuel, we understand that circumstances change. You have the right to cancel your subscription or order within 14 days of purchase. This policy applies to all digital and physical products ordered through our platform.
               </p>
             </motion.section>
@@ -56,13 +57,13 @@ export default function CancellationPolicy() {
             {/* Section 2 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 style={{ fontSize: F_SIZE.lg }} className="font-bold text-gray-900 flex items-center gap-3">
-                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">2</span>
+                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold">2</span>
                 How to Cancel
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 To cancel your order or subscription:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Contact our customer support team at support@plainfuel.com</li>
                 <li>Provide your order number or subscription ID</li>
                 <li>State your reason for cancellation (optional)</li>
@@ -73,10 +74,10 @@ export default function CancellationPolicy() {
             {/* Section 3 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 style={{ fontSize: F_SIZE.lg }} className="font-bold text-gray-900 flex items-center gap-3">
-                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">3</span>
+                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold">3</span>
                 Refunds
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Once your cancellation is processed, refunds will be issued to your original payment method within 5-7 business days. Please note that subscription cancellations are effective immediately, but you may continue to have access until the end of your current billing period.
               </p>
             </motion.section>
@@ -84,10 +85,10 @@ export default function CancellationPolicy() {
             {/* Section 4 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 style={{ fontSize: F_SIZE.lg }} className="font-bold text-gray-900 flex items-center gap-3">
-                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">4</span>
+                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold">4</span>
                 Exceptions
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Cancellations cannot be processed for orders already shipped or delivered, unless they qualify under our Return Policy. Digital downloads cannot be cancelled after purchase.
               </p>
             </motion.section>
@@ -95,13 +96,13 @@ export default function CancellationPolicy() {
             {/* Section 5 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 style={{ fontSize: F_SIZE.lg }} className="font-bold text-gray-900 flex items-center gap-3">
-                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">5</span>
+                <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold">5</span>
                 Contact Us
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: '#14532d' }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you have questions about our cancellation policy, please reach out to our support team:
               </p>
-              <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded">
+              <div className="bg-[#EFE9E1] border-l-4  p-4 rounded">
                 <p style={{ fontSize: F_SIZE.md }} className="text-gray-900 font-semibold mb-2">Plainfuel Customer Support</p>
                 <p style={{ fontSize: F_SIZE.md }} className="text-gray-700">Email: support@plainfuel.com</p>
                 <p style={{ fontSize: F_SIZE.md }} className="text-gray-700">Hours: Monday - Friday, 9 AM - 5 PM EST</p>
@@ -113,3 +114,7 @@ export default function CancellationPolicy() {
     </MainLayout>
   );
 }
+
+
+
+

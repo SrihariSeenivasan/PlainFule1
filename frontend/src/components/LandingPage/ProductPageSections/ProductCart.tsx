@@ -9,35 +9,14 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import AuthModal from '@/components/AuthModal';
 import MainLayout from '@/components/MainLayout';
-import { F_SIZE } from '@/lib/typography';
-
-/* ── Design Tokens ── */
-const C = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
-  white: '#ffffff',
-  offwhite: '#fafafa',
-  silver: '#64748b',
-  mist: '#f1f5f9',
-  gold: '#854d0e',
-  goldLight: '#a16207',
-  glass: 'rgba(255, 255, 255, 0.92)',
-};
-
-const FONTS = {
-  main: "'Montserrat', sans-serif",
-  accent: "'Caveat', cursive",
-};
+import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
 
 /* ── Components ── */
 function GoldLine({ style }: { style?: React.CSSProperties }) {
   return (
     <div style={{
       height: 1, width: '100%',
-      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      background: `linear-gradient(to right, transparent, ${BRAND.stone}99, transparent)`,
       ...style,
     }} />
   );
@@ -49,10 +28,10 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 700,
-      border: `1px solid ${C.forest}40`,
+      color: BRAND.espresso, fontWeight: 700,
+      border: `1px solid ${BRAND.stone}40`,
       borderRadius: 2, padding: '5px 14px',
-      backgroundColor: 'rgba(10, 61, 31, 0.05)',
+      backgroundColor: 'rgba(50, 45, 41, 0.05)',
     }}>{children}</span>
   );
 }
@@ -113,7 +92,7 @@ export default function ProductCart() {
 
   if (items.length === 0) {
     return (
-      <MainLayout background={C.offwhite}>
+      <MainLayout background={BRAND.cream}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '160px 24px 100px', textAlign: 'center', fontFamily: FONTS.main }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -124,18 +103,18 @@ export default function ProductCart() {
             </div>
             
             <div style={{ 
-              width: 120, height: 120, borderRadius: '50%', background: 'linear-gradient(135deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
+              width: 120, height: 120, borderRadius: '50%', background: BRAND.white,
               display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 40px',
-              border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.04)'
+              border: `1px solid ${BRAND.stone}40`, boxShadow: '0 10px 30px rgba(50,45,41,0.04)'
             }}>
-              <ShoppingCart size={48} color={C.mid} strokeWidth={1.5} />
+              <ShoppingCart size={48} color={BRAND.taupe} strokeWidth={1.5} />
             </div>
 
-            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: '0 0 16px', letterSpacing: '-0.04em', lineHeight: 1 }}>
-              Your <span style={{ fontWeight: 300, color: C.forest }}>Cart</span> is Empty
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: '0 0 16px', letterSpacing: '-0.04em', lineHeight: 1 }}>
+              Your <span style={{ fontWeight: 300, color: BRAND.taupe }}>Cart</span> is Empty
             </h1>
 
-            <p style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.accent, color: C.forest, fontWeight: 700, marginBottom: 48 }}>
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.accent, color: BRAND.taupe, fontWeight: 700, marginBottom: 48 }}>
               Let's find the right products for your daily needs.
             </p>
 
@@ -144,10 +123,10 @@ export default function ProductCart() {
               whileTap={{ scale: 0.98 }}
               onClick={() => router.push('/products')}
               style={{
-                padding: '18px 36px', background: C.forest, color: C.white, border: 'none', borderRadius: 6,
+                padding: '18px 36px', background: BRAND.espresso, color: BRAND.white, border: 'none', borderRadius: 6,
                 fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em',
                 cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 12, transition: 'all 0.3s ease',
-                boxShadow: '0 8px 32px rgba(10,61,31,0.12)'
+                boxShadow: `0 8px 32px rgba(50,45,41,0.12)`
               }}
             >
               <ArrowLeft size={18} /> Continue Shopping
@@ -160,15 +139,15 @@ export default function ProductCart() {
   }
 
   return (
-    <MainLayout background={C.offwhite}>
+    <MainLayout background={BRAND.cream}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '160px 24px 100px', position: 'relative', zIndex: 1, fontFamily: FONTS.main }}>
         
         {/* Header */}
         <div style={{ marginBottom: 56 }}>
           <Chip>Cart — {totalItems} {totalItems === 1 ? 'Item' : 'Items'}</Chip>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, marginTop: 24 }}>
-            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
-              Shopping <span style={{ fontWeight: 300, color: C.forest }}>Cart</span>
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
+              Shopping <span style={{ fontWeight: 300, color: BRAND.taupe }}>Cart</span>
             </h1>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', marginTop: 12 }}>
@@ -180,11 +159,11 @@ export default function ProductCart() {
           {/* Cart Items List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ 
-              background: C.white, border: '1px solid rgba(0,0,0,0.05)', 
-              borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)' 
+              background: BRAND.white, border: `1px solid ${BRAND.stone}40`, 
+              borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 20px rgba(50,45,41,0.04), 0 20px 60px rgba(50,45,41,0.06)' 
             }}>
-              <div style={{ padding: '28px 32px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                <h2 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: 0 }}>Order Summary</h2>
+              <div style={{ padding: '28px 32px', borderBottom: `1px solid ${BRAND.stone}40` }}>
+                <h2 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, margin: 0 }}>Order Summary</h2>
               </div>
 
               <div style={{ padding: '32px' }}>
@@ -199,14 +178,14 @@ export default function ProductCart() {
                       transition={{ delay: index * 0.05 }}
                       style={{
                         display: 'grid', gridTemplateColumns: '120px 1fr', gap: 28,
-                        paddingBottom: 28, marginBottom: 28, borderBottom: '1px solid rgba(0,0,0,0.05)'
+                        paddingBottom: 28, marginBottom: 28, borderBottom: `1px solid ${BRAND.stone}40`
                       }}
                     >
                       {/* Product Image */}
                       <div style={{
                         width: 120, height: 120, borderRadius: 8, overflow: 'hidden',
-                        background: 'linear-gradient(160deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, border: '1px solid rgba(0,0,0,0.03)'
+                        background: 'linear-gradient(160deg, #f8f9f8 0%, #ffffff 100%)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, border: `1px solid ${BRAND.stone}20`
                       }}>
                         <div style={{ position: 'relative', width: '80%', height: '80%' }}>
                            <Image src={item.image} alt={item.productName} fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.08))' }} />
@@ -217,22 +196,22 @@ export default function ProductCart() {
                       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                             <h3 style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink, margin: '0 0 6px' }}>{item.productName}</h3>
+                             <h3 style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.espresso, margin: '0 0 6px' }}>{item.productName}</h3>
                              <motion.button 
-                               whileHover={{ scale: 1.1, color: '#ef4444' }}
+                               whileHover={{ scale: 1.1, color: BRAND.burgundy }}
                                onClick={() => handleRemoveItem(item.id!)}
-                               style={{ background: 'none', border: 'none', color: C.silver, cursor: 'pointer', padding: 4 }}
+                               style={{ background: 'none', border: 'none', color: BRAND.taupe, cursor: 'pointer', padding: 4 }}
                              >
                                 <Trash2 size={18} />
                              </motion.button>
                           </div>
-                          <p style={{ fontSize: F_SIZE.sm, color: C.silver, margin: '0 0 12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe, margin: '0 0 12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                             {item.packageName}
                           </p>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.forest }}>₹{item.price.toLocaleString()}</span>
+                            <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.espresso }}>₹{item.price.toLocaleString()}</span>
                             {item.origPrice && item.origPrice > item.price && (
-                              <span style={{ fontSize: F_SIZE.sm, color: C.silver, textDecoration: 'line-through' }}>₹{item.origPrice.toLocaleString()}</span>
+                              <span style={{ fontSize: F_SIZE.sm, color: BRAND.taupe, textDecoration: 'line-through' }}>₹{item.origPrice.toLocaleString()}</span>
                             )}
                           </div>
                         </div>
@@ -240,11 +219,11 @@ export default function ProductCart() {
                         {/* Quantity Controls */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 12 }}>
                           <div style={{ 
-                            display: 'flex', alignItems: 'center', gap: 16, border: '1px solid rgba(0,0,0,0.08)', borderRadius: 4, padding: '4px 12px', background: C.offwhite
+                            display: 'flex', alignItems: 'center', gap: 16, border: `1px solid ${BRAND.stone}60`, borderRadius: 4, padding: '4px 12px', background: BRAND.cream
                           }}>
-                            <button onClick={() => updateQuantity(item.id!, item.quantity - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.forest, fontWeight: 900, fontSize: 18 }}>−</button>
-                            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.ink, minWidth: 24, textAlign: 'center' }}>{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id!, item.quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.forest, fontWeight: 900, fontSize: 18 }}>+</button>
+                            <button onClick={() => updateQuantity(item.id!, item.quantity - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: BRAND.espresso, fontWeight: 900, fontSize: 18 }}>−</button>
+                            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.espresso, minWidth: 24, textAlign: 'center' }}>{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.id!, item.quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: BRAND.espresso, fontWeight: 900, fontSize: 18 }}>+</button>
                           </div>
                         </div>
                       </div>
@@ -253,10 +232,10 @@ export default function ProductCart() {
                 </AnimatePresence>
                 
                 <motion.button
-                  whileHover={{ color: '#ef4444', x: 2 }}
+                  whileHover={{ color: BRAND.burgundy, x: 2 }}
                   onClick={handleClearCart}
                   style={{
-                    background: 'none', border: 'none', color: C.silver, fontFamily: FONTS.main,
+                    background: 'none', border: 'none', color: BRAND.taupe, fontFamily: FONTS.main,
                     fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em',
                     cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8
                   }}
@@ -270,38 +249,38 @@ export default function ProductCart() {
           {/* Checkout Summary Sidebar */}
           <div style={{ position: 'sticky', top: 120 }}>
             <div style={{ 
-              background: C.white, border: '1px solid rgba(0,0,0,0.05)', borderRadius: 16, 
-              padding: '36px', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.04)' 
+              background: BRAND.white, border: `1px solid ${BRAND.stone}40`, borderRadius: 16, 
+              padding: '36px', boxShadow: '0 10px 30px -10px rgba(50,45,41,0.04)' 
             }}>
-              <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '0 0 24px', letterSpacing: '-0.01em' }}>Billing Details</h3>
+              <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, margin: '0 0 24px', letterSpacing: '-0.01em' }}>Billing Details</h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                   <span style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cart Value</span>
-                  <span style={{ fontWeight: 600, color: C.ink }}>₹{totalPrice.toLocaleString()}</span>
+                   <span style={{ fontSize: F_SIZE.sm, color: BRAND.taupe, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cart Value</span>
+                  <span style={{ fontWeight: 600, color: BRAND.espresso }}>₹{totalPrice.toLocaleString()}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Priority Shipping</span>
-                  <span style={{ fontWeight: 800, color: C.leaf }}>FREE</span>
+                  <span style={{ fontSize: F_SIZE.sm, color: BRAND.taupe, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Priority Shipping</span>
+                  <span style={{ fontWeight: 800, color: BRAND.burgundy }}>FREE</span>
                 </div>
                 
                 <GoldLine style={{ margin: '12px 0' }} />
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink }}>Total Order Value</span>
-                   <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.forest }}>₹{totalPrice.toLocaleString()}</span>
+                  <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.espresso }}>Total Order Value</span>
+                   <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso }}>₹{totalPrice.toLocaleString()}</span>
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                  whileHover={{ scale: 1.01, backgroundColor: BRAND.burgundy }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleProceedToCheckout}
                   disabled={isCheckingOut}
                   style={{
-                    marginTop: 24, padding: '20px', background: C.forest, color: C.white, border: 'none',
+                    marginTop: 24, padding: '20px', background: BRAND.espresso, color: BRAND.white, border: 'none',
                     borderRadius: 6, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase',
                     letterSpacing: '0.22em', cursor: isCheckingOut ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 8px 32px rgba(10,61,31,0.12)', transition: 'all 0.3s ease',
+                    boxShadow: `0 8px 32px rgba(50,45,41,0.12)`, transition: 'all 0.3s ease',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, opacity: isCheckingOut ? 0.7 : 1
                   }}
                 >
@@ -312,14 +291,14 @@ export default function ProductCart() {
                   )}
                 </motion.button>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24, padding: '20px', background: C.offwhite, borderRadius: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24, padding: '20px', background: BRAND.cream, borderRadius: 8 }}>
                   <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <ShieldCheck size={16} color={C.mid} />
-                    <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>End-to-End SSL Encrypted</span>
+                    <ShieldCheck size={16} color={BRAND.taupe} />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: BRAND.taupe, textTransform: 'uppercase', letterSpacing: '0.05em' }}>End-to-End SSL Encrypted</span>
                   </div>
                   <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                    <Truck size={16} color={C.mid} />
-                    <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Express Delivery Verified</span>
+                    <Truck size={16} color={BRAND.taupe} />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: BRAND.taupe, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Express Delivery Verified</span>
                   </div>
                 </div>
               </div>
@@ -337,7 +316,7 @@ export default function ProductCart() {
             exit={{ opacity: 0, scale: 0.9 }}
             style={{
               position: 'fixed', bottom: 40, left: '50%', x: '-50%',
-              background: C.deep, color: C.white, padding: '16px 32px', borderRadius: 100,
+              background: BRAND.espresso, color: BRAND.white, padding: '16px 32px', borderRadius: 100,
               fontSize: 13, fontWeight: 900, zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
               textTransform: 'uppercase', letterSpacing: '0.15em'
             }}
@@ -355,3 +334,6 @@ export default function ProductCart() {
     </MainLayout>
   );
 }
+
+
+

@@ -9,257 +9,134 @@ import {
     GraduationCap, Sun
 } from 'lucide-react';
 import Image from 'next/image';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
 
-/* ── DESIGN TOKENS ── */
-const C = {
-    forest: '#0a3d1f',
-    deep: '#071a0d',
-    mid: '#14532d',
-    leaf: '#16a34a',
-    ink: '#070d08',
-    white: '#ffffff',
-    offwhite: '#fafafa',
-    gold: '#854d0e',
-    silver: '#64748b',
-    border: 'rgba(0, 0, 0, 0.05)',
-};
-
-const FONTS = {
-    main: "'Montserrat', sans-serif",
-};
-
-/* ── FIXED CATEGORY SYSTEM ── */
-const CATEGORIES = {
-    'High Physical Demand': [
-        {
-            id: 'farmer-1',
-            src: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=800&q=80',
-            alt: 'Farmer working',
-            title: 'Farmers & Workers',
-            description: 'Energy for long physical labor',
-            icon: <Sun size={12} />,
-        },
-        {
-            id: 'athlete-1',
-            src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80',
-            alt: 'Athlete training',
-            title: 'Athletes',
-            description: 'Endurance and recovery',
-            icon: <Activity size={12} />,
-        },
+/* ── CATEGORY SYSTEM ── */
+const CATEGORIES: any = {
+    'Physical Demand': [
+        { id: 'farmer-1', src: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=800&q=80', alt: 'Farmer working', title: 'Farmers & Workers', icon: <Sun size={14} color={BRAND.burgundy} /> },
+        { id: 'athlete-1', src: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80', alt: 'Athlete training', title: 'Athletes', icon: <Activity size={14} color={BRAND.burgundy} /> },
+        { id: 'worker-1', src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80', alt: 'Tech worker', title: 'Professionals', icon: <Briefcase size={14} color={BRAND.burgundy} /> },
     ],
-
     'Mental Performance': [
-        {
-            id: 'student-1',
-            src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80',
-            alt: 'Student studying',
-            title: 'Students',
-            description: 'Focus and memory',
-            icon: <GraduationCap size={12} />,
-        },
-        {
-            id: 'professional-1',
-            src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80',
-            alt: 'Professional working',
-            title: 'Professionals',
-            description: 'Clarity and productivity',
-            icon: <Briefcase size={12} />,
-        },
+        { id: 'student-1', src: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80', alt: 'Student studying', title: 'Students', icon: <GraduationCap size={14} color={BRAND.burgundy} /> },
+        { id: 'pro-1', src: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80', alt: 'Manager', title: 'Managers', icon: <Briefcase size={14} color={BRAND.burgundy} /> },
+        { id: 'creative-1', src: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80', alt: 'Writer', title: 'Creatives', icon: <Sparkles size={14} color={BRAND.burgundy} /> },
     ],
-
-    'Family & Growth': [
-        {
-            id: 'parent-1',
-            src: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&q=80',
-            alt: 'Parents',
-            title: 'Parents',
-            description: 'Balanced nutrition',
-            icon: <Baby size={12} />,
-        },
-        {
-            id: 'child-1',
-            src: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=80',
-            alt: 'Child health',
-            title: 'Children',
-            description: 'Growth & immunity',
-            icon: <Baby size={12} />,
-        },
+    'Family Growth': [
+        { id: 'parent-1', src: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800&q=80', alt: 'Parents', title: 'Parents', icon: <Baby size={14} color={BRAND.burgundy} /> },
+        { id: 'child-1', src: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=80', alt: 'Child health', title: 'Children', icon: <Baby size={14} color={BRAND.burgundy} /> },
+        { id: 'family-1', src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80', alt: 'Family', title: 'Families', icon: <Users size={14} color={BRAND.burgundy} /> },
     ],
-
-    'Aging & Longevity': [
-        {
-            id: 'senior-1',
-            src: 'https://images.unsplash.com/photo-1515377553641-5b868e6584c6?w=800&q=80',
-            alt: 'Senior',
-            title: 'Seniors',
-            description: 'Healthy aging',
-            icon: <Heart size={12} />,
-        },
+    'Longevity': [
+        { id: 'senior-1', src: 'https://images.unsplash.com/photo-1515377553641-5b868e6584c6?w=800&q=80', alt: 'Senior', title: 'Seniors', icon: <Heart size={14} color={BRAND.burgundy} /> },
+        { id: 'senior-2', src: 'https://images.unsplash.com/photo-1581579438747-1dc8c18782c1?w=800&q=80', alt: 'Active Senior', title: 'Active Aging', icon: <Footprints size={14} color={BRAND.burgundy} /> },
     ],
-
-    'Recovery & Low Energy': [
-        {
-            id: 'recovery-1',
-            src: 'https://images.unsplash.com/photo-1584515933487-779824d29309?w=800&q=80',
-            alt: 'Recovery',
-            title: 'Recovery',
-            description: 'Rebuild strength',
-            icon: <ShieldCheck size={12} />,
-        },
-    ],
-
-    'General Daily Nutrition': [
-        {
-            id: 'adult-1',
-            src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80',
-            alt: 'Adult',
-            title: 'Everyday Adults',
-            description: 'Daily nutrition support',
-            icon: <Users size={12} />,
-        },
-    ],
-
     'Women’s Health': [
-        {
-            id: 'women-1',
-            src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80',
-            alt: 'Woman',
-            title: 'Women',
-            description: 'Hormonal & iron support',
-            icon: <Heart size={12} />,
-        },
+        { id: 'women-1', src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80', alt: 'Woman', title: 'Women', icon: <Heart size={14} color={BRAND.burgundy} /> },
+        { id: 'women-2', src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80', alt: 'Portrait', title: 'Wellness', icon: <ShieldCheck size={14} color={BRAND.burgundy} /> },
     ],
 };
 
-/* ── FLATTEN ── */
-const ALL_IMAGES = Object.entries(CATEGORIES).flatMap(([cat, imgs]) =>
-    imgs.map(img => ({ ...img, category: cat }))
+const ALL_IMAGES = Object.entries(CATEGORIES).flatMap(([cat, imgs]: any) =>
+    imgs.map((img: any) => ({ ...img, category: cat }))
 );
 
-/* ── SLOT CONFIG ── */
-const SLOT_COUNT = 10;
-
 const SLOT_CATEGORIES = [
-    'High Physical Demand',
-    'Mental Performance',
-    'Family & Growth',
-    'Aging & Longevity',
-    'Recovery & Low Energy',
-    'General Daily Nutrition',
-    'Women’s Health',
-    'Mental Performance',
-    'High Physical Demand',
-    'General Daily Nutrition',
+    'Physical Demand', 'Mental Performance', 'Family Growth', 'Longevity', 'Women’s Health',
+    'Family Growth', 'Physical Demand', 'Mental Performance', 'Women’s Health', 'Longevity'
 ];
 
-/* ── COMPONENT ── */
-
-function ImageCell({ image, isChanging, style }: any) {
+function ImageCell({ image, index }: { image: any, index: number }) {
     return (
-        <div style={{ ...style, position: 'relative' }}>
-            <div style={{
-                position: 'absolute',
-                inset: 0,
-                borderRadius: 24,
-                overflow: 'hidden',
-                background: C.offwhite,
-            }}>
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={image.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                        style={{ position: 'absolute', inset: 0 }}
-                    >
-                        <Image
-                            src={image.src}
-                            alt={image.alt}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            unoptimized
-                        />
-                    </motion.div>
-                </AnimatePresence>
-            </div>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: index * 0.05 }}
+            style={{ position: 'relative', aspectRatio: '4/5', borderRadius: 24, overflow: 'hidden', background: BRAND.cream, border: `1px solid ${BRAND.espresso}10` }}
+        >
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={image.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                    style={{ position: 'absolute', inset: 0 }}
+                >
+                    <Image src={image.src} alt={image.alt} fill style={{ objectFit: 'cover' }} unoptimized />
+                </motion.div>
+            </AnimatePresence>
 
-            {/* Badge */}
-            <div style={{ position: 'absolute', top: 10, left: 10 }}>
-                <div style={{
-                    padding: '4px 10px',
-                    borderRadius: 100,
-                    background: C.white,
-                    fontSize: F_SIZE.sm,
-                    fontWeight: 800
-                }}>
-                    {image.category}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%)' }} />
+
+            <div style={{ position: 'absolute', bottom: 12, left: 12, right: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 8px', borderRadius: 100, background: BRAND.white, width: 'fit-content', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                    {image.icon}
+                    <span style={{ fontSize: 10, fontWeight: 900, color: BRAND.espresso, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{image.category}</span>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
-/* ── MAIN ── */
-
 export default function PeopleSection() {
-    const containerRef = useRef(null);
-    const inView = useInView(containerRef, { once: true });
-
+    const sectionRef = useRef(null);
+    const inView = useInView(sectionRef, { once: true });
     const [slots, setSlots] = useState<any[]>(() =>
-        SLOT_CATEGORIES.map(cat => {
-            const imgs = ALL_IMAGES.filter(i => i.category === cat);
-            return imgs[0]; // Avoid Math.random() during initial render for hydration sync
-        })
+        SLOT_CATEGORIES.map(cat => ALL_IMAGES.find(i => i.category === cat))
     );
 
     useEffect(() => {
         const interval = setInterval(() => {
             setSlots(prev => {
                 const next = [...prev];
-                const idx = Math.floor(Math.random() * SLOT_COUNT);
+                const idx = Math.floor(Math.random() * next.length);
                 const cat = SLOT_CATEGORIES[idx];
                 const imgs = ALL_IMAGES.filter(i => i.category === cat);
-
                 next[idx] = imgs[Math.floor(Math.random() * imgs.length)];
                 return next;
             });
-        }, 4000);
-
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <section ref={containerRef} style={{ padding: '120px 0' }}>
+        <section ref={sectionRef} style={{ background: BRAND.white, padding: '100px 24px' }}>
             <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-
-                <h2 style={{
-                    textAlign: 'center',
-                    fontFamily: FONTS.main,
-                    fontWeight: 900,
-                    fontSize: F_SIZE.xl
-                }}>
-                    One Sachet. For Everyone.
-                </h2>
-
-                <div className="grid">
-                    {slots.map((img, i) => (
-                        <ImageCell key={img.id + i} image={img} />
-                    ))}
+                <div style={{ textAlign: 'center', marginBottom: 56 }}>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: BRAND.cream, border: `1px solid ${BRAND.espresso}10`, marginBottom: 24 }}
+                    >
+                        <Sparkles size={14} color={BRAND.burgundy} />
+                        <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.espresso, letterSpacing: '0.1em', textTransform: 'uppercase' }}>For Every Life Stage</span>
+                    </motion.div>
+                    <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: 0 }}>One Sachet. <span style={{ color: BRAND.burgundy }}>For Everyone</span>.</h2>
                 </div>
 
+                <div className="people-grid">
+                    {slots.map((img, i) => (
+                        <ImageCell key={img.id + i} image={img} index={i} />
+                    ))}
+                </div>
             </div>
 
             <style>{`
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 16px;
-          margin-top: 60px;
-        }
-      `}</style>
+                .people-grid {
+                    display: grid;
+                    grid-template-columns: repeat(5, 1fr);
+                    gap: 16px;
+                }
+                @media (max-width: 1024px) {
+                    .people-grid { grid-template-columns: repeat(4, 1fr); }
+                }
+                @media (max-width: 768px) {
+                    .people-grid { grid-template-columns: repeat(2, 1fr); }
+                }
+            `}</style>
         </section>
     );
 }

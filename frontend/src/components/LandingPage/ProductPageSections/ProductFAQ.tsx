@@ -4,19 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, Sparkles } from 'lucide-react';
 import { getApiUrl } from '@/lib/api';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
+  forest: BRAND.espresso,
+  deep: BRAND.espresso,
+  mid: BRAND.espresso,
+  leaf: BRAND.burgundy,
+  ink: BRAND.espresso,
   white: '#ffffff',
-  offwhite: '#fafafa',
+  offwhite: BRAND.cream,
   silver: '#64748b',
-  gold: '#854d0e',
+  gold: BRAND.burgundy,
   glass: 'rgba(255, 255, 255, 0.92)',
 };
 
@@ -39,8 +39,8 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 800,
-      border: `1px solid ${C.forest}30`,
+      color: BRAND.espresso, fontWeight: 800,
+      border: `1px solid ${BRAND.espresso}30`,
       borderRadius: 2, padding: '4px 12px',
       backgroundColor: 'rgba(10, 61, 31, 0.04)',
     }}>{children}</span>
@@ -59,7 +59,7 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
       style={{
         background: C.white,
         borderRadius: 8,
-        border: `1px solid ${open ? C.forest : 'rgba(0,0,0,0.06)'}`,
+        border: `1px solid ${open ? BRAND.espresso : 'rgba(0,0,0,0.06)'}`,
         overflow: 'hidden',
         transition: 'all 0.3s ease',
         boxShadow: open ? '0 10px 30px -10px rgba(0,0,0,0.05)' : 'none',
@@ -69,18 +69,18 @@ const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
         onClick={() => setOpen(!open)}
         style={{
           width: '100%', padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          background: open ? `${C.forest}04` : 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 20
+          background: open ? `${BRAND.espresso}04` : 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 20
         }}
       >
         <span style={{ 
-          fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: open ? C.forest : C.ink, 
+          fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: open ? BRAND.espresso : C.ink, 
           letterSpacing: '-0.01em', lineHeight: 1.4 
         }}>
           {q}
         </span>
         <motion.div
            animate={{ rotate: open ? 180 : 0 }}
-           style={{ color: open ? C.forest : C.silver }}
+           style={{ color: open ? BRAND.espresso : C.silver }}
         >
            <ChevronDown size={20} />
         </motion.div>
@@ -182,7 +182,7 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           style={{
-            marginTop: 48, padding: '32px 40px', background: C.offwhite, borderRadius: 12,
+            marginTop: 48, padding: '32px 40px', background: BRAND.cream, borderRadius: 12,
             border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap'
           }}
         >
@@ -191,12 +191,12 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
             <p style={{ fontSize: F_SIZE.sm, color: C.silver, margin: 0, fontWeight: 600 }}>Our specialist team is available for deep-technical inquiries.</p>
           </div>
           <motion.button
-            whileHover={{ scale: 1.02, backgroundColor: C.forest, color: C.white }}
+            whileHover={{ scale: 1.02, backgroundColor: BRAND.espresso, color: C.white }}
             whileTap={{ scale: 0.98 }}
             onClick={() => window.location.href = '/contact'}
             style={{
-              padding: '12px 28px', background: 'transparent', color: C.forest,
-              border: `2px solid ${C.forest}`, borderRadius: 6, fontWeight: 900, 
+              padding: '12px 28px', background: 'transparent', color: BRAND.espresso,
+              border: `2px solid ${BRAND.espresso}`, borderRadius: 6, fontWeight: 900, 
               fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', transition: '0.2s'
             }}
           >
@@ -207,3 +207,6 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
     </div>
   );
 }
+
+
+

@@ -9,20 +9,20 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import MainLayout from '@/components/MainLayout';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
+  forest: BRAND.espresso,
+  deep: BRAND.espresso,
+  mid: BRAND.espresso,
+  leaf: BRAND.burgundy,
+  ink: BRAND.espresso,
   white: '#ffffff',
-  offwhite: '#fafafa',
+  offwhite: BRAND.cream,
   silver: '#64748b',
-  mist: '#f1f5f9',
-  gold: '#854d0e',
+  mist: BRAND.stone,
+  gold: BRAND.burgundy,
   goldLight: '#a16207',
   glass: 'rgba(255, 255, 255, 0.92)',
 };
@@ -49,8 +49,8 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: C.forest, fontWeight: 700,
-      border: `1px solid ${C.forest}40`,
+      color: BRAND.espresso, fontWeight: 700,
+      border: `1px solid ${BRAND.espresso}40`,
       borderRadius: 2, padding: '5px 14px',
       backgroundColor: 'rgba(10, 61, 31, 0.05)',
     }}>{children}</span>
@@ -150,7 +150,7 @@ export default function Checkout() {
             email: formData.email,
             contact: formData.phone
           },
-          theme: { color: C.forest }
+          theme: { color: BRAND.espresso }
         };
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
@@ -168,7 +168,7 @@ export default function Checkout() {
 
   if (orderComplete) {
     return (
-      <MainLayout background={C.offwhite}>
+      <MainLayout background={BRAND.cream}>
         <div style={{ maxWidth: 1160, margin: '160px auto 100px', padding: '0 24px', textAlign: 'center', fontFamily: FONTS.main }}>
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
@@ -179,15 +179,15 @@ export default function Checkout() {
             }}
           >
             <div style={{ width: 100, height: 100, background: 'linear-gradient(135deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
-              <CheckCircle size={44} color={C.leaf} />
+              <CheckCircle size={44} color={BRAND.burgundy} />
             </div>
             <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: '0 0 16px', letterSpacing: '-0.04em', lineHeight: 1 }}>Order Confirmed.</h1>
-            <p style={{ color: C.silver, fontSize: F_SIZE.md, marginBottom: 48, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Order ID: <strong style={{color: C.forest}}>#{orderId}</strong></p>
+            <p style={{ color: C.silver, fontSize: F_SIZE.md, marginBottom: 48, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Order ID: <strong style={{color: BRAND.espresso}}>#{orderId}</strong></p>
             <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
               <button 
                 onClick={() => router.push('/my-orders')}
                 style={{ 
-                  padding: '18px 32px', background: C.forest, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, cursor: 'pointer',
+                  padding: '18px 32px', background: BRAND.espresso, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, cursor: 'pointer',
                   fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em', boxShadow: '0 8px 32px rgba(10,61,31,0.12)'
                 }}
               >
@@ -196,7 +196,7 @@ export default function Checkout() {
               <button 
                 onClick={() => router.push('/products')}
                 style={{ 
-                   padding: '18px 32px', background: 'transparent', color: C.forest, border: `2.5px solid ${C.forest}`, borderRadius: 6, fontWeight: 900, cursor: 'pointer',
+                   padding: '18px 32px', background: 'transparent', color: BRAND.espresso, border: `2.5px solid ${BRAND.espresso}`, borderRadius: 6, fontWeight: 900, cursor: 'pointer',
                    fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em'
                 }}
               >
@@ -210,7 +210,7 @@ export default function Checkout() {
   }
 
   return (
-    <MainLayout background={C.offwhite}>
+    <MainLayout background={BRAND.cream}>
       <div style={{ maxWidth: 1160, margin: '160px auto 100px', padding: '0 24px', fontFamily: FONTS.main }}>
         
         {/* Header */}
@@ -218,7 +218,7 @@ export default function Checkout() {
           <Chip>Processing Order</Chip>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, marginTop: 24 }}>
             <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
-              Secure <span style={{ fontWeight: 300, color: C.forest }}>Checkout</span>
+              Secure <span style={{ fontWeight: 300, color: BRAND.espresso }}>Checkout</span>
             </h1>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', marginTop: 12 }}>
@@ -271,7 +271,7 @@ export default function Checkout() {
                 {items.map(item => (
                   <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 20 }}>
                     <div style={{ display: 'flex', gap: 16 }}>
-                      <div style={{ width: 56, height: 56, background: C.offwhite, borderRadius: 6, flexShrink: 0, padding: 4, display: 'flex', alignItems: 'center' }}>
+                      <div style={{ width: 56, height: 56, background: BRAND.cream, borderRadius: 6, flexShrink: 0, padding: 4, display: 'flex', alignItems: 'center' }}>
                         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                            <Image src={item.image} alt={item.productName} fill style={{ objectFit: 'contain' }} />
                         </div>
@@ -281,7 +281,7 @@ export default function Checkout() {
                         <div style={{ fontSize: 11, color: C.silver, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>QTY: {item.quantity} · {item.packageName}</div>
                       </div>
                     </div>
-                    <div style={{ fontWeight: 900, color: C.forest }}>₹{(item.price * item.quantity).toLocaleString()}</div>
+                    <div style={{ fontWeight: 900, color: BRAND.espresso }}>₹{(item.price * item.quantity).toLocaleString()}</div>
                   </div>
                 ))}
               </div>
@@ -295,9 +295,9 @@ export default function Checkout() {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: C.silver, fontSize: F_SIZE.sm, fontWeight: 700, textTransform: 'uppercase' }}>
                   <span>Shipping</span>
-                  <span style={{ color: C.leaf }}>FREE</span>
+                  <span style={{ color: BRAND.burgundy }}>FREE</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: F_SIZE.lg, fontWeight: 900, marginTop: 12, color: C.forest }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: F_SIZE.lg, fontWeight: 900, marginTop: 12, color: BRAND.espresso }}>
                   <span>Final Total</span>
                   <span>₹{totalPrice.toLocaleString()}</span>
                 </div>
@@ -310,12 +310,12 @@ export default function Checkout() {
               )}
 
               <motion.button 
-                whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                whileHover={{ scale: 1.01, backgroundColor: BRAND.espresso }}
                 whileTap={{ scale: 0.99 }}
                 onClick={handlePlaceOrder}
                 disabled={isProcessing || items.length === 0}
                 style={{ 
-                  width: '100%', padding: 20, background: C.forest, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, 
+                  width: '100%', padding: 20, background: BRAND.espresso, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, 
                   fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em', marginTop: 32, cursor: 'pointer',
                   boxShadow: '0 8px 32px rgba(10,61,31,0.12)', opacity: isProcessing ? 0.7 : 1
                 }}
@@ -353,10 +353,10 @@ function Input({ label, ...props }: any) {
       <label style={{ fontSize: 11, fontWeight: 900, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.12em' }}>{label}</label>
       <input 
         style={{ 
-          padding: '16px 20px', borderRadius: 6, border: '1.5px solid rgba(0,0,0,0.08)', outline: 'none', background: C.offwhite, 
+          padding: '16px 20px', borderRadius: 6, border: '1.5px solid rgba(0,0,0,0.08)', outline: 'none', background: BRAND.cream, 
           fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.ink, transition: '0.2s'
         }}
-        onFocus={e => e.currentTarget.style.borderColor = C.forest}
+        onFocus={e => e.currentTarget.style.borderColor = BRAND.espresso}
         onBlur={e => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'}
         {...props} 
       />
@@ -369,20 +369,23 @@ function PaymentOption({ title, desc, icon, selected, onClick }: any) {
     <div 
       onClick={onClick}
       style={{ 
-        display: 'flex', alignItems: 'center', gap: 20, padding: 24, borderRadius: 12, border: `2.5px solid ${selected ? C.forest : 'rgba(0,0,0,0.06)'}`,
-        background: selected ? `${C.forest}04` : 'transparent', cursor: 'pointer', transition: '0.2s'
+        display: 'flex', alignItems: 'center', gap: 20, padding: 24, borderRadius: 12, border: `2.5px solid ${selected ? BRAND.espresso : 'rgba(0,0,0,0.06)'}`,
+        background: selected ? `${BRAND.espresso}04` : 'transparent', cursor: 'pointer', transition: '0.2s'
       }}
     >
-      <div style={{ width: 56, height: 56, borderRadius: 8, background: selected ? C.forest : C.mist, color: selected ? C.white : C.mid, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 56, height: 56, borderRadius: 8, background: selected ? BRAND.espresso : C.mist, color: selected ? C.white : BRAND.espresso, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {icon}
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 900, color: C.ink, fontSize: F_SIZE.md }}>{title}</div>
         <div style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, marginTop: 4 }}>{desc}</div>
       </div>
-      <div style={{ width: 24, height: 24, borderRadius: '50%', border: `2px solid ${selected ? C.forest : '#ddd'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {selected && <div style={{ width: 12, height: 12, borderRadius: '50%', background: C.forest }} />}
+      <div style={{ width: 24, height: 24, borderRadius: '50%', border: `2px solid ${selected ? BRAND.espresso : '#ddd'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {selected && <div style={{ width: 12, height: 12, borderRadius: '50%', background: BRAND.espresso }} />}
       </div>
     </div>
   );
 }
+
+
+
