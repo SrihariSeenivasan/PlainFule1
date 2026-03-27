@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { Trash2, Plus, Minus, ShoppingCart, ArrowLeft, LogIn } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingCart, ArrowLeft, LogIn, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
@@ -11,10 +11,51 @@ import AuthModal from '@/components/AuthModal';
 import MainLayout from '@/components/MainLayout';
 import { F_SIZE } from '@/lib/typography';
 
-const FD = "'Playfair Display', Georgia, serif";
-const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
-const G = '#15803d';
-const BG = '#fdfaf3';
+/* ── Design Tokens ── */
+const C = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  mist: '#f1f5f9',
+  gold: '#854d0e',
+  goldLight: '#a16207',
+  glass: 'rgba(255, 255, 255, 0.92)',
+};
+
+const FONTS = {
+  main: "'Montserrat', sans-serif",
+  accent: "'Caveat', cursive",
+};
+
+/* ── Components ── */
+function GoldLine({ style }: { style?: React.CSSProperties }) {
+  return (
+    <div style={{
+      height: 1, width: '100%',
+      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      ...style,
+    }} />
+  );
+}
+
+function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      fontFamily: FONTS.main,
+      fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
+      color: C.forest, fontWeight: 700,
+      border: `1px solid ${C.forest}40`,
+      borderRadius: 2, padding: '5px 14px',
+      backgroundColor: 'rgba(10, 61, 31, 0.05)',
+    }}>{children}</span>
+  );
+}
 
 export default function ProductCart() {
   const router = useRouter();
@@ -27,10 +68,8 @@ export default function ProductCart() {
 
   const handleProceedToCheckout = async () => {
     if (items.length === 0) return;
-
     setIsCheckingOut(true);
     try {
-      // Navigate to checkout page
       router.push('/checkout');
     } catch (err) {
       console.error('Checkout error:', err);
@@ -74,227 +113,81 @@ export default function ProductCart() {
 
   if (items.length === 0) {
     return (
-      <MainLayout background={BG}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120, textAlign: 'center' }}>
+      <MainLayout background={C.offwhite}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '160px 24px 100px', textAlign: 'center', fontFamily: FONTS.main }}>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
           >
-            {!user ? (
-              <>
-                {/* Not logged in - show login prompt */}
-                <div style={{
-                  width: 80,
-                  height: 80,
-                  margin: '0 auto 24px',
-                  background: 'rgba(21,128,61,0.1)',
-                  borderRadius: 16,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <LogIn size={40} color={G} />
-                </div>
+            <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
+              <Chip>Status Report — Empty</Chip>
+            </div>
+            
+            <div style={{ 
+              width: 120, height: 120, borderRadius: '50%', background: 'linear-gradient(135deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 40px',
+              border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 30px rgba(0,0,0,0.04)'
+            }}>
+              <ShoppingCart size={48} color={C.mid} strokeWidth={1.5} />
+            </div>
 
-                <h1 style={{
-                  fontFamily: FD,
-                  fontSize: F_SIZE.xl,
-                  fontWeight: 800,
-                  color: '#1a1a1a',
-                  margin: '0 0 12px',
-                }}>
-                  Sign In to Your Cart
-                </h1>
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: '0 0 16px', letterSpacing: '-0.04em', lineHeight: 1 }}>
+              Your <span style={{ fontWeight: 300, color: C.forest }}>Cart</span> is Empty
+            </h1>
 
-                <p style={{
-                  fontSize: F_SIZE.md,
-                  color: '#666',
-                  marginBottom: 32,
-                  maxWidth: 400,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}>
-                  Log in to view your saved cart and continue shopping. Your items will be saved for you.
-                </p>
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.accent, color: C.forest, fontWeight: 700, marginBottom: 48 }}>
+              Let's find the right products for your daily needs.
+            </p>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowAuthModal(true)}
-                  style={{
-                    padding: '12px 28px',
-                    background: G,
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 12,
-                    fontFamily: FD,
-                    fontSize: F_SIZE.md,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  <LogIn size={18} />
-                  Log In to Cart
-                </motion.button>
-              </>
-            ) : (
-              <>
-                {/* Logged in but cart empty */}
-                <div style={{
-                  width: 80,
-                  height: 80,
-                  margin: '0 auto 24px',
-                  background: 'rgba(21,128,61,0.1)',
-                  borderRadius: 16,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <ShoppingCart size={40} color={G} />
-                </div>
-
-                <h1 style={{
-                  fontFamily: FD,
-                  fontSize: F_SIZE.xl,
-                  fontWeight: 800,
-                  color: '#1a1a1a',
-                  margin: '0 0 12px',
-                }}>
-                  Your Cart is Empty
-                </h1>
-
-                <p style={{
-                  fontSize: F_SIZE.md,
-                  color: '#666',
-                  marginBottom: 32,
-                  maxWidth: 400,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}>
-                  Start shopping to add products to your cart. Browse our collection of healthy supplements.
-                </p>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => router.push('/products')}
-                  style={{
-                    padding: '12px 28px',
-                    background: G,
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 12,
-                    fontFamily: FD,
-                    fontSize: F_SIZE.md,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    transition: 'all 0.3s ease',
-                  }}
-                >
-                  <ArrowLeft size={18} />
-                  Continue Shopping
-                </motion.button>
-              </>
-            )}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => router.push('/products')}
+              style={{
+                padding: '18px 36px', background: C.forest, color: C.white, border: 'none', borderRadius: 6,
+                fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em',
+                cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 12, transition: 'all 0.3s ease',
+                boxShadow: '0 8px 32px rgba(10,61,31,0.12)'
+              }}
+            >
+              <ArrowLeft size={18} /> Continue Shopping
+            </motion.button>
           </motion.div>
         </div>
-
-        {/* Auth Modal for empty cart */}
         <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       </MainLayout>
     );
   }
 
   return (
-    <MainLayout background={BG}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120, position: 'relative', zIndex: 1 }}>
+    <MainLayout background={C.offwhite}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '160px 24px 100px', position: 'relative', zIndex: 1, fontFamily: FONTS.main }}>
+        
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 48 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            onClick={() => router.push('/products')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '8px 12px',
-              borderRadius: 8,
-              border: `1.5px solid ${G}`,
-              background: 'transparent',
-              color: G,
-              fontFamily: FS,
-              fontSize: F_SIZE.sm,
-              fontWeight: 600,
-              cursor: 'pointer',
-              marginBottom: 16,
-              transition: 'all 0.2s',
-            }}
-          >
-            ← Back to Products
-          </motion.button>
+        <div style={{ marginBottom: 56 }}>
+          <Chip>Cart — {totalItems} {totalItems === 1 ? 'Item' : 'Items'}</Chip>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, marginTop: 24 }}>
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
+              Shopping <span style={{ fontWeight: 300, color: C.forest }}>Cart</span>
+            </h1>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: 12 }}>
+            <GoldLine style={{ width: 180 }} />
+          </div>
+        </div>
 
-          <h1 style={{
-            fontFamily: FD,
-            fontSize: F_SIZE.xl,
-            fontWeight: 800,
-            color: '#1a1a1a',
-            margin: 0,
-          }}>
-            Shopping Cart
-          </h1>
-          <p style={{
-            fontSize: F_SIZE.md,
-            color: '#666',
-            marginTop: 8,
-          }}>
-            {totalItems} {totalItems === 1 ? 'item' : 'items'} in your cart
-          </p>
-        </motion.div>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 360px',
-          gap: 32,
-        }}>
-          {/* Cart Items */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div style={{
-              background: '#fff',
-              border: '2px solid rgba(21,128,61,0.15)',
-              borderRadius: 16,
-              overflow: 'hidden',
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 380px', gap: 40, alignItems: 'start' }}>
+          {/* Cart Items List */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div style={{ 
+              background: C.white, border: '1px solid rgba(0,0,0,0.05)', 
+              borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)' 
             }}>
-              <div style={{
-                padding: '24px',
-                borderBottom: '2px dashed rgba(21,128,61,0.15)',
-              }}>
-                <h2 style={{
-                  fontFamily: FD,
-                  fontSize: F_SIZE.lg,
-                  fontWeight: 800,
-                  color: '#1a1a1a',
-                  margin: 0,
-                }}>
-                  Order Summary
-                </h2>
+              <div style={{ padding: '28px 32px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                <h2 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: 0 }}>Order Summary</h2>
               </div>
 
-              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ padding: '32px' }}>
                 <AnimatePresence mode="popLayout">
                   {items.map((item, index) => (
                     <motion.div
@@ -302,325 +195,136 @@ export default function ProductCart() {
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
+                      exit={{ opacity: 0, x: -20 }}
                       transition={{ delay: index * 0.05 }}
                       style={{
-                        display: 'grid',
-                        gridTemplateColumns: '100px 1fr',
-                        gap: 16,
-                        paddingBottom: 20,
-                        borderBottom: '1px dashed rgba(21,128,61,0.15)',
+                        display: 'grid', gridTemplateColumns: '120px 1fr', gap: 28,
+                        paddingBottom: 28, marginBottom: 28, borderBottom: '1px solid rgba(0,0,0,0.05)'
                       }}
                     >
                       {/* Product Image */}
                       <div style={{
-                        width: 100,
-                        height: 100,
-                        borderRadius: 12,
-                        overflow: 'hidden',
-                        background: 'rgba(21,128,61,0.05)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        width: 120, height: 120, borderRadius: 8, overflow: 'hidden',
+                        background: 'linear-gradient(160deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 10, border: '1px solid rgba(0,0,0,0.03)'
                       }}>
-                        <Image
-                          src={item.image}
-                          alt={item.productName}
-                          width={100}
-                          height={100}
-                          style={{ objectFit: 'contain' }}
-                        />
+                        <div style={{ position: 'relative', width: '80%', height: '80%' }}>
+                           <Image src={item.image} alt={item.productName} fill style={{ objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.08))' }} />
+                        </div>
                       </div>
 
                       {/* Product Details */}
                       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div>
-                          <h3 style={{
-                            fontFamily: FD,
-                            fontSize: F_SIZE.md,
-                            fontWeight: 700,
-                            color: '#1a1a1a',
-                            margin: '0 0 4px',
-                          }}>
-                            {item.productName}
-                          </h3>
-                          <p style={{
-                            fontSize: F_SIZE.sm,
-                            color: '#666',
-                            margin: '0 0 8px',
-                          }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                             <h3 style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink, margin: '0 0 6px' }}>{item.productName}</h3>
+                             <motion.button 
+                               whileHover={{ scale: 1.1, color: '#ef4444' }}
+                               onClick={() => handleRemoveItem(item.id!)}
+                               style={{ background: 'none', border: 'none', color: C.silver, cursor: 'pointer', padding: 4 }}
+                             >
+                                <Trash2 size={18} />
+                             </motion.button>
+                          </div>
+                          <p style={{ fontSize: F_SIZE.sm, color: C.silver, margin: '0 0 12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                             {item.packageName}
                           </p>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                          }}>
-                            <span style={{
-                              fontFamily: FD,
-                              fontSize: F_SIZE.md,
-                              fontWeight: 700,
-                              color: G,
-                            }}>
-                              ₹{item.price.toLocaleString()}
-                            </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.forest }}>₹{item.price.toLocaleString()}</span>
                             {item.origPrice && item.origPrice > item.price && (
-                              <span style={{
-                                fontSize: F_SIZE.sm,
-                                color: '#999',
-                                textDecoration: 'line-through',
-                              }}>
-                                ₹{item.origPrice.toLocaleString()}
-                              </span>
+                              <span style={{ fontSize: F_SIZE.sm, color: C.silver, textDecoration: 'line-through' }}>₹{item.origPrice.toLocaleString()}</span>
                             )}
                           </div>
                         </div>
 
                         {/* Quantity Controls */}
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 12,
-                          marginTop: 12,
-                        }}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            border: `1.5px solid ${G}`,
-                            borderRadius: 8,
-                            padding: '4px 8px',
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginTop: 12 }}>
+                          <div style={{ 
+                            display: 'flex', alignItems: 'center', gap: 16, border: '1px solid rgba(0,0,0,0.08)', borderRadius: 4, padding: '4px 12px', background: C.offwhite
                           }}>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => updateQuantity(item.id!, item.quantity - 1)}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 24,
-                                height: 24,
-                                background: 'transparent',
-                                border: 'none',
-                                color: G,
-                                cursor: 'pointer',
-                                padding: 0,
-                              }}
-                            >
-                              <Minus size={16} />
-                            </motion.button>
-                            <span style={{
-                              fontFamily: FS,
-                              fontSize: F_SIZE.sm,
-                              fontWeight: 600,
-                              color: '#1a1a1a',
-                              minWidth: 30,
-                              textAlign: 'center',
-                            }}>
-                              {item.quantity}
-                            </span>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => updateQuantity(item.id!, item.quantity + 1)}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 24,
-                                height: 24,
-                                background: 'transparent',
-                                border: 'none',
-                                color: G,
-                                cursor: 'pointer',
-                                padding: 0,
-                              }}
-                            >
-                              <Plus size={16} />
-                            </motion.button>
+                            <button onClick={() => updateQuantity(item.id!, item.quantity - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.forest, fontWeight: 900, fontSize: 18 }}>−</button>
+                            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.ink, minWidth: 24, textAlign: 'center' }}>{item.quantity}</span>
+                            <button onClick={() => updateQuantity(item.id!, item.quantity + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.forest, fontWeight: 900, fontSize: 18 }}>+</button>
                           </div>
-
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => handleRemoveItem(item.id!)}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 4,
-                              padding: '6px 12px',
-                              background: 'rgba(239,68,68,0.1)',
-                              border: '1px solid rgba(239,68,68,0.2)',
-                              borderRadius: 6,
-                              color: '#ef4444',
-                              fontFamily: FS,
-                              fontSize: F_SIZE.sm,
-                              fontWeight: 600,
-                              cursor: 'pointer',
-                              transition: 'all 0.2s',
-                            }}
-                          >
-                            <Trash2 size={14} />
-                            Remove
-                          </motion.button>
                         </div>
                       </div>
                     </motion.div>
                   ))}
                 </AnimatePresence>
+                
+                <motion.button
+                  whileHover={{ color: '#ef4444', x: 2 }}
+                  onClick={handleClearCart}
+                  style={{
+                    background: 'none', border: 'none', color: C.silver, fontFamily: FONTS.main,
+                    fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em',
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8
+                  }}
+                >
+                  Clear Entire Cart <RefreshCw size={12} />
+                </motion.button>
               </div>
-
-              {items.length > 0 && (
-                <div style={{
-                  padding: '16px 24px',
-                  borderTop: '2px dashed rgba(21,128,61,0.15)',
-                  background: 'rgba(21,128,61,0.02)',
-                }}>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    onClick={handleClearCart}
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      background: 'transparent',
-                      border: `1px dashed rgba(239,68,68,0.3)`,
-                      color: '#ef4444',
-                      fontFamily: FS,
-                      fontSize: F_SIZE.sm,
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      borderRadius: 8,
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    Clear Cart
-                  </motion.button>
-                </div>
-              )}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Summary Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            style={{
-              background: '#fff',
-              border: '2px solid rgba(21,128,61,0.15)',
-              borderRadius: 16,
-              padding: 24,
-              height: 'fit-content',
-              position: 'sticky',
-              top: 100,
-            }}
-          >
-            <h3 style={{
-              fontFamily: FD,
-              fontSize: F_SIZE.md,
-              fontWeight: 800,
-              color: '#1a1a1a',
-              margin: '0 0 20px',
+          {/* Checkout Summary Sidebar */}
+          <div style={{ position: 'sticky', top: 120 }}>
+            <div style={{ 
+              background: C.white, border: '1px solid rgba(0,0,0,0.05)', borderRadius: 16, 
+              padding: '36px', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.04)' 
             }}>
-              Price Details
-            </h3>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* Price breakdown */}
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Subtotal ({totalItems} items)</span>
-                <span style={{ fontWeight: 600, color: '#1a1a1a' }}>
-                  ₹{totalPrice.toLocaleString()}
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Shipping</span>
-                <span style={{ fontWeight: 600, color: G }}>Free</span>
-              </div>
-
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                paddingTop: 16,
-                borderTop: '2px dashed rgba(21,128,61,0.15)',
-              }}>
-                <span style={{ fontFamily: FD, fontSize: F_SIZE.md, fontWeight: 700, color: '#1a1a1a' }}>Total</span>
-                <span style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, color: G }}>
-                  ₹{totalPrice.toLocaleString()}
-                </span>
-              </div>
-
-              {/* CTA */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleProceedToCheckout}
-                disabled={isCheckingOut}
-                style={{
-                  marginTop: 20,
-                  padding: '14px',
-                  background: `linear-gradient(135deg, ${G} 0%, #1d7e34 100%)`,
-                  border: 'none',
-                  color: '#fff',
-                  fontFamily: FD,
-                  fontSize: F_SIZE.sm,
-                  fontWeight: 700,
-                  borderRadius: 12,
-                  cursor: isCheckingOut ? 'not-allowed' : 'pointer',
-                  opacity: isCheckingOut ? 0.7 : 1,
-                  boxShadow: '0 4px 12px rgba(21,128,61,0.2)',
-                  transition: 'all 0.3s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                }}
-              >
-                {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
-              </motion.button>
-
-              {/* Trust badges */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 12,
-                marginTop: 20,
-                paddingTop: 20,
-                borderTop: '2px dashed rgba(21,128,61,0.15)',
-              }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <div style={{
-                    width: 24,
-                    height: 24,
-                    background: 'rgba(21,128,61,0.1)',
-                    borderRadius: 6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    ✓
-                  </div>
-                  <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Secure Checkout</span>
+              <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '0 0 24px', letterSpacing: '-0.01em' }}>Billing Details</h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                   <span style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cart Value</span>
+                  <span style={{ fontWeight: 600, color: C.ink }}>₹{totalPrice.toLocaleString()}</span>
                 </div>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <div style={{
-                    width: 24,
-                    height: 24,
-                    background: 'rgba(21,128,61,0.1)',
-                    borderRadius: 6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    ✓
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Priority Shipping</span>
+                  <span style={{ fontWeight: 800, color: C.leaf }}>FREE</span>
+                </div>
+                
+                <GoldLine style={{ margin: '12px 0' }} />
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink }}>Total Order Value</span>
+                   <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.forest }}>₹{totalPrice.toLocaleString()}</span>
+                </div>
+
+                <motion.button
+                  whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                  whileTap={{ scale: 0.99 }}
+                  onClick={handleProceedToCheckout}
+                  disabled={isCheckingOut}
+                  style={{
+                    marginTop: 24, padding: '20px', background: C.forest, color: C.white, border: 'none',
+                    borderRadius: 6, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase',
+                    letterSpacing: '0.22em', cursor: isCheckingOut ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 8px 32px rgba(10,61,31,0.12)', transition: 'all 0.3s ease',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, opacity: isCheckingOut ? 0.7 : 1
+                  }}
+                >
+                  {isCheckingOut ? 'Processing...' : (
+                    <>
+                      Proceed to Checkout <ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} />
+                    </>
+                  )}
+                </motion.button>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24, padding: '20px', background: C.offwhite, borderRadius: 8 }}>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                    <ShieldCheck size={16} color={C.mid} />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>End-to-End SSL Encrypted</span>
                   </div>
-                  <span style={{ fontSize: F_SIZE.sm, color: '#666' }}>Easy Returns</span>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                    <Truck size={16} color={C.mid} />
+                    <span style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Express Delivery Verified</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -628,24 +332,14 @@ export default function ProductCart() {
       <AnimatePresence>
         {showToast && (
           <motion.div
-            initial={{ opacity: 0, y: 20, x: -20 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, y: -20, x: -20 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             style={{
-              position: 'fixed',
-              bottom: 24,
-              left: 24,
-              background: G,
-              color: '#fff',
-              padding: '16px 24px',
-              borderRadius: 12,
-              fontFamily: FS,
-              fontSize: F_SIZE.sm,
-              fontWeight: 600,
-              boxShadow: '0 8px 24px rgba(21,128,61,0.3)',
-              zIndex: 1000,
-              maxWidth: 300,
+              position: 'fixed', bottom: 40, left: '50%', x: '-50%',
+              background: C.deep, color: C.white, padding: '16px 32px', borderRadius: 100,
+              fontSize: 13, fontWeight: 900, zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+              textTransform: 'uppercase', letterSpacing: '0.15em'
             }}
           >
             {toastMessage}
@@ -653,8 +347,11 @@ export default function ProductCart() {
         )}
       </AnimatePresence>
 
-      {/* Auth Modal */}
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+      `}</style>
     </MainLayout>
   );
 }

@@ -150,6 +150,18 @@ export interface FAQ {
   updatedAt: string;
 }
 
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+  status: 'UNREAD' | 'READ' | 'REPLIED' | 'ARCHIVED';
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthResponse {
   message: string;
   token: string;
@@ -401,6 +413,28 @@ export const faqAPI = {
     }),
 };
 
+// Contact APIs
+export const contactAPI = {
+  submitMessage: (data: Partial<ContactMessage>) =>
+    apiRequest<ContactMessage>('/contact', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  getMessages: () => apiRequest<ContactMessage[]>('/contact'),
+
+  updateStatus: (id: number, status: ContactMessage['status']) =>
+    apiRequest<ContactMessage>(`/contact/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    }),
+
+  deleteMessage: (id: number) =>
+    apiRequest<{ message: string }>(`/contact/${id}`, {
+      method: 'DELETE',
+    }),
+};
+
 // Consolidated API export
 export const api = {
   auth: authAPI,
@@ -413,4 +447,5 @@ export const api = {
   admin: adminAPI,
   cart: cartAPI,
   faq: faqAPI,
+  contact: contactAPI,
 };

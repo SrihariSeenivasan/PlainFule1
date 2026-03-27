@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { CheckCircle, CreditCard, Truck, ShieldCheck } from 'lucide-react';
+import { CheckCircle, CreditCard, Truck, ShieldCheck, ArrowLeft, Send } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
@@ -11,10 +11,51 @@ import { api } from '@/lib/api';
 import MainLayout from '@/components/MainLayout';
 import { F_SIZE } from '@/lib/typography';
 
-const G = '#15803d';
-const BG = '#fdfaf3';
-const FD = "'Playfair Display', Georgia, serif";
-const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
+/* ── Design Tokens ── */
+const C = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  mist: '#f1f5f9',
+  gold: '#854d0e',
+  goldLight: '#a16207',
+  glass: 'rgba(255, 255, 255, 0.92)',
+};
+
+const FONTS = {
+  main: "'Montserrat', sans-serif",
+  accent: "'Caveat', cursive",
+};
+
+/* ── Components ── */
+function GoldLine({ style }: { style?: React.CSSProperties }) {
+  return (
+    <div style={{
+      height: 1, width: '100%',
+      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      ...style,
+    }} />
+  );
+}
+
+function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      fontFamily: FONTS.main,
+      fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
+      color: C.forest, fontWeight: 700,
+      border: `1px solid ${C.forest}40`,
+      borderRadius: 2, padding: '5px 14px',
+      backgroundColor: 'rgba(10, 61, 31, 0.05)',
+    }}>{children}</span>
+  );
+}
 
 export default function Checkout() {
   const router = useRouter();
@@ -23,10 +64,9 @@ export default function Checkout() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState('');
-  const [activeStep, setActiveStep] = useState(1);
   const [error, setError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('online');
   
-  // Forms state
   const [formData, setFormData] = useState({
     name: user ? `${user.firstName} ${user.lastName}` : '',
     email: user?.email || '',
@@ -38,9 +78,6 @@ export default function Checkout() {
     country: 'India'
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('online');
-
-  // Load Razorpay Script
   const loadRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -65,12 +102,10 @@ export default function Checkout() {
 
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
-    
     setIsProcessing(true);
     setError('');
 
     try {
-      // Create order on backend
       const res = await api.orders.create({
         items: items.map(item => ({
           productId: typeof item.productId === 'string' ? parseInt(item.productId) : item.productId,
@@ -99,14 +134,12 @@ export default function Checkout() {
           description: 'Payment for your order',
           order_id: res.razorpayOrderId,
           handler: async (response: any) => {
-            // Verify payment on backend
             await api.orders.verifyPayment({
               orderId: res.order.id,
               razorpayPaymentId: response.razorpay_payment_id,
               razorpayOrderId: response.razorpay_order_id,
               razorpaySignature: response.razorpay_signature
             });
-            
             setOrderId(res.order.id.toString());
             setOrderComplete(true);
             clearCart();
@@ -117,13 +150,11 @@ export default function Checkout() {
             email: formData.email,
             contact: formData.phone
           },
-          theme: { color: G }
+          theme: { color: C.forest }
         };
-
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
       } else {
-        // COD logic
         setOrderId(res.order.id.toString());
         setOrderComplete(true);
         clearCart();
@@ -137,36 +168,39 @@ export default function Checkout() {
 
   if (orderComplete) {
     return (
-      <MainLayout background={BG}>
-        <div style={{ maxWidth: 600, margin: '140px auto 100px', padding: '0 24px', textAlign: 'center' }}>
+      <MainLayout background={C.offwhite}>
+        <div style={{ maxWidth: 1160, margin: '160px auto 100px', padding: '0 24px', textAlign: 'center', fontFamily: FONTS.main }}>
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             style={{ 
-              background: '#fff', 
-              padding: '60px 40px', 
-              borderRadius: 24, 
-              boxShadow: '0 20px 50px rgba(0,0,0,0.05)',
-              border: '2px solid rgba(21,128,61,0.1)'
+              background: C.white, padding: '64px 40px', borderRadius: 16, 
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)',
             }}
           >
-            <div style={{ width: 80, height: 80, background: 'rgba(21,128,61,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-              <CheckCircle size={40} color={G} />
+            <div style={{ width: 100, height: 100, background: 'linear-gradient(135deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
+              <CheckCircle size={44} color={C.leaf} />
             </div>
-            <h1 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', margin: '0 0 12px' }}>Order Confirmed!</h1>
-            <p style={{ color: '#666', fontSize: F_SIZE.md, marginBottom: 32 }}>Thank you for your purchase. Your order ID is <strong style={{color: G}}>#{orderId}</strong>. We've sent a confirmation email to {formData.email}.</p>
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: '0 0 16px', letterSpacing: '-0.04em', lineHeight: 1 }}>Order Confirmed.</h1>
+            <p style={{ color: C.silver, fontSize: F_SIZE.md, marginBottom: 48, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Order ID: <strong style={{color: C.forest}}>#{orderId}</strong></p>
+            <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
               <button 
                 onClick={() => router.push('/my-orders')}
-                style={{ padding: '12px 24px', background: G, color: '#fff', border: 'none', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}
+                style={{ 
+                  padding: '18px 32px', background: C.forest, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, cursor: 'pointer',
+                  fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em', boxShadow: '0 8px 32px rgba(10,61,31,0.12)'
+                }}
               >
-                Track Order
+                Track Shipment
               </button>
               <button 
                 onClick={() => router.push('/products')}
-                style={{ padding: '12px 24px', background: 'transparent', color: G, border: `2px solid ${G}`, borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}
+                style={{ 
+                   padding: '18px 32px', background: 'transparent', color: C.forest, border: `2.5px solid ${C.forest}`, borderRadius: 6, fontWeight: 900, cursor: 'pointer',
+                   fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em'
+                }}
               >
-                Keep Shopping
+                Continue Shopping
               </button>
             </div>
           </motion.div>
@@ -176,158 +210,138 @@ export default function Checkout() {
   }
 
   return (
-    <MainLayout background={BG}>
-      <div style={{ maxWidth: 1200, margin: '140px auto 100px', padding: '0 24px' }}>
-        <h1 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', marginBottom: 40 }}>Checkout</h1>
+    <MainLayout background={C.offwhite}>
+      <div style={{ maxWidth: 1160, margin: '160px auto 100px', padding: '0 24px', fontFamily: FONTS.main }}>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: 40 }}>
+        {/* Header */}
+        <div style={{ marginBottom: 56 }}>
+          <Chip>Processing Order</Chip>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, marginTop: 24 }}>
+            <h1 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>
+              Secure <span style={{ fontWeight: 300, color: C.forest }}>Checkout</span>
+            </h1>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: 12 }}>
+            <GoldLine style={{ width: 180 }} />
+          </div>
+        </div>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 400px', gap: 48, alignItems: 'start' }}>
           {/* Checkout Steps */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {/* Step 1: Shipping */}
-            <CheckoutCard active={activeStep >= 1} title="1. Shipping Information">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <CheckoutCard title="Shipping Details">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
                 <Input name="name" label="Full Name" value={formData.name} onChange={handleInputChange} />
                 <Input name="email" label="Email Address" value={formData.email} onChange={handleInputChange} />
                 <Input name="phone" label="Phone Number" value={formData.phone} onChange={handleInputChange} />
                 <div style={{ gridColumn: 'span 2' }}>
-                  <Input name="address" label="Street Address" value={formData.address} onChange={handleInputChange} />
+                  <Input name="address" label="Primary Shipping Address" value={formData.address} onChange={handleInputChange} />
                 </div>
                 <Input name="city" label="City" value={formData.city} onChange={handleInputChange} />
-                <Input name="state" label="State" value={formData.state} onChange={handleInputChange} />
-                <Input name="zipCode" label="Pincode" value={formData.zipCode} onChange={handleInputChange} />
+                <Input name="state" label="Region/State" value={formData.state} onChange={handleInputChange} />
+                <Input name="zipCode" label="Zip/Pin Code" value={formData.zipCode} onChange={handleInputChange} />
               </div>
             </CheckoutCard>
 
             {/* Step 2: Payment */}
-            <CheckoutCard active={activeStep >= 1} title="2. Payment Method">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <CheckoutCard title="Payment Method">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <PaymentOption 
-                  id="online" 
-                  title="Pay Online" 
-                  desc="UPI, Cards, Netbanking (Razorpay)" 
-                  icon={<CreditCard size={20} />} 
-                  selected={paymentMethod === 'online'} 
-                  onClick={() => setPaymentMethod('online')} 
+                  id="online" title="Pay Online" desc="Instant Secure Transaction" icon={<CreditCard size={20} />} 
+                  selected={paymentMethod === 'online'} onClick={() => setPaymentMethod('online')} 
                 />
                 <PaymentOption 
-                  id="cod" 
-                  title="Cash on Delivery" 
-                  desc="Pay when you receive your order" 
-                  icon={<Truck size={20} />} 
-                  selected={paymentMethod === 'cod'} 
-                  onClick={() => setPaymentMethod('cod')} 
+                  id="cod" title="Pay on Receipt" desc="Terminal Delivery Payment" icon={<Truck size={20} />} 
+                  selected={paymentMethod === 'cod'} onClick={() => setPaymentMethod('cod')} 
                 />
               </div>
             </CheckoutCard>
           </div>
 
-          {/* Right: Order Summary */}
-          <div style={{ position: 'sticky', top: 120, height: 'fit-content' }}>
+          {/* Right: Order Summary Sidebar */}
+          <div style={{ position: 'sticky', top: 120 }}>
             <div style={{ 
-              background: '#fff', 
-              padding: 32, 
-              borderRadius: 24, 
-              border: '2px solid rgba(21,128,61,0.1)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.03)'
+              background: C.white, padding: 40, borderRadius: 16, border: '1px solid rgba(0,0,0,0.05)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)'
             }}>
-              <h3 style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, marginBottom: 24 }}>Order Summary</h3>
+              <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, marginBottom: 28, letterSpacing: '-0.01em' }}>Summary</h3>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 32 }}>
                 {items.map(item => (
-                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-                    <div style={{ display: 'flex', gap: 12 }}>
-                      <div style={{ width: 48, height: 48, background: '#f5f5f5', borderRadius: 8, flexShrink: 0 }}>
-                        <Image src={item.image} alt={item.productName} width={48} height={48} style={{ objectFit: 'contain' }} />
+                  <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 20 }}>
+                    <div style={{ display: 'flex', gap: 16 }}>
+                      <div style={{ width: 56, height: 56, background: C.offwhite, borderRadius: 6, flexShrink: 0, padding: 4, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                           <Image src={item.image} alt={item.productName} fill style={{ objectFit: 'contain' }} />
+                        </div>
                       </div>
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: F_SIZE.sm }}>{item.productName}</div>
-                        <div style={{ fontSize: F_SIZE.sm, color: '#666' }}>qty: {item.quantity} · {item.packageName}</div>
+                        <div style={{ fontWeight: 800, fontSize: F_SIZE.sm, color: C.ink }}>{item.productName}</div>
+                        <div style={{ fontSize: 11, color: C.silver, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>QTY: {item.quantity} · {item.packageName}</div>
                       </div>
                     </div>
-                    <div style={{ fontWeight: 700 }}>₹{(item.price * item.quantity).toLocaleString()}</div>
+                    <div style={{ fontWeight: 900, color: C.forest }}>₹{(item.price * item.quantity).toLocaleString()}</div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ 
-                borderTop: '2px dashed rgba(21,128,61,0.1)', 
-                paddingTop: 20, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: 12 
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#666' }}>
-                  <span>Subtotal</span>
+              <GoldLine style={{ margin: '24px 0', opacity: 0.6 }} />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: C.silver, fontSize: F_SIZE.sm, fontWeight: 700, textTransform: 'uppercase' }}>
+                  <span>Gross Value</span>
                   <span>₹{totalPrice.toLocaleString()}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#666' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: C.silver, fontSize: F_SIZE.sm, fontWeight: 700, textTransform: 'uppercase' }}>
                   <span>Shipping</span>
-                  <span style={{ color: G, fontWeight: 700 }}>FREE</span>
+                  <span style={{ color: C.leaf }}>FREE</span>
                 </div>
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  fontSize: F_SIZE.lg, 
-                  fontWeight: 800, 
-                  marginTop: 8,
-                  fontFamily: FD,
-                  color: '#1a1a1a'
-                }}>
-                  <span>Total</span>
-                  <span style={{ color: G }}>₹{totalPrice.toLocaleString()}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: F_SIZE.lg, fontWeight: 900, marginTop: 12, color: C.forest }}>
+                  <span>Final Total</span>
+                  <span>₹{totalPrice.toLocaleString()}</span>
                 </div>
               </div>
 
               {error && (
-                <div style={{ marginTop: 20, padding: 12, background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderRadius: 8, fontSize: F_SIZE.sm, fontWeight: 600 }}>
-                  {error}
+                <div style={{ marginTop: 20, padding: 16, background: 'rgba(239,68,68,0.1)', color: '#ef4444', borderRadius: 8, fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  × {error}
                 </div>
               )}
 
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                whileTap={{ scale: 0.99 }}
                 onClick={handlePlaceOrder}
                 disabled={isProcessing || items.length === 0}
                 style={{ 
-                  width: '100%', 
-                  padding: 16, 
-                  background: G, 
-                  color: '#fff', 
-                  border: 'none', 
-                  borderRadius: 16, 
-                  fontWeight: 800, 
-                  fontSize: F_SIZE.md,
-                  marginTop: 24,
-                  cursor: (isProcessing || items.length === 0) ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 10px 20px rgba(21,128,61,0.2)',
-                  transition: '0.3s'
+                  width: '100%', padding: 20, background: C.forest, color: C.white, border: 'none', borderRadius: 6, fontWeight: 900, 
+                  fontSize: F_SIZE.sm, textTransform: 'uppercase', letterSpacing: '0.22em', marginTop: 32, cursor: 'pointer',
+                  boxShadow: '0 8px 32px rgba(10,61,31,0.12)', opacity: isProcessing ? 0.7 : 1
                 }}
               >
-                {isProcessing ? 'Processing...' : `Place Order · ₹${totalPrice.toLocaleString()}`}
-              </button>
+                {isProcessing ? 'Processing...' : `Complete Order · ₹${totalPrice.toLocaleString()}`} <Send size={16} />
+              </motion.button>
 
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', justifyContent: 'center', marginTop: 16, opacity: 0.5 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'center', marginTop: 24, opacity: 0.4 }}>
                 <ShieldCheck size={16} />
-                <span style={{ fontSize: F_SIZE.sm, fontWeight: 600 }}>Secure 256-bit SSL encrypted payment</span>
+                <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Secure SSL Encryption Active</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+      `}</style>
     </MainLayout>
   );
 }
 
-function CheckoutCard({ children, title, active }: any) {
+function CheckoutCard({ children, title }: any) {
   return (
-    <div style={{ 
-      background: '#fff', 
-      borderRadius: 24, 
-      padding: 32, 
-      border: `2px solid ${active ? 'rgba(21,128,61,0.2)' : '#eee'}`,
-      boxShadow: active ? '0 10px 30px rgba(0,0,0,0.03)' : 'none',
-      opacity: active ? 1 : 0.6
-    }}>
-      <h2 style={{ fontFamily: FD, fontSize: F_SIZE.lg, fontWeight: 800, marginBottom: 24, color: '#1a1a1a' }}>{title}</h2>
+    <div style={{ background: C.white, borderRadius: 16, padding: '40px', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)' }}>
+      <h2 style={{ fontSize: F_SIZE.lg, fontWeight: 900, marginBottom: 32, color: C.ink, letterSpacing: '-0.01em' }}>{title}</h2>
       {children}
     </div>
   );
@@ -335,18 +349,15 @@ function CheckoutCard({ children, title, active }: any) {
 
 function Input({ label, ...props }: any) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <label style={{ fontSize: 11, fontWeight: 900, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.12em' }}>{label}</label>
       <input 
         style={{ 
-          padding: '12px 16px', 
-          borderRadius: 12, 
-          border: '2px solid #eee', 
-          fontFamily: FS,
-          fontSize: F_SIZE.sm,
-          outline: 'none',
-          transition: '0.2s'
+          padding: '16px 20px', borderRadius: 6, border: '1.5px solid rgba(0,0,0,0.08)', outline: 'none', background: C.offwhite, 
+          fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: C.ink, transition: '0.2s'
         }}
+        onFocus={e => e.currentTarget.style.borderColor = C.forest}
+        onBlur={e => e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'}
         {...props} 
       />
     </div>
@@ -358,44 +369,19 @@ function PaymentOption({ title, desc, icon, selected, onClick }: any) {
     <div 
       onClick={onClick}
       style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 16, 
-        padding: 20, 
-        borderRadius: 16, 
-        border: `2px solid ${selected ? G : '#eee'}`,
-        background: selected ? 'rgba(21,128,61,0.02)' : 'transparent',
-        cursor: 'pointer',
-        transition: '0.2s'
+        display: 'flex', alignItems: 'center', gap: 20, padding: 24, borderRadius: 12, border: `2.5px solid ${selected ? C.forest : 'rgba(0,0,0,0.06)'}`,
+        background: selected ? `${C.forest}04` : 'transparent', cursor: 'pointer', transition: '0.2s'
       }}
     >
-      <div style={{ 
-        width: 48, 
-        height: 48, 
-        borderRadius: 12, 
-        background: selected ? G : '#f5f5f5', 
-        color: selected ? '#fff' : '#666',
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center' 
-      }}>
+      <div style={{ width: 56, height: 56, borderRadius: 8, background: selected ? C.forest : C.mist, color: selected ? C.white : C.mid, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {icon}
       </div>
-      <div>
-        <div style={{ fontWeight: 800, color: '#1a1a1a' }}>{title}</div>
-        <div style={{ fontSize: F_SIZE.sm, color: '#666' }}>{desc}</div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontWeight: 900, color: C.ink, fontSize: F_SIZE.md }}>{title}</div>
+        <div style={{ fontSize: F_SIZE.sm, color: C.silver, fontWeight: 700, marginTop: 4 }}>{desc}</div>
       </div>
-      <div style={{ 
-        marginLeft: 'auto', 
-        width: 24, 
-        height: 24, 
-        borderRadius: '50%', 
-        border: `2px solid ${selected ? G : '#ddd'}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {selected && <div style={{ width: 12, height: 12, borderRadius: '50%', background: G }} />}
+      <div style={{ width: 24, height: 24, borderRadius: '50%', border: `2px solid ${selected ? C.forest : '#ddd'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {selected && <div style={{ width: 12, height: 12, borderRadius: '50%', background: C.forest }} />}
       </div>
     </div>
   );

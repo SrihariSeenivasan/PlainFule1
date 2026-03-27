@@ -8,6 +8,8 @@ import { authAPI } from '@/lib/api';
 import { handleGoogleCallback, loadGoogleSDK } from '@/lib/google-auth';
 import { F_SIZE } from '@/lib/typography';
 
+import { Eye, EyeOff } from 'lucide-react';
+
 interface LoginPageProps {
   onSwitchView?: (view: 'login' | 'register' | 'forgot') => void;
   onSuccess?: () => void;
@@ -19,6 +21,7 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
   const googleButtonRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -176,17 +179,26 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
               <label htmlFor="password" style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif", color: '#0a3d1f' }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                autoComplete="current-password"
-                className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all duration-300 placeholder:text-gray-400 font-medium"
-                style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }}
-                required
-              />
+              <div className="relative group">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  className="w-full px-4 py-3 bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition-all duration-300 placeholder:text-gray-400 font-medium pr-12"
+                  style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#0a3d1f40] hover:text-[#0a3d1f] transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center justify-between gap-2 py-1">

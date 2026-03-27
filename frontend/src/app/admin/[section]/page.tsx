@@ -9,6 +9,7 @@ import AdminPayments from '@/components/AdminPanel/AdminPayments';
 import AdminInventory from '@/components/AdminPanel/AdminInventory';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminReturns from '@/components/AdminPanel/AdminReturns';
+import AdminMessages from '@/components/AdminPanel/AdminMessages';
 
 export default function AdminSectionPage() {
   const params = useParams();
@@ -32,6 +33,8 @@ export default function AdminSectionPage() {
         return <AdminInventory />;
       case 'faq':
         return <AdminFAQ />;
+      case 'messages':
+        return <AdminMessages />;
       default:
         return <AdminDashboard />;
     }

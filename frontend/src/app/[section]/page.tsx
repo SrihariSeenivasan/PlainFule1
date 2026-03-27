@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import Navbar from '@/components/Navbar';
+import MainLayout from '@/components/MainLayout';
 import ProductPage from '@/components/LandingPage/ProductPage';
 import AboutPage from '@/components/LandingPage/AboutPage';
 import ProductCart from '@/components/LandingPage/ProductPageSections/ProductCart';
@@ -17,6 +17,7 @@ import ReturnPolicy from '@/components/Policies/Return';
 import ShippingPolicy from '@/components/Policies/ShippingPolicy';
 import Terms from '@/components/Policies/Terms';
 import ResetPassword from '@/components/Login/ResetPassword';
+import ContactPage from '@/components/LandingPage/ContactPage';
 
 const PROTECTED = ['my-orders', 'my-profile'];
 
@@ -46,23 +47,21 @@ export default function SectionPage() {
     case 'my-orders':
       return (
         <AuthGuard>
-          <div style={{ minHeight: '100vh', background: '#fdfaf3' }}>
-            <Navbar />
+          <MainLayout background="#fdfaf3" showFAQ={false}>
             <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserOrders />
             </div>
-          </div>
+          </MainLayout>
         </AuthGuard>
       );
     case 'my-profile':
       return (
         <AuthGuard>
-          <div style={{ minHeight: '100vh', background: '#fdfaf3' }}>
-            <Navbar />
+          <MainLayout background="#fdfaf3" showFAQ={false}>
             <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserProfile />
             </div>
-          </div>
+          </MainLayout>
         </AuthGuard>
       );
     case 'cancellation': return <CancellationPolicy />;
@@ -72,6 +71,12 @@ export default function SectionPage() {
     case 'shipping':     return <ShippingPolicy />;
     case 'terms':        return <Terms />;
     case 'reset-password': return <ResetPassword />;
+    case 'contact':
+      return (
+        <MainLayout background="#fdfaf3">
+          <ContactPage />
+        </MainLayout>
+      );
     default:
       return null;
   }

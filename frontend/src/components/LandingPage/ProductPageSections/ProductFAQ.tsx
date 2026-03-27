@@ -1,14 +1,29 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
+import { ChevronDown, Sparkles } from 'lucide-react';
 import { getApiUrl } from '@/lib/api';
 import { F_SIZE } from '@/lib/typography';
 
-// ── Theme Constants ──
-const FD = "'Playfair Display', Georgia, serif";
-const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
-const G = '#15803d';
+/* ── Design Tokens ── */
+const C = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  gold: '#854d0e',
+  glass: 'rgba(255, 255, 255, 0.92)',
+};
+
+const FONTS = {
+  main: "'Montserrat', sans-serif",
+  accent: "'Caveat', cursive",
+};
 
 interface FAQ {
   id: number;
@@ -17,157 +32,108 @@ interface FAQ {
   type: string;
 }
 
-// ── Doodle SVG Primitives ──
-const ScribbleUnderline = ({ color = '#15803d', delay = 0, style = {} }: { color?: string; delay?: number; style?: React.CSSProperties }) => (
-  <motion.svg
-    viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden
-    style={{ position: 'absolute', bottom: -6, left: 0, width: '100%', height: 12, pointerEvents: 'none', ...style }}
-  >
-    <motion.path
-      d="M4,8 Q50,2 100,6 Q150,10 196,4"
-      fill="none" stroke={color} strokeWidth="3" strokeLinecap="round"
-      initial={{ pathLength: 0, opacity: 0 }}
-      whileInView={{ pathLength: 1, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, delay, ease: 'easeOut' }}
-    />
-  </motion.svg>
-);
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-const StarBurst = ({ size = 28, rotate = 0, color = '#15803d', style = {} }: { size?: number; rotate?: number; color?: string; style?: React.CSSProperties }) => {
-  // This SVG can be used in the future for decorations
-  void rotate; // Avoid unused warning
+/* ── Components ── */
+function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden
-      style={{ transform: `rotate(${rotate}deg)`, ...style }}>
-      <path
-        d="M16,2 L17.8,12 L28,10 L20,17 L24,27 L16,21 L8,27 L12,17 L4,10 L14.2,12 Z"
-        fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      fontFamily: FONTS.main,
+      fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase',
+      color: C.forest, fontWeight: 800,
+      border: `1px solid ${C.forest}30`,
+      borderRadius: 2, padding: '4px 12px',
+      backgroundColor: 'rgba(10, 61, 31, 0.04)',
+    }}>{children}</span>
   );
-};
+}
 
-const CircleScribble = ({ size = 60, style = {} }: { size?: number; style?: React.CSSProperties }) => {
-  // This SVG can be used in the future for decorations
-  return (
-    <svg viewBox="0 0 64 64" width={size} height={size} aria-hidden style={style}>
-      <path
-        d="M32,6 C48,5 58,18 58,32 C58,46 48,59 32,58 C16,59 6,46 6,32 C6,18 16,5 32,6 Z"
-        fill="none" stroke="rgba(34,197,94,0.25)" strokeWidth="2" strokeLinecap="round" strokeDasharray="5,3"
-      />
-    </svg>
-  );
-};
-/* eslint-enable @typescript-eslint/no-unused-vars */
-
-// ── FAQ Item ──
-const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
+const FaqItem = ({ q, a, index }: { q: string; a: string; index: number }) => {
   const [open, setOpen] = useState(false);
-  const rotations = [-1.2, 0.8, -0.6, 1.0];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24, rotate: rotations[index % 4] }}
-      whileInView={{ opacity: 1, y: 0, rotate: open ? 0 : rotations[index % 4] }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: (index % 4) * 0.1, duration: 0.6 }}
-      onClick={() => setOpen(v => !v)}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
       style={{
-        position: 'relative',
-        background: '#fffef5',
-        borderRadius: 16,
-        padding: '20px 22px',
-        cursor: 'pointer',
-        border: `2px ${open ? 'solid' : 'dashed'} ${open ? '#15803d' : 'rgba(0,0,0,0.15)'}`,
-        boxShadow: open ? '5px 6px 0 rgba(21,128,61,0.2)' : '3px 4px 0 rgba(0,0,0,0.08)',
+        background: C.white,
+        borderRadius: 8,
+        border: `1px solid ${open ? C.forest : 'rgba(0,0,0,0.06)'}`,
+        overflow: 'hidden',
         transition: 'all 0.3s ease',
-        transform: `rotate(${open ? 0 : rotations[index % 4]}deg)`,
+        boxShadow: open ? '0 10px 30px -10px rgba(0,0,0,0.05)' : 'none',
       }}
     >
-      {/* notebook lines */}
-      <div style={{
-        position: 'absolute', inset: 0, borderRadius: 'inherit', overflow: 'hidden', pointerEvents: 'none',
-        backgroundImage: 'repeating-linear-gradient(transparent,transparent 27px,rgba(21,128,61,0.07) 27px,rgba(21,128,61,0.07) 28px)',
-      }} />
-
-      {/* corner dog-ear */}
-      <div style={{
-        position: 'absolute', bottom: 0, right: 0, width: 24, height: 24,
-        background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.06) 50%)',
-        borderRadius: '0 0 14px 0',
-      }} />
-
-      <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-        <p style={{
-          fontFamily: "'Permanent Marker', cursive",
-          fontSize: F_SIZE.md, color: '#0a0a0a', margin: 0, lineHeight: 1.4, flex: 1,
-        }}>{q}</p>
-        <motion.span
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ duration: 0.25 }}
-          style={{
-            fontFamily: "'Caveat', cursive",
-            fontSize: F_SIZE.lg, color: '#15803d', fontWeight: 900,
-            lineHeight: 1, flexShrink: 0,
-          }}
-        >+</motion.span>
-      </div>
-
-      <motion.div
-        initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        style={{ overflow: 'hidden' }}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: '100%', padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: open ? `${C.forest}04` : 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 20
+        }}
       >
-        <div style={{ paddingTop: 10, borderTop: '1.5px dashed rgba(34,197,94,0.3)', marginTop: 12 }}>
-          <p style={{
-            fontFamily: "'Caveat', cursive",
-            fontSize: F_SIZE.lg, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.6, margin: 0,
-          }}>{a}</p>
-        </div>
-      </motion.div>
+        <span style={{ 
+          fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 800, color: open ? C.forest : C.ink, 
+          letterSpacing: '-0.01em', lineHeight: 1.4 
+        }}>
+          {q}
+        </span>
+        <motion.div
+           animate={{ rotate: open ? 180 : 0 }}
+           style={{ color: open ? C.forest : C.silver }}
+        >
+           <ChevronDown size={20} />
+        </motion.div>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ overflow: 'hidden' }}
+          >
+            <div style={{ padding: '0 32px 32px', borderTop: '1px solid rgba(0,0,0,0.03)' }}>
+              <p style={{
+                fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 500, color: '#3c4a3e', 
+                lineHeight: 1.8, margin: '24px 0 0', position: 'relative', paddingLeft: 20
+              }}>
+                <span style={{ position: 'absolute', left: 0, top: 0, color: C.gold, fontWeight: 900 }}>—</span>
+                {a}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
 
-// ── Default FAQs (moved outside component to avoid dependency issues) ──
 const DEFAULT_FAQS: FAQ[] = [
-  { id: 1, question: 'Wha is the recommended dosage?', answer: 'One scoop (about 10g) mixed into your daily drink is all you need. Take it with breakfast for best results.', type: 'PRODUCT' },
-  { id: 2, question: 'Can I take it with other supplements?', answer: 'Yes! PlainFuel works well alongside other supplements. No known interactions, but consult your doctor if on medication.', type: 'PRODUCT' },
-  { id: 3, question: 'How long until I see results?', answer: 'Most customers notice improved energy and digestion within 3-5 days of consistent use.', type: 'PRODUCT' },
-  { id: 4, question: 'Is it suitable for vegetarians/vegans?', answer: 'Absolutely! All PlainFuel products are 100% vegan and plant-based. No animal derivatives.', type: 'PRODUCT' },
-  { id: 5, question: 'What\'s the shelf life?', answer: 'Our pouches stay fresh for 24 months when stored in a cool, dry place. Check the date on your pack.', type: 'PRODUCT' },
-  { id: 6, question: 'Do you offer bulk discounts?', answer: 'Yes! Subscribe for monthly delivery and get 15% off. Contact our team for wholesale options.', type: 'PRODUCT' },
+  { id: 1, question: 'What is the recommended dosage for optimal performance?', answer: 'One sachet (approx. 12g) integrated into your morning hydration routine. Formulated for maximum cellular absorption when taken on an empty stomach.', type: 'PRODUCT' },
+  { id: 2, question: 'Is the product compatible with other bio-supplements?', answer: 'Yes. PlainFuel is designed to be a foundational product. It has been tested for safety alongside common micronutrients. Consult your medical advisor if using prescription supplements.', type: 'PRODUCT' },
+  { id: 3, question: 'What is the expected synchronization period?', answer: 'Most users report baseline metabolic stabilization within 48-72 hours. Peak efficacy is typically achieved after 14 days of consistent adherence.', type: 'PRODUCT' },
+  { id: 4, question: 'Is the formula compatible with plant-based lifestyles?', answer: 'Strictly. All ingredients are synthesized from high-purity botanical sources. 100% Vegan, Non-GMO, and Lab-Verified.', type: 'PRODUCT' },
 ];
 
-// ── Main Component ──
 export default function ProductFAQ({ productId }: { productId?: number } = {}) {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
-  // Fetch FAQs from backend for specific product
   const fetchFaqs = useCallback(async () => {
       try {
         setLoading(true);
         const apiUrl = getApiUrl();
-        
-        // Build query params
         const params = new URLSearchParams();
         params.append('type', 'PRODUCT');
-        if (productId) {
-          params.append('productId', productId.toString());
-        }
+        if (productId) params.append('productId', productId.toString());
 
         const response = await fetch(`${apiUrl}/faqs?${params.toString()}`);
-
         if (response.ok) {
           const data = await response.json();
-          setFaqs(data.data || DEFAULT_FAQS);
-          setError('');
+          setFaqs(data.data?.length ? data.data : DEFAULT_FAQS);
         } else {
           setFaqs(DEFAULT_FAQS);
         }
@@ -182,104 +148,62 @@ export default function ProductFAQ({ productId }: { productId?: number } = {}) {
   useEffect(() => {
     fetchFaqs();
   }, [fetchFaqs]);
+
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700;900&family=Permanent+Marker&display=swap');
+    <div style={{ fontFamily: FONTS.main }}>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
       `}</style>
 
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative' }}>
+        {/* Header */}
+        <div style={{ marginBottom: 48 }}>
+           <Chip>Knowledge Base — Product Q&A</Chip>
+           <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '20px 0 0', letterSpacing: '-0.02em' }}>Common Inquiries</h3>
+           <div style={{ height: 1, width: 60, background: C.gold, marginTop: 16 }} />
+        </div>
 
-        {/* ─── Section Header ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          style={{ marginBottom: 44 }}
-        >
-          <div style={{
-            display: 'inline-block',
-            background: 'rgba(254,240,138,0.5)',
-            border: '1.5px dashed rgba(0,0,0,0.2)',
-            borderRadius: 6,
-            padding: '4px 14px',
-            marginBottom: 14,
-            transform: 'rotate(-1deg)',
-            boxShadow: '2px 2px 0 rgba(0,0,0,0.07)',
-          }}>
-            <span style={{ fontFamily: "'Caveat',cursive", fontSize: F_SIZE.md, fontWeight: 700, color: '#1a1a1a', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              ❓ Product FAQs
-            </span>
-          </div>
-
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            <h3 style={{
-              fontFamily: "'Permanent Marker',cursive",
-              fontSize: F_SIZE.xl,
-              color: '#0a0a0a',
-              margin: 0,
-              lineHeight: 1.1,
-            }}>Common Product Questions</h3>
-            <ScribbleUnderline delay={0.4} />
-          </div>
-        </motion.div>
-
-        {/* ─── FAQ Grid ─── */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-          gap: 20,
-        }}>
+        {/* FAQ List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {loading ? (
-            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 0' }}>
-              <p style={{ fontFamily: FS, color: '#999' }}>Loading FAQs...</p>
-            </div>
-          ) : error && faqs.length === 0 ? (
-            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 0' }}>
-              <p style={{ fontFamily: FS, color: '#c33' }}>Failed to load FAQs</p>
+            <div style={{ padding: '40px 0', textAlign: 'center' }}>
+              <p style={{ color: C.silver, fontWeight: 700, textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.15em' }}>Retrieving Knowledge Base...</p>
             </div>
           ) : (
             faqs.map((faq, i) => (
-              <FaqCard key={faq.id} q={faq.question} a={faq.answer} index={i} />
+              <FaqItem key={faq.id} q={faq.question} a={faq.answer} index={i} />
             ))
           )}
         </div>
 
-        {/* ─── CTA Section ─── */}
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           style={{
-            marginTop: 64, textAlign: 'center',
-            background: '#fff', borderRadius: 16, padding: 'clamp(32px, 8vw, 48px)',
-            border: '2px dashed rgba(21,128,61,0.2)',
+            marginTop: 48, padding: '32px 40px', background: C.offwhite, borderRadius: 12,
+            border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap'
           }}
         >
-          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
-            Still have questions?
-          </p>
-          <h4 style={{ fontFamily: FD, fontSize: F_SIZE.xl, color: '#1a1a1a', margin: '0 0 16px' }}>
-            Get in touch with our team
-          </h4>
-          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#666', marginBottom: 20 }}>
-            Reach out at <strong>support@plainfuel.com</strong> or use our contact form
-          </p>
+          <div>
+            <h4 style={{ fontSize: F_SIZE.md, fontWeight: 900, margin: '0 0 4px', color: C.ink }}>Expert Support Available</h4>
+            <p style={{ fontSize: F_SIZE.sm, color: C.silver, margin: 0, fontWeight: 600 }}>Our specialist team is available for deep-technical inquiries.</p>
+          </div>
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => window.location.href = 'mailto:support@plainfuel.com'}
+            whileHover={{ scale: 1.02, backgroundColor: C.forest, color: C.white }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => window.location.href = '/contact'}
             style={{
-              padding: '10px 24px', background: G, color: '#fff',
-              fontFamily: "'Caveat', cursive", fontWeight: 600, fontSize: F_SIZE.md,
-              border: 'none', borderRadius: 12, cursor: 'pointer',
-              boxShadow: '3px 4px 0 rgba(21,128,61,0.2)',
+              padding: '12px 28px', background: 'transparent', color: C.forest,
+              border: `2px solid ${C.forest}`, borderRadius: 6, fontWeight: 900, 
+              fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', transition: '0.2s'
             }}
           >
-            Contact Support
+            Contact Specialist
           </motion.button>
         </motion.div>
       </div>
-    </>
+    </div>
   );
 }

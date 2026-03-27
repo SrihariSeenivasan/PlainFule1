@@ -1,16 +1,32 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getApiUrl } from '@/lib/api';
 import AuthModal from '@/components/AuthModal';
 import { F_SIZE } from '@/lib/typography';
+import { Star, MessageSquare, ShieldCheck, User, Send } from 'lucide-react';
 
-// ── Theme Constants ──
-const FD = "'Playfair Display', Georgia, serif";
-const FS = "'DM Sans', 'Helvetica Neue', sans-serif";
-const G = '#15803d';
+/* ── Design Tokens ── */
+const C = {
+  forest: '#0a3d1f',
+  deep: '#071a0d',
+  mid: '#14532d',
+  leaf: '#16a34a',
+  ink: '#070d08',
+  white: '#ffffff',
+  offwhite: '#fafafa',
+  silver: '#64748b',
+  mist: '#f1f5f9',
+  gold: '#854d0e',
+  glass: 'rgba(255, 255, 255, 0.92)',
+};
+
+const FONTS = {
+  main: "'Montserrat', sans-serif",
+  accent: "'Caveat', cursive",
+};
 
 interface Review {
   id: number;
@@ -20,69 +36,82 @@ interface Review {
   createdAt: string;
 }
 
-// ── Review Star Component ──
+/* ── Components ── */
+function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 8,
+      fontFamily: FONTS.main,
+      fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
+      color: C.forest, fontWeight: 800,
+      border: `1px solid ${C.forest}25`,
+      borderRadius: 2, padding: '3px 10px',
+      backgroundColor: 'rgba(10, 61, 31, 0.03)',
+    }}>{children}</span>
+  );
+}
+
 const StarRating = ({ rating, size = 16, interactive = false, onRate }: { rating: number; size?: number; interactive?: boolean; onRate?: (r: number) => void }) => (
-  <svg viewBox="0 0 100 20" width={size * 5} height={size} style={{ pointerEvents: interactive ? 'auto' : 'none', cursor: interactive ? 'pointer' : 'default' }}>
-    {[...Array(5)].map((_, i) => (
-      <g
-        key={i}
-        onClick={() => interactive && onRate?.(i + 1)}
-        style={{ cursor: interactive ? 'pointer' : 'default' }}
+  <div style={{ display: 'flex', gap: 4, cursor: interactive ? 'pointer' : 'default' }}>
+    {[1, 2, 3, 4, 5].map((star) => (
+      <div 
+        key={star} 
+        onClick={() => interactive && onRate?.(star)}
+        style={{ color: star <= rating ? C.gold : `${C.silver}33`, transition: '0.2s' }}
       >
-        <path
-          d={`M${i * 20 + 10},2 L${i * 20 + 12.4},9.6 L${i * 20 + 20},9.6 L${i * 20 + 14.6},14.4 L${i * 20 + 17},21 L${i * 20 + 10},16.2 L${i * 20 + 3},21 L${i * 20 + 5.4},14.4 L0,9.6`}
-          fill={i < Math.round(rating) ? G : 'rgba(21,128,61,0.2)'}
-          stroke="none"
-        />
-      </g>
+        <Star size={size} fill={star <= rating ? C.gold : 'none'} strokeWidth={2.5} />
+      </div>
     ))}
-  </svg>
+  </div>
 );
 
-// ── Review Card Component ──
 const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
+    initial={{ opacity: 0, scale: 0.98 }}
+    whileInView={{ opacity: 1, scale: 1 }}
     viewport={{ once: true }}
-    transition={{ delay: index * 0.1 }}
+    transition={{ delay: index * 0.05, duration: 0.4 }}
     style={{
-      background: '#fff',
-      border: `2px solid rgba(21,128,61,0.15)`,
+      background: C.white,
+      border: `1px solid rgba(0,0,0,0.06)`,
       borderRadius: 12,
-      padding: '20px',
-      position: 'relative',
+      padding: '32px',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+      display: 'flex', flexDirection: 'column', gap: 16
     }}
   >
-    {/* Corner dog-ear */}
-    <div style={{
-      position: 'absolute', bottom: 0, right: 0, width: 20, height: 20,
-      background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.04) 50%)',
-      borderRadius: '0 0 10px 0',
-    }} />
-
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-      <div>
-        <p style={{ fontFamily: FS, fontWeight: 700, fontSize: F_SIZE.sm, color: '#1a1a1a', margin: 0 }}>
-          {review.user.firstName} {review.user.lastName}
-        </p>
-        <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: '4px 0 0' }}>
-          {new Date(review.createdAt).toLocaleDateString()}
-        </p>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+         <div style={{ width: 32, height: 32, borderRadius: '50%', background: C.mist, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+           <User size={16} color={C.mid} />
+         </div>
+         <div>
+            <div style={{ fontWeight: 800, fontSize: F_SIZE.sm, color: C.ink, lineHeight: 1 }}>
+              {review.user.firstName} {review.user.lastName}
+            </div>
+            <div style={{ fontSize: 10, color: C.silver, fontWeight: 700, marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              {new Date(review.createdAt).toLocaleDateString()}
+            </div>
+         </div>
+      </div>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+         <ShieldCheck size={14} color={C.leaf} />
+         <span style={{ fontSize: 9, fontWeight: 800, color: C.leaf, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Verified User</span>
       </div>
     </div>
 
-    <div style={{ marginBottom: 12 }}>
-      <StarRating rating={review.rating} size={14} />
-    </div>
+    <StarRating rating={review.rating} size={14} />
 
-    <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#555', lineHeight: 1.6, margin: 0 }}>
+    <p style={{ 
+      fontSize: F_SIZE.sm, color: '#3c4a3e', lineHeight: 1.7, margin: 0, fontWeight: 500,
+      fontStyle: 'italic', position: 'relative', paddingLeft: 18
+    }}>
+      <span style={{ position: 'absolute', left: 0, top: 0, color: C.gold, fontSize: 18, fontWeight: 900 }}>"</span>
       {review.text}
     </p>
   </motion.div>
 );
 
-// ── Reviews Section Component ──
 export default function ReviewsSection({ productId = 1 }: { productId?: number }) {
   const { isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -123,7 +152,6 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
     }
   }, [productId]);
 
-  // Load reviews on mount
   useEffect(() => {
     loadReviews();
   }, [loadReviews]);
@@ -139,7 +167,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
     }
 
     if (formData.text.trim().length < 10) {
-      setError('Review must be at least 10 characters long');
+      setError('Review must be at least 10 characters decoded.');
       return;
     }
 
@@ -162,194 +190,147 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
       });
 
       if (response.ok) {
-        setSuccess('Thank you for your review!');
+        setSuccess('Transmission Successful. Thank you.');
         setFormData({ rating: 5, text: '' });
         await loadReviews();
       } else {
         const data = await response.json();
-        setError(data.message || 'Failed to submit review');
+        setError(data.message || 'Transmission Failed.');
       }
     } catch (err) {
       console.error('Error submitting review:', err);
-      setError('Failed to submit review');
+      setError('Transmission Failed.');
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <section style={{ padding: '72px 0', background: '#fdfaf3', position: 'relative', overflow: 'hidden' }}>
-      {/* Background pattern */}
-      <div aria-hidden style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px)',
-        backgroundSize: '24px 24px',
-      }} />
-
-      <div style={{
-        maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1,
-      }}>
-        {/* ─── Header ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          style={{ textAlign: 'center', marginBottom: 48 }}
-        >
-          <h2 style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a', margin: 0 }}>
-            What People Are Saying
-          </h2>
-          <p style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", fontSize: F_SIZE.md, color: '#666', marginTop: 12 }}>
-            Join {(stats.totalReviews || 324).toLocaleString()} satisfied customers
-          </p>
-        </motion.div>
-
-        {/* ─── Rating Summary ─── */}
-        <div style={{
-          background: '#fff', borderRadius: 16, padding: '32px', border: '2px solid rgba(21,128,61,0.15)',
-          marginBottom: 48, textAlign: 'center', boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-        }}>
-          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: 0, marginBottom: 12, textTransform: 'uppercase' }}>
-            Average Rating
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <StarRating rating={stats.averageRating || 0} size={18} />
-              <span style={{ fontFamily: FD, fontSize: F_SIZE.xl, fontWeight: 800, color: '#1a1a1a' }}>
-                {(stats.averageRating || 0).toFixed(1)}
-              </span>
-            </div>
-          </div>
-          <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#666', margin: 0 }}>
-            Based on {stats.totalReviews || 324} verified reviews
-          </p>
+    <div style={{ fontFamily: FONTS.main }}>
+      {/* ─── Header & Stats ─── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 40, alignItems: 'end', marginBottom: 56 }}>
+        <div>
+           <Chip>Community Feedback</Chip>
+           <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '20px 0 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+             Customer <span style={{ fontWeight: 300, color: C.forest }}>Reviews</span>
+           </h3>
+           <div style={{ height: 1, width: 60, background: C.gold, marginTop: 16 }} />
         </div>
-
-        {/* ─── Review Form ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          style={{
-            background: '#fff', borderRadius: 16, padding: '32px', border: '2px solid rgba(21,128,61,0.15)',
-            marginBottom: 48, boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-          }}
-        >
-          <h3 style={{ fontFamily: FD, fontSize: F_SIZE.lg, color: '#1a1a1a', margin: '0 0 24px', fontWeight: 800 }}>
-            {isAuthenticated ? 'Share Your Experience' : 'Share Your Review'}
-          </h3>
-
-          {!isAuthenticated && (
-            <div style={{
-              background: 'rgba(21, 128, 61, 0.1)', padding: 16, borderRadius: 8, marginBottom: 24, border: `2px solid ${G}`,
-            }}>
-              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#333', margin: 0 }}>
-                👤 <strong>Please log in to post a review</strong>
-              </p>
-            </div>
-          )}
-
-          {error && (
-            <div style={{
-              background: '#fee', padding: 16, borderRadius: 8, marginBottom: 16, borderLeft: `4px solid #f33`,
-            }}>
-              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#c33', margin: 0 }}>{error}</p>
-            </div>
-          )}
-
-          {success && (
-            <div style={{
-              background: '#efe', padding: 16, borderRadius: 8, marginBottom: 16, borderLeft: `4px solid #3a3`,
-            }}>
-              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#3a3', margin: 0 }}>{success}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmitReview} style={{ display: 'grid', gap: 20 }}>
-            <div>
-              <label style={{ fontFamily: FS, fontSize: F_SIZE.sm, fontWeight: 600, color: '#333', display: 'block', marginBottom: 12 }}>
-                Rating *
-              </label>
-              <div style={{ cursor: isAuthenticated ? 'pointer' : 'default' }}>
-                <StarRating
-                  rating={formData.rating}
-                  size={20}
-                  interactive={isAuthenticated}
-                  onRate={(r) => isAuthenticated && setFormData({ ...formData, rating: r })}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label style={{ fontFamily: FS, fontSize: F_SIZE.sm, fontWeight: 600, color: '#333', display: 'block', marginBottom: 8 }}>
-                Your Review *
-              </label>
-              <textarea
-                value={formData.text}
-                onChange={(e) => setFormData({ ...formData, text: e.target.value })}
-                placeholder="Share your experience with this product (min 10 characters)"
-                disabled={!isAuthenticated}
-                rows={5}
-                style={{
-                  width: '100%', padding: '12px', fontFamily: FS, fontSize: F_SIZE.sm, border: '1.5px solid #ddd',
-                  borderRadius: 8, boxSizing: 'border-box', resize: 'vertical', opacity: isAuthenticated ? 1 : 0.6,
-                }}
-              />
-              <p style={{ fontFamily: FS, fontSize: F_SIZE.sm, color: '#999', margin: '8px 0 0' }}>
-                {formData.text.length} characters
-              </p>
-            </div>
-
-            {!isAuthenticated ? (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                type="button"
-                onClick={() => setShowAuthModal(true)}
-                style={{
-                  padding: '12px 24px', background: G, color: '#fff', fontFamily: FS, fontWeight: 600,
-                  border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: F_SIZE.md,
-                }}
-              >
-                Login to Review
-              </motion.button>
-            ) : (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                type="submit"
-                disabled={submitting}
-                style={{
-                  padding: '12px 24px', background: submitting ? '#ccc' : G, color: '#fff', fontFamily: FS, fontWeight: 600,
-                  border: 'none', borderRadius: 8, cursor: submitting ? 'not-allowed' : 'pointer', fontSize: F_SIZE.md,
-                }}
-              >
-                {submitting ? 'Posting...' : 'Post Review'}
-              </motion.button>
-            )}
-          </form>
-        </motion.div>
-
-        {/* ─── Reviews Grid ─── */}
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <p style={{ fontFamily: FS, color: '#999' }}>Loading reviews...</p>
-          </div>
-        ) : reviews.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <p style={{ fontFamily: FS, color: '#999', fontSize: F_SIZE.md }}>No reviews yet. Be the first to review!</p>
-          </div>
-        ) : (
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24,
-          }}>
-            {reviews.map((review, i) => (
-              <ReviewCard key={review.id} review={review} index={i} />
-            ))}
-          </div>
-        )}
+        
+        <div style={{ 
+          display: 'flex', alignItems: 'center', gap: 40, background: C.white, padding: '24px 32px', 
+          borderRadius: 8, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' 
+        }}>
+           <div>
+              <div style={{ fontSize: '2rem', fontWeight: 900, color: C.forest, lineHeight: 1 }}>{(stats.averageRating || 0).toFixed(1)}</div>
+               <div style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4 }}>Product Rating</div>
+           </div>
+           <StarRating rating={stats.averageRating || 0} size={18} />
+           <div style={{ borderLeft: '1px solid rgba(0,0,0,0.08)', paddingLeft: 32 }}>
+              <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{(stats.totalReviews || 0).toLocaleString()}</div>
+               <div style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4 }}>Verified Reviews</div>
+           </div>
+        </div>
       </div>
 
-      {/* Auth Modal */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 420px', gap: 48, alignItems: 'start' }}>
+        {/* Reviews List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {loading ? (
+             <div style={{ padding: '40px 0', textAlign: 'center' }}>
+                <p style={{ color: C.silver, fontWeight: 700, textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.15em' }}>Retrieving Reviews...</p>
+             </div>
+          ) : reviews.length === 0 ? (
+             <div style={{ padding: '60px 40px', textAlign: 'center', background: C.offwhite, borderRadius: 12, border: '1px dashed rgba(0,0,0,0.1)' }}>
+                <MessageSquare size={32} color={C.silver} style={{ marginBottom: 16 }} />
+                 <p style={{ color: C.silver, fontWeight: 700, fontSize: F_SIZE.sm }}>Be the first to share your experience.</p>
+             </div>
+          ) : (
+            reviews.map((review, i) => (
+              <ReviewCard key={review.id} review={review} index={i} />
+            ))
+          )}
+        </div>
+
+        {/* Review Submission Form */}
+        <div style={{ position: 'sticky', top: 120 }}>
+          <div style={{ 
+            background: C.white, padding: 40, borderRadius: 16, border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)'
+          }}>
+             <h3 style={{ fontSize: F_SIZE.md, fontWeight: 900, color: C.ink, marginBottom: 28 }}>Record Your Experience</h3>
+
+            {error && (
+              <div style={{ marginBottom: 20, padding: 16, background: '#fee', borderRadius: 6, fontSize: 11, fontWeight: 800, color: '#c33', textTransform: 'uppercase', borderLeft: '3px solid #f33' }}>
+                {error}
+              </div>
+            )}
+            {success && (
+              <div style={{ marginBottom: 20, padding: 16, background: '#efe', borderRadius: 6, fontSize: 11, fontWeight: 800, color: C.leaf, textTransform: 'uppercase', borderLeft: '3px solid #3a3' }}>
+                {success}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmitReview} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div>
+                 <label style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.12em', display: 'block', marginBottom: 12 }}>Rating</label>
+                <div style={{ marginTop: 10 }}>
+                  <StarRating 
+                    rating={formData.rating} size={22} interactive={isAuthenticated} 
+                    onRate={(r) => setFormData({ ...formData, rating: r })} 
+                  />
+                </div>
+              </div>
+
+              <div>
+                 <label style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.12em', display: 'block', marginBottom: 10 }}>Your Review</label>
+                <textarea
+                  value={formData.text}
+                  onChange={(e) => setFormData({ ...formData, text: e.target.value })}
+                   placeholder={isAuthenticated ? "Write your review..." : "Sign in to write a review."}
+                  disabled={!isAuthenticated}
+                  rows={4}
+                  style={{
+                    width: '100%', padding: '20px', fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 600,
+                    border: '1.5px solid rgba(0,0,0,0.08)', borderRadius: 6, outline: 'none', background: C.offwhite, resize: 'none'
+                  }}
+                />
+              </div>
+
+              {isAuthenticated ? (
+                <motion.button
+                  whileHover={{ scale: 1.01, backgroundColor: C.forest, color: C.white }}
+                  whileTap={{ scale: 0.99 }}
+                  type="submit"
+                  disabled={submitting}
+                  style={{
+                    padding: '16px', background: C.forest, color: C.white, border: 'none', borderRadius: 6,
+                    fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em', cursor: 'pointer',
+                    boxShadow: '0 8px 32px rgba(10,61,31,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12
+                  }}
+                >
+                   {submitting ? 'Submitting...' : <>Submit Review <Send size={14} /></>}
+                </motion.button>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.01, backgroundColor: C.mid }}
+                  whileTap={{ scale: 0.99 }}
+                  type="button"
+                  onClick={() => setShowAuthModal(true)}
+                  style={{
+                    padding: '16px', background: C.mid, color: C.white, border: 'none', borderRadius: 6,
+                    fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em', cursor: 'pointer'
+                  }}
+                >
+                  Authorized Sign-in Required
+                </motion.button>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-    </section>
+    </div>
   );
 }

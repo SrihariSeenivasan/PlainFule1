@@ -17,6 +17,8 @@ import faqRoutes from './routes/faqRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import cartRoutes from './routes/cartRoutes';
 import uploadRoutes from './routes/uploadRoutes';
+import contactRoutes from './routes/contactRoutes';
+
 
 dotenv.config();
 
@@ -59,6 +61,8 @@ app.use('/api/orders', authMiddleware, orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/contact', contactRoutes);
+
 
 // 404 handler
 app.use((_req, res) => {

@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User as UserIcon, Mail, Phone, MapPin, Globe, Edit3, Save, X, Shield, Package, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { userAPI, User } from '@/lib/api';
+import { F_SIZE } from '@/lib/typography';
 
 export default function UserProfile() {
   const { user: authUser } = useAuth();
@@ -99,260 +102,168 @@ export default function UserProfile() {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Profile Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Profile Information
-          </h2>
-          {!isEditing && (
-            <button
-              onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
-              Edit Profile
-            </button>
-          )}
-        </div>
+  const COLORS = {
+    forest: '#0a3d1f',
+    leaf: '#16a34a',
+    silver: '#9eaaa0',
+    glass: 'rgba(255, 255, 255, 0.45)',
+    glassBorder: 'rgba(255, 255, 255, 0.7)',
+  };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
+
+  return (
+    <motion.div 
+      initial="hidden" 
+      animate="visible" 
+      variants={containerVariants}
+      className="space-y-8"
+      style={{ fontFamily: "'Montserrat', sans-serif" }}
+    >
+      {/* Profile Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 style={{ fontSize: F_SIZE.lg, color: COLORS.forest }} className="font-black tracking-tight mb-1 uppercase">
+            Account Central
+          </h1>
+          <p style={{ fontSize: F_SIZE.sm, color: COLORS.silver }} className="font-semibold uppercase letter-spacing-widest">
+            Manage your biological profile
+          </p>
+        </div>
+        {!isEditing && (
+          <motion.button
+            whileHover={{ scale: 1.02, backgroundColor: COLORS.forest, color: '#fff' }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setIsEditing(true)}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm border border-[#0a3d1f20]"
+            style={{ color: COLORS.forest, fontSize: F_SIZE.sm }}
+          >
+            <Edit3 size={16} /> Edit Profile
+          </motion.button>
+        )}
+      </div>
+
+      {/* Profile Card */}
+      <div 
+        className="relative overflow-hidden"
+        style={{
+          background: COLORS.glass,
+          backdropFilter: 'blur(32px)',
+          borderRadius: 32,
+          padding: '40px',
+          border: `1px solid ${COLORS.glassBorder}`,
+          boxShadow: '0 20px 50px rgba(10, 61, 31, 0.04)'
+        }}
+      >
         {/* Messages */}
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
-        {message && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-            {message}
-          </div>
-        )}
+        <AnimatePresence>
+          {error && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }} 
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-2xl flex items-center gap-3 font-semibold"
+              style={{ fontSize: F_SIZE.sm }}
+            >
+              <X size={18} /> {error}
+            </motion.div>
+          )}
+          {message && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }} 
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mb-6 p-4 bg-green-50 border border-green-100 text-green-800 rounded-2xl flex items-center gap-3 font-semibold"
+              style={{ fontSize: F_SIZE.sm }}
+            >
+              <CheckCircle2 size={18} /> {message}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {loading ? (
-          <div className="p-6 text-gray-600">Loading profile...</div>
+          <div className="flex items-center gap-4 p-8 text-gray-500 animate-pulse font-bold">
+            <div className="w-12 h-12 rounded-full bg-gray-200" />
+            Loading your credentials...
+          </div>
         ) : (
-          <>
-            {/* Profile Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* First Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  First Name
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.firstName}
-                  </p>
-                )}
-              </div>
-
-              {/* Last Name */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Last Name
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.lastName}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email Address
-                </label>
-                <p className="mt-1 text-gray-900 dark:text-gray-300">
-                  {formData.email}
-                </p>
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Phone Number
-                </label>
-                {isEditing ? (
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.phone}
-                  </p>
-                )}
-              </div>
-
-              {/* Address */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Address
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.address}
-                  </p>
-                )}
-              </div>
-
-              {/* City */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  City
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.city}
-                  </p>
-                )}
-              </div>
-
-              {/* State */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  State
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.state}
-                  </p>
-                )}
-              </div>
-
-              {/* Zip Code */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Zip Code
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="zip"
-                    value={formData.zip}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.zip}
-                  </p>
-                )}
-              </div>
-
-              {/* Country */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Country
-                </label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="mt-1 text-gray-900 dark:text-gray-300">
-                    {formData.country}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Save Button */}
-            {isEditing && (
-              <div className="mt-6 flex justify-end gap-3">
-                <button
-                  onClick={() => {
-                    setIsEditing(false);
-                    setError('');
-                    setMessage('');
-                  }}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+            {/* Fields Mapping */}
+            {[
+              { label: 'First Name', name: 'firstName', icon: UserIcon },
+              { label: 'Last Name', name: 'lastName', icon: UserIcon },
+              { label: 'Email Address', name: 'email', icon: Mail, readonly: true },
+              { label: 'Phone Number', name: 'phone', icon: Phone },
+              { label: 'Address', name: 'address', icon: MapPin },
+              { label: 'City', name: 'city', icon: Globe },
+              { label: 'State', name: 'state', icon: MapPin },
+              { label: 'Zip Code', name: 'zip', icon: MapPin },
+              { label: 'Country', name: 'country', icon: Globe },
+            ].map((field) => (
+              <div key={field.name} className="space-y-2">
+                <label 
+                  style={{ fontSize: F_SIZE.sm, color: COLORS.forest, opacity: 0.6 }} 
+                  className="font-black uppercase tracking-widest pl-1 block"
                 >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
-                >
-                  {saving ? 'Saving...' : 'Save Changes'}
-                </button>
+                  {field.label}
+                </label>
+                <div className="relative group">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0a3d1f40] transition-colors group-hover:text-[#0a3d1f]">
+                    <field.icon size={18} strokeWidth={2.5} />
+                  </div>
+                  {isEditing && !field.readonly ? (
+                    <input
+                      type="text"
+                      name={field.name}
+                      value={formData[field.name as keyof typeof formData]}
+                      onChange={handleInputChange}
+                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border border-[#0a3d1f10] focus:border-[#16a34a] focus:ring-4 focus:ring-[#16a34a08] outline-none transition-all font-bold text-[#0a3d1f]"
+                      style={{ fontSize: F_SIZE.md }}
+                    />
+                  ) : (
+                    <div 
+                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-[#0a3d1f05] border border-transparent font-bold text-[#0a3d1f]"
+                      style={{ fontSize: F_SIZE.md }}
+                    >
+                      {formData[field.name as keyof typeof formData] || '—'}
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </>
+            ))}
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        {isEditing && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-12 flex justify-end gap-4"
+          >
+            <button
+              onClick={() => { setIsEditing(false); setError(''); setMessage(''); }}
+              className="px-8 py-3.5 rounded-2xl font-black uppercase tracking-widest text-[#0a3d1f60] hover:text-[#0a3d1f] hover:bg-[#0a3d1f05] transition-all"
+              style={{ fontSize: F_SIZE.sm }}
+            >
+              Cancel
+            </button>
+            <motion.button
+              whileHover={{ scale: 1.02, backgroundColor: COLORS.leaf }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleSave}
+              disabled={saving}
+              className="px-10 py-3.5 bg-[#0a3d1f] text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-[#0a3d1f20] disabled:bg-gray-300 transition-all flex items-center gap-3"
+              style={{ fontSize: F_SIZE.sm }}
+            >
+              {saving ? 'Synchronizing...' : <><Save size={18} /> Save Vital Changes</>}
+            </motion.button>
+          </motion.div>
         )}
       </div>
-
-      {/* Account Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-          Account Settings
-        </h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Password
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Change your password
-              </p>
-            </div>
-            <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              Change
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </motion.div>
   );
 }

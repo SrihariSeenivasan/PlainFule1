@@ -178,7 +178,8 @@ export default function ProductSection() {
                   <Image
                     src={p.packages?.[0]?.images?.[0] || '/images/Products/product.png'}
                     alt={p.name} fill
-                    style={{ objectFit: 'contain', padding: 30, filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.06))' }}
+                    unoptimized={true}
+                    style={{ objectFit: 'contain', padding: 30, filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.06))', backgroundColor: 'transparent' }}
                   />
                 </motion.div>
               </div>
@@ -187,7 +188,7 @@ export default function ProductSection() {
               <div style={{ position: 'absolute', top: 24, left: 24, zIndex: 10 }}>
                 <div style={{ padding: '6px 14px', borderRadius: 100, background: 'rgba(10, 61, 31, 0.05)', border: '1px solid rgba(10, 61, 31, 0.1)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Sparkles size={10} color={C.gold} />
-                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Protocol {String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Package {String(i + 1).padStart(2, '0')}</span>
                 </div>
               </div>
 
