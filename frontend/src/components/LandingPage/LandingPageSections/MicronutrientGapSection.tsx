@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, type ReactNode } from 'react';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND, COLORS, FONTS } from '@/lib/typography';
 
 const PRODUCT_ROUTES = {
   b12: '/products/vitamin-b-complex',
@@ -641,7 +641,7 @@ export default function MicronutrientGapSection() {
                 desc="No brain fog. No hunger spikes. Stable energy, better focus. You end the day strong."
                 color={T.blue} rotate={1.5} delay={0.26} />
 
-              <StickyNote color="#f0fdf4" rotate={1.5} style={{ alignSelf: 'flex-start', maxWidth: 260, border: `1.5px dashed ${T.green}`, marginTop: 4 }}>
+              <StickyNote color={BRAND.cream} rotate={1.5} style={{ alignSelf: 'flex-start', maxWidth: 260, border: `1.5px dashed ${T.green}`, marginTop: 4 }}>
                 🌀 This cycle repeats every day — silently draining you.
               </StickyNote>
             </div>
@@ -852,7 +852,7 @@ export default function MicronutrientGapSection() {
             <motion.div
               whileHover={{ scale: 1.01 }}
               style={{
-                background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%)',
+                background: `linear-gradient(135deg, ${BRAND.cream} 0%, ${BRAND.cream} 50%, ${BRAND.cream} 100%)`,
                 borderRadius: 16, padding: '16px 24px',
                 border: `2.5px dashed ${T.green}`,
                 boxShadow: `6px 6px 0 ${T.green}30`,
@@ -909,3 +909,8 @@ export default function MicronutrientGapSection() {
     </>
   );
 }
+
+
+
+
+

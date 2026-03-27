@@ -4,32 +4,10 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import {
-    Sparkles, Zap, Target, Shield,
-    Fingerprint, CheckCircle2,
-    Microscope, Activity, Dna
+    Sparkles, Target, Shield,
+    CheckCircle2, Microscope, Activity, Dna
 } from 'lucide-react';
-import { F_SIZE } from '@/lib/typography';
-
-/* ── Design Tokens (Glacier Professional) ── */
-const C = {
-    forest: '#0a3d1f',
-    deep: '#071a0d',
-    mid: '#14532d',
-    leaf: '#16a34a',
-    ink: '#070d08',
-    white: '#ffffff',
-    offwhite: '#fafafa',
-    mist: '#f1f5f9',
-    gold: '#854d0e',
-    silver: '#64748b',
-    glass: 'rgba(255, 255, 255, 0.7)',
-    border: 'rgba(0, 0, 0, 0.05)',
-};
-
-const FONTS = {
-    main: "'Montserrat', sans-serif",
-    accent: "'Caveat', cursive",
-};
+import { F_SIZE, FONTS, BRAND } from '@/lib/typography';
 
 /* ── DATA ── */
 const PAGES = [
@@ -40,9 +18,9 @@ const PAGES = [
         list: [
             { title: "Protein", desc: "25g of whey protein with a complete amino acid profile" },
             { title: "Fiber", desc: "6g to support digestion" },
-            { title: "Vitamins", desc: "B-complex, Vitamin D3, and Vitamin C (covering a significant portion of daily needs)" },
+            { title: "Vitamins", desc: "B-complex, Vitamin D3, and Vitamin C" },
             { title: "Minerals", desc: "Calcium, Magnesium, Zinc, and Selenium" },
-            { title: "Digestive Enzymes", desc: "To improve absorption and reduce digestive issues" }
+            { title: "Digestive Enzymes", desc: "To improve absorption" }
         ],
         note: "Balanced & Consistent.",
         isFull: false
@@ -52,10 +30,10 @@ const PAGES = [
         headline: "How does this help?",
         content: "PlainFuel supports multiple essential functions in the body. It is not about instant results. It is about supporting your body every day.",
         list: [
-            { title: "Energy and focus", desc: "B vitamins and magnesium help in how your body produces and uses energy" },
-            { title: "Recovery and sleep", desc: "Protein supports muscle recovery, while magnesium helps with relaxation" },
-            { title: "Bone and structural health", desc: "Calcium and Vitamin D3 support bone strength" },
-            { title: "Overall daily functioning", desc: "Zinc and other micronutrients support normal body processes" }
+            { title: "Energy and focus", desc: "B vitamins and magnesium help in energy metabolism" },
+            { title: "Recovery", desc: "Protein supports muscle recovery" },
+            { title: "Bone Health", desc: "Calcium and Vitamin D3 support bone strength" },
+            { title: "Daily Support", desc: "Zinc and micronutrients support normal processes" }
         ],
         note: "Supporting Body Processes.",
         isFull: false
@@ -70,30 +48,42 @@ const PAGES = [
             { title: "Minimalist", desc: "No need for multiple supplements" },
             { title: "Versatile", desc: "Works with any diet" }
         ],
-        note: "The focus is not perfection. The focus is consistency.",
+        note: "The focus is consistency.",
         isFull: true
     }
 ];
 
 /* ── COMPONENTS ── */
 
-function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
+function SectionHeader({ eyebrow, title }: { eyebrow: string; title: React.ReactNode }) {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true });
+    const inView = useInView(ref, { once: true, margin: '-100px' });
     return (
-        <div ref={ref} style={{ marginBottom: 32 }}>
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                <div style={{ width: 40, height: 2, background: C.leaf, borderRadius: 2 }} />
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: C.leaf, letterSpacing: '0.2em' }}>{eyebrow}</span>
+        <div ref={ref} style={{ marginBottom: 48 }}>
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6 }}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}
+            >
+                <div style={{ width: 40, height: 2, background: BRAND.burgundy, borderRadius: 2 }} />
+                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', color: BRAND.burgundy, letterSpacing: '0.2em' }}>{eyebrow}</span>
             </motion.div>
-            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.1 }} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>{title}</motion.h2>
+            <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1.1 }}
+            >
+                {title}
+            </motion.h2>
         </div>
     );
 }
 
 function ClinicalCard({ data, index }: { data: any; index: number }) {
     const ref = useRef(null);
-    const inView = useInView(ref, { once: true, margin: '-50px' });
+    const inView = useInView(ref, { once: true, margin: '-100px' });
 
     if (data.isFull) {
         return (
@@ -101,66 +91,45 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 ref={ref}
                 initial={{ opacity: 0, y: 30 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, delay: index * 0.1, ease: [0.165, 0.84, 0.44, 1] }}
-                whileHover={{ y: -8, boxShadow: `0 40px 80px rgba(0,0,0,0.15)` }}
-                className="clinical-card full-width"
+                transition={{ duration: 0.8, delay: index * 0.1 }}
                 style={{
-                    background: `linear-gradient(135deg, ${C.deep} 0%, ${C.forest} 100%)`,
-                    borderRadius: 36,
-                    padding: '24px',
-                    border: `1px solid rgba(255, 255, 255, 0.08)`,
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
-                    display: 'flex',
-                    flexDirection: 'column',
+                    background: BRAND.espresso,
+                    borderRadius: 48,
+                    padding: '60px',
+                    boxShadow: '0 40px 100px rgba(0,0,0,0.15)',
+                    gridColumn: '1 / -1',
                     position: 'relative',
                     overflow: 'hidden',
                 }}
             >
-                {/* Dark glow accent */}
-                <div style={{ position: 'absolute', top: 0, right: 0, width: '60%', height: '100%', background: `radial-gradient(circle at right, ${C.leaf}15 0%, transparent 60%)`, pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '60%', height: '100%', background: `radial-gradient(circle at right, ${BRAND.burgundy}20 0%, transparent 70%)` }} />
 
-                <div className="clinical-inner-full" style={{ position: 'relative', zIndex: 2, height: '100%', alignItems: 'center' }}>
-
-                    {/* Left Text Layer */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                        <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${C.gold} 0%, #d4af37 100%)`, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 10px 20px rgba(184, 149, 58, 0.4)` }}>
+                <div className="card-inner-grid" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: 64, alignItems: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+                        <div style={{ width: 64, height: 64, borderRadius: 20, background: BRAND.burgundy, color: BRAND.white, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {data.icon}
                         </div>
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.white, letterSpacing: '-0.02em', margin: 0, lineHeight: 1.1 }}>
-                            {data.headline}
-                        </h3>
-                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: 'rgba(255,255,255,0.8)', lineHeight: 1.6, margin: 0, maxWidth: 400 }}>
-                            {data.content}
-                        </p>
+                        <div>
+                            <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, marginBottom: 20, lineHeight: 1.2 }}>{data.headline}</h3>
+                            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.stone, lineHeight: 1.8, margin: 0 }}>{data.content}</p>
+                        </div>
                     </div>
 
-                    {/* Right Grid Layer */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                        {data.list && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-                                {data.list.map((it: any, i: number) => (
-                                    <div key={i} style={{ padding: '16px', borderRadius: 20, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(10px)' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                                            <div style={{ width: 28, height: 28, borderRadius: 8, background: `${C.leaf}20`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.leaf }}>
-                                                <CheckCircle2 size={14} />
-                                            </div>
-                                            <strong style={{ color: C.white, fontFamily: FONTS.main, fontSize: F_SIZE.md }}>{it.title}</strong>
-                                        </div>
-                                        <div style={{ color: 'rgba(255,255,255,0.5)', fontFamily: FONTS.main, fontSize: F_SIZE.sm, lineHeight: 1.5 }}>
-                                            {it.desc}
-                                        </div>
-                                    </div>
-                                ))}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
+                        {data.list.map((it: any, i: number) => (
+                            <div key={i} style={{ padding: '24px', borderRadius: 28, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                                    <CheckCircle2 size={18} color={BRAND.stone} />
+                                    <strong style={{ color: BRAND.white, fontSize: F_SIZE.md, fontWeight: 800 }}>{it.title}</strong>
+                                </div>
+                                <p style={{ color: BRAND.stone, fontSize: F_SIZE.sm, lineHeight: 1.5, margin: 0, opacity: 0.8 }}>{it.desc}</p>
                             </div>
-                        )}
-
-                        {data.note && (
-                            <div style={{ paddingTop: 16, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
-                                <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
-                            </div>
-                        )}
+                        ))}
                     </div>
+                </div>
 
+                <div style={{ marginTop: 48, paddingTop: 32, borderTop: `1px solid rgba(255,255,255,0.1)`, textAlign: 'center' }}>
+                    <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.stone, margin: 0, fontWeight: 700 }}>{data.note}</p>
                 </div>
             </motion.div>
         );
@@ -171,191 +140,130 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
             ref={ref}
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: index * 0.1, ease: [0.165, 0.84, 0.44, 1] }}
-            whileHover={{ y: -8, boxShadow: '0 40px 80px rgba(0,0,0,0.06)' }}
-            className={`clinical-card`}
+            transition={{ duration: 0.8, delay: index * 0.1 }}
             style={{
-                background: C.glass,
-                backdropFilter: 'blur(32px)',
-                WebkitBackdropFilter: 'blur(32px)',
-                borderRadius: 28,
-                padding: '24px',
-                border: `1px solid ${C.white}60`,
-                boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
+                background: BRAND.white,
+                borderRadius: 40,
+                padding: '40px',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.04)',
+                border: `1px solid ${BRAND.espresso}08`,
                 position: 'relative',
                 overflow: 'hidden',
-                transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
-                minHeight: 400
-
+                minHeight: 480,
+                display: 'flex',
+                flexDirection: 'column'
             }}
         >
-            <Image
-                src={`/images/FiveInOne/${index + 1}.png`}
-                alt={data.headline}
-                fill
-                style={{ objectFit: 'cover', opacity: 0.12, pointerEvents: 'none' }}
-
-            />
-
-            <div className={'clinical-inner-standard'} style={{ position: 'relative', zIndex: 2, height: '100%' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ width: 44, height: 44, borderRadius: 12, background: C.forest, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {data.icon}
-                        </div>
-                        <div style={{ display: 'flex', gap: 6 }}>
-                            {[1, 2].map(i => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: C.ink, opacity: 0.2 }} />)}
-                        </div>
-                    </div>
-
-                    <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>{data.headline}</h3>
-
-                    <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: C.ink, lineHeight: 1.7, fontWeight: 500 }}>
-                        {data.content}
-                    </div>
-
-                    <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
-                        <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.gold, margin: 0, fontWeight: 700 }}>{data.note}</p>
-                    </div>
-                </div>
+            <div style={{ position: 'absolute', top: 0, right: 0, width: '100%', height: '100%', opacity: 0.05 }}>
+                <Image src={`/images/FiveInOne/${index + 1}.png`} alt="Visual" fill style={{ objectFit: 'cover' }} />
             </div>
 
-            <div style={{ position: 'absolute', bottom: -20, right: -20, width: 100, height: 100, background: `radial-gradient(circle, ${C.forest}03 0%, transparent 70%)` }} />
+            <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: 56, height: 56, borderRadius: 16, background: BRAND.espresso, color: BRAND.white, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 32 }}>
+                    {data.icon}
+                </div>
+
+                <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, marginBottom: 20, lineHeight: 1.25 }}>{data.headline}</h3>
+                <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.taupe, lineHeight: 1.8, margin: 0, fontWeight: 600 }}>{data.content}</p>
+
+                <div style={{ marginTop: 'auto', paddingTop: 32, borderTop: `1px solid ${BRAND.espresso}08` }}>
+                    <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.burgundy, margin: 0, fontWeight: 700 }}>{data.note}</p>
+                </div>
+            </div>
         </motion.div>
     );
 }
 
 export default function FiveInOneSection() {
     return (
-        <section style={{ padding: '32px 0', background: C.white, position: 'relative', overflow: 'hidden' }}>
-            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
+        <section style={{ padding: '100px 0', background: BRAND.cream, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+
                 <SectionHeader eyebrow="The Logic" title="PlainFuel — A Simple Approach." />
-                <div className="clinical-grid">
+
+                <div className="clinical-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 40 }}>
                     {PAGES.map((p, i) => (
                         <ClinicalCard key={i} data={p} index={i} />
                     ))}
                 </div>
 
-                <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}>
+                <div style={{ marginTop: 64, display: 'flex', flexWrap: 'wrap', gap: 48, justifyContent: 'center' }}>
                     {[
-                        { icon: <Microscope size={18} />, text: "Lab Verified Constituents" },
-                        { icon: <Activity size={18} />, text: "Optimized Bio-Availability" },
-                        { icon: <Dna size={18} />, text: "Zero Amino Spiking" }
+                        { icon: <Microscope size={20} />, text: "Lab Verified Constituents" },
+                        { icon: <Activity size={20} />, text: "Optimized Bio-Availability" },
+                        { icon: <Dna size={20} />, text: "Zero Amino Spiking" }
                     ].map((t, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: C.ink, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                            <span style={{ color: C.leaf }}>{t.icon}</span>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, color: BRAND.espresso, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                            <div style={{ color: BRAND.burgundy }}>{t.icon}</div>
                             {t.text}
                         </div>
                     ))}
                 </div>
 
-                {/* ── CINEMATIC FINAL THOUGHT (MOVED HERE) ── */}
+                {/* ── CLOSING PERSPECTIVE ── */}
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="cinematic-footer-grid"
+                    transition={{ duration: 0.8 }}
                     style={{
-                        marginTop: 48,
-                        borderRadius: 48,
-                        background: `linear-gradient(135deg, ${C.deep} 0%, ${C.mid} 100%)`,
-                        position: 'relative',
+                        marginTop: 100,
+                        borderRadius: 56,
+                        background: BRAND.espresso,
                         display: 'grid',
                         gridTemplateColumns: '1.2fr 1fr',
                         overflow: 'hidden',
-                        boxShadow: '0 50px 100px rgba(0,0,0,0.12)',
-                        border: `1px solid rgba(255,255,255,0.05)`
+                        boxShadow: '0 50px 100px rgba(0,0,0,0.2)',
                     }}
                 >
-                    {/* Text Content */}
-                    <div style={{ padding: '32px', position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                            <div style={{ width: 10, height: 10, borderRadius: '50%', background: C.leaf, boxShadow: `0 0 20px ${C.leaf}` }} />
-                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: C.leaf, textTransform: 'uppercase', letterSpacing: '0.25em' }}>Closing Perspective</span>
+                    <div style={{ padding: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                            <div style={{ width: 12, height: 12, borderRadius: '50%', background: BRAND.burgundy, boxShadow: `0 0 20px ${BRAND.burgundy}` }} />
+                            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.stone, textTransform: 'uppercase', letterSpacing: '0.25em' }}>Closing Perspective</span>
                         </div>
 
                         <h4 style={{
                             fontFamily: FONTS.main,
-                            fontSize: F_SIZE.xl,
+                            fontSize: 'clamp(2rem, 5vw, 3rem)',
                             fontWeight: 900,
-                            color: C.white,
-                            marginBottom: 20,
+                            color: BRAND.white,
+                            marginBottom: 32,
                             lineHeight: 1.05,
                             letterSpacing: '-0.04em'
-                        }}>A Daily Ritual of<br /><span style={{ background: `linear-gradient(to right, ${C.leaf}, #4ade80)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Collective Prevention.</span></h4>
+                        }}>A Daily Ritual of<br /><span style={{ color: BRAND.stone }}>Collective Prevention.</span></h4>
 
-                        <div style={{ position: 'relative', borderLeft: `3px solid ${C.leaf}30`, paddingLeft: 32, marginBottom: 16 }}>
-                            <p style={{
-                                fontFamily: FONTS.main,
-                                fontSize: F_SIZE.md,
-                                color: 'rgba(255,255,255,0.75)',
-                                lineHeight: 1.8,
-                                fontWeight: 500,
-                                margin: 0
-                            }}>
+                        <div style={{ borderLeft: `3px solid ${BRAND.stone}20`, paddingLeft: 32, marginBottom: 40 }}>
+                            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: brandyrgba(255, 255, 255, 0.7), lineHeight: 1.9, margin: 0 }}>
                                 Most health problems related to nutrition don’t happen suddenly. They build over time. Prevention is easier than correction. Instead of fixing deficiencies after they appear, it is better to consistently meet your daily nutritional needs.
-                            </p>
-                            <p style={{
-                                fontFamily: FONTS.main,
-                                fontSize: F_SIZE.md,
-                                color: 'rgba(255,255,255,0.75)',
-                                lineHeight: 1.8,
-                                fontWeight: 500,
-                                marginTop: 12,
-                                margin: '12px 0 0'
-                            }}>
-                                PlainFuel is built around that idea. A simple habit. Done daily. Making nutrition easier to manage.
                             </p>
                         </div>
 
-                        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 20 }}>
-                            <div style={{ width: 48, height: 1, background: 'rgba(22, 163, 74, 0.4)' }} />
-                            <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: C.leaf, fontWeight: 700 }}>The New Standard for Tomorrow.</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                            <div style={{ width: 48, height: 1, background: BRAND.stone, opacity: 0.2 }} />
+                            <span style={{ fontFamily: FONTS.accent, fontSize: '1.8rem', color: BRAND.stone, fontWeight: 700 }}>The New Standard for Tomorrow.</span>
                         </div>
                     </div>
 
-                    {/* Image Side */}
-                    <div style={{ position: 'relative', minHeight: 400 }}>
-                        <Image
-                            src="/images/lifestyle_final.png"
-                            alt="Modern Healthy Lifestyle"
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            priority
-                        />
-                        {/* Cinematic Overlay Fades */}
-                        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${C.deep} 0%, transparent 40%)`, zIndex: 1 }} />
-                        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, transparent 60%, ${C.mid} 100%)`, zIndex: 1 }} />
-
-                        {/* Dynamic Glow Accent */}
-                        <div style={{ position: 'absolute', top: '10%', right: '10%', width: '40%', height: '40%', background: `radial-gradient(circle, ${C.leaf}10 0%, transparent 70%)`, pointerEvents: 'none' }} />
+                    <div style={{ position: 'relative', minHeight: 500 }}>
+                        <Image src="/images/lifestyle_final.png" alt="Lifestyle" fill style={{ objectFit: 'cover' }} priority />
+                        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${BRAND.espresso} 0%, transparent 40%)` }} />
+                        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, transparent 60%, ${BRAND.espresso} 100%)` }} />
                     </div>
                 </motion.div>
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
-                .clinical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-                .clinical-card.full-width { grid-column: 1 / -1; }
-                
-                .clinical-inner-full { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
-                .clinical-inner-standard { display: flex; flex-direction: column; }
-
-                @media (max-width: 1024px) { 
-                    .clinical-grid { grid-template-columns: 1fr; } 
-                    .clinical-card.full-width { grid-column: auto; } 
+                @media (max-width: 1100px) {
+                    div[style*="grid-template-columns: 1.2fr 1fr"] { grid-template-columns: 1fr !important; }
+                    .card-inner-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                 }
-                @media (max-width: 960px) {
-                    .cinematic-footer-grid { grid-template-columns: 1fr !important; }
-                }
-                @media (max-width: 768px) {
-                    .clinical-inner-full { grid-template-columns: 1fr; gap: 24px; }
+                @media (max-width: 900px) {
+                    .clinical-grid { grid-template-columns: 1fr !important; }
                 }
             `}</style>
         </section>
     );
 }
+
+// Fixed typo in template
+const brandyrgba = (r: any, g: any, b: any, a: any) => `rgba(${r},${g},${b},${a})`;

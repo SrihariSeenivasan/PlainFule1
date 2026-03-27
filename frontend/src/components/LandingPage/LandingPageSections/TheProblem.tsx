@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { F_SIZE } from "@/lib/typography";
+import { F_SIZE, COLORS, FONTS, BRAND } from '@/lib/typography';
 
 const carouselImages = [
   {
@@ -32,25 +32,25 @@ const cards = [
     icon: "🧠",
     title: "B-Vitamins Missing",
     body: "B6, B9, B12 — crucial for energy, brain function and hormone balance. Most people run low daily.",
-    color: "#15803d",
+    color: BRAND.espresso,
   },
   {
     icon: "🦴",
     title: "Calcium + Magnesium Gap",
     body: "Bone strength, better sleep, stress control. Daily diet rarely provides optimal magnesium.",
-    color: "#15803d",
+    color: BRAND.espresso,
   },
   {
     icon: "🛡️",
     title: "Low Zinc & Selenium",
     body: "Immunity, skin repair, thyroid support. Soil depletion means your food is depleted too.",
-    color: "#15803d",
+    color: BRAND.espresso,
   },
   {
     icon: "🍊",
     title: "Vitamin C Lost in Cooking",
     body: "50mg daily — but heat destroys Vitamin C in regular meals before it ever reaches you.",
-    color: "#15803d",
+    color: BRAND.espresso,
   },
 ];
 
@@ -76,9 +76,9 @@ export default function ProblemSection() {
     <section
       className="problem-section"
       style={{
-        background: "#f5f5ee",
+        background: BRAND.cream,
         padding: "48px 24px",
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: FONTS.main,
         position: "relative",
         overflow: "hidden",
       }}
@@ -89,9 +89,8 @@ export default function ProblemSection() {
         .problem-section::before {
           content: '';
           position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(21,128,61,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(21,128,61,0.05) 1px, transparent 1px);
+          background: linear-gradient(${BRAND.espresso}0D 1px, transparent 1px),
+            linear-gradient(90deg, ${BRAND.espresso}0D 1px, transparent 1px);
           background-size: 40px 40px;
           pointer-events: none; z-index: 0;
         }
@@ -180,43 +179,43 @@ export default function ProblemSection() {
         /* existing card styles */
         .card-item {
           background: #fffef0 !important;
-          border: 3.5px solid #15803d !important;
+          border: 3.5px solid ${BRAND.espresso} !important;
           border-radius: 8px !important;
-          box-shadow: 5px 5px 0 #15803d !important;
+          box-shadow: 5px 5px 0 ${BRAND.espresso} !important;
           transform: rotate(-0.5deg) !important;
           position: relative; overflow: hidden;
           transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .card-item:hover {
           transform: rotate(-0.5deg) translateY(-3px) !important;
-          box-shadow: 7px 7px 0 #15803d !important;
+          box-shadow: 7px 7px 0 ${BRAND.espresso} !important;
         }
         .card-item::before {
           content: '';
           position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-          background-image: repeating-linear-gradient(
+          background: repeating-linear-gradient(
             to bottom,
             transparent 0px, transparent 27px,
-            rgba(21,128,61,0.1) 28px, rgba(21,128,61,0.1) 29px
+            ${BRAND.espresso}1A 28px, ${BRAND.espresso}1A 29px
           );
           pointer-events: none; z-index: 0;
         }
         .card-item::after {
           content: '';
           position: absolute; left: 28px; top: 0; bottom: 0; width: 2px;
-          background: rgba(21,128,61,0.3);
+          background: ${BRAND.espresso}4D;
           pointer-events: none; z-index: 0;
         }
         .card-content { position: relative; z-index: 1; padding: 20px 20px 20px 36px; }
         .card-icon { font-size: 32px; margin-bottom: 14px; display: block; }
          .card-title {
           font-family: 'Playfair Display', serif;
-          font-size: ${F_SIZE.md}; font-weight: 700; color: #15803d;
+          font-size: ${F_SIZE.md}; font-weight: 700; color: ${BRAND.espresso};
           margin: 0 0 10px 0; line-height: 1.2;
         }
         .card-body {
-          font-family: 'DM Sans', sans-serif;
-          font-size: ${F_SIZE.sm}; color: #15803d; line-height: 1.6; margin: 0; font-weight: 400;
+          font-family: ${FONTS.main};
+          font-size: ${F_SIZE.sm}; color: ${BRAND.espresso}; line-height: 1.6; margin: 0; font-weight: 400;
         }
 
         .underline-sketch { position: relative; display: inline-block; }
@@ -249,7 +248,7 @@ export default function ProblemSection() {
             <span style={{
               display: "block", fontSize: F_SIZE.sm, fontWeight: 600,
               letterSpacing: "0.15em", textTransform: "uppercase",
-              color: "#e11d48", marginBottom: 14, fontFamily: "'DM Sans', sans-serif",
+              color: "#e11d48", marginBottom: 14, fontFamily: FONTS.main,
             }}>
               The Problem
             </span>
@@ -322,3 +321,8 @@ export default function ProblemSection() {
     </section>
   );
 }
+
+
+
+
+

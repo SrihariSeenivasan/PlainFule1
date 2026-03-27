@@ -2,14 +2,11 @@
 
 import MainLayout from '../MainLayout';
 import Products from './ProductPageSections/Products';
-
-const C = {
-  offwhite: '#f7f8f5',
-};
+import { BRAND } from '@/lib/typography';
 
 export default function ProductPage() {
   return (
-    <MainLayout background={C.offwhite}>
+    <MainLayout background={BRAND.cream}>
         <Products />
     </MainLayout>
   );

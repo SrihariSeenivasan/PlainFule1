@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { User as UserIcon, Mail, Phone, MapPin, Globe, Edit3, Save, X, Shield, Package, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { userAPI, User } from '@/lib/api';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from '@/lib/typography';
 
 export default function UserProfile() {
   const { user: authUser } = useAuth();
@@ -102,13 +102,7 @@ export default function UserProfile() {
     }
   };
 
-  const COLORS = {
-    forest: '#0a3d1f',
-    leaf: '#16a34a',
-    silver: '#9eaaa0',
-    glass: 'rgba(255, 255, 255, 0.45)',
-    glassBorder: 'rgba(255, 255, 255, 0.7)',
-  };
+
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -126,20 +120,20 @@ export default function UserProfile() {
       {/* Profile Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 style={{ fontSize: F_SIZE.lg, color: COLORS.forest }} className="font-black tracking-tight mb-1 uppercase">
+          <h1 style={{ fontSize: F_SIZE.lg, color: BRAND.espresso }} className="font-black tracking-tight mb-1 uppercase">
             Account Central
           </h1>
-          <p style={{ fontSize: F_SIZE.sm, color: COLORS.silver }} className="font-semibold uppercase letter-spacing-widest">
+          <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe }} className="font-semibold uppercase letter-spacing-widest">
             Manage your biological profile
           </p>
         </div>
         {!isEditing && (
           <motion.button
-            whileHover={{ scale: 1.02, backgroundColor: COLORS.forest, color: '#fff' }}
+            whileHover={{ scale: 1.02, backgroundColor: BRAND.espresso, color: '#fff' }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsEditing(true)}
             className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm border border-[#0a3d1f20]"
-            style={{ color: COLORS.forest, fontSize: F_SIZE.sm }}
+            style={{ color: BRAND.espresso, fontSize: F_SIZE.sm }}
           >
             <Edit3 size={16} /> Edit Profile
           </motion.button>
@@ -150,12 +144,12 @@ export default function UserProfile() {
       <div 
         className="relative overflow-hidden"
         style={{
-          background: COLORS.glass,
+          background: BRAND.glass,
           backdropFilter: 'blur(32px)',
           borderRadius: 32,
           padding: '40px',
-          border: `1px solid ${COLORS.glassBorder}`,
-          boxShadow: '0 20px 50px rgba(10, 61, 31, 0.04)'
+          border: `1px solid ${BRAND.stone}`,
+          boxShadow: `0 20px 50px ${BRAND.glassDark}`
         }}
       >
         {/* Messages */}
@@ -205,7 +199,7 @@ export default function UserProfile() {
             ].map((field) => (
               <div key={field.name} className="space-y-2">
                 <label 
-                  style={{ fontSize: F_SIZE.sm, color: COLORS.forest, opacity: 0.6 }} 
+                  style={{ fontSize: F_SIZE.sm, color: BRAND.espresso, opacity: 0.6 }} 
                   className="font-black uppercase tracking-widest pl-1 block"
                 >
                   {field.label}
@@ -252,7 +246,7 @@ export default function UserProfile() {
               Cancel
             </button>
             <motion.button
-              whileHover={{ scale: 1.02, backgroundColor: COLORS.leaf }}
+              whileHover={{ scale: 1.02, backgroundColor: BRAND.burgundy }}
               whileTap={{ scale: 0.98 }}
               onClick={handleSave}
               disabled={saving}

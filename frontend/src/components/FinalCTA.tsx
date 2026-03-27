@@ -2,30 +2,13 @@
 
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Instagram, Mail, Twitter, ChevronDown, Sparkles, Send, Globe, ShieldCheck, ArrowRight } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Instagram, Mail, Twitter, ChevronDown, Sparkles, Send, Globe, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BRAND, FONTS } from '@/lib/typography';
 
-// ─── Design Tokens (Standardized with Navbar) ───────────────────────
-const COLORS = {
-  forest: '#0a3d1f',
-  deep: '#071a0d',
-  mid: '#14532d',
-  leaf: '#16a34a',
-  ink: '#070d08',
-  white: '#ffffff',
-  offwhite: '#f7f8f5',
-  silver: '#9eaaa0',
-  mist: '#eef4ee',
-  gold: '#b8953a',
-  goldLight: '#d4af5a',
-  champagne: '#f0e4c0',
-  glass: 'rgba(255, 255, 255, 0.45)',
-  glassDark: 'rgba(4, 14, 7, 0.65)',
-};
-
-// ─── Doodle Elements (Standardized) ──────────────────────────────────
-const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = COLORS.leaf }: {
+// ─── Doodle Elements ──────────────────────────────────────────────────
+const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = BRAND.taupe }: {
   size?: number; rotation?: number; style?: React.CSSProperties; color?: string
 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden
@@ -35,7 +18,7 @@ const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = COLORS.leaf }
   </svg>
 );
 
-const ScribbleUnderline = ({ color = COLORS.leaf, delay = 0 }: { color?: string; delay?: number }) => (
+const ScribbleUnderline = ({ color = BRAND.burgundy, delay = 0 }: { color?: string; delay?: number }) => (
   <motion.svg
     viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden
     style={{ position: 'absolute', bottom: -4, left: 0, width: '100%', height: 10, pointerEvents: 'none' }}
@@ -63,29 +46,39 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       onClick={() => setOpen(v => !v)}
       style={{
         position: 'relative',
-        background: open ? 'rgb(255, 255, 255)' : 'rgba(255, 255, 255, 0.4)',
+        background: open ? BRAND.white : 'rgba(255, 255, 255, 0.6)',
         backdropFilter: 'blur(32px)',
         borderRadius: 24,
         padding: '32px',
         cursor: 'pointer',
-        border: `1px solid ${open ? COLORS.leaf + '40' : 'rgba(255,255,255,0.7)'}`,
+        border: `1px solid ${open ? BRAND.burgundy + '30' : BRAND.stone + '80'}`,
         boxShadow: open
-          ? '0 30px 60px rgba(10, 61, 31, 0.1), 0 0 0 1px rgba(255,255,255,1)'
-          : '0 4px 12px rgba(10, 61, 31, 0.02)',
+          ? `0 30px 60px rgba(114, 56, 61, 0.08), 0 0 0 1px ${BRAND.white}`
+          : `0 4px 12px rgba(50, 45, 41, 0.04)`,
         transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
         overflow: 'hidden',
       }}
-      whileHover={{ y: -4, background: 'rgba(255, 255, 255, 0.8)', border: `1px solid ${COLORS.leaf}20` }}
+      whileHover={{
+        y: -4,
+        background: 'rgba(255, 255, 255, 0.85)',
+        border: `1px solid ${BRAND.burgundy}20`,
+      }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24 }}>
         <h4 style={{
-          fontFamily: "'Montserrat', sans-serif",
-          fontSize: 17, fontWeight: 800, color: COLORS.forest, margin: 0, lineHeight: 1.4, flex: 1,
+          fontFamily: FONTS.main,
+          fontSize: 17, fontWeight: 800, color: BRAND.espresso, margin: 0, lineHeight: 1.4, flex: 1,
           letterSpacing: '-0.01em',
         }}>{q}</h4>
         <motion.div
           animate={{ rotate: open ? '180deg' : '0deg', scale: open ? 1.1 : 1 }}
-          style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: open ? COLORS.leaf : COLORS.silver, background: open ? COLORS.leaf + '10' : 'rgba(0,0,0,0.04)', transition: 'all 0.4s' }}
+          style={{
+            width: 36, height: 36, borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: open ? BRAND.burgundy : BRAND.taupe,
+            background: open ? BRAND.burgundy + '12' : `${BRAND.stone}40`,
+            transition: 'all 0.4s'
+          }}
         >
           <ChevronDown size={20} strokeWidth={2.5} />
         </motion.div>
@@ -98,8 +91,8 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
             exit={{ height: 0, opacity: 0, marginTop: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div style={{ paddingTop: 20, borderTop: `1px solid ${COLORS.mid}10` }}>
-              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 15.5, fontWeight: 500, color: '#4a5a4e', lineHeight: 1.7, margin: 0 }}>{a}</p>
+            <div style={{ paddingTop: 20, borderTop: `1px solid ${BRAND.stone}40` }}>
+              <p style={{ fontFamily: FONTS.main, fontSize: 15.5, fontWeight: 500, color: BRAND.taupe, lineHeight: 1.7, margin: 0 }}>{a}</p>
             </div>
           </motion.div>
         )}
@@ -110,15 +103,15 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
 
 // ─── Footer Components ────────────────────────────────────────────────
 const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <motion.a href={href} whileHover={{ x: 4, color: COLORS.leaf }}
-    style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 13.5, fontWeight: 600, color: COLORS.silver, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all 0.3s' }}
+  <motion.a href={href} whileHover={{ x: 4, color: BRAND.stone }}
+    style={{ fontFamily: FONTS.main, fontSize: 13.5, fontWeight: 600, color: BRAND.taupe, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all 0.3s' }}
   >
     {children}
   </motion.a>
 );
 
 const FooterHeader = ({ children }: { children: React.ReactNode }) => (
-  <h5 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: COLORS.leaf, marginBottom: 28 }}>{children}</h5>
+  <h5 style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: BRAND.stone, marginBottom: 28 }}>{children}</h5>
 );
 
 // ─── Data ───────────────────────────────────────────────────────────
@@ -133,29 +126,23 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
   const router = useRouter();
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@400;600;700;900&display=swap');
-        .premium-glow { position: relative; }
-        .premium-glow::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent, rgba(255,255,255,0.2)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-mask( #fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
-      `}</style>
-
-      <section id="buy" style={{ position: 'relative', overflow: 'hidden', background: '#fff' }}>
+      <section id="buy" style={{ position: 'relative', overflow: 'hidden', background: BRAND.white }}>
 
         {/* FAQ BLOCK */}
         {showFAQ && (
-          <div style={{ background: `linear-gradient(to bottom, #f9faf8, #f5f7f5)`, padding: '120px 0', position: 'relative' }}>
+          <div style={{ background: BRAND.cream, padding: '120px 0', position: 'relative' }}>
             <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
 
               <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 80 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: COLORS.forest, padding: '8px 20px', borderRadius: 100, marginBottom: 24, boxShadow: '0 10px 20px rgba(10,61,31,0.1)' }}>
-                  <Sparkles size={14} color={COLORS.gold} />
-                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Biological Logic</span>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.espresso, padding: '8px 20px', borderRadius: 100, marginBottom: 24, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
+                  <Sparkles size={14} color={BRAND.stone} />
+                  <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: BRAND.white, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Biological Logic</span>
                 </div>
                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <h3 style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: COLORS.forest, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
-                  <ScribbleUnderline delay={0.4} color={COLORS.gold} />
+                  <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
+                  <ScribbleUnderline delay={0.4} color={BRAND.burgundy} />
                 </div>
-                <p style={{ fontFamily: "'Caveat', cursive", fontSize: 24, color: COLORS.leaf, marginTop: 20, opacity: 0.9 }}>Helping you make sense of the daily scoop ✨</p>
+                <p style={{ fontFamily: FONTS.accent, fontSize: 24, color: BRAND.burgundy, marginTop: 20, opacity: 0.9 }}>Helping you make sense of the daily scoop ✨</p>
               </motion.div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: 24 }}>
@@ -165,8 +152,12 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
               </div>
 
               <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: 80 }}>
-                <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 14, fontWeight: 700, color: COLORS.silver, marginBottom: 24 }}>Still have something on your mind?</p>
-                <motion.button onClick={() => router.push('/contact')} whileHover={{ scale: 1.05, background: COLORS.leaf }} style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '18px 40px', background: COLORS.forest, color: '#fff', borderRadius: 100, border: 'none', fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', boxShadow: '0 20px 40px rgba(10,61,31,0.15)', transition: 'all 0.3s' }}>
+                <p style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: BRAND.taupe, marginBottom: 24 }}>Still have something on your mind?</p>
+                <motion.button
+                  onClick={() => router.push('/contact')}
+                  whileHover={{ scale: 1.05, background: BRAND.burgundy, boxShadow: `0 20px 40px rgba(114,56,61,0.2)` }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '18px 40px', background: BRAND.espresso, color: BRAND.white, borderRadius: 100, border: 'none', fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', boxShadow: `0 20px 40px rgba(50,45,41,0.15)`, transition: 'all 0.3s' }}
+                >
                   Contact our support team <Send size={16} />
                 </motion.button>
               </motion.div>
@@ -175,17 +166,20 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
         )}
 
         {/* FOOTER */}
-        <footer style={{ background: COLORS.deep, padding: '120px 0 60px', color: COLORS.white, position: 'relative' }}>
-          <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: `radial-gradient(${COLORS.white} 1px, transparent 1px)`, backgroundSize: '40px 40px', pointerEvents: 'none' }} />
+        <footer style={{ background: BRAND.espresso, padding: '120px 0 60px', color: BRAND.white, position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(${BRAND.stone} 1px, transparent 1px)`, backgroundSize: '40px 40px', pointerEvents: 'none' }} />
 
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 80, marginBottom: 100 }}>
               <div style={{ gridColumn: 'span 2' }}>
                 <Image src="/images/plainfuel.png" alt="PlainFuel" width={180} height={45} style={{ filter: 'brightness(0) invert(1)', marginBottom: 32 }} />
-                <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, lineHeight: 1.8, color: COLORS.silver, maxWidth: 380, marginBottom: 40, fontWeight: 500 }}>Standardizing daily nutrition without the compromise. Built by pharmacists, designed for high-performance longevity.</p>
+                <p style={{ fontFamily: FONTS.main, fontSize: 16, lineHeight: 1.8, color: BRAND.stone, maxWidth: 380, marginBottom: 40, fontWeight: 500 }}>Standardizing daily nutrition without the compromise. Built by pharmacists, designed for high-performance longevity.</p>
                 <div style={{ display: 'flex', gap: 16 }}>
                   {[Twitter, Instagram, Mail, Globe].map((Icon, i) => (
-                    <motion.a key={i} href="#" whileHover={{ scale: 1.1, backgroundColor: COLORS.leaf, color: COLORS.deep }} style={{ width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', transition: 'all 0.3s' }}><Icon size={18} /></motion.a>
+                    <motion.a key={i} href="#"
+                      whileHover={{ scale: 1.1, backgroundColor: BRAND.burgundy, color: BRAND.white }}
+                      style={{ width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${BRAND.taupe}30`, color: BRAND.stone, transition: 'all 0.3s' }}
+                    ><Icon size={18} /></motion.a>
                   ))}
                 </div>
               </div>
@@ -203,22 +197,25 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
               <div>
                 <FooterHeader>Governance</FooterHeader>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-                  <FooterLink href="/shipping">Shipping</FooterLink>
-                  <FooterLink href="/privacy">Privacy</FooterLink>
-                  <FooterLink href="/terms">Terms</FooterLink>
+                  <FooterLink href="/shipping">Shipping Policy</FooterLink>
+                  <FooterLink href="/cancellation">Cancellation Policy</FooterLink>
+                  <FooterLink href="/return">Return Policy</FooterLink>
+                  <FooterLink href="/payment">Payment Policy</FooterLink>
+                  <FooterLink href="/privacy">Privacy Policy</FooterLink>
+                  <FooterLink href="/terms">Terms & Conditions</FooterLink>
                   <FooterLink href="/contact">Support</FooterLink>
                 </div>
               </div>
             </div>
 
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
+            <div style={{ borderTop: `1px solid ${BRAND.taupe}20`, paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <ShieldCheck size={22} color={COLORS.leaf} />
-                <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 800, color: COLORS.silver, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Pharmaceutical Grade Quality</span>
+                <ShieldCheck size={22} color={BRAND.stone} />
+                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: BRAND.taupe, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Pharmaceutical Grade Quality</span>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 700, color: COLORS.silver, margin: 0 }}>© 2026 PLAINFUEL INC.</p>
-                <p style={{ fontFamily: "'Caveat', cursive", fontSize: 18, color: COLORS.white, opacity: 0.6, marginTop: 4 }}>Empowering your biological potential ✨</p>
+                <p style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: BRAND.taupe, margin: 0 }}>© 2026 PLAINFUEL INC.</p>
+                <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: BRAND.white, opacity: 0.5, marginTop: 4 }}>Empowering your biological potential ✨</p>
               </div>
             </div>
           </div>

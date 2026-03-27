@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, Truck, CheckCircle, Clock, XCircle, ArrowLeft, RotateCcw, ShieldCheck, CreditCard, MapPin } from 'lucide-react';
 import { orderAPI, Order, OrderItem, ReturnRequest } from '@/lib/api';
-import { F_SIZE } from '@/lib/typography';
+import { F_SIZE, BRAND } from '@/lib/typography';
 import Image from 'next/image';
 
 type ViewMode = 'list' | 'detail';
@@ -156,15 +156,7 @@ export default function UserOrders() {
   const getPackageName = (item: OrderItem) =>
     item.package ? `${item.package.duration} · ${item.package.pouches} pouches` : '';
 
-  const COLORS = {
-    forest: '#0a3d1f',
-    leaf: '#16a34a',
-    silver: '#9eaaa0',
-    deep: '#071a0d',
-    glass: 'rgba(255, 255, 255, 0.45)',
-    glassDark: 'rgba(4, 14, 7, 0.05)',
-    glassBorder: 'rgba(255, 255, 255, 0.7)',
-  };
+
 
   const getStatusStyle = (status: string) => {
     const styles: Record<string, { bg: string; color: string; icon: any }> = {
@@ -221,10 +213,10 @@ export default function UserOrders() {
       {/* Header Area */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: F_SIZE.lg, color: COLORS.forest }} className="font-black tracking-tight mb-1 uppercase">
+          <h1 style={{ fontSize: F_SIZE.lg, color: BRAND.espresso }} className="font-black tracking-tight mb-1 uppercase">
             Order History
           </h1>
-          <p style={{ fontSize: F_SIZE.sm, color: COLORS.silver }} className="font-semibold uppercase tracking-widest">
+          <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe }} className="font-semibold uppercase tracking-widest">
             Track your nutritional journey
           </p>
         </div>
@@ -245,7 +237,7 @@ export default function UserOrders() {
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="p-20 text-center rounded-[32px] border-2 border-dashed border-[#0a3d1f10]"
-            style={{ background: COLORS.glass, backdropFilter: 'blur(32px)' }}
+            style={{ background: BRAND.glass, backdropFilter: 'blur(32px)' }}
           >
             <Package size={48} className="mx-auto text-[#0a3d1f20] mb-4" />
             <p style={{ fontSize: F_SIZE.md }} className="font-bold text-[#0a3d1f50]">No order history found.</p>
@@ -327,7 +319,7 @@ export default function UserOrders() {
                       </div>
                       
                       <motion.div
-                        whileHover={{ scale: 1.05, backgroundColor: COLORS.forest, color: '#fff' }}
+                        whileHover={{ scale: 1.05, backgroundColor: BRAND.espresso, color: '#fff' }}
                         className="px-5 py-2.5 rounded-xl font-black uppercase tracking-widest text-[#0a3d1f] border border-[#0a3d1f10] transition-all"
                         style={{ fontSize: 9 }}
                       >
@@ -519,10 +511,10 @@ export default function UserOrders() {
             >
               <div className="p-10 space-y-8">
                 <div>
-                  <h3 style={{ fontSize: F_SIZE.lg, color: COLORS.forest }} className="font-black tracking-tight mb-2 uppercase">
+                  <h3 style={{ fontSize: F_SIZE.lg, color: BRAND.espresso }} className="font-black tracking-tight mb-2 uppercase">
                     Return Details
                   </h3>
-                  <p style={{ fontSize: F_SIZE.sm, color: COLORS.silver }} className="font-semibold uppercase tracking-widest leading-relaxed">
+                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe }} className="font-semibold uppercase tracking-widest leading-relaxed">
                     Order: {returnModal.order.orderNumber}
                   </p>
                 </div>
@@ -571,7 +563,7 @@ export default function UserOrders() {
                     Cancel
                   </motion.button>
                   <motion.button
-                    whileHover={{ scale: 1.02, backgroundColor: COLORS.leaf }}
+                    whileHover={{ scale: 1.02, backgroundColor: BRAND.burgundy }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleReturnSubmit}
                     disabled={returnModal.submitting}
