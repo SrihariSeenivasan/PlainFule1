@@ -222,9 +222,9 @@ export default function WhyPlainFuel() {
                                     transition={{ duration: 0.8, delay: i * 0.05 + 0.5 }}
                                     style={{
                                         flex: 1,
-                                        background: i > 8 ? `linear-gradient(to top, ${BRAND.burgundy}, ${BRAND.espresso})` : i > 4 ? `linear-gradient(to top, ${BRAND.burgundy}, ${BRAND.taupe})` : `linear-gradient(to top, ${BRAND.espresso}, ${BRAND.burgundy})`,
+                                        background: i < 3 ? BRAND.stone : i < 8 ? BRAND.taupe : BRAND.burgundy,
                                         borderRadius: '4px 4px 1px 1px',
-                                        opacity: 0.85
+                                        opacity: i < 8 ? 0.8 : 1
                                     }}
                                 />
                             ))}
