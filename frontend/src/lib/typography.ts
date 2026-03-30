@@ -30,22 +30,22 @@ export const COLORS = {
 
 // ─── User-facing UI palette (warm neutral brand) ─────────────────────────────
 export const BRAND = {
-    espresso:   '#322D29', // primary dark — headings, buttons, key text
-    burgundy:   '#72383D', // accent / CTAs / interactive highlights
-    taupe:      '#AC9C8D', // mid-tone — subheadings, icons, secondary text
-    stone:      '#D1C7BD', // light surface — dividers, muted text
-    silver:     '#D9D9D9', // borders, placeholders, disabled states
-    cream:      '#EFE9E1', // page background, card surfaces
-    white:      '#ffffff',
+    espresso: '#72383D', // primary dark — headings, buttons, key text
+    burgundy: '#72383D', // accent / CTAs / interactive highlights
+    taupe: '#AC9C8D', // mid-tone — subheadings, icons, secondary text
+    stone: '#D1C7BD', // light surface — dividers, muted text
+    silver: '#D9D9D9', // borders, placeholders, disabled states
+    cream: '#EFE9E1', // page background, card surfaces
+    white: '#ffffff',
     // Semantic aliases
-    bg:         '#EFE9E1',
-    card:       '#ffffff',
-    border:     '#D9D9D9',
-    text:       '#322D29',
-    textMuted:  '#AC9C8D',
-    accent:     '#72383D',
-    glass:      'rgba(255, 255, 255, 0.65)',
-    glassDark:  'rgba(50, 45, 41, 0.08)',
+    bg: '#EFE9E1',
+    card: '#ffffff',
+    border: '#D9D9D9',
+    text: '#322D29',
+    textMuted: '#AC9C8D',
+    accent: '#72383D',
+    glass: 'rgba(255, 255, 255, 0.65)',
+    glassDark: 'rgba(50, 45, 41, 0.08)',
 };
 
 export const FONTS = {
