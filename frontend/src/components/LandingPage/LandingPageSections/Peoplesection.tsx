@@ -103,7 +103,7 @@ export default function PeopleSection() {
     }, []);
 
     return (
-        <section ref={sectionRef} style={{ background: BRAND.white, padding: '100px 24px' }}>
+        <section ref={sectionRef} style={{ background: BRAND.white, padding: '60px 24px' }}>
             <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 56 }}>
                     <motion.div

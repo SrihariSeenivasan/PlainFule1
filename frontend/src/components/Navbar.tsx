@@ -490,7 +490,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
 
 const mobileBtnStyle = {
   padding: '16px 20px',
-  background: `rgba(239,233,225,0.6)`,
+  background: BRAND.white,
   color: BRAND.espresso,
   fontFamily: FONTS.main,
   fontSize: 15,

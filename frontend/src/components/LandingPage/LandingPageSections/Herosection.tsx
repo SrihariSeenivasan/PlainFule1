@@ -385,7 +385,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
         <span style={{
           fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, letterSpacing: '0.28em',
-          textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
+          textTransform: 'uppercase', color: BRAND.accent, fontWeight: 900,
         }}>What is PlainFuel?</span>
       </motion.div>
 
@@ -471,7 +471,7 @@ export default function PlainFuelHero() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: clamp(64px, 9vw, 112px) clamp(24px, 5.5vw, 72px);
+          padding: clamp(48px, 6vw, 80px) clamp(24px, 5.5vw, 72px);
           position: relative;
           overflow: hidden;
         }

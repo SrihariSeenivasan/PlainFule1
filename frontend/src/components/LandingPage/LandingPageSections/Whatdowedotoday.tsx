@@ -35,24 +35,24 @@ export default function WhatDoWeDoToday() {
                 backgroundColor: BRAND.cream,
                 position: 'relative',
                 overflow: 'hidden',
-                padding: '100px 24px',
+                padding: '32px 24px',
             }}
         >
             <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: 64 }}>
+                <div style={{ textAlign: 'center', marginBottom: 24 }}>
                     <motion.div {...fadeUp(0)}>
                         <Chip>The Challenge</Chip>
                     </motion.div>
                     <motion.h2 {...fadeUp(0.1)} style={{
                         fontFamily: FONTS.main,
                         fontSize: F_SIZE.xl,
-                        fontWeight: 900, letterSpacing: '-0.04em', color: BRAND.espresso, marginTop: 24, lineHeight: 1.1
+                        fontWeight: 900, letterSpacing: '-0.04em', color: BRAND.ink, marginTop: 16, lineHeight: 1.1
                     }}>What do we do today?</motion.h2>
                     <motion.p {...fadeUp(0.2)} style={{
                         fontFamily: FONTS.main,
-                        fontSize: F_SIZE.md, color: BRAND.burgundy, maxWidth: 600, margin: '20px auto 0', lineHeight: 1.7, fontWeight: 500
+                        fontSize: F_SIZE.md, color: BRAND.ink, maxWidth: 600, margin: '12px auto 0', lineHeight: 1.7, fontWeight: 500
                     }}>
                         To fill the nutritional gap, most people turn to a complex routine of supplements.
                     </motion.p>
@@ -62,23 +62,23 @@ export default function WhatDoWeDoToday() {
                 <div className="cards-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
 
                     {/* Problem Card */}
-                    <motion.div {...fadeUp(0.3)} style={{ background: BRAND.white, borderRadius: 40, padding: '48px', border: `1px solid ${BRAND.espresso}08`, boxShadow: '0 20px 40px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: 24 }}>
-                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, margin: 0 }}>But this creates another problem:</h3>
+                    <motion.div {...fadeUp(0.3)} style={{ background: BRAND.white, borderRadius: 40, padding: '32px', border: `1px solid ${BRAND.espresso}08`, boxShadow: '0 20px 40px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: 24 }}>
+                        <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.accent, margin: 0 }}>But this creates another problem:</h3>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
                             {['Multiple separate supplements', 'Confusing timings', 'Difficult to maintain consistency'].map((item, i) => (
-                                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 700, color: BRAND.espresso }}>
-                                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: BRAND.burgundy }} />
+                                <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 700, color: BRAND.secondary }}>
+                                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: BRAND.taupe }} />
                                     {item}
                                 </li>
                             ))}
                         </ul>
-                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.burgundy, lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
+                        <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.ink, lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
                             Maintaining a complex routine is a logistical challenge. Most people start with good intent but stop within days. The real issue isn't effort—it's that the current system is too complex for a busy life.
                         </p>
                     </motion.div>
 
                     {/* Solution Card */}
-                    <motion.div {...fadeUp(0.4)} style={{ background: BRAND.espresso, borderRadius: 40, padding: '48px', boxShadow: '0 40px 80px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    <motion.div {...fadeUp(0.4)} style={{ background: BRAND.espresso, borderRadius: 40, padding: '32px', boxShadow: '0 40px 80px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column', gap: 24 }}>
                         <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: 0 }}>What PlainFuel does?</h3>
                         <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.stone, lineHeight: 1.8, margin: 0, opacity: 0.9 }}>
                             PlainFuel simplifies this entire process. Instead of managing multiple supplements, you take one sachet daily. It replaces your regular protein sachet while providing essential vitamins, minerals, and digestive support.

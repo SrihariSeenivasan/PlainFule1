@@ -23,7 +23,7 @@ export default function ReturnPolicy() {
   };
 
   return (
-    <MainLayout background="linear-gradient(to bottom right, BRAND.cream, #ffffff)">
+    <MainLayout background="#ffffff">
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
         <motion.div
           className="max-w-4xl mx-auto"

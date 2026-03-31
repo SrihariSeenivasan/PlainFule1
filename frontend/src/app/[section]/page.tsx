@@ -47,7 +47,7 @@ export default function SectionPage() {
     case 'my-orders':
       return (
         <AuthGuard>
-          <MainLayout background="#fdfaf3" showFAQ={false}>
+          <MainLayout background="#ffffff" showFAQ={false}>
             <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserOrders />
             </div>
@@ -57,7 +57,7 @@ export default function SectionPage() {
     case 'my-profile':
       return (
         <AuthGuard>
-          <MainLayout background="#fdfaf3" showFAQ={false}>
+          <MainLayout background="#ffffff" showFAQ={false}>
             <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserProfile />
             </div>
@@ -73,7 +73,7 @@ export default function SectionPage() {
     case 'reset-password': return <ResetPassword />;
     case 'contact':
       return (
-        <MainLayout background="#fdfaf3">
+        <MainLayout background="#ffffff">
           <ContactPage />
         </MainLayout>
       );

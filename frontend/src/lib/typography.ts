@@ -35,17 +35,19 @@ export const BRAND = {
     taupe: '#AC9C8D', // mid-tone — subheadings, icons, secondary text
     stone: '#D1C7BD', // light surface — dividers, muted text
     silver: '#D9D9D9', // borders, placeholders, disabled states
-    cream: '#EFE9E1', // page background, card surfaces
+    cream: '#ffffff', // page background, card surfaces
     white: '#ffffff',
+    secondary: '#322D29',
     // Semantic aliases
-    bg: '#EFE9E1',
-    card: '#ffffff',
+    bg: '#ffffff',
+    card: '#b9b6b6e9',
     border: '#D9D9D9',
     text: '#322D29',
     textMuted: '#AC9C8D',
     accent: '#72383D',
     glass: 'rgba(255, 255, 255, 0.65)',
     glassDark: 'rgba(50, 45, 41, 0.08)',
+    ink: '#070d08',
 };
 
 export const FONTS = {

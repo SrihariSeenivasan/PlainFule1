@@ -14,26 +14,31 @@ const PAGES = [
     {
         icon: <Shield size={22} />,
         headline: "What does PlainFuel contain?",
-        content: "Each serving of PlainFuel is designed to provide balanced daily support: The goal is not to overload the body, but to provide consistent and balanced nutrition.",
+        contentBefore: "Each serving of PlainFuel is designed to provide balanced daily support: ",
         list: [
             { title: "Protein", desc: "25g of whey protein with a complete amino acid profile" },
             { title: "Fiber", desc: "6g to support digestion" },
-            { title: "Vitamins", desc: "B-complex, Vitamin D3, and Vitamin C" },
+            { title: "Vitamins", desc: "B-complex, Vitamin D3, and Vitamin C (covering a significant portion of daily needs)" },
             { title: "Minerals", desc: "Calcium, Magnesium, Zinc, and Selenium" },
-            { title: "Digestive Enzymes", desc: "To improve absorption" }
+            { title: "Digestive Enzymes", desc: "To improve absorption and reduce digestive issues" }
         ],
+        contentAfter: "The goal is not to overload the body, but to provide consistent and balanced nutrition.",
         note: "Balanced & Consistent.",
         isFull: false
     },
     {
         icon: <Target size={22} />,
         headline: "How does this help?",
-        content: "PlainFuel supports multiple essential functions in the body. It is not about instant results. It is about supporting your body every day.",
+        contentBefore: "PlainFuel supports multiple essential functions in the body:",
         list: [
-            { title: "Energy and focus", desc: "B vitamins and magnesium help in energy metabolism" },
-            { title: "Recovery", desc: "Protein supports muscle recovery" },
-            { title: "Bone Health", desc: "Calcium and Vitamin D3 support bone strength" },
-            { title: "Daily Support", desc: "Zinc and micronutrients support normal processes" }
+            { title: "Energy and focus", desc: "B vitamins and magnesium help in how your body produces and uses energy" },
+            { title: "Recovery and sleep", desc: "Protein supports muscle recovery, while magnesium helps with relaxation" },
+            { title: "Bone and structural health", desc: "Calcium and Vitamin D3 support bone strength" },
+            { title: "Overall daily functioning", desc: "Zinc and other micronutrients support normal body processes" }
+        ],
+        contentAfterPoints: [
+            "It is not about instant results.",
+            "It is about supporting your body every day."
         ],
         note: "Supporting Body Processes.",
         isFull: false
@@ -59,7 +64,7 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: React.React
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: '-100px' });
     return (
-        <div ref={ref} style={{ marginBottom: 48 }}>
+        <div ref={ref} style={{ marginBottom: 24 }}>
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -73,7 +78,7 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: React.React
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1.1 }}
+                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.ink, margin: 0, letterSpacing: '-0.04em', lineHeight: 1.1 }}
             >
                 {title}
             </motion.h2>
@@ -95,12 +100,13 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 style={{
                     background: BRAND.espresso,
                     borderRadius: 48,
-                    padding: '60px',
+                    padding: '40px',
                     boxShadow: '0 40px 100px rgba(0,0,0,0.15)',
                     gridColumn: '1 / -1',
                     position: 'relative',
                     overflow: 'hidden',
                 }}
+                className="full-card"
             >
                 <div style={{ position: 'absolute', top: 0, right: 0, width: '60%', height: '100%', background: `radial-gradient(circle at right, ${BRAND.burgundy}20 0%, transparent 70%)` }} />
 
@@ -110,12 +116,12 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                             {data.icon}
                         </div>
                         <div>
-                            <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, marginBottom: 20, lineHeight: 1.2 }}>{data.headline}</h3>
+                            <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, marginBottom: 20, lineHeight: 1.25 }}>{data.headline}</h3>
                             <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.stone, lineHeight: 1.8, margin: 0 }}>{data.content}</p>
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
+                    <div className="list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
                         {data.list.map((it: any, i: number) => (
                             <div key={i} style={{ padding: '24px', borderRadius: 28, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
@@ -144,12 +150,12 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
             style={{
                 background: BRAND.white,
                 borderRadius: 40,
-                padding: '40px',
+                padding: '32px',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.04)',
                 border: `1px solid ${BRAND.espresso}08`,
                 position: 'relative',
                 overflow: 'hidden',
-                minHeight: 480,
+                minHeight: 580,
                 display: 'flex',
                 flexDirection: 'column'
             }}
@@ -164,9 +170,69 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
                 </div>
 
                 <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.espresso, marginBottom: 20, lineHeight: 1.25 }}>{data.headline}</h3>
-                <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.taupe, lineHeight: 1.8, margin: 0, fontWeight: 600 }}>{data.content}</p>
 
-                <div style={{ marginTop: 'auto', paddingTop: 32, borderTop: `1px solid ${BRAND.espresso}08` }}>
+                {data.contentBefore && (
+                    <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.ink, lineHeight: 1.6, marginBottom: 24, fontWeight: 600 }}>
+                        {data.contentBefore}
+                    </p>
+                )}
+
+                {!data.contentBefore && data.content && (
+                    <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.taupe, lineHeight: 1.8, marginBottom: 24, fontWeight: 600 }}>{data.content}</p>
+                )}
+
+                {data.list && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 28 }}>
+                        {data.list.map((it: any, i: number) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={inView ? { opacity: 1, x: 0 } : {}}
+                                transition={{ delay: 0.2 + (i * 0.05) }}
+                                style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}
+                            >
+                                <div style={{ marginTop: 6 }}>
+                                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.taupe }} />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, fontWeight: 800 }}>{it.title}: </span>
+                                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.ink, fontWeight: 500, lineHeight: 1.5 }}>{it.desc}</span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
+
+                {data.contentAfter && typeof data.contentAfter === 'string' && (
+                    <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.ink, lineHeight: 1.6, marginTop: 'auto', marginBottom: 24, fontWeight: 600 }}>
+                        {data.contentAfter.includes("consistent and balanced nutrition.") ? (
+                            <>
+                                {data.contentAfter.split("consistent and balanced nutrition.")[0]}
+                                <span style={{ color: BRAND.burgundy, fontWeight: 800 }}>consistent and balanced nutrition.</span>
+                                {data.contentAfter.split("consistent and balanced nutrition.")[1]}
+                            </>
+                        ) : data.contentAfter}
+                    </p>
+                )}
+
+                {data.contentAfterPoints && (
+                    <div style={{ marginTop: 'auto', marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        {data.contentAfterPoints.map((line: string, i: number) => (
+                            <motion.p
+                                key={i}
+                                initial={{ opacity: 0 }}
+                                animate={inView ? { opacity: 1 } : {}}
+                                transition={{ delay: 0.6 + (i * 0.2) }}
+                                style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.burgundy, fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}
+                            >
+                                <div style={{ width: 12, height: 1, background: BRAND.burgundy }} />
+                                {line}
+                            </motion.p>
+                        ))}
+                    </div>
+                )}
+
+                <div style={{ marginTop: (data.contentAfter || data.contentAfterPoints) ? 0 : 'auto', paddingTop: 24, borderTop: `1px solid ${BRAND.espresso}08` }}>
                     <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.burgundy, margin: 0, fontWeight: 700 }}>{data.note}</p>
                 </div>
             </div>
@@ -176,7 +242,7 @@ function ClinicalCard({ data, index }: { data: any; index: number }) {
 
 export default function FiveInOneSection() {
     return (
-        <section style={{ padding: '100px 0', background: BRAND.cream, position: 'relative', overflow: 'hidden' }}>
+        <section style={{ padding: '40px 0', background: BRAND.cream, position: 'relative', overflow: 'hidden' }}>
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
 
                 <SectionHeader eyebrow="The Logic" title="PlainFuel — A Simple Approach." />
@@ -206,8 +272,9 @@ export default function FiveInOneSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
+                    className="closing-perspective-card"
                     style={{
-                        marginTop: 100,
+                        marginTop: 40,
                         borderRadius: 56,
                         background: BRAND.espresso,
                         display: 'grid',
@@ -254,11 +321,22 @@ export default function FiveInOneSection() {
 
             <style>{`
                 @media (max-width: 1100px) {
-                    div[style*="grid-template-columns: 1.2fr 1fr"] { grid-template-columns: 1fr !important; }
+                    .closing-perspective-card { grid-template-columns: 1fr !important; }
                     .card-inner-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
                 }
                 @media (max-width: 900px) {
                     .clinical-grid { grid-template-columns: 1fr !important; }
+                }
+                @media (max-width: 768px) {
+                    .list-grid { grid-template-columns: 1fr !important; }
+                    .full-card { padding: 32px 24px !important; border-radius: 32px !important; }
+                    .closing-perspective-card { 
+                        border-radius: 0 !important; 
+                        margin: 40px -24px 0 !important; 
+                        width: calc(100% + 48px) !important;
+                    }
+                    .closing-perspective-card > div:first-child { padding: 48px 24px !important; }
+                    .closing-perspective-card h4 { font-size: 2rem !important; }
                 }
             `}</style>
         </section>
