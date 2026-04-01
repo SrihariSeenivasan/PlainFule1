@@ -67,7 +67,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24 }}>
         <h4 style={{
           fontFamily: FONTS.main,
-          fontSize: 17, fontWeight: 800, color: BRAND.espresso, margin: 0, lineHeight: 1.4, flex: 1,
+          fontSize: 17, fontWeight: 800, color: BRAND.secondary, margin: 0, lineHeight: 1.4, flex: 1,
           letterSpacing: '-0.01em',
         }}>{q}</h4>
         <motion.div
@@ -130,22 +130,22 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
 
         {/* FAQ BLOCK */}
         {showFAQ && (
-          <div style={{ background: BRAND.cream, padding: '120px 0', position: 'relative' }}>
+          <div className="faq-section" style={{ background: BRAND.cream, padding: '120px 0', position: 'relative' }}>
             <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
 
-              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 80 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.espresso, padding: '8px 20px', borderRadius: 100, marginBottom: 24, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
+              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 60 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.espresso, padding: '8px 20px', borderRadius: 100, marginBottom: 20, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
                   <Sparkles size={14} color={BRAND.stone} />
-                  <span style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, color: BRAND.white, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Biological Logic</span>
+                  <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 800, color: BRAND.white, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Biological Logic</span>
                 </div>
                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <h3 style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
+                  <h3 className="faq-header" style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
                   <ScribbleUnderline delay={0.4} color={BRAND.burgundy} />
                 </div>
-                <p style={{ fontFamily: FONTS.accent, fontSize: 24, color: BRAND.burgundy, marginTop: 20, opacity: 0.9 }}>Helping you make sense of the daily scoop ✨</p>
+                <p className="faq-subtext" style={{ fontFamily: FONTS.accent, fontSize: 24, color: BRAND.burgundy, marginTop: 16, opacity: 0.9 }}>Helping you make sense of the daily scoop ✨</p>
               </motion.div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: 24 }}>
+              <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 20 }}>
                 {faqs.map((faq, i) => (
                   <FaqCard key={i} q={faq.q} a={faq.a} index={i} />
                 ))}
@@ -166,12 +166,12 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
         )}
 
         {/* FOOTER */}
-        <footer style={{ background: BRAND.espresso, padding: '120px 0 60px', color: BRAND.white, position: 'relative' }}>
+        <footer className="footer-main" style={{ background: BRAND.espresso, padding: '120px 0 60px', color: BRAND.white, position: 'relative' }}>
           <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(${BRAND.stone} 1px, transparent 1px)`, backgroundSize: '40px 40px', pointerEvents: 'none' }} />
 
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 80, marginBottom: 100 }}>
-              <div style={{ gridColumn: 'span 2' }}>
+            <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 60, marginBottom: 80 }}>
+              <div className="footer-brand" style={{ gridColumn: 'span 2' }}>
                 <Image src="/images/plainfuel.png" alt="PlainFuel" width={180} height={45} style={{ filter: 'brightness(0) invert(1)', marginBottom: 32 }} />
                 <p style={{ fontFamily: FONTS.main, fontSize: 16, lineHeight: 1.8, color: BRAND.stone, maxWidth: 380, marginBottom: 40, fontWeight: 500 }}>Standardizing daily nutrition without the compromise. Built by pharmacists, designed for high-performance longevity.</p>
                 <div style={{ display: 'flex', gap: 16 }}>
@@ -208,18 +208,33 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
               </div>
             </div>
 
-            <div style={{ borderTop: `1px solid ${BRAND.taupe}20`, paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
+            <div className="footer-bottom" style={{ borderTop: `1px solid ${BRAND.taupe}20`, paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <ShieldCheck size={22} color={BRAND.stone} />
                 <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: BRAND.taupe, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Pharmaceutical Grade Quality</span>
               </div>
-              <div style={{ textAlign: 'right' }}>
+              <div className="footer-copy" style={{ textAlign: 'right' }}>
                 <p style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: BRAND.taupe, margin: 0 }}>© 2026 PLAINFUEL INC.</p>
                 <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: BRAND.white, opacity: 0.5, marginTop: 4 }}>Empowering your biological potential ✨</p>
               </div>
             </div>
           </div>
         </footer>
+
+        <style>{`
+          @media (max-width: 768px) {
+            .faq-section { padding: 80px 0 !important; }
+            .faq-header { font-size: 3rem !important; }
+            .faq-subtext { font-size: 20px !important; }
+            .faq-grid { grid-template-columns: 1fr !important; }
+            
+            .footer-main { padding: 80px 0 40px !important; }
+            .footer-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+            .footer-brand { grid-column: span 1 !important; }
+            .footer-bottom { flex-direction: column !important; text-align: center !important; }
+            .footer-copy { textAlign: center !important; }
+          }
+        `}</style>
       </section>
     </>
   );

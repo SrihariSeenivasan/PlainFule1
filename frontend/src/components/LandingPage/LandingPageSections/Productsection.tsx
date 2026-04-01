@@ -77,7 +77,7 @@ export default function ProductSection() {
   if (loading || products.length === 0) return null;
 
   return (
-    <section id="products" style={{ position: 'relative', padding: '100px 0', overflow: 'hidden' }}>
+    <section id="products" style={{ position: 'relative', padding: '60px 0', overflow: 'hidden' }}>
       <PremiumBackground />
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
@@ -94,7 +94,7 @@ export default function ProductSection() {
           </motion.div>
 
           <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.espresso, margin: 0, lineHeight: 1.1, letterSpacing: '-0.04em' }}>
-            Fuel <span style={{ color: BRAND.burgundy }}>Cycle.</span>
+            Fuel <span style={{ color: BRAND.secondary }}>Cycle.</span>
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
             <GoldUnderline width={220} />

@@ -9,7 +9,7 @@ interface MainLayoutProps {
   showFAQ?: boolean;
 }
 
-export default function MainLayout({ children, background = '#f7f8f5', showFAQ = true }: MainLayoutProps) {
+export default function MainLayout({ children, background = '#ffffff', showFAQ = true }: MainLayoutProps) {
   return (
     <main style={{ minHeight: '100vh', background }}>
       {/* This div clips horizontal overflow WITHOUT breaking sticky */}

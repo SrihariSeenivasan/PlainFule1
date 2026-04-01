@@ -9,7 +9,7 @@ import { F_SIZE, COLORS, FONTS, BRAND } from '@/lib/typography';
 const Squiggle = ({ width = 120, style = {} }) => (
   <svg viewBox={`0 0 ${width} 12`} width={width} height={12} style={style} aria-hidden>
     <path
-      d={`M2,6 Q${width*0.1},2 ${width*0.2},6 Q${width*0.3},10 ${width*0.4},6 Q${width*0.5},2 ${width*0.6},6 Q${width*0.7},10 ${width*0.8},6 Q${width*0.9},2 ${width-2},6`}
+      d={`M2,6 Q${width * 0.1},2 ${width * 0.2},6 Q${width * 0.3},10 ${width * 0.4},6 Q${width * 0.5},2 ${width * 0.6},6 Q${width * 0.7},10 ${width * 0.8},6 Q${width * 0.9},2 ${width - 2},6`}
       fill="none" stroke={BRAND.espresso} strokeWidth="2.5" strokeLinecap="round"
     />
   </svg>
@@ -17,9 +17,9 @@ const Squiggle = ({ width = 120, style = {} }) => (
 
 const HandDrawnUnderline = ({ width = 160, style = {} }) => (
   <svg viewBox={`0 0 ${width} 14`} width={width} height={14} style={style} aria-hidden>
-    <path d={`M3,8 C${width*0.15},4 ${width*0.35},11 ${width*0.5},7 C${width*0.65},3 ${width*0.8},10 ${width-3},7`}
+    <path d={`M3,8 C${width * 0.15},4 ${width * 0.35},11 ${width * 0.5},7 C${width * 0.65},3 ${width * 0.8},10 ${width - 3},7`}
       fill="none" stroke={BRAND.espresso} strokeWidth="3" strokeLinecap="round" />
-    <path d={`M6,11 C${width*0.2},9 ${width*0.5},13 ${width*0.75},10 C${width*0.85},9 ${width*0.95},11 ${width-5},10`}
+    <path d={`M6,11 C${width * 0.2},9 ${width * 0.5},13 ${width * 0.75},10 C${width * 0.85},9 ${width * 0.95},11 ${width - 5},10`}
       fill="none" stroke="${BRAND.burgundy}0.3" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
@@ -52,7 +52,7 @@ const QuoteOpen = ({ size = 40, style = {} }: { size?: number; style?: React.CSS
 const WavyLine = ({ width = 200, style = {} }: { width?: number; style?: React.CSSProperties }) => (
   <svg viewBox={`0 0 ${width} 16`} width={width} height={16} style={style} aria-hidden>
     <path
-      d={`M0,8 Q${width*0.125},2 ${width*0.25},8 Q${width*0.375},14 ${width*0.5},8 Q${width*0.625},2 ${width*0.75},8 Q${width*0.875},14 ${width},8`}
+      d={`M0,8 Q${width * 0.125},2 ${width * 0.25},8 Q${width * 0.375},14 ${width * 0.5},8 Q${width * 0.625},2 ${width * 0.75},8 Q${width * 0.875},14 ${width},8`}
       fill="none" stroke="${BRAND.burgundy}0.3" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
@@ -489,9 +489,7 @@ export default function DoctorsReview() {
                 ✦ Expert {current + 1} of {DOCTORS.length}
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.espresso, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  {paused ? 'PAUSED' : 'AUTO'}
-                </span>
+
                 <div style={{ width: isMobile ? 56 : 80, height: 4, background: 'rgba(10,61,31,0.15)', borderRadius: 99, overflow: 'hidden' }}>
                   {!paused && (
                     <motion.div
@@ -537,7 +535,7 @@ export default function DoctorsReview() {
               <NavBtn onClick={next} dir="next" disabled={isAnimating} />
             </div>
 
-            
+
             {isMobile && (
               <p style={{ textAlign: 'center', marginTop: 10, fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: 'rgba(0,0,0,0.32)', fontWeight: 500, letterSpacing: '0.03em' }}>
                 swipe left or right to explore
@@ -564,7 +562,7 @@ export default function DoctorsReview() {
                 </motion.div>
               ))}
             </div>
-          </motion.div> 
+          </motion.div>
 
           {/* Trust badges */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} style={{ marginTop: isMobile ? 12 : 16 }}>

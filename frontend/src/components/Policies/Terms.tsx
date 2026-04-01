@@ -23,7 +23,7 @@ export default function Terms() {
   };
 
   return (
-    <MainLayout background="linear-gradient(to bottom right, BRAND.cream, #ffffff)">
+    <MainLayout background="#ffffff">
       <div className="py-12 px-4" style={{ paddingTop: 100 }}>
         <motion.div
           className="max-w-4xl mx-auto"
@@ -260,7 +260,7 @@ export default function Terms() {
               <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed font-medium opacity-80 text-gray-700">
                 If you have any questions about these Terms of Service, please contact us:
               </p>
-              <div className="bg-[#EFE9E1] p-6 rounded-2xl space-y-3 border border-green-100">
+              <div className="bg-[#ffffff] p-6 rounded-2xl space-y-3 border border-gray-100">
                 <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold">PlainFuel Legal Team</p>
                 <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-medium opacity-80">Email: legal@plainfuel.com</p>
                 <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-medium opacity-80">Address: PlainFuel Inc., USA</p>

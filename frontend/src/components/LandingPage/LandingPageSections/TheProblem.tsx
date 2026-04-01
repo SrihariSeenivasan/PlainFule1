@@ -77,7 +77,7 @@ export default function ProblemSection() {
       className="problem-section"
       style={{
         background: BRAND.cream,
-        padding: "48px 24px",
+        padding: "40px 24px",
         fontFamily: FONTS.main,
         position: "relative",
         overflow: "hidden",

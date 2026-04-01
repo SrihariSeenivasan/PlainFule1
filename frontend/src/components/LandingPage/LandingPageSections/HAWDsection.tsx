@@ -198,9 +198,9 @@ export default function HAWDsection() {
             <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
 
                 {/* ── TOP SECTION: HEADER ── */}
-                <div style={{ marginBottom: 64, textAlign: 'center' }}>
+                <div style={{ marginBottom: 32, textAlign: 'center' }}>
                     <Chip text="The Simple Process" icon={ShieldCheck} />
-                    <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.text, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '24px auto 12px', maxWidth: 800 }}>
+                    <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.text, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '16px auto 12px', maxWidth: 800 }}>
                         What do we do <span style={{ color: BRAND.burgundy }}>today?</span>
                     </h2>
                     <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.burgundy, lineHeight: 1.7, maxWidth: 720, margin: '0 auto' }}>
@@ -209,10 +209,10 @@ export default function HAWDsection() {
                 </div>
 
                 {/* ── CARDS GRID ── */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 32, alignItems: 'stretch', marginBottom: 56 }}>
+                <div className="complexity-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 32, alignItems: 'stretch', marginBottom: 32 }}>
 
                     {/* Column 1: Complexity Barrier */}
-                    <div style={{ padding: '32px', background: `${BRAND.cream}80`, borderRadius: 40, border: `1px solid ${BRAND.espresso}05`, position: 'relative', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '24px', background: `${BRAND.cream}80`, borderRadius: 40, border: `1px solid ${BRAND.espresso}05`, position: 'relative', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', justifyItems: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                             <Chip text="Market Analysis" />
                         </div>
@@ -245,7 +245,7 @@ export default function HAWDsection() {
                     </div>
 
                     {/* Column 2: Laboratory Ingredients */}
-                    <div style={{ padding: '32px', background: BRAND.cream, borderRadius: 40, border: `1px solid ${BRAND.espresso}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '24px', background: BRAND.cream, borderRadius: 40, border: `1px solid ${BRAND.espresso}08`, boxShadow: '0 4px 30px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
                             <FlaskConical size={20} color={BRAND.espresso} />
                             <h4 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.text, textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>Laboratory Ingredients</h4>
@@ -272,17 +272,18 @@ export default function HAWDsection() {
                 </div>
 
                 {/* ── RDA BARS ── */}
-                <div style={{ marginTop: 48, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
+                <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16 }}>
                     {rdaBars.map((b, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.1 }}
+                            className="rda-card"
                             style={{ textAlign: 'center', padding: '20px 16px', background: BRAND.cream, borderRadius: 24, border: `1px solid ${BRAND.espresso}02` }}
                         >
                             <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: b.color, marginBottom: 12 }}>{b.pct}%</div>
-                            <div style={{ height: 120, width: 12, background: BRAND.white, borderRadius: 10, margin: '0 auto 12px', position: 'relative', overflow: 'hidden' }}>
+                            <div className="rda-bar-box" style={{ height: 120, width: 12, background: BRAND.white, borderRadius: 10, margin: '0 auto 12px', position: 'relative', overflow: 'hidden' }}>
                                 <motion.div initial={{ height: 0 }} whileInView={{ height: `${b.pct}%` }} transition={{ duration: 1, delay: i * 0.1 }} style={{ width: '100%', background: `${b.color}cc`, position: 'absolute', bottom: 0 }} />
                             </div>
                             <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.text }}>{b.label}</div>
@@ -294,6 +295,15 @@ export default function HAWDsection() {
 
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+                
+                @media (max-width: 968px) {
+                    .complexity-grid { grid-template-columns: 1fr !important; }
+                }
+                
+                @media (max-width: 640px) {
+                    .rda-bar-box { display: none !important; }
+                    .rda-card { padding: 12px 8px !important; }
+                }
             `}</style>
         </section>
     );
