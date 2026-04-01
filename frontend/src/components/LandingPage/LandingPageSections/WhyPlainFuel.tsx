@@ -265,7 +265,7 @@ export default function WhyPlainFuel() {
                 <SectionHeader
                     eyebrow="Dietary Analysis"
                     title="Today, many of us have started paying attention to protein. But nutrition is not just about protein."
-                    subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients."
+                    subtitle="Our daily diet, especially in India"
                 />
 
                 <motion.div
