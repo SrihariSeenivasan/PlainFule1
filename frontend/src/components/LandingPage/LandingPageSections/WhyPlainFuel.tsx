@@ -264,8 +264,8 @@ export default function WhyPlainFuel() {
             <section style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto' }}>
                 <SectionHeader
                     eyebrow="Dietary Analysis"
-                    title="Our daily diet, especially in India, is unbalanced."
-                    subtitle="We often pay attention to protein, but nutritional gaps build silently from other areas."
+                    title="Today, many of us have started paying attention to protein. But nutrition is not just about protein."
+                    subtitle="Our daily diet, especially in India, is heavily focused on Carbohydrates and Fats. But it often lacks: Protein, Fiber, and Essential micronutrients."
                 />
 
                 <motion.div
