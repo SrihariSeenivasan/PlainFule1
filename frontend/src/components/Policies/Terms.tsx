@@ -33,10 +33,10 @@ export default function Terms() {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-extrabold mb-4 tracking-tight">
+            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-extrabold mb-4 tracking-tight">
               Terms of Service
             </h1>
-            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso, opacity: 0.8 }} className="font-medium">
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary, opacity: 0.8 }} className="font-medium">
               Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </motion.div>
@@ -45,7 +45,7 @@ export default function Terms() {
           <motion.div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 space-y-8">
             {/* Section 1 */}
             <motion.section variants={itemVariants} className="space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold flex items-center gap-3">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold flex items-center gap-3">
                 <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-xl shadow-sm flex items-center justify-center font-bold">1</span>
                 Acceptance of Terms
               </h2>
@@ -59,7 +59,7 @@ export default function Terms() {
 
             {/* Section 2 */}
             <motion.section variants={itemVariants} className="space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold flex items-center gap-3">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold flex items-center gap-3">
                 <span style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-xl shadow-sm flex items-center justify-center font-bold">2</span>
                 Use License
               </h2>
@@ -78,7 +78,7 @@ export default function Terms() {
 
             {/* Section 3 */}
             <motion.section variants={itemVariants} className="space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold flex items-center gap-3">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold flex items-center gap-3">
                 <span style={{ fontSize: F_SIZE.sm, fontFamily: "'Montserrat', sans-serif" }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-xl shadow-sm flex items-center justify-center font-bold">3</span>
                 User Accounts
               </h2>
@@ -93,7 +93,7 @@ export default function Terms() {
                 <li>Update account information as needed</li>
                 <li>Notify us immediately of any unauthorized use</li>
               </ul>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed mt-4 font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="leading-relaxed mt-4 font-medium opacity-80">
                 PlainFuel reserves the right to suspend or terminate any account that violates these terms.
               </p>
             </motion.section>
@@ -104,7 +104,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 Product Information & Pricing
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 PlainFuel strives to provide accurate product descriptions and pricing. However, we do not warrant that product descriptions, pricing, or other website content is accurate, complete, or error-free.
               </p>
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -120,7 +120,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 Age Requirement
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 You must be at least 18 years of age to make purchases from PlainFuel. By using our services and making purchases, you represent and warrant that you are at least 18 years old and of legal age to form a binding contract under the laws of your place of residence.
               </p>
             </motion.section>
@@ -131,13 +131,13 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
                 Product Disclaimer & Health Warning
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 <strong>These products are not intended to diagnose, treat, cure, or prevent any disease.</strong>
               </p>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 All product information, testimonials, and claims are for informational purposes only. PlainFuel does not make any health or medical claims regarding its products. Always consult with a healthcare professional before starting any new supplement regimen, especially if you:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Are pregnant or nursing</li>
                 <li>Have any medical conditions</li>
                 <li>Are taking medications or other supplements</li>
@@ -151,10 +151,10 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
                 Intellectual Property Rights
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 All content on PlainFuel, including but not limited to text, images, logos, graphics, and software, is the property of PlainFuel or its content suppliers and is protected by copyright, trademark, and other intellectual property laws. You may not:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Reproduce or distribute any content without permission</li>
                 <li>Use our trademarks without authorization</li>
                 <li>Create derivative works from our content</li>
@@ -168,16 +168,16 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
                 User Content & Reviews
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 You retain ownership of any content you submit (reviews, comments, etc.), but grant PlainFuel a worldwide, non-exclusive, royalty-free license to use, edit, and display your content. By submitting content, you agree that:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Your content is accurate and truthful</li>
                 <li>Your content does not violate anyone&apos;s rights</li>
                 <li>Your content does not contain spam or promotional content</li>
                 <li>Your content does not contain offensive or inappropriate material</li>
               </ul>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed mt-4 font-medium opacity-80 text-gray-700">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="leading-relaxed mt-4 font-medium opacity-80 text-gray-700">
                 PlainFuel reserves the right to remove content that violates these terms without notice.
               </p>
             </motion.section>
@@ -188,7 +188,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
                 Limitation of Liability
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 In no event shall PlainFuel, its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, even if advised of the possibility of such damages. Our liability shall not exceed the amount you paid for products purchased.
               </p>
             </motion.section>
@@ -199,10 +199,10 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
                 Indemnification
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 You agree to indemnify and hold harmless PlainFuel and its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Your violation of these Terms of Service</li>
                 <li>Your use of our services</li>
                 <li>Your infringement of any intellectual property rights</li>
@@ -216,7 +216,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">11</span>
                 Third-Party Links
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 PlainFuel may contain links to third-party websites. We are not responsible for the content, accuracy, or practices of these external sites. Your use of third-party websites is at your own risk and governed by their terms of service.
               </p>
             </motion.section>
@@ -227,7 +227,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">12</span>
                 Governing Law
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 These Terms of Service and all related policies are governed by and construed in accordance with the laws of the United States, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
               </p>
             </motion.section>
@@ -238,7 +238,7 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">13</span>
                 Dispute Resolution
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Any disputes arising from your use of PlainFuel shall first be addressed through our customer support team. If resolution cannot be reached, disputes shall be resolved through binding arbitration in accordance with the rules of the American Arbitration Association.
               </p>
             </motion.section>
@@ -249,22 +249,22 @@ export default function Terms() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">14</span>
                 Entire Agreement
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 These Terms of Service, along with our Privacy Policy and other policies, constitute the entire agreement between you and PlainFuel regarding your use of our services and supersede all prior or contemporaneous communications.
               </p>
             </motion.section>
 
             {/* Contact Section */}
             <motion.section variants={itemVariants} className="border-t pt-8 space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold">Questions About Our Terms?</h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed font-medium opacity-80 text-gray-700">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold">Questions About Our Terms?</h2>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="leading-relaxed font-medium opacity-80 text-gray-700">
                 If you have any questions about these Terms of Service, please contact us:
               </p>
               <div className="bg-[#ffffff] p-6 rounded-2xl space-y-3 border border-gray-100">
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold">PlainFuel Legal Team</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-medium opacity-80">Email: legal@plainfuel.com</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-medium opacity-80">Address: PlainFuel Inc., USA</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-medium opacity-80">Phone: 1-800-PLAINFUEL</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold">PlainFuel Legal Team</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-medium opacity-80">Email: legal@plainfuel.com</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-medium opacity-80">Address: PlainFuel Inc., USA</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-medium opacity-80">Phone: 1-800-PLAINFUEL</p>
               </div>
             </motion.section>
           </motion.div>

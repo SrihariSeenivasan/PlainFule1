@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion,  } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { getApiUrl } from '@/lib/api';
@@ -10,16 +10,16 @@ import { Star, MessageSquare, ShieldCheck, User, Send } from 'lucide-react';
 
 /* ── Design Tokens ── */
 const C = {
-  forest: BRAND.espresso,
-  deep: BRAND.espresso,
-  mid: BRAND.espresso,
-  leaf: BRAND.burgundy,
-  ink: BRAND.espresso,
+  forest: BRAND.primary,
+  deep: BRAND.primary,
+  mid: BRAND.primary,
+  leaf: BRAND.primaryDark,
+  ink: BRAND.primary,
   white: '#ffffff',
-  offwhite: BRAND.cream,
+  offwhite: BRAND.white,
   silver: '#64748b',
-  mist: BRAND.stone,
-  gold: BRAND.burgundy,
+  mist: BRAND.tertiary,
+  gold: BRAND.primaryDark,
   glass: 'rgba(255, 255, 255, 0.92)',
 };
 
@@ -43,8 +43,8 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase',
-      color: BRAND.espresso, fontWeight: 800,
-      border: `1px solid ${BRAND.espresso}25`,
+      color: BRAND.primary, fontWeight: 800,
+      border: `1px solid ${BRAND.primary}25`,
       borderRadius: 2, padding: '3px 10px',
       backgroundColor: 'rgba(10, 61, 31, 0.03)',
     }}>{children}</span>
@@ -83,7 +83,7 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
          <div style={{ width: 32, height: 32, borderRadius: '50%', background: C.mist, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-           <User size={16} color={BRAND.espresso} />
+           <User size={16} color={BRAND.primary} />
          </div>
          <div>
             <div style={{ fontWeight: 800, fontSize: F_SIZE.sm, color: C.ink, lineHeight: 1 }}>
@@ -95,8 +95,8 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
          </div>
       </div>
       <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-         <ShieldCheck size={14} color={BRAND.burgundy} />
-         <span style={{ fontSize: 9, fontWeight: 800, color: BRAND.burgundy, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Verified User</span>
+         <ShieldCheck size={14} color={BRAND.primaryDark} />
+         <span style={{ fontSize: 9, fontWeight: 800, color: BRAND.primaryDark, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Verified User</span>
       </div>
     </div>
 
@@ -106,7 +106,7 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => (
       fontSize: F_SIZE.sm, color: '#3c4a3e', lineHeight: 1.7, margin: 0, fontWeight: 500,
       fontStyle: 'italic', position: 'relative', paddingLeft: 18
     }}>
-      <span style={{ position: 'absolute', left: 0, top: 0, color: C.gold, fontSize: 18, fontWeight: 900 }}>"</span>
+      <span style={{ position: 'absolute', left: 0, top: 0, color: C.gold, fontSize: 18, fontWeight: 900 }}>&quot;</span>
       {review.text}
     </p>
   </motion.div>
@@ -212,7 +212,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
         <div>
            <Chip>Community Feedback</Chip>
            <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: C.ink, margin: '20px 0 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-             Customer <span style={{ fontWeight: 300, color: BRAND.espresso }}>Reviews</span>
+             Customer <span style={{ fontWeight: 300, color: BRAND.primary }}>Reviews</span>
            </h3>
            <div style={{ height: 1, width: 60, background: C.gold, marginTop: 16 }} />
         </div>
@@ -222,7 +222,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
           borderRadius: 8, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' 
         }}>
            <div>
-              <div style={{ fontSize: '2rem', fontWeight: 900, color: BRAND.espresso, lineHeight: 1 }}>{(stats.averageRating || 0).toFixed(1)}</div>
+              <div style={{ fontSize: '2rem', fontWeight: 900, color: BRAND.primary, lineHeight: 1 }}>{(stats.averageRating || 0).toFixed(1)}</div>
                <div style={{ fontSize: 10, fontWeight: 800, color: C.silver, textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 4 }}>Product Rating</div>
            </div>
            <StarRating rating={stats.averageRating || 0} size={18} />
@@ -241,7 +241,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                 <p style={{ color: C.silver, fontWeight: 700, textTransform: 'uppercase', fontSize: 11, letterSpacing: '0.15em' }}>Retrieving Reviews...</p>
              </div>
           ) : reviews.length === 0 ? (
-             <div style={{ padding: '60px 40px', textAlign: 'center', background: BRAND.cream, borderRadius: 12, border: '1px dashed rgba(0,0,0,0.1)' }}>
+             <div style={{ padding: '60px 40px', textAlign: 'center', background: BRAND.white, borderRadius: 12, border: '1px dashed rgba(0,0,0,0.1)' }}>
                 <MessageSquare size={32} color={C.silver} style={{ marginBottom: 16 }} />
                  <p style={{ color: C.silver, fontWeight: 700, fontSize: F_SIZE.sm }}>Be the first to share your experience.</p>
              </div>
@@ -266,7 +266,7 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
               </div>
             )}
             {success && (
-              <div style={{ marginBottom: 20, padding: 16, background: '#efe', borderRadius: 6, fontSize: 11, fontWeight: 800, color: BRAND.burgundy, textTransform: 'uppercase', borderLeft: '3px solid #3a3' }}>
+              <div style={{ marginBottom: 20, padding: 16, background: '#efe', borderRadius: 6, fontSize: 11, fontWeight: 800, color: BRAND.primaryDark, textTransform: 'uppercase', borderLeft: '3px solid #3a3' }}>
                 {success}
               </div>
             )}
@@ -292,19 +292,19 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                   rows={4}
                   style={{
                     width: '100%', padding: '20px', fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 600,
-                    border: '1.5px solid rgba(0,0,0,0.08)', borderRadius: 6, outline: 'none', background: BRAND.cream, resize: 'none'
+                    border: '1.5px solid rgba(0,0,0,0.08)', borderRadius: 6, outline: 'none', background: BRAND.white, resize: 'none'
                   }}
                 />
               </div>
 
               {isAuthenticated ? (
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: BRAND.espresso, color: C.white }}
+                  whileHover={{ scale: 1.01, backgroundColor: BRAND.primary, color: C.white }}
                   whileTap={{ scale: 0.99 }}
                   type="submit"
                   disabled={submitting}
                   style={{
-                    padding: '16px', background: BRAND.espresso, color: C.white, border: 'none', borderRadius: 6,
+                    padding: '16px', background: BRAND.primary, color: C.white, border: 'none', borderRadius: 6,
                     fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em', cursor: 'pointer',
                     boxShadow: '0 8px 32px rgba(10,61,31,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12
                   }}
@@ -313,12 +313,12 @@ export default function ReviewsSection({ productId = 1 }: { productId?: number }
                 </motion.button>
               ) : (
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: BRAND.espresso }}
+                  whileHover={{ scale: 1.01, backgroundColor: BRAND.primary }}
                   whileTap={{ scale: 0.99 }}
                   type="button"
                   onClick={() => setShowAuthModal(true)}
                   style={{
-                    padding: '16px', background: BRAND.espresso, color: C.white, border: 'none', borderRadius: 6,
+                    padding: '16px', background: BRAND.primary, color: C.white, border: 'none', borderRadius: 6,
                     fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.22em', cursor: 'pointer'
                   }}
                 >

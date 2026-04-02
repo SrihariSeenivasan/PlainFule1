@@ -33,10 +33,10 @@ export default function PrivacyPolicy() {
         >
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-extrabold mb-4 tracking-tight">
+            <h1 style={{ fontSize: F_SIZE.xl, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-extrabold mb-4 tracking-tight">
               Privacy Policy
             </h1>
-            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso, opacity: 0.8 }} className="font-medium">
+            <p style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary, opacity: 0.8 }} className="font-medium">
               Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </motion.div>
@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
           <motion.div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 space-y-8">
             {/* Section 1 */}
             <motion.section variants={itemVariants} className="space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold flex items-center gap-3">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold flex items-center gap-3">
                 <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-xl shadow-sm flex items-center justify-center font-bold">1</span>
                 Introduction
               </h2>
@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
 
             {/* Section 2 */}
             <motion.section variants={itemVariants} className="space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold flex items-center gap-3">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold flex items-center gap-3">
                 <span style={{ fontSize: F_SIZE.sm }} className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-xl shadow-sm flex items-center justify-center font-bold">2</span>
                 Information We Collect
               </h2>
@@ -113,7 +113,7 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 Data Sharing and Disclosure
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We do not sell, rent, or trade your personal information to third parties. However, we may share your information with:
               </p>
               <ul style={{ fontSize: F_SIZE.md }} className="list-disc list-inside text-gray-700 space-y-2 font-medium">
@@ -130,7 +130,7 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 Security of Your Information
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These measures include:
               </p>
               <ul style={{ fontSize: F_SIZE.md }} className="list-disc list-inside text-gray-700 space-y-2 font-medium">
@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
                 Cookies and Tracking Technologies
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We use cookies, web beacons, and similar tracking technologies to enhance your experience. Cookies help us remember your preferences, track your usage, and provide personalized content. You can adjust your browser settings to refuse cookies, but this may limit your ability to use some features of our website.
               </p>
             </motion.section>
@@ -182,7 +182,7 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
                 Retention of Information
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required by law. When information is no longer needed, we securely delete or anonymize it.
               </p>
             </motion.section>
@@ -193,7 +193,7 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
                 Third-Party Links
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Our website may contain links to third-party websites. We are not responsible for the privacy practices of these external sites. Please review their privacy policies before providing any personal information.
               </p>
             </motion.section>
@@ -204,15 +204,15 @@ export default function PrivacyPolicy() {
                 <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
                 Changes to This Privacy Policy
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will notify you of significant changes by posting the updated policy on our website and updating the &quot;Last updated&quot; date.
               </p>
             </motion.section>
 
             {/* Contact Section */}
             <motion.section variants={itemVariants} className="border-t pt-8 space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold">Contact Us</h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed font-medium opacity-80 text-gray-700">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold">Contact Us</h2>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="leading-relaxed font-medium opacity-80 text-gray-700">
                 If you have questions about this Privacy Policy or our privacy practices, please contact us at:
               </p>
               <div className="bg-[#EFE9E1] p-6 rounded-lg space-y-2">

@@ -213,10 +213,10 @@ export default function UserOrders() {
       {/* Header Area */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: F_SIZE.lg, color: BRAND.espresso }} className="font-black tracking-tight mb-1 uppercase">
+          <h1 style={{ fontSize: F_SIZE.lg, color: BRAND.primary }} className="font-black tracking-tight mb-1 uppercase">
             Order History
           </h1>
-          <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe }} className="font-semibold uppercase tracking-widest">
+          <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }} className="font-semibold uppercase tracking-widest">
             Track your nutritional journey
           </p>
         </div>
@@ -237,7 +237,7 @@ export default function UserOrders() {
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="p-20 text-center rounded-[32px] border-2 border-dashed border-[#0a3d1f10]"
-            style={{ background: BRAND.glass, backdropFilter: 'blur(32px)' }}
+            style={{ background: BRAND.light, backdropFilter: 'blur(32px)' }}
           >
             <Package size={48} className="mx-auto text-[#0a3d1f20] mb-4" />
             <p style={{ fontSize: F_SIZE.md }} className="font-bold text-[#0a3d1f50]">No order history found.</p>
@@ -319,7 +319,7 @@ export default function UserOrders() {
                       </div>
                       
                       <motion.div
-                        whileHover={{ scale: 1.05, backgroundColor: BRAND.espresso, color: '#fff' }}
+                        whileHover={{ scale: 1.05, backgroundColor: BRAND.primary, color: '#fff' }}
                         className="px-5 py-2.5 rounded-xl font-black uppercase tracking-widest text-[#0a3d1f] border border-[#0a3d1f10] transition-all"
                         style={{ fontSize: 9 }}
                       >
@@ -511,10 +511,10 @@ export default function UserOrders() {
             >
               <div className="p-10 space-y-8">
                 <div>
-                  <h3 style={{ fontSize: F_SIZE.lg, color: BRAND.espresso }} className="font-black tracking-tight mb-2 uppercase">
+                  <h3 style={{ fontSize: F_SIZE.lg, color: BRAND.primary }} className="font-black tracking-tight mb-2 uppercase">
                     Return Details
                   </h3>
-                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.taupe }} className="font-semibold uppercase tracking-widest leading-relaxed">
+                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }} className="font-semibold uppercase tracking-widest leading-relaxed">
                     Order: {returnModal.order.orderNumber}
                   </p>
                 </div>
@@ -563,7 +563,7 @@ export default function UserOrders() {
                     Cancel
                   </motion.button>
                   <motion.button
-                    whileHover={{ scale: 1.02, backgroundColor: BRAND.burgundy }}
+                    whileHover={{ scale: 1.02, backgroundColor: BRAND.primaryDark }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleReturnSubmit}
                     disabled={returnModal.submitting}
