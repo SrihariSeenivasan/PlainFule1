@@ -46,22 +46,22 @@ export default function ShippingPolicy() {
             {/* Section 1 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
                 Shipping Methods & Rates
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 PlainFuel offers multiple shipping options to meet your needs. Shipping rates are calculated based on your location, order weight, and selected delivery method.
               </p>
               <div className="space-y-3">
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Standard Shipping (5-7 Business Days)</h3>
                   <p className="text-gray-700">Economical option for non-urgent orders. Free shipping on orders over $50.</p>
                 </div>
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Express Shipping (2-3 Business Days)</h3>
                   <p className="text-gray-700">Faster delivery for time-sensitive orders. Flat rate of $9.99.</p>
                 </div>
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Overnight Shipping (Next Business Day)</h3>
                   <p className="text-gray-700">Premium option for urgent deliveries. Flat rate of $24.99.</p>
                 </div>
@@ -71,10 +71,10 @@ export default function ShippingPolicy() {
             {/* Section 2 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
                 Delivery Timeline
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Processing time is 1-2 business days from order placement. Shipping times begin after processing is complete. Please note that delivery times are estimates and not guarantees.
               </p>
               <div className="bg-blue-50 p-4 rounded-lg">
@@ -87,10 +87,10 @@ export default function ShippingPolicy() {
             {/* Section 3 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
                 Shipping Address Requirements
               </h2>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>We ship to all addresses within the continental United States</li>
                 <li>International shipping available to select countries</li>
                 <li>Please ensure your address is accurate and complete</li>
@@ -103,13 +103,13 @@ export default function ShippingPolicy() {
             {/* Section 4 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 Order Tracking
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Once your order ships, you will receive a confirmation email with a tracking number. You can use this tracking number to monitor your package&apos;s progress through our carrier&apos;s website. We use reliable carriers including UPS, FedEx, and USPS.
               </p>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Tracking information is typically available within 24 hours of shipment.
               </p>
             </motion.section>
@@ -117,13 +117,13 @@ export default function ShippingPolicy() {
             {/* Section 5 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 Lost or Damaged Shipments
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If your package arrives damaged or does not arrive within the estimated delivery window, please contact us immediately at support@plainfuel.com with:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Order number and tracking information</li>
                 <li>Photos of the damaged packaging or product (if applicable)</li>
                 <li>Description of the issue</li>
@@ -136,10 +136,10 @@ export default function ShippingPolicy() {
             {/* Section 6 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
                 Signature Requirements
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Standard and Express shipping do not require signatures. However, Overnight and certain high-value shipments may require adult signature upon delivery. The carrier will attempt delivery up to 3 times before returning the package.
               </p>
             </motion.section>
@@ -147,13 +147,13 @@ export default function ShippingPolicy() {
             {/* Section 7 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
                 International Shipping
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 We ship to select countries worldwide. International orders typically take 7-21 business days depending on destination. International shipping costs and delivery times will be calculated at checkout.
               </p>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Customers are responsible for any customs duties, taxes, or import fees that may apply to international orders.
               </p>
             </motion.section>
@@ -161,13 +161,13 @@ export default function ShippingPolicy() {
             {/* Section 8 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
                 Free Shipping
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 <strong>Eligibility:</strong> Free standard shipping is available on orders totaling $50 or more (before taxes and excluding shipping costs).
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Free shipping applies to continental U.S. addresses only</li>
                 <li>Promotional free shipping codes may apply to orders under $50</li>
                 <li>Free shipping cannot be combined with other discounts unless specified</li>
@@ -178,10 +178,10 @@ export default function ShippingPolicy() {
             {/* Section 9 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
                 Shipping Delays
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 While we strive to meet all shipping timelines, unforeseen circumstances such as weather events, carrier delays, or high order volumes may cause delays. In such cases, we will notify you via email if your shipment experiences an unexpected delay.
               </p>
             </motion.section>
@@ -189,10 +189,10 @@ export default function ShippingPolicy() {
             {/* Section 10 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
                 Address Changes
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you need to change your shipping address, please contact us immediately after placing your order. Address changes can only be made if the order hasn&apos;t shipped yet. Once a package is in transit, delivery address changes may not be possible.
               </p>
             </motion.section>
@@ -200,7 +200,7 @@ export default function ShippingPolicy() {
             {/* Contact Section */}
             <motion.section variants={itemVariants} className="border-t pt-8 space-y-4">
               <h2 className="text-2xl font-bold text-gray-900">Questions About Shipping?</h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you have any questions about our shipping policy, please don&apos;t hesitate to reach out:
               </p>
               <div className="bg-[#EFE9E1] p-6 rounded-lg space-y-2">

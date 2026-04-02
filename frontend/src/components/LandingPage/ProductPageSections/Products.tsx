@@ -12,16 +12,16 @@ import { F_SIZE, BRAND } from '@/lib/typography';
 
 /* ── Design Tokens ── */
 const C = {
-  forest: BRAND.espresso,
-  deep: BRAND.espresso,
-  mid: BRAND.espresso,
-  leaf: BRAND.burgundy,
-  ink: BRAND.espresso,
+  forest: BRAND.primary,
+  deep: BRAND.primary,
+  mid: BRAND.primary,
+  leaf: BRAND.primaryDark,
+  ink: BRAND.primary,
   white: '#ffffff',
-  offwhite: BRAND.cream,
+  offwhite: BRAND.white,
   silver: '#64748b',
-  mist: BRAND.stone,
-  gold: BRAND.burgundy,
+  mist: BRAND.tertiary,
+  gold: BRAND.primaryDark,
   goldLight: '#a16207',
   glow: 'rgba(74,222,128,0.22)',
   glass: 'rgba(255, 255, 255, 0.92)',
@@ -49,8 +49,8 @@ function Chip({ children }: { children: React.ReactNode }) {
       display: 'inline-flex', alignItems: 'center', gap: 8,
       fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: BRAND.espresso, fontWeight: 700,
-      border: `1px solid ${BRAND.espresso}40`,
+      color: BRAND.primary, fontWeight: 700,
+      border: `1px solid ${BRAND.primary}40`,
       borderRadius: 2, padding: '5px 14px',
       backgroundColor: 'rgba(10, 61, 31, 0.05)',
     }}>{children}</span>
@@ -78,7 +78,7 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [, setError] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -104,14 +104,14 @@ export default function Products() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: BRAND.cream, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONTS.main }}>
+      <div style={{ minHeight: '100vh', background: BRAND.white, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONTS.main }}>
         <div style={{ textAlign: 'center' }}>
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-            style={{ width: 40, height: 40, border: `2px solid ${BRAND.espresso}22`, borderTopColor: BRAND.espresso, borderRadius: '50%', margin: '0 auto 20px' }}
+            style={{ width: 40, height: 40, border: `2px solid ${BRAND.primary}22`, borderTopColor: BRAND.primary, borderRadius: '50%', margin: '0 auto 20px' }}
           />
-          <p style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.espresso, letterSpacing: '0.2em', textTransform: 'uppercase' }}>Loading Products...</p>
+          <p style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.primary, letterSpacing: '0.2em', textTransform: 'uppercase' }}>Loading Products...</p>
         </div>
       </div>
     );
@@ -122,7 +122,7 @@ export default function Products() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: BRAND.cream, fontFamily: FONTS.main, position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: BRAND.white, fontFamily: FONTS.main, position: 'relative', overflow: 'hidden' }}>
       <Navbar />
       
       {/* Background Decor */}
@@ -145,13 +145,13 @@ export default function Products() {
             style={{ marginBottom: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }}
           >
             <Chip>
-              <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={BRAND.espresso} /></svg>
+              <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={BRAND.primary} /></svg>
               Elite Selection
             </Chip>
           </motion.div>
           
           <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 0.88, letterSpacing: '-0.04em' }}>
-            Available <span style={{ fontWeight: 300, color: BRAND.espresso }}>Selections</span>
+            Available <span style={{ fontWeight: 300, color: BRAND.primary }}>Selections</span>
           </h2>
           
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 22 }}>
@@ -159,7 +159,7 @@ export default function Products() {
           </div>
           
           <p style={{ 
-            fontFamily: FONTS.accent, fontSize: F_SIZE.lg, fontWeight: 700, color: BRAND.espresso,
+            fontFamily: FONTS.accent, fontSize: F_SIZE.lg, fontWeight: 700, color: BRAND.primary,
             margin: '32px auto 0', letterSpacing: '0.01em', maxWidth: 600
           }}>
             Select your daily fuel system formulated for maximum bio-efficiency.
@@ -234,9 +234,9 @@ export default function Products() {
                 <div style={{ 
                   width: 30, height: 30, borderRadius: '50%', background: C.white, 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: `1px solid ${BRAND.espresso}10` 
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: `1px solid ${BRAND.primary}10` 
                 }}>
-                  <Check size={16} color={BRAND.burgundy} strokeWidth={4} />
+                  <Check size={16} color={BRAND.primaryDark} strokeWidth={4} />
                 </div>
               </div>
 
@@ -258,7 +258,7 @@ export default function Products() {
                       fontSize: F_SIZE.lg, fontWeight: 800, color: C.ink, margin: 0, 
                       letterSpacing: '-0.02em', lineHeight: 1 
                     }}>{p.name}</h3>
-                    <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: BRAND.espresso, fontWeight: 700 }}>Formula</span>
+                    <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: BRAND.primary, fontWeight: 700 }}>Formula</span>
                   </div>
                   <p style={{ 
                     fontSize: F_SIZE.sm, color: C.silver, letterSpacing: '0.14em', 
@@ -278,7 +278,7 @@ export default function Products() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                        <span style={{ 
-                        fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.espresso, 
+                        fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, 
                         fontFamily: FONTS.main, letterSpacing: '0.05em' 
                       }}>₹{p.packages?.[0]?.price?.toLocaleString()}</span>
                     </div>
@@ -288,7 +288,7 @@ export default function Products() {
                     whileHover={{ x: 3 }}
                     style={{
                       fontFamily: FONTS.main, fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-                      textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
+                      textTransform: 'uppercase', color: BRAND.primary, fontWeight: 900,
                       display: 'flex', alignItems: 'center', gap: 8
                     }}
                   >
@@ -297,7 +297,7 @@ export default function Products() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 4 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.burgundy, boxShadow: `0 0 7px ${BRAND.burgundy}66` }} />
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.primaryDark, boxShadow: `0 0 7px ${BRAND.primaryDark}66` }} />
                   <span style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.silver, fontWeight: 700 }}>
                     Quality Verified — In Stock
                   </span>

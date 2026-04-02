@@ -46,10 +46,10 @@ export default function ReturnPolicy() {
             {/* Section 1 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
                 Our Return Guarantee
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 At PlainFuel, we stand behind our products with confidence. If you&apos;re not completely satisfied with your purchase, we offer a hassle-free return and refund policy designed with your peace of mind in mind.
               </p>
               <div className="bg-[#EFE9E1] p-4 rounded-lg border border-green-200 mt-4">
@@ -63,13 +63,13 @@ export default function ReturnPolicy() {
             {/* Section 2 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
                 Eligibility for Returns
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
                 To be eligible for a return, your item must meet the following criteria:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Return request must be made within 30 days of purchase date</li>
                 <li>Product must be unopened and unused</li>
                 <li>Product must be in original, resellable condition</li>
@@ -87,7 +87,7 @@ export default function ReturnPolicy() {
             {/* Section 3 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
                 How to Initiate a Return
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4">
@@ -95,28 +95,28 @@ export default function ReturnPolicy() {
               </p>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Contact Customer Support</h3>
                     <p className="text-gray-700">Email support@plainfuel.com with your order number and reason for return within 30 days</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Receive Return Authorization</h3>
                     <p className="text-gray-700">We&apos;ll send you a return authorization number (RMA) and prepaid shipping label</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Ship Your Return</h3>
                     <p className="text-gray-700">Package your item securely and ship using our provided label. Include your RMA number</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">4</div>
+                  <div className="w-10 h-10 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">4</div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Receive Your Refund</h3>
                     <p className="text-gray-700">Once received and inspected, we&apos;ll process your refund within 5-7 business days</p>
@@ -128,22 +128,22 @@ export default function ReturnPolicy() {
             {/* Section 4 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 Refund Processing
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Here&apos;s what you can expect during the refund process:
               </p>
               <div className="space-y-3 mt-4">
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Inspection (2-3 business days)</h3>
                   <p className="text-gray-700">We inspect the returned item to verify it meets return conditions</p>
                 </div>
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Approval (1 business day)</h3>
                   <p className="text-gray-700">Once approved, we process your refund request</p>
                 </div>
-                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.burgundy }}>
+                <div className="border-l-4 pl-4" style={{ borderColor: BRAND.primaryDark }}>
                   <h3 className="font-semibold text-gray-900">Refund (5-7 business days)</h3>
                   <p className="text-gray-700">Credit appears back to original payment method</p>
                 </div>
@@ -156,7 +156,7 @@ export default function ReturnPolicy() {
             {/* Section 5 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 Refund Amounts
               </h2>
               <div className="space-y-3">
@@ -178,10 +178,10 @@ export default function ReturnPolicy() {
             {/* Section 6 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
                 Returning Defective or Damaged Items
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 If you receive a defective or damaged item, we&apos;ll make it right! Follow these steps:
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-2 mt-4">
@@ -196,13 +196,13 @@ export default function ReturnPolicy() {
             {/* Section 7 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">7</span>
                 Non-Returnable Items
               </h2>
               <p className="text-gray-700 leading-relaxed mb-3">
                 Unfortunately, the following items cannot be returned:
               </p>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Clearance or final sale items (marked as such at time of purchase)</li>
                 <li>Opened food items for health and safety reasons</li>
                 <li>Custom or personalized orders</li>
@@ -215,10 +215,10 @@ export default function ReturnPolicy() {
             {/* Section 8 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">8</span>
                 Exchanges
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 Want to exchange an item for a different size, color, or product? We make exchanges easy! Simply follow our return process and place a new order, or contact customer support for assistance. If the new item costs more, you&apos;ll only pay the difference. If it costs less, we&apos;ll refund the difference.
               </p>
             </motion.section>
@@ -226,10 +226,10 @@ export default function ReturnPolicy() {
             {/* Section 9 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">9</span>
                 Return Shipping
               </h2>
-              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
+              <ul style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="list-disc list-inside text-gray-700 space-y-2 font-medium opacity-80">
                 <li>Free return shipping provided via prepaid label</li>
                 <li>Use the provided label for quickest processing</li>
                 <li>Drop off at any authorized carrier location</li>
@@ -241,26 +241,26 @@ export default function ReturnPolicy() {
             {/* Section 10 */}
             <motion.section variants={itemVariants} className="space-y-4">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-                <span className="w-8 h-8 style={{ backgroundColor: BRAND.burgundy }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
+                <span className="w-8 h-8 style={{ backgroundColor: BRAND.primaryDark }} text-white rounded-full flex items-center justify-center text-sm font-bold">10</span>
                 Store Credit Alternative
               </h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="text-gray-700 leading-relaxed font-medium opacity-80">
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="text-gray-700 leading-relaxed font-medium opacity-80">
                 As an alternative to refunds, we offer store credit with a 15% bonus! For example, a $100 return could become $115 in store credit. This is a great way to try other products while supporting PlainFuel.
               </p>
             </motion.section>
 
             {/* Contact Section */}
             <motion.section variants={itemVariants} className="border-t pt-8 space-y-4">
-              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="font-bold">Need Help with Your Return?</h2>
-              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="leading-relaxed font-medium opacity-80 text-gray-700">
+              <h2 style={{ fontSize: F_SIZE.lg, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="font-bold">Need Help with Your Return?</h2>
+              <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="leading-relaxed font-medium opacity-80 text-gray-700">
                 Our customer service team is here to help make returns as easy as possible:
               </p>
               <div className="bg-[#EFE9E1] p-6 rounded-2xl shadow-sm space-y-3 border border-green-100">
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="opacity-80 font-medium"><strong>Email:</strong> support@plainfuel.com</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="opacity-80 font-medium"><strong>Phone:</strong> 1-800-PLAINFUEL</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="opacity-80 font-medium"><strong>Live Chat:</strong> Available on our website during business hours</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="opacity-80 font-medium"><strong>Hours:</strong> Monday-Friday, 9 AM - 5 PM EST</p>
-                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.espresso }} className="opacity-80 font-medium"><strong>Response Time:</strong> We aim to respond within 24 hours</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="opacity-80 font-medium"><strong>Email:</strong> support@plainfuel.com</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="opacity-80 font-medium"><strong>Phone:</strong> 1-800-PLAINFUEL</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="opacity-80 font-medium"><strong>Live Chat:</strong> Available on our website during business hours</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="opacity-80 font-medium"><strong>Hours:</strong> Monday-Friday, 9 AM - 5 PM EST</p>
+                <p style={{ fontSize: F_SIZE.md, fontFamily: "'Montserrat', sans-serif", color: BRAND.primary }} className="opacity-80 font-medium"><strong>Response Time:</strong> We aim to respond within 24 hours</p>
               </div>
             </motion.section>
           </motion.div>
