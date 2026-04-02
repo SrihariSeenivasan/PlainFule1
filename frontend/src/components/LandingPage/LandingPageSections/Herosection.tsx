@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { F_SIZE, COLORS, FONTS, BRAND } from '@/lib/typography';
+import { F_SIZE, FONTS, BRAND } from '@/lib/typography';
 
 // ── Slides data ───────────────────────────────────────────────────────────────
 const SLIDES = [
@@ -15,8 +15,7 @@ const SLIDES = [
     glow: 'rgba(74,222,128,0.22)',
     specs: [
       { k: 'Protein', v: '25g' },
-      { k: 'Fiber', v: '8g' },
-      { k: 'Calories', v: '140' },
+      { k: 'Fiber', v: '6g' },
     ],
   },
   {
@@ -28,8 +27,7 @@ const SLIDES = [
     glow: 'rgba(167,139,250,0.22)',
     specs: [
       { k: 'Protein', v: '25g' },
-      { k: 'Fiber', v: '8g' },
-      { k: 'Calories', v: '140' },
+      { k: 'Fiber', v: '6g' },
     ],
   },
 ];
@@ -39,7 +37,7 @@ function GoldLine({ style }: { style?: React.CSSProperties }) {
   return (
     <div style={{
       height: 1, width: '100%',
-      background: `linear-gradient(to right, transparent, ${BRAND.burgundy}99, transparent)`,
+      background: `linear-gradient(to right, transparent, ${BRAND.secondary}88, transparent)`,
       ...style,
     }} />
   );
@@ -49,12 +47,11 @@ function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
-      fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
-      color: BRAND.espresso, fontWeight: 700,
-      border: `1px solid ${BRAND.espresso}40`,
+      color: BRAND.primary, fontWeight: 700,
+      border: `1px solid ${BRAND.tertiary}`,
       borderRadius: 2, padding: '5px 14px',
-      backgroundColor: 'rgba(10, 61, 31, 0.05)',
+      backgroundColor: `${BRAND.light}`,
     }}>{children}</span>
   );
 }
@@ -97,7 +94,7 @@ function ProductPanel() {
       height: CARD_HEIGHT,
       width: '100%',
       boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)',
-      background: COLORS.white,
+      background: BRAND.white,
       border: '1px solid rgba(0,0,0,0.05)',
     }}>
 
@@ -112,20 +109,20 @@ function ProductPanel() {
         >
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(160deg, #f8f9f8 0%, #f1f5f1 45%, #ffffff 100%)',
+            background: 'linear-gradient(160deg, #FFFFFF 0%, #F5F5F5 45%, #FFFFFF 100%)',
           }} />
           <div style={{
             position: 'absolute',
             top: 0,
             left: '50%', transform: 'translateX(-50%)',
             width: 500, height: IMAGE_AREA,
-            background: `radial-gradient(ellipse at 50% 55%, ${slide.glow} 0%, transparent 65%)`,
+            background: `radial-gradient(ellipse at 50% 55%, ${BRAND.tertiary}44 0%, transparent 65%)`,
             opacity: 0.15,
           }} />
           <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.08 }}>
             <defs>
               <pattern id="dotgrid" width="28" height="28" patternUnits="userSpaceOnUse">
-                <circle cx="14" cy="14" r="0.9" fill={BRAND.burgundy} />
+                <circle cx="14" cy="14" r="0.9" fill={BRAND.secondary} />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#dotgrid)" />
@@ -135,7 +132,7 @@ function ProductPanel() {
 
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 2, zIndex: 20,
-        background: `linear-gradient(to right, transparent 5%, ${BRAND.burgundy}44 35%, ${BRAND.burgundy} 50%, ${BRAND.burgundy}44 65%, transparent 95%)`,
+        background: `linear-gradient(to right, transparent 5%, ${BRAND.secondary}44 35%, ${BRAND.secondary} 50%, ${BRAND.secondary}44 65%, transparent 95%)`,
       }} />
 
       <div style={{
@@ -146,7 +143,7 @@ function ProductPanel() {
         <span style={{
           fontFamily: FONTS.accent,
           fontSize: F_SIZE.md, letterSpacing: '0.04em',
-          color: `${COLORS.ink}44`, fontWeight: 700,
+          color: `${BRAND.primaryDark}99`, fontWeight: 700,
         }}>PlainFuel — Daily Edition</span>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -158,15 +155,14 @@ function ProductPanel() {
               style={{
                 width: i === idx ? 28 : 7, height: 3,
                 border: 'none', cursor: 'pointer', padding: 0,
-                background: i === idx ? BRAND.espresso : `${COLORS.silver}33`,
+                background: i === idx ? BRAND.secondary : `${BRAND.quaternary}33`,
                 borderRadius: 1.5, transition: 'all 0.35s ease',
               }}
             />
           ))}
           <span style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-            color: `${COLORS.ink}33`, fontWeight: 700, marginLeft: 4,
+            color: `${BRAND.text}33`, fontWeight: 700, marginLeft: 4,
           }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</span>
         </div>
       </div>
@@ -186,7 +182,7 @@ function ProductPanel() {
             initial={{ opacity: 0, x: dir * 60, scale: 0.92 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: dir * -50, scale: 0.95 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as any }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             style={{ width: '72%', maxWidth: 280 }}
           >
             <motion.img
@@ -230,20 +226,18 @@ function ProductPanel() {
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4 }}>
                 <span style={{
-                  fontFamily: FONTS.main,
                   fontSize: F_SIZE.lg, fontWeight: 800,
-                  color: COLORS.ink, letterSpacing: '-0.02em', lineHeight: 1,
+                  color: BRAND.text, letterSpacing: '-0.02em', lineHeight: 1,
                 }}>{slide.label}</span>
                 <span style={{
                   fontFamily: FONTS.accent,
-                  fontSize: F_SIZE.md, color: BRAND.espresso, fontWeight: 700,
+                  fontSize: F_SIZE.md, color: BRAND.secondary, fontWeight: 700,
                   letterSpacing: '0.02em',
                 }}>Flavor</span>
               </div>
               <div style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.18em',
-                textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 600,
+                textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 600,
                 marginBottom: 0,
               }}>{slide.sub}</div>
             </motion.div>
@@ -254,28 +248,37 @@ function ProductPanel() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
+          gridTemplateColumns: '1fr 1fr auto',
           flex: 1,
           padding: '0',
         }}>
           {slide.specs.map(({ k, v }, i) => (
             <div key={k} style={{
               padding: '12px 24px',
-              borderRight: i < 2 ? `1px solid rgba(0,0,0,0.05)` : 'none',
+              borderRight: i < 1 ? `1px solid rgba(0,0,0,0.05)` : 'none',
               display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
             }}>
               <span style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.lg, fontWeight: 800,
-                color: COLORS.ink, lineHeight: 1,
+                color: BRAND.text, lineHeight: 1,
               }}>{v}</span>
               <span style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.24em',
-                textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 700,
+                textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 700,
               }}>{k}</span>
             </div>
           ))}
+          <div style={{
+            padding: '12px 24px',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
+            borderLeft: `1px solid rgba(0,0,0,0.05)`,
+          }}>
+            <span style={{
+              fontSize: F_SIZE.lg,
+              fontFamily: FONTS.accent,
+              color: BRAND.text, lineHeight: 1.4, fontWeight: 800,
+            }}>All other Nutrition required</span>
+          </div>
         </div>
 
         <div style={{
@@ -287,19 +290,17 @@ function ProductPanel() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <div style={{
               width: 6, height: 6, borderRadius: '50%',
-              background: '#72383D',
-              boxShadow: '0 0 7px rgba(22,163,74,0.4)',
+              background: BRAND.secondary,
+              boxShadow: `0 0 7px ${BRAND.secondary}66`,
             }} />
             <span style={{
-              fontFamily: FONTS.main,
               fontSize: F_SIZE.sm, letterSpacing: '0.16em',
-              textTransform: 'uppercase', color: `${COLORS.silver}`, fontWeight: 700,
+              textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 700,
             }}>In Stock — Ships in 2 days</span>
           </div>
           <a href="#order" style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-            textTransform: 'uppercase', color: BRAND.espresso, fontWeight: 900,
+            textTransform: 'uppercase', color: BRAND.primaryDark, fontWeight: 900,
             textDecoration: 'none',
             display: 'flex', alignItems: 'center', gap: 6,
             transition: 'opacity 0.2s',
@@ -329,35 +330,35 @@ function AboutLeft({ inView }: { inView: boolean }) {
   const fromLeft = (delay: number) => ({
     initial: { opacity: 0, x: -40 },
     animate: inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 },
-    transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] as any },
+    transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] },
   });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <motion.div {...fromLeft(0.05)} style={{ marginBottom: 30, display: 'flex', alignItems: 'center', gap: 16 }}>
+      {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
+      <motion.div {...fromLeft(0.05)} style={{ marginBottom: 30, marginTop: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
         <Chip>
-          <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={BRAND.espresso} /></svg>
+          <svg viewBox="0 0 8 8" width={6} height={6}><circle cx="4" cy="4" r="3" fill={BRAND.primary} /></svg>
           Daily Nutrition
         </Chip>
         <div style={{
           width: 52, height: 1,
-          background: `linear-gradient(to right, ${BRAND.burgundy}99, transparent)`,
+          background: `linear-gradient(to right, ${BRAND.secondary}99, transparent)`,
         }} />
       </motion.div>
 
+      {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
       <motion.div {...fromLeft(0.12)} style={{ marginBottom: 6 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 'clamp(8px,1.2vw,16px)', flexWrap: 'nowrap' }}>
           <h2 style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 900, lineHeight: 0.88,
-            letterSpacing: '-0.04em', margin: 0, color: COLORS.ink,
+            letterSpacing: '-0.04em', margin: 0, color: BRAND.text,
           }}>Plain</h2>
           <h2 style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 300, lineHeight: 0.88,
-            letterSpacing: '-0.04em', margin: 0, color: BRAND.espresso,
+            letterSpacing: '-0.04em', margin: 0, color: BRAND.primaryDark,
           }}>Fuel</h2>
         </div>
       </motion.div>
@@ -365,59 +366,64 @@ function AboutLeft({ inView }: { inView: boolean }) {
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] as any }}
+        transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
         style={{ originX: 0, marginBottom: 22 }}
       >
         <GoldLine />
       </motion.div>
 
+      {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
       <motion.p {...fromLeft(0.28)} style={{
         fontFamily: FONTS.accent,
         fontSize: F_SIZE.lg,
-        fontWeight: 700, color: BRAND.espresso,
+        fontWeight: 700, color: BRAND.secondary,
         margin: '0 0 38px 0', letterSpacing: '0.01em',
       }}>
-        A Simple Approach to Daily Nutrition
+        India&apos;s first supplement that supports the Indian diet
       </motion.p>
 
+      {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
       <motion.div {...fromLeft(0.34)} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
-        <div style={{ width: 20, height: 1, background: BRAND.burgundy }} />
+        <div style={{ width: 20, height: 1, background: BRAND.secondary }} />
         <span style={{
-          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, letterSpacing: '0.28em',
-          textTransform: 'uppercase', color: BRAND.accent, fontWeight: 900,
+          textTransform: 'uppercase', color: BRAND.primaryDark, fontWeight: 900,
         }}>What is PlainFuel?</span>
       </motion.div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 46 }}>
         {paragraphs.map((text, i) => (
+          // @ts-expect-error - Framer Motion cubic-bezier easing
           <motion.p key={i} {...fromLeft(0.42 + i * 0.1)}
             style={{
-              fontFamily: FONTS.main,
               fontSize: F_SIZE.md,
-              fontWeight: 500, color: '#3c4a3e',
+              fontWeight: i === 2 ? 600 : 500,
+              color: BRAND.text,
               lineHeight: 1.9, margin: 0,
-              paddingLeft: 18,
-              borderLeft: `2px solid ${i === 0 ? BRAND.burgundy : i === 1 ? BRAND.burgundy : 'rgba(22,101,52,0.15)'}`,
+              padding: i === 2 ? '16px 20px' : `0 0 0 18px`,
+              paddingLeft: i === 2 ? 20 : 18,
+              borderLeft: i === 2 ? `3px solid ${BRAND.secondary}` : `2px solid ${i === 0 ? BRAND.secondary : i === 1 ? BRAND.tertiary : `${BRAND.quaternary}66`}`,
+              backgroundColor: i === 2 ? `${BRAND.secondary}08` : 'transparent',
+              borderRadius: i === 2 ? 6 : 0,
             }}
           >{text}</motion.p>
         ))}
       </div>
 
+      {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
       <motion.div {...fromLeft(0.72)} style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
         <a href="#order" style={{
           display: 'inline-flex', alignItems: 'center', gap: 12,
-          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, fontWeight: 900,
           letterSpacing: '0.22em', textTransform: 'uppercase',
-          color: COLORS.white, background: BRAND.espresso,
+          color: BRAND.white, background: BRAND.primaryDark,
           padding: '15px 30px', borderRadius: 3,
           textDecoration: 'none',
-          boxShadow: '0 8px 32px rgba(10,61,31,0.12)',
+          boxShadow: `0 8px 32px ${BRAND.primaryDark}1f`,
           transition: 'all 0.25s ease',
         }}
-          onMouseEnter={e => { e.currentTarget.style.background = BRAND.espresso; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 40px rgba(10,61,31,0.2)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = BRAND.espresso; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 8px 32px rgba(10,61,31,0.12)'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = BRAND.primaryDark; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 14px 40px ${BRAND.primaryDark}33`; }}
+          onMouseLeave={e => { e.currentTarget.style.background = BRAND.primaryDark; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `0 8px 32px ${BRAND.primaryDark}1f`; }}
         >
           Get PlainFuel
           <svg viewBox="0 0 16 16" width={11} height={11} fill="none">
@@ -427,10 +433,10 @@ function AboutLeft({ inView }: { inView: boolean }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ display: 'flex' }}>
-            {['#2d6a3f', '#235233', '#3a8055'].map((bg, i) => (
+            {[BRAND.secondary, BRAND.tertiary, BRAND.quaternary].map((bg, i) => (
               <div key={i} style={{
                 width: 28, height: 28, borderRadius: '50%',
-                border: `2px solid ${COLORS.white}`,
+                border: `2px solid ${BRAND.white}`,
                 background: bg, marginLeft: i > 0 ? -9 : 0,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
               }} />
@@ -440,13 +446,13 @@ function AboutLeft({ inView }: { inView: boolean }) {
             <div style={{ display: 'flex', gap: 2, marginBottom: 3 }}>
               {[1, 2, 3, 4, 5].map(s => (
                 <svg key={s} viewBox="0 0 10 10" width={9} height={9}>
-                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={BRAND.burgundy} />
+                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={BRAND.secondary} />
                 </svg>
               ))}
             </div>
             <span style={{
               fontFamily: FONTS.accent,
-              fontSize: F_SIZE.sm, color: COLORS.silver, fontWeight: 700,
+              fontSize: F_SIZE.sm, color: BRAND.textMuted, fontWeight: 700,
             }}>1,200+ daily users</span>
           </div>
         </div>
@@ -463,10 +469,10 @@ export default function PlainFuelHero() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
         
         .pfa-section {
-          background: ${BRAND.cream};
+          background: #FFFFFF;
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -480,8 +486,8 @@ export default function PlainFuelHero() {
           content: '';
           position: absolute; inset: 0;
           background:
-            radial-gradient(ellipse at 10% 55%, rgba(22,101,52,0.035) 0%, transparent 52%),
-            radial-gradient(ellipse at 90% 15%, rgba(133,77,14,0.02) 0%, transparent 48%);
+            radial-gradient(ellipse at 10% 55%, rgba(50, 45, 41, 0.03) 0%, transparent 52%),
+            radial-gradient(ellipse at 90% 15%, rgba(114, 56, 61, 0.02) 0%, transparent 48%);
           pointer-events: none;
         }
 
@@ -522,7 +528,7 @@ export default function PlainFuelHero() {
             className="pfa-panel-col"
             initial={{ opacity: 0, x: 60 }}
             animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
-            transition={{ duration: 0.72, delay: 0.1, ease: [0.22, 1, 0.36, 1] as any }}
+            transition={{ duration: 0.72, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <ProductPanel />
           </motion.div>

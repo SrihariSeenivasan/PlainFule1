@@ -3,17 +3,17 @@
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useTransition } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, LogOut, User, Menu, X, ShoppingCart, Package, UserCircle, ChevronDown, Sparkles } from 'lucide-react';
+import { Shield, LogOut, User, Menu, X, ShoppingCart, Package, UserCircle, Sparkles } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '@/lib/auth-context';
 import { useCart } from '@/lib/cart-context';
 import { BRAND, FONTS } from '@/lib/typography';
 
 // ── Doodle Elements ────────────────────────────────────────────────────────────
-const StarDoodle = ({ size = 16, rotation = 0, style = {}, color = BRAND.burgundy }: {
+const StarDoodle = ({ size = 16, rotation = 0, style = {}, color = BRAND.primaryDark }: {
   size?: number; rotation?: number; style?: React.CSSProperties; color?: string
 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden
@@ -47,7 +47,7 @@ const NavLink = ({ href, children, accent = false, delay = 0, onClick }: {
           fontSize: 12.5,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: hovered || accent ? BRAND.burgundy : BRAND.espresso,
+          color: hovered || accent ? BRAND.primaryDark : BRAND.primary,
           textDecoration: 'none',
           padding: '8px 14px',
           transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
@@ -63,7 +63,7 @@ const NavLink = ({ href, children, accent = false, delay = 0, onClick }: {
             animate={{ scale: 1, opacity: 1, rotate: '0deg' }}
             style={{ position: 'absolute', top: -4, right: 0 }}
           >
-            <StarDoodle size={10} rotation={15} color={BRAND.taupe} />
+            <StarDoodle size={10} rotation={15} color={BRAND.secondary} />
           </motion.div>
         )}
         <motion.span
@@ -76,7 +76,7 @@ const NavLink = ({ href, children, accent = false, delay = 0, onClick }: {
             left: 14,
             width: '60%',
             height: 1.5,
-            background: BRAND.burgundy,
+            background: BRAND.primaryDark,
             transformOrigin: 'left',
             borderRadius: 1,
             opacity: 0.7,
@@ -111,7 +111,7 @@ const PremiumLogo = () => (
       transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
       style={{ position: 'absolute', top: -8, right: -12, opacity: 0.4 }}
     >
-      <StarDoodle size={12} rotation={0} color={BRAND.taupe} />
+      <StarDoodle size={12} rotation={0} color={BRAND.secondary} />
     </motion.div>
   </Link>
 );
@@ -133,7 +133,7 @@ const PremiumCTA = ({ delay = 0 }: { delay?: number }) => {
           display: 'inline-flex',
           alignItems: 'center',
           gap: 10,
-          background: `linear-gradient(135deg, ${BRAND.espresso} 0%, ${BRAND.burgundy} 100%)`,
+          background: `linear-gradient(135deg, ${BRAND.primary} 0%, ${BRAND.primary} 100%)`,
           color: BRAND.white,
           fontFamily: FONTS.main,
           fontSize: 10.5,
@@ -144,12 +144,12 @@ const PremiumCTA = ({ delay = 0 }: { delay?: number }) => {
           borderRadius: 6,
           padding: '12px 26px',
           boxShadow: hovered 
-            ? `0 12px 24px rgba(114,56,61,0.3), inset 0 1px 1px rgba(255,255,255,0.2)` 
+            ? `0 12px 24px rgba(255, 255, 255, 0.3), inset 0 1px 1px rgba(255,255,255,0.2)` 
             : `0 6px 16px rgba(114,56,61,0.2), inset 0 1px 1px rgba(255,255,255,0.1)`,
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           cursor: 'pointer',
           whiteSpace: 'nowrap',
-          border: `1px solid ${BRAND.burgundy}40`,
+          border: `1px solid ${BRAND.primaryDark}40`,
           position: 'relative',
           overflow: 'hidden',
           transform: hovered ? 'translateY(-2px)' : 'translateY(0)',
@@ -199,8 +199,8 @@ const PremiumIconBtn = ({ onClick, delay = 0, children, badge, ariaLabel }: {
         height: 42,
         background: 'rgba(255,255,255,0.1)',
         backdropFilter: 'blur(8px)',
-        color: BRAND.espresso,
-        border: `1px solid ${BRAND.stone}40`,
+        color: BRAND.primary,
+        border: `1px solid ${BRAND.quaternary}40`,
         borderRadius: 12,
         cursor: 'pointer', 
         padding: 0,
@@ -209,12 +209,12 @@ const PremiumIconBtn = ({ onClick, delay = 0, children, badge, ariaLabel }: {
       }} 
       aria-label={ariaLabel}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = BRAND.taupe;
+        e.currentTarget.style.borderColor = BRAND.secondary;
         e.currentTarget.style.background = BRAND.white;
-        e.currentTarget.style.boxShadow = `0 8px 20px ${BRAND.stone}40`;
+        e.currentTarget.style.boxShadow = `0 8px 20px ${BRAND.quaternary}40`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = `${BRAND.stone}40`;
+        e.currentTarget.style.borderColor = `${BRAND.quaternary}40`;
         e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
         e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
       }}
@@ -230,7 +230,7 @@ const PremiumIconBtn = ({ onClick, delay = 0, children, badge, ariaLabel }: {
             right: -4,
             width: 20, 
             height: 20,
-            background: BRAND.burgundy, 
+            background: BRAND.primaryDark, 
             color: '#fff',
             borderRadius: '50%',
             display: 'flex', 
@@ -279,7 +279,7 @@ const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: 
             backdropFilter: 'blur(32px) saturate(160%)',
             borderRadius: 16, 
             padding: '10px',
-            border: `1px solid ${BRAND.silver}`,
+            border: `1px solid ${BRAND.tertiary}`,
             boxShadow: `0 24px 60px rgba(50,45,41,0.18), 0 0 0 1px rgba(255,255,255,0.4)`,
             zIndex: 300, 
             minWidth: 230,
@@ -288,17 +288,17 @@ const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: 
           <div style={{
             padding: '14px 16px',
             marginBottom: 8,
-            background: `linear-gradient(135deg, ${BRAND.burgundy}15 0%, ${BRAND.burgundy}05 100%)`,
+            background: `linear-gradient(135deg, ${BRAND.primaryDark}15 0%, ${BRAND.primaryDark}05 100%)`,
             borderRadius: 10,
-            border: `1px solid ${BRAND.burgundy}10`,
+            border: `1px solid ${BRAND.primaryDark}10`,
             position: 'relative',
             overflow: 'hidden',
           }}>
-            <p style={{ margin: 0, fontSize: 8.5, color: BRAND.taupe, fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.7 }}>Account Member</p>
-            <p style={{ margin: '4px 0 0', fontSize: 16, fontWeight: 800, color: BRAND.espresso, fontFamily: FONTS.main }}>
+            <p style={{ margin: 0, fontSize: 8.5, color: BRAND.secondary, fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.7 }}>Account Member</p>
+            <p style={{ margin: '4px 0 0', fontSize: 16, fontWeight: 800, color: BRAND.primary, fontFamily: FONTS.main }}>
               {user?.firstName || 'User'}
             </p>
-            <StarDoodle size={10} style={{ position: 'absolute', top: 12, right: 12, opacity: 0.3 }} color={BRAND.taupe} />
+            <StarDoodle size={10} style={{ position: 'absolute', top: 12, right: 12, opacity: 0.3 }} color={BRAND.secondary} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -306,15 +306,15 @@ const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: 
               <motion.button 
                 key={path}
                 onClick={() => handleNav(path)}
-                whileHover={{ backgroundColor: `${BRAND.burgundy}08`, x: 5 }}
+                whileHover={{ backgroundColor: `${BRAND.primaryDark}08`, x: 5 }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
                   border: 'none', background: 'transparent', borderRadius: 8,
                   fontFamily: FONTS.main, fontSize: 13.5, fontWeight: 600,
-                  color: BRAND.espresso, cursor: 'pointer', width: '100%', textAlign: 'left',
+                  color: BRAND.primary, cursor: 'pointer', width: '100%', textAlign: 'left',
                   transition: 'all 0.25s',
                 }}>
-                <span style={{ color: BRAND.burgundy, display: 'flex' }}>{icon}</span> {label}
+                <span style={{ color: BRAND.primaryDark, display: 'flex' }}>{icon}</span> {label}
               </motion.button>
             ))}
 
@@ -331,7 +331,7 @@ const ProfileDropdown = ({ open, onClose, navigate }: { open: boolean; onClose: 
               </motion.a>
             )}
 
-            <div style={{ height: 1.5, background: `${BRAND.stone}40`, margin: '6px 12px' }} />
+            <div style={{ height: 1.5, background: `${BRAND.quaternary}40`, margin: '6px 12px' }} />
 
             <motion.button onClick={handleLogout}
               whileHover={{ backgroundColor: 'rgba(239,68,68,0.05)', x: 5 }}
@@ -360,6 +360,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
 }) => {
   const links = [
     { href: '/about', label: 'About' },
+    { href: '/science', label: 'Science' },
     { href: '/products', label: 'Products' },
   ] as const;
 
@@ -390,11 +391,11 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
               zIndex: 200, padding: '80px 32px 40px',
               display: 'flex', flexDirection: 'column',
               borderRadius: 24,
-              border: `1px solid ${BRAND.silver}`,
+              border: `1px solid ${BRAND.tertiary}`,
               boxShadow: '-15px 0 50px rgba(0,0,0,0.15)',
             }}
           >
-            <StarDoodle size={40} rotation={15} style={{ position: 'absolute', top: 32, right: 32, opacity: 0.1 }} color={BRAND.taupe} />
+            <StarDoodle size={40} rotation={15} style={{ position: 'absolute', top: 32, right: 32, opacity: 0.1 }} color={BRAND.secondary} />
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -410,7 +411,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
                       style={{
                         fontFamily: FONTS.main,
                         fontSize: 22, fontWeight: 800,
-                        color: BRAND.espresso, textDecoration: 'none',
+                        color: BRAND.primary, textDecoration: 'none',
                         letterSpacing: '0.02em',
                         display: 'flex',
                         alignItems: 'center',
@@ -418,13 +419,13 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
                       }}
                     >
                       {link.label}
-                      <StarDoodle size={14} rotation={i * 20} style={{ opacity: 0.4 }} color={BRAND.taupe} />
+                      <StarDoodle size={14} rotation={i * 20} style={{ opacity: 0.4 }} color={BRAND.secondary} />
                     </Link>
                   </motion.div>
                 ))}
               </div>
 
-              <div style={{ height: 1, background: `linear-gradient(to right, ${BRAND.stone}60, transparent)` }} />
+              <div style={{ height: 1, background: `linear-gradient(to right, ${BRAND.quaternary}60, transparent)` }} />
 
               {!isAuthenticated ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -435,7 +436,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
                     onClick={() => { onOpenAuth(); onClose(); }}
                     style={{
                       padding: '18px',
-                      background: BRAND.espresso, color: BRAND.white,
+                      background: BRAND.primary, color: BRAND.white,
                       fontFamily: FONTS.main, fontSize: 13, fontWeight: 800,
                       letterSpacing: '0.2em', textTransform: 'uppercase',
                       borderRadius: 12, border: 'none', cursor: 'pointer',
@@ -451,10 +452,10 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
                     onClick={() => { onOpenAuth(); onClose(); }}
                     style={{
                       padding: '18px',
-                      background: 'transparent', color: BRAND.espresso,
+                      background: 'transparent', color: BRAND.primary,
                       fontFamily: FONTS.main, fontSize: 13, fontWeight: 800,
                       letterSpacing: '0.2em', textTransform: 'uppercase',
-                      borderRadius: 12, border: `2px solid ${BRAND.espresso}`,
+                      borderRadius: 12, border: `2px solid ${BRAND.primary}`,
                       cursor: 'pointer',
                     }}
                   >
@@ -464,8 +465,8 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                   <div style={{ marginBottom: 12 }}>
-                    <p style={{ margin: 0, fontSize: 14, color: BRAND.taupe, opacity: 0.7, fontFamily: FONTS.main, fontWeight: 600 }}>Welcome back,</p>
-                    <p style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 900, color: BRAND.espresso, fontFamily: FONTS.main }}>
+                    <p style={{ margin: 0, fontSize: 14, color: BRAND.secondary, opacity: 0.7, fontFamily: FONTS.main, fontWeight: 600 }}>Welcome back,</p>
+                    <p style={{ margin: '4px 0 0', fontSize: 24, fontWeight: 900, color: BRAND.primary, fontFamily: FONTS.main }}>
                       {user?.firstName}
                     </p>
                   </div>
@@ -479,7 +480,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
             
             {/* Signature at bottom */}
             <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', opacity: 0.2 }}>
-              <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: BRAND.taupe }}>Fuel your day nicely ✨</p>
+              <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: BRAND.secondary }}>Fuel your day nicely ✨</p>
             </div>
           </motion.div>
         </>
@@ -491,12 +492,12 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
 const mobileBtnStyle = {
   padding: '16px 20px',
   background: BRAND.white,
-  color: BRAND.espresso,
+  color: BRAND.primary,
   fontFamily: FONTS.main,
   fontSize: 15,
   fontWeight: 700,
   borderRadius: 12,
-  border: `1px solid ${BRAND.stone}40`,
+  border: `1px solid ${BRAND.quaternary}40`,
   cursor: 'pointer',
   textAlign: 'left' as const,
   display: 'flex',
@@ -511,6 +512,7 @@ export default function Navbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [, startTransition] = useTransition();
 
   const { isAuthenticated, user, logout } = useAuth();
   const { totalItems } = useCart();
@@ -518,7 +520,12 @@ export default function Navbar() {
   const router = useRouter();
 
   useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 20));
-  useEffect(() => { setMounted(true); }, []);
+  
+  React.useEffect(() => {
+    startTransition(() => {
+      setMounted(true);
+    });
+  }, []);
 
   const navigate = (path: string) => router.push(path);
   const handleLogout = () => { logout(); router.push('/'); };
@@ -558,7 +565,7 @@ export default function Navbar() {
           backdropFilter: 'blur(36px) saturate(180%)',
           WebkitBackdropFilter: 'blur(36px) saturate(180%)',
           borderRadius: scrolled ? 24 : 16,
-          border: `1px solid ${scrolled ? BRAND.silver : 'rgba(255, 255, 255, 0.3)'}`,
+          border: `1px solid ${scrolled ? BRAND.tertiary : 'rgba(255, 255, 255, 0.3)'}`,
           boxShadow: scrolled ? `0 15px 45px rgba(50,45,41,0.1), inset 0 0 0 1px rgba(255,255,255,0.4)` : 'none',
           padding: '0 28px',
           display: 'flex',
@@ -573,6 +580,7 @@ export default function Navbar() {
           <div className="nav-desktop">
             <div style={{ display: 'flex', gap: 4, background: `rgba(50,45,41,0.04)`, padding: '4px', borderRadius: 14, marginRight: 12 }}>
               <NavLink href="/about">About</NavLink>
+              <NavLink href="/science">Science</NavLink>
               <NavLink href="/products">Products</NavLink>
             </div>
             
@@ -626,7 +634,7 @@ export default function Navbar() {
                 justifyContent: 'center',
                 width: 44,
                 height: 44,
-                background: BRAND.espresso,
+                background: BRAND.primary,
                 borderRadius: 14,
                 border: 'none',
                 cursor: 'pointer',

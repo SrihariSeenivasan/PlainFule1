@@ -6,7 +6,7 @@ import { BRAND } from '@/lib/typography';
 
 export default function ProductPage() {
   return (
-    <MainLayout background={BRAND.cream}>
+    <MainLayout background={BRAND.white}>
         <Products />
     </MainLayout>
   );

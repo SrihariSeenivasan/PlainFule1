@@ -34,7 +34,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
   return (
     <div className="w-full">
       <style>{`
-        .forgot-input:focus { border-color: ${BRAND.burgundy} !important; box-shadow: 0 0 0 3px ${BRAND.burgundy}15 !important; }
+        .forgot-input:focus { border-color: ${BRAND.primaryDark} !important; box-shadow: 0 0 0 3px ${BRAND.primaryDark}15 !important; }
       `}</style>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -43,7 +43,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
       >
         <button
           onClick={() => onSwitchView?.('login')}
-          style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.taupe }}
+          style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.secondary }}
           className="mb-8 flex items-center gap-2 hover:opacity-70 transition-opacity font-bold uppercase tracking-wider text-[10px]"
         >
           <ArrowLeft size={14} /> Back to Login
@@ -55,15 +55,15 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               className="absolute left-1/2 -top-16 -translate-x-1/2 w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-              style={{ background: `${BRAND.burgundy}15` }}
+              style={{ background: `${BRAND.primaryDark}15` }}
             >
-              <Mail size={24} style={{ color: BRAND.burgundy }} />
+              <Mail size={24} style={{ color: BRAND.primaryDark }} />
             </motion.div>
           )}
-          <h1 style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.main, color: BRAND.espresso }} className="font-extrabold mb-2 tracking-tight">
+          <h1 style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.main, color: BRAND.primary }} className="font-extrabold mb-2 tracking-tight">
             Reset Password
           </h1>
-          <p style={{ fontSize: F_SIZE.md, fontFamily: FONTS.main, color: BRAND.taupe, opacity: 0.8 }} className="font-medium leading-relaxed">
+          <p style={{ fontSize: F_SIZE.md, fontFamily: FONTS.main, color: BRAND.secondary, opacity: 0.8 }} className="font-medium leading-relaxed">
             {submitted
               ? 'Check your email for reset link'
               : 'Enter your email and we\'ll send you a reset link'}
@@ -85,7 +85,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
         {!submitted ? (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.espresso }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
+              <label htmlFor="email" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.primary }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
                 Email Address
               </label>
               <input
@@ -95,7 +95,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="forgot-input w-full px-4 py-3 bg-white/50 backdrop-blur-sm rounded-xl focus:outline-none transition-all duration-300 font-medium"
-                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.stone}`, color: BRAND.espresso }}
+                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.tertiary}`, color: BRAND.primary }}
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
               type="submit"
               disabled={loading}
               className="w-full text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-md uppercase tracking-widest border-none"
-              style={{ fontSize: '11px', fontFamily: FONTS.main, background: BRAND.espresso, opacity: loading ? 0.7 : 1 }}
+              style={{ fontSize: '11px', fontFamily: FONTS.main, background: BRAND.primary, opacity: loading ? 0.7 : 1 }}
             >
               {loading ? 'Sending link...' : 'Send Reset Link'}
             </motion.button>
@@ -117,7 +117,7 @@ export default function ForgotPassword({ onSwitchView }: ForgotPasswordProps) {
             whileTap={{ scale: 0.98 }}
             onClick={() => setSubmitted(false)}
             className="w-full font-bold py-4 px-6 rounded-xl transition-all duration-300 uppercase tracking-widest border-none"
-            style={{ fontSize: '11px', fontFamily: FONTS.main, background: `${BRAND.taupe}20`, color: BRAND.espresso }}
+            style={{ fontSize: '11px', fontFamily: FONTS.main, background: `${BRAND.secondary}20`, color: BRAND.primary }}
           >
             Try another email
           </motion.button>
