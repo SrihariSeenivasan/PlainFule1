@@ -46,7 +46,6 @@ function Pill({ label, variant = 'default' }: { label: string; variant?: 'defaul
         color: styles.textColor,
         letterSpacing: '0.15em',
         textTransform: 'uppercase',
-        fontFamily: FONTS.main,
       }}>{label}</span>
     </div>
   );
@@ -76,12 +75,33 @@ function ChapterStamp({ number }: { number: string }) {
             color: BRAND.primaryDark,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
-            fontFamily: FONTS.main,
           }}>Chapter {number}</span>
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
           transition={{ duration: 0.7 }} style={{ height: 1, width: 80, background: BRAND.tertiary, transformOrigin: 'left' }} />
       </div>
+
+      {/* Hook line below Chapter label */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        style={{
+          textAlign: 'center',
+          marginTop: 16,
+        }}
+      >
+        <p style={{
+          fontSize: F_SIZE.lg,
+          fontWeight: 600,
+          color: BRAND.primaryDark,
+          margin: 0,
+          lineHeight: 1.6,
+        }}>
+          We all want things to be <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural</span>, but <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural food</span> can&apos;t provide that all
+        </p>
+      </motion.div>
     </section>
   );
 }
@@ -110,7 +130,6 @@ function DietaryAnalysisSection() {
         <div style={{
           position: 'absolute', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          fontFamily: FONTS.main,
           fontSize: 'clamp(100px, 16vw, 200px)',
           fontWeight: 900,
           color: `${BRAND.quaternary}50`,
@@ -136,7 +155,6 @@ function DietaryAnalysisSection() {
               initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 }}
               style={{
-                fontFamily: FONTS.main,
                 fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
                 fontWeight: 900,
                 color: BRAND.primary,
@@ -148,7 +166,7 @@ function DietaryAnalysisSection() {
               <span style={{ color: BRAND.primaryDark }}> But nutrition is not just about protein.</span>
             </motion.h2>
             <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.25 }}
-              style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, margin: 0, fontWeight: 400 }}>
+              style={{ fontSize: F_SIZE.md, color: BRAND.secondary, margin: 0, fontWeight: 800 }}>
               Our daily diet, especially in India
             </motion.p>
           </div>
@@ -168,7 +186,7 @@ function DietaryAnalysisSection() {
                   <CheckCircle2 size={18} color={BRAND.white} />
                 </div>
                 <span style={{
-                  fontFamily: FONTS.main, fontSize: F_SIZE.sm,
+                  fontSize: F_SIZE.sm,
                   fontWeight: 800, color: BRAND.primaryDark,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                 }}>Heavily focused on</span>
@@ -190,7 +208,7 @@ function DietaryAnalysisSection() {
                       background: BRAND.primaryDark, flexShrink: 0,
                       boxShadow: `0 0 8px ${BRAND.primaryDark}60`,
                     }} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 700, color: BRAND.primary }}>{tag}</span>
+                    <span style={{ fontSize: F_SIZE.md, fontWeight: 700, color: BRAND.primary }}>{tag}</span>
                     <div style={{ marginLeft: 'auto' }}>
                       <ArrowRight size={14} color={BRAND.primaryDark} />
                     </div>
@@ -211,8 +229,8 @@ function DietaryAnalysisSection() {
                   <AlertCircle size={18} color={BRAND.primary} />
                 </div>
                 <span style={{
-                  fontFamily: FONTS.main, fontSize: F_SIZE.sm,
-                  fontWeight: 800, color: BRAND.secondary,
+                  fontSize: F_SIZE.sm,
+                  fontWeight: 800, color: BRAND.primary,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                 }}>But often lacks</span>
               </div>
@@ -232,7 +250,7 @@ function DietaryAnalysisSection() {
                       width: 6, height: 6, borderRadius: '50%',
                       background: BRAND.secondary, flexShrink: 0,
                     }} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 600, color: BRAND.secondary }}>{tag}</span>
+                    <span style={{ fontSize: F_SIZE.md, fontWeight: 600, color: BRAND.primaryDark }}>{tag}</span>
                   </motion.div>
                 ))}
               </div>
@@ -294,7 +312,6 @@ function CounterBlock({ target, suffix, unit, inView, delay }: {
         pointerEvents: 'none',
       }} />
       <div style={{
-        fontFamily: FONTS.main,
         fontSize: F_SIZE.xl,
         fontWeight: 900,
         color: BRAND.primaryDark,
@@ -305,7 +322,6 @@ function CounterBlock({ target, suffix, unit, inView, delay }: {
         {value}{suffix}
       </div>
       <div style={{
-        fontFamily: FONTS.main,
         fontSize: F_SIZE.sm,
         fontWeight: 700,
         color: BRAND.primary,
@@ -328,14 +344,13 @@ function TextBlock({ label, body }: { label: string; body: string }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
         <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.primaryDark, flexShrink: 0 }} />
         <span style={{
-          fontFamily: FONTS.main,
-          fontSize: F_SIZE.sm, fontWeight: 800,
+          fontSize: F_SIZE.md, fontWeight: 800,
           color: BRAND.primaryDark, textTransform: 'uppercase',
           letterSpacing: '0.07em', lineHeight: 1.2,
         }}>{label}</span>
       </div>
       <p style={{
-        fontFamily: FONTS.main, fontSize: F_SIZE.sm,
+        fontSize: F_SIZE.md,
         color: BRAND.secondary, fontWeight: 700,
         margin: 0, lineHeight: 1.55,
       }}>{body}</p>
@@ -365,7 +380,6 @@ function TheoreticalSection() {
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
           style={{
-            fontFamily: FONTS.main,
             fontSize: 'clamp(2.6rem, 5vw, 2.5rem)',
             fontWeight: 900,
             color: BRAND.primary,
@@ -378,7 +392,7 @@ function TheoreticalSection() {
         <motion.p
           initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.25 }}
-          style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, color: BRAND.primaryDark, margin: '14px 0 0', lineHeight: 1.65, fontWeight: 500 }}>
+          style={{ fontSize: F_SIZE.lg, color: BRAND.primaryDark, margin: '14px 0 0', lineHeight: 1.65, fontWeight: 800 }}>
           In theory, yes. In reality, it is difficult to do consistently in our modern world. Let&apos;s look at the numbers:
         </motion.p>
       </div>
@@ -442,21 +456,19 @@ function TheoreticalSection() {
           border: `1.5px solid ${BRAND.secondary}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0, marginTop: 2,
-          fontFamily: FONTS.main,
           fontSize: F_SIZE.md,
           fontWeight: 900,
           color: BRAND.tertiary,
         }}>!</div>
         <div>
           <div style={{
-            fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800,
+            fontSize: F_SIZE.sm, fontWeight: 800,
             color: BRAND.secondary, letterSpacing: '0.14em',
             textTransform: 'uppercase', marginBottom: 4,
           }}>
             Consistency &amp; Practicality
           </div>
           <h4 style={{
-            fontFamily: FONTS.main,
             fontSize: 'clamp(1.4rem, 3vw, 1.5rem)',
             fontWeight: 900,
             color: BRAND.white,
@@ -466,7 +478,7 @@ function TheoreticalSection() {
           }}>
             This is not practical for most people.
           </h4>
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.tertiary, margin: 0, lineHeight: 1.6, fontWeight: 400 }}>
+          <p style={{ fontSize: F_SIZE.sm, color: BRAND.tertiary, margin: 0, lineHeight: 1.6, fontWeight: 400 }}>
             So the problem is not lack of knowledge. The problem is{' '}
             <span style={{ fontWeight: 800, color: BRAND.light }}>consistency and practicality.</span>
           </p>
@@ -499,48 +511,45 @@ function NutrientCard({ pct, label, sym, role, delay = 0, inView }: {
       transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
       style={{
         borderRadius: 14,
-        background: BRAND.light,
-        border: `1px solid ${BRAND.tertiary}`,
+        background: BRAND.primary,
+        border: `1px solid ${BRAND.quaternary}`,
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-        <div>
-          <div style={{
-            fontFamily: FONTS.main, fontSize: F_SIZE.sm,
-            fontWeight: 900, color: BRAND.secondary, marginBottom: 3,
-          }}>{sym}</div>
-          <div style={{
-            fontFamily: FONTS.main, fontSize: '0.875rem',
-            fontWeight: 800, color: BRAND.primary,
-          }}>{label}</div>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{
-            fontFamily: FONTS.main, fontSize: F_SIZE.lg,
-            fontWeight: 900, color: BRAND.primaryDark, lineHeight: 0.9,
-          }}>{deficiency}%</div>
-          <div style={{
-            fontFamily: FONTS.main, fontSize: '0.75rem',
-            fontWeight: 700, color: BRAND.secondary,
-          }}>deficient</div>
-        </div>
+      {/* Header: Symbol and Label */}
+      <div>
+        <div style={{
+          fontSize: F_SIZE.lg,
+          fontWeight: 900, color: BRAND.secondary, marginBottom: 3,
+        }}>{sym}</div>
+        <div style={{
+          fontSize: '0.875rem',
+          fontWeight: 800, color: BRAND.tertiary, marginBottom: 8,
+        }}>{label}</div>
       </div>
 
-      {/* Progress bar */}
-      <div style={{ height: 6, borderRadius: 100, background: BRAND.quaternary, overflow: 'hidden' }}>
-        <motion.div
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${pct}%` } : {}}
-          transition={{ duration: 1.1, delay: delay + 0.2, ease: [0.16, 1, 0.3, 1] }}
-          style={{ height: '100%', borderRadius: 100, background: BRAND.primaryDark }}
-        />
+      {/* Clear Deficiency Statement */}
+      <div style={{
+        padding: '12px',
+        background: `${BRAND.secondary}15`,
+        borderRadius: 10,
+        borderLeft: `3px solid ${BRAND.secondary}`,
+      }}>
+        <div style={{
+          fontSize: F_SIZE.md,
+          fontWeight: 900, color: BRAND.white, lineHeight: 1,
+        }}>{deficiency}%</div>
+        <div style={{
+          fontSize: '0.75rem',
+          fontWeight: 800, color: BRAND.white, marginTop: 2,
+        }}>Deficient</div>
       </div>
 
-      <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.3 }}>
+      {/* Role description */}
+      <div style={{ fontSize: F_SIZE.md, color: BRAND.light, lineHeight: 1.3, fontWeight: 800, fontFamily: FONTS.main }}>
         {role}
       </div>
     </motion.div>
@@ -570,29 +579,28 @@ function LaboratorySection() {
           </motion.div>
           <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.1 }}
             style={{
-              fontFamily: FONTS.main,
               fontSize: F_SIZE.xl,
               fontWeight: 900,
               color: BRAND.primary,
               margin: '16px 0 8px',
-              letterSpacing: '-0.035em',
-              lineHeight: 1.1,
+              // letterSpacing: '-0.035em',
+              // lineHeight: 1.1,
             }}>
             Beyond the Surface.
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.15 }}
             style={{
-              fontFamily: FONTS.main, fontSize: F_SIZE.sm,
+              fontSize: F_SIZE.lg,
               fontWeight: 800, color: BRAND.primaryDark,
-              margin: '0 0 8px', letterSpacing: '0.08em', textTransform: 'uppercase',
+              margin: '0 0 8px', textTransform: 'uppercase',
             }}>
             Common Deficiencies in Indian Diet
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.2 }}
             style={{
-              fontFamily: FONTS.main, fontSize: F_SIZE.md,
-              color: BRAND.secondary, margin: '0 auto', maxWidth: 600,
-              lineHeight: 1.65, fontWeight: 400,
+              fontSize: F_SIZE.md,
+              color: BRAND.secondary, margin: '0 auto', maxWidth: 1000,
+              lineHeight: 1.65, fontWeight: 800,
             }}>
             When we look at blood reports, the most common deficiencies are not protein — these are micronutrients, and they play a critical role in how our body functions.
           </motion.p>
@@ -608,7 +616,7 @@ function LaboratorySection() {
               style={{ height: 2, background: `linear-gradient(90deg, ${BRAND.primaryDark}, ${BRAND.tertiary})`, borderRadius: 2, marginBottom: 20, transformOrigin: 'left' }} />
 
             {/* Nutrient cards grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
               {NUTRIENTS.map((n, i) => (
                 <NutrientCard key={n.sym} pct={n.pct}
                   label={n.name} sym={n.sym} role={n.role}
@@ -632,7 +640,7 @@ function LaboratorySection() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FlaskConical size={16} color={BRAND.primaryDark} />
                 <div style={{
-                  fontFamily: FONTS.main, fontSize: F_SIZE.sm,
+                  fontSize: F_SIZE.md,
                   fontWeight: 900, color: BRAND.primaryDark,
                   textTransform: 'uppercase', letterSpacing: '0.08em',
                 }}>
@@ -640,8 +648,8 @@ function LaboratorySection() {
                 </div>
               </div>
               <p style={{
-                fontFamily: FONTS.main, fontSize: F_SIZE.sm,
-                color: BRAND.primary, margin: 0, lineHeight: 1.5, fontWeight: 600,
+                fontSize: F_SIZE.md,
+                color: BRAND.primary, margin: 0, lineHeight: 1.5, fontWeight: 800,
               }}>
                 These deficiencies in Indian diets are systemic. PlainFuel bridges this gap with a scientifically-formulated solution.
               </p>
@@ -679,7 +687,6 @@ function LaboratorySection() {
                 <span style={{
                   fontSize: F_SIZE.sm, fontWeight: 800,
                   color: BRAND.white, letterSpacing: '0.08em', textTransform: 'uppercase',
-                  fontFamily: FONTS.main,
                 }}>
                   What&rsquo;s Missing
                 </span>

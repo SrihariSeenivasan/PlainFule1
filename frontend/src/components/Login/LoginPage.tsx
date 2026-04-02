@@ -9,6 +9,20 @@ import { handleGoogleCallback, loadGoogleSDK } from '@/lib/google-auth';
 import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
 import { Eye, EyeOff } from 'lucide-react';
 
+interface GoogleAccountsId {
+  initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
+  renderButton: (element: HTMLElement, config?: { theme?: string; size?: string; width?: number }) => void;
+  prompt: () => void;
+}
+
+interface GoogleAccounts {
+  id: GoogleAccountsId;
+}
+
+interface GoogleWindow extends Window {
+  google?: { accounts: GoogleAccounts };
+}
+
 interface LoginPageProps {
   onSwitchView?: (view: 'login' | 'register' | 'forgot') => void;
   onSuccess?: () => void;
@@ -47,13 +61,14 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
   useEffect(() => {
     loadGoogleSDK();
     const timer = setTimeout(() => {
-      if (googleButtonRef.current && window.google) {
+      const googleWindow = window as GoogleWindow;
+      if (googleButtonRef.current && googleWindow.google) {
         try {
-          window.google.accounts.id.initialize({
+          googleWindow.google.accounts.id.initialize({
             client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
             callback: handleGoogleResponse,
           });
-          window.google.accounts.id.renderButton(googleButtonRef.current, {
+          googleWindow.google.accounts.id.renderButton(googleButtonRef.current, {
             theme: 'outline',
             size: 'large',
             width: 320,
@@ -84,9 +99,9 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
   return (
     <div className="w-full">
       <style>{`
-        .auth-input:focus { border-color: ${BRAND.burgundy} !important; box-shadow: 0 0 0 3px ${BRAND.burgundy}15 !important; }
-        .auth-checkbox:checked { background-color: ${BRAND.burgundy} !important; border-color: ${BRAND.burgundy} !important; }
-        .auth-checkbox:focus { border-color: ${BRAND.burgundy} !important; box-shadow: 0 0 0 3px ${BRAND.burgundy}15 !important; outline: none; }
+        .auth-input:focus { border-color: ${BRAND.primaryDark} !important; box-shadow: 0 0 0 3px ${BRAND.primaryDark}15 !important; }
+        .auth-checkbox:checked { background-color: ${BRAND.primaryDark} !important; border-color: ${BRAND.primaryDark} !important; }
+        .auth-checkbox:focus { border-color: ${BRAND.primaryDark} !important; box-shadow: 0 0 0 3px ${BRAND.primaryDark}15 !important; outline: none; }
       `}</style>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -96,10 +111,10 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
         <div>
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.main, color: BRAND.espresso }} className="font-extrabold mb-2 tracking-tight">
+            <h1 style={{ fontSize: F_SIZE.lg, fontFamily: FONTS.main, color: BRAND.primary }} className="font-extrabold mb-2 tracking-tight">
               Welcome Back
             </h1>
-            <p style={{ fontSize: F_SIZE.md, fontFamily: FONTS.main, color: BRAND.taupe, opacity: 0.8 }} className="font-medium">Sign in to your PlainFuel account</p>
+            <p style={{ fontSize: F_SIZE.md, fontFamily: FONTS.main, color: BRAND.secondary, opacity: 0.8 }} className="font-medium">Sign in to your PlainFuel account</p>
           </div>
 
           {/* Error Message */}
@@ -125,12 +140,13 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
               }}
               whileTap={{ scale: 0.98 }}
               onClick={() => {
-                if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
-                  (window as any).google.accounts.id.prompt();
+                const googleWindow = window as GoogleWindow;
+                if (typeof window !== 'undefined' && googleWindow.google?.accounts?.id) {
+                  googleWindow.google.accounts.id.prompt();
                 }
               }}
               className="w-full flex items-center justify-center gap-4 bg-white/20 backdrop-blur-2xl py-3.5 rounded-2xl shadow-lg transition-all duration-300 group overflow-hidden relative"
-              style={{ border: `1px solid ${BRAND.stone}60` }}
+              style={{ border: `1px solid ${BRAND.tertiary}60` }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               <svg width="24" height="24" viewBox="0 0 24 24" className="bg-white p-1 rounded-full shadow-sm">
@@ -139,7 +155,7 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-              <span style={{ fontSize: '13px', fontFamily: FONTS.main, color: BRAND.espresso }} className="font-bold tracking-wider uppercase opacity-80 group-hover:opacity-100 transition-opacity">
+              <span style={{ fontSize: '13px', fontFamily: FONTS.main, color: BRAND.primary }} className="font-bold tracking-wider uppercase opacity-80 group-hover:opacity-100 transition-opacity">
                 Continue with Google
               </span>
               
@@ -149,15 +165,15 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-8">
-            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${BRAND.stone}, transparent)` }}></div>
-            <span style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.taupe, opacity: 0.8 }} className="font-bold uppercase tracking-widest text-[10px]">or email login</span>
-            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${BRAND.stone}, transparent)` }}></div>
+            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${BRAND.tertiary}, transparent)` }}></div>
+            <span style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.secondary, opacity: 0.8 }} className="font-bold uppercase tracking-widest text-[10px]">or email login</span>
+            <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, ${BRAND.tertiary}, transparent)` }}></div>
           </div>
 
           {/* Email Form */}
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.espresso }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
+              <label htmlFor="email" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.primary }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
                 Email Address
               </label>
               <input
@@ -167,13 +183,13 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 className="auth-input w-full px-4 py-3 bg-white/50 backdrop-blur-sm rounded-xl focus:outline-none transition-all duration-300 font-medium"
-                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.stone}`, color: BRAND.espresso }}
+                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.tertiary}`, color: BRAND.primary }}
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.espresso }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
+              <label htmlFor="password" style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.primary }} className="block font-bold mb-2 tracking-wide uppercase text-[11px] opacity-70">
                 Password
               </label>
               <div className="relative group">
@@ -185,13 +201,13 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
                   placeholder="••••••••"
                   autoComplete="current-password"
                   className="auth-input w-full px-4 py-3 bg-white/50 backdrop-blur-sm rounded-xl focus:outline-none transition-all duration-300 font-medium pr-12"
-                  style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.stone}`, color: BRAND.espresso }}
+                  style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, border: `1px solid ${BRAND.tertiary}`, color: BRAND.primary }}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ color: BRAND.taupe }}
+                  style={{ color: BRAND.secondary }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-80 transition-colors focus:outline-none"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -201,13 +217,13 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
 
             <div className="flex items-center justify-between gap-2 py-1">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" className="auth-checkbox rounded-md transition-all cursor-pointer" style={{ border: `1px solid ${BRAND.stone}` }} />
-                <span style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.taupe }} className="font-semibold opacity-80 group-hover:opacity-100 transition-opacity">Remember me</span>
+                <input type="checkbox" className="auth-checkbox rounded-md transition-all cursor-pointer" style={{ border: `1px solid ${BRAND.tertiary}` }} />
+                <span style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.secondary }} className="font-semibold opacity-80 group-hover:opacity-100 transition-opacity">Remember me</span>
               </label>
               <button 
                 type="button" 
                 onClick={() => onSwitchView?.('forgot')} 
-                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.burgundy }} 
+                style={{ fontSize: F_SIZE.sm, fontFamily: FONTS.main, color: BRAND.primaryDark }} 
                 className="hover:opacity-80 font-bold tracking-tight transition-opacity"
               >
                 Forgot password?
@@ -220,7 +236,7 @@ export default function LoginPage({ onSwitchView, onSuccess }: LoginPageProps) {
               type="submit"
               disabled={loading}
               className="w-full text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-md uppercase tracking-widest border-none"
-              style={{ fontSize: '11px', fontFamily: FONTS.main, background: BRAND.espresso, opacity: loading ? 0.7 : 1 }}
+              style={{ fontSize: '11px', fontFamily: FONTS.main, background: BRAND.primary, opacity: loading ? 0.7 : 1 }}
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </motion.button>

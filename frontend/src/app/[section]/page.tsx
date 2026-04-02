@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import MainLayout from '@/components/MainLayout';
 import ProductPage from '@/components/LandingPage/ProductPage';
 import AboutPage from '@/components/LandingPage/AboutPage';
+import SciencePage from '@/components/LandingPage/SciencePage';
 import ProductCart from '@/components/LandingPage/ProductPageSections/ProductCart';
 import Checkout from '@/components/LandingPage/ProductPageSections/ProductCheckout';
 import UserOrders from '@/components/UserPanel/UserOrders';
@@ -40,6 +41,8 @@ export default function SectionPage() {
       return <ProductPage />;
     case 'about':
       return <AboutPage />;
+    case 'science':
+      return <SciencePage />;
     case 'cart':
       return <ProductCart />;
     case 'checkout':

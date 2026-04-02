@@ -61,7 +61,7 @@ function SectionBadge({ text, icon: Icon }: { text: string; icon?: LucideIcon })
     return (
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: BRAND.white, border: `1px solid ${BRAND.primary}15`, backdropFilter: 'blur(10px)' }}>
             {Icon && <Icon size={12} color={BRAND.primaryDark} />}
-            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>{text}</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase'}}>{text}</span>
         </div>
     );
 }
@@ -98,7 +98,7 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
                 <Image src={blog.image} alt={blog.title} fill style={{ objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${BRAND.primary}50 0%, transparent 50%)` }} />
                 <div style={{ position: 'absolute', top: 16, left: 16 }}>
-                     <div style={{ background: BRAND.white, padding: '4px 12px', borderRadius: 100, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{blog.tag}</div>
+                     <div style={{ background: BRAND.white, padding: '4px 12px', borderRadius: 100, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{blog.tag}</div>
                 </div>
             </div>
 
@@ -106,13 +106,12 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
             <div style={{ display: 'flex', flexDirection: 'column', gap: isLarge ? 16 : 8, flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <Calendar size={14} color={BRAND.textMuted} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.textMuted }}>{blog.date}</span>
+                    <span style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.textMuted }}>{blog.date}</span>
                     <span style={{ width: 1, height: 12, background: BRAND.border }} />
-                    <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary }}>{blog.readTime}</span>
+                    <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary }}>{blog.readTime}</span>
                 </div>
 
                 <h3 style={{
-                    fontFamily: FONTS.main,
                     fontSize: isLarge ? F_SIZE.lg : F_SIZE.md,
                     fontWeight: 900,
                     color: BRAND.text,
@@ -122,7 +121,6 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
                 }}>{blog.title}</h3>
 
                 <p style={{
-                    fontFamily: FONTS.main,
                     fontSize: isLarge ? F_SIZE.md : F_SIZE.sm,
                     color: BRAND.textMuted,
                     lineHeight: 1.6,
@@ -133,8 +131,8 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
                     overflow: 'hidden'
                 }}>{blog.excerpt}</p>
 
-                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primaryDark }}>
-                    READ ANALYSIS <ArrowRight size={14} />
+                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primaryDark }}>
+                    READ MORE <ArrowRight size={14} />
                 </div>
             </div>
         </motion.article>
@@ -160,7 +158,7 @@ export default function Blogsection() {
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 40 }}>
                     <div style={{ maxWidth: 640 }}>
                         <SectionBadge text="Research Library" icon={BookOpen} />
-                        <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.text, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
+                        <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.text, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
                             Our  <span style={{ color: BRAND.primaryDark }}>Insights</span>
                         </h2>
                     </div>
@@ -168,10 +166,10 @@ export default function Blogsection() {
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Link href="/blog" style={{
                             display: 'flex', alignItems: 'center', gap: 12, padding: '12px 24px', borderRadius: 16,
-                            background: BRAND.primary, color: BRAND.white, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900,
+                            background: BRAND.primary, color: BRAND.white, fontSize: F_SIZE.sm, fontWeight: 900,
                             textTransform: 'uppercase', letterSpacing: '0.15em', boxShadow: '0 20px 40px rgba(10,61,31,0.15)'
                         }}>
-                            All Research Papers <ChevronRight size={16} />
+                            Read ALL Insights <ChevronRight size={16} />
                         </Link>
                     </motion.div>
                 </div>
@@ -186,7 +184,7 @@ export default function Blogsection() {
 
                     {/* Secondary List */}
                     <div className="list-column">
-                        <div style={{ paddingBottom: 24, borderBottom: `1px solid ${BRAND.border}`, display: 'flex', alignItems: 'center', gap: 12, color: BRAND.textMuted, fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                        <div style={{ paddingBottom: 24, borderBottom: `1px solid ${BRAND.border}`, display: 'flex', alignItems: 'center', gap: 12, color: BRAND.textMuted, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                             <Bookmark size={14} color={BRAND.primaryDark} />
                             Trending Peer Reviews
                         </div>
@@ -204,7 +202,7 @@ export default function Blogsection() {
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap');
                 
                 .blog-grid {
                     display: grid;

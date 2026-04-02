@@ -33,3 +33,50 @@ export const FONTS = {
     accent: "'Caveat', cursive",
 };
 
+// ─── Predefined Typography Styles ──────────────────────────────────────────
+export const TYPOGRAPHY = {
+    // Main Poppins Styles
+    displayXL: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.xl,
+        fontWeight: 900,
+    },
+    headingLG: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.lg,
+        fontWeight: 900,
+    },
+    headingMD: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.md,
+        fontWeight: 700,
+    },
+    bodyMD: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.md,
+        fontWeight: 400,
+    },
+    bodySM: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.sm,
+        fontWeight: 500,
+    },
+    eyebrow: {
+        fontFamily: FONTS.main,
+        fontSize: F_SIZE.sm,
+        fontWeight: 900,
+        textTransform: 'uppercase',
+        letterSpacing: '0.15em',
+    },
+    // Accent (Caveat) Styles
+    accentLG: {
+        fontFamily: FONTS.accent,
+        fontSize: F_SIZE.lg,
+        fontStyle: 'italic',
+    },
+    accentMD: {
+        fontFamily: FONTS.accent,
+        fontSize: F_SIZE.md,
+    },
+};
+

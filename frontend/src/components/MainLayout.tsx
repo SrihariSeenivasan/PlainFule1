@@ -14,7 +14,7 @@ export default function MainLayout({ children, background = '#ffffff', showFAQ =
     <main style={{ minHeight: '100vh', background }}>
       {/* This div clips horizontal overflow WITHOUT breaking sticky */}
       <div style={{ overflowX: 'clip' }}>
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
         <FinalCTA showFAQ={showFAQ} />
       </div>

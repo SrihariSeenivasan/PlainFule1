@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Instagram, Mail, Twitter, ChevronDown, Sparkles, Send, Globe, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { BRAND, FONTS } from '@/lib/typography';
+import { BRAND, F_SIZE, FONTS } from '@/lib/typography';
 
 // ─── Doodle Elements ──────────────────────────────────────────────────
-const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = BRAND.taupe }: {
+const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = BRAND.secondary }: {
   size?: number; rotation?: number; style?: React.CSSProperties; color?: string
 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden
@@ -18,7 +18,7 @@ const StarDoodle = ({ size = 24, rotation = 0, style = {}, color = BRAND.taupe }
   </svg>
 );
 
-const ScribbleUnderline = ({ color = BRAND.burgundy, delay = 0 }: { color?: string; delay?: number }) => (
+const ScribbleUnderline = ({ color = BRAND.primaryDark, delay = 0 }: { color?: string; delay?: number }) => (
   <motion.svg
     viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden
     style={{ position: 'absolute', bottom: -4, left: 0, width: '100%', height: 10, pointerEvents: 'none' }}
@@ -51,7 +51,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
         borderRadius: 24,
         padding: '32px',
         cursor: 'pointer',
-        border: `1px solid ${open ? BRAND.burgundy + '30' : BRAND.stone + '80'}`,
+        border: `1px solid ${open ? BRAND.primaryDark + '30' : BRAND.light + '80'}`,
         boxShadow: open
           ? `0 30px 60px rgba(114, 56, 61, 0.08), 0 0 0 1px ${BRAND.white}`
           : `0 4px 12px rgba(50, 45, 41, 0.04)`,
@@ -61,7 +61,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
       whileHover={{
         y: -4,
         background: 'rgba(255, 255, 255, 0.85)',
-        border: `1px solid ${BRAND.burgundy}20`,
+        border: `1px solid ${BRAND.primaryDark}20`,
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24 }}>
@@ -75,8 +75,8 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
           style={{
             width: 36, height: 36, borderRadius: '50%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: open ? BRAND.burgundy : BRAND.taupe,
-            background: open ? BRAND.burgundy + '12' : `${BRAND.stone}40`,
+            color: open ? BRAND.primaryDark : BRAND.secondary,
+            background: open ? BRAND.primaryDark + '12' : `${BRAND.light}40`,
             transition: 'all 0.4s'
           }}
         >
@@ -91,8 +91,8 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
             exit={{ height: 0, opacity: 0, marginTop: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div style={{ paddingTop: 20, borderTop: `1px solid ${BRAND.stone}40` }}>
-              <p style={{ fontFamily: FONTS.main, fontSize: 15.5, fontWeight: 500, color: BRAND.taupe, lineHeight: 1.7, margin: 0 }}>{a}</p>
+            <div style={{ paddingTop: 20, borderTop: `1px solid ${BRAND.light}40` }}>
+              <p style={{ fontFamily: FONTS.main, fontSize: 15.5, fontWeight: 500, color: BRAND.secondary, lineHeight: 1.7, margin: 0 }}>{a}</p>
             </div>
           </motion.div>
         )}
@@ -103,15 +103,15 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
 
 // ─── Footer Components ────────────────────────────────────────────────
 const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <motion.a href={href} whileHover={{ x: 4, color: BRAND.stone }}
-    style={{ fontFamily: FONTS.main, fontSize: 13.5, fontWeight: 600, color: BRAND.taupe, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all 0.3s' }}
+  <motion.a href={href} whileHover={{ x: 4, color: BRAND.light }}
+    style={{ fontFamily: FONTS.main, fontSize: 13.5, fontWeight: 600, color: BRAND.secondary, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all 0.3s' }}
   >
     {children}
   </motion.a>
 );
 
 const FooterHeader = ({ children }: { children: React.ReactNode }) => (
-  <h5 style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: BRAND.stone, marginBottom: 28 }}>{children}</h5>
+  <h5 style={{ fontFamily: FONTS.main, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: BRAND.light, marginBottom: 28 }}>{children}</h5>
 );
 
 // ─── Data ───────────────────────────────────────────────────────────
@@ -130,19 +130,19 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
 
         {/* FAQ BLOCK */}
         {showFAQ && (
-          <div className="faq-section" style={{ background: BRAND.cream, padding: '120px 0', position: 'relative' }}>
+          <div className="faq-section" style={{ background: BRAND.white, padding: '120px 0', position: 'relative' }}>
             <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
 
               <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 60 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.espresso, padding: '8px 20px', borderRadius: 100, marginBottom: 20, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
-                  <Sparkles size={14} color={BRAND.stone} />
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.primary, padding: '8px 20px', borderRadius: 100, marginBottom: 20, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
+                  <Sparkles size={14} color={BRAND.light} />
                   <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 800, color: BRAND.white, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Biological Logic</span>
                 </div>
                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <h3 className="faq-header" style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: BRAND.espresso, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
-                  <ScribbleUnderline delay={0.4} color={BRAND.burgundy} />
+                  <h3 className="faq-header" style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 6vw, 3.8rem)', fontWeight: 900, color: BRAND.primary, margin: 0, letterSpacing: '-0.04em', lineHeight: 1 }}>Common Questions</h3>
+                  <ScribbleUnderline delay={0.4} color={BRAND.primaryDark} />
                 </div>
-                <p className="faq-subtext" style={{ fontFamily: FONTS.accent, fontSize: 24, color: BRAND.burgundy, marginTop: 16, opacity: 0.9 }}>Helping you make sense of the daily scoop ✨</p>
+                <p className="faq-subtext" style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.xl, color: BRAND.primaryDark, marginTop: 16, opacity: 0.9 }}>Helping you make sense of the daily sachet ✨</p>
               </motion.div>
 
               <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 20 }}>
@@ -152,11 +152,11 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
               </div>
 
               <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: 80 }}>
-                <p style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: BRAND.taupe, marginBottom: 24 }}>Still have something on your mind?</p>
+                <p style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: BRAND.secondary, marginBottom: 24 }}>Still have something on your mind?</p>
                 <motion.button
                   onClick={() => router.push('/contact')}
-                  whileHover={{ scale: 1.05, background: BRAND.burgundy, boxShadow: `0 20px 40px rgba(114,56,61,0.2)` }}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '18px 40px', background: BRAND.espresso, color: BRAND.white, borderRadius: 100, border: 'none', fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', boxShadow: `0 20px 40px rgba(50,45,41,0.15)`, transition: 'all 0.3s' }}
+                  whileHover={{ scale: 1.05, background: BRAND.primaryDark, boxShadow: `0 20px 40px rgba(114,56,61,0.2)` }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '18px 40px', background: BRAND.primary, color: BRAND.white, borderRadius: 100, border: 'none', fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.15em', cursor: 'pointer', boxShadow: `0 20px 40px rgba(50,45,41,0.15)`, transition: 'all 0.3s' }}
                 >
                   Contact our support team <Send size={16} />
                 </motion.button>
@@ -166,19 +166,19 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
         )}
 
         {/* FOOTER */}
-        <footer className="footer-main" style={{ background: BRAND.espresso, padding: '120px 0 60px', color: BRAND.white, position: 'relative' }}>
-          <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(${BRAND.stone} 1px, transparent 1px)`, backgroundSize: '40px 40px', pointerEvents: 'none' }} />
+        <footer className="footer-main" style={{ background: BRAND.primary, padding: '120px 0 60px', color: BRAND.white, position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, opacity: 0.04, backgroundImage: `radial-gradient(${BRAND.light} 1px, transparent 1px)`, backgroundSize: '40px 40px', pointerEvents: 'none' }} />
 
           <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-            <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 60, marginBottom: 80 }}>
-              <div className="footer-brand" style={{ gridColumn: 'span 2' }}>
+            <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: 60, marginBottom: 80 }}>
+              <div className="footer-brand" style={{ gridColumn: 'span 1' }}>
                 <Image src="/images/plainfuel.png" alt="PlainFuel" width={180} height={45} style={{ filter: 'brightness(0) invert(1)', marginBottom: 32 }} />
-                <p style={{ fontFamily: FONTS.main, fontSize: 16, lineHeight: 1.8, color: BRAND.stone, maxWidth: 380, marginBottom: 40, fontWeight: 500 }}>Standardizing daily nutrition without the compromise. Built by pharmacists, designed for high-performance longevity.</p>
+                <p style={{ fontFamily: FONTS.main, fontSize: 16, lineHeight: 1.8, color: BRAND.light, maxWidth: 380, marginBottom: 40, fontWeight: 500 }}>Standardizing daily nutrition without the compromise. Built by pharmacists, designed for high-performance longevity.</p>
                 <div style={{ display: 'flex', gap: 16 }}>
                   {[Twitter, Instagram, Mail, Globe].map((Icon, i) => (
                     <motion.a key={i} href="#"
-                      whileHover={{ scale: 1.1, backgroundColor: BRAND.burgundy, color: BRAND.white }}
-                      style={{ width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${BRAND.taupe}30`, color: BRAND.stone, transition: 'all 0.3s' }}
+                      whileHover={{ scale: 1.1, backgroundColor: BRAND.primaryDark, color: BRAND.white }}
+                      style={{ width: 44, height: 44, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${BRAND.secondary}30`, color: BRAND.light, transition: 'all 0.3s' }}
                     ><Icon size={18} /></motion.a>
                   ))}
                 </div>
@@ -208,13 +208,13 @@ export default function FinalCTA({ showFAQ = true }: { showFAQ?: boolean }) {
               </div>
             </div>
 
-            <div className="footer-bottom" style={{ borderTop: `1px solid ${BRAND.taupe}20`, paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
+            <div className="footer-bottom" style={{ borderTop: `1px solid ${BRAND.secondary}20`, paddingTop: 40, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <ShieldCheck size={22} color={BRAND.stone} />
-                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: BRAND.taupe, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Pharmaceutical Grade Quality</span>
+                <ShieldCheck size={22} color={BRAND.light} />
+                <span style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 800, color: BRAND.secondary, letterSpacing: '0.15em', textTransform: 'uppercase' }}>Pharmaceutical Grade Quality</span>
               </div>
               <div className="footer-copy" style={{ textAlign: 'right' }}>
-                <p style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: BRAND.taupe, margin: 0 }}>© 2026 PLAINFUEL INC.</p>
+                <p style={{ fontFamily: FONTS.main, fontSize: 13, fontWeight: 700, color: BRAND.secondary, margin: 0 }}>© 2026 PLAINFUEL INC.</p>
                 <p style={{ fontFamily: FONTS.accent, fontSize: 18, color: BRAND.white, opacity: 0.5, marginTop: 4 }}>Empowering your biological potential ✨</p>
               </div>
             </div>

@@ -47,7 +47,6 @@ function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
-      fontFamily: FONTS.main,
       fontSize: F_SIZE.sm, letterSpacing: '0.26em', textTransform: 'uppercase',
       color: BRAND.primary, fontWeight: 700,
       border: `1px solid ${BRAND.tertiary}`,
@@ -162,7 +161,6 @@ function ProductPanel() {
             />
           ))}
           <span style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
             color: `${BRAND.text}33`, fontWeight: 700, marginLeft: 4,
           }}>{slide.tag}/{SLIDES.length.toString().padStart(2, '0')}</span>
@@ -228,7 +226,6 @@ function ProductPanel() {
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 4 }}>
                 <span style={{
-                  fontFamily: FONTS.main,
                   fontSize: F_SIZE.lg, fontWeight: 800,
                   color: BRAND.text, letterSpacing: '-0.02em', lineHeight: 1,
                 }}>{slide.label}</span>
@@ -239,7 +236,6 @@ function ProductPanel() {
                 }}>Flavor</span>
               </div>
               <div style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.18em',
                 textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 600,
                 marginBottom: 0,
@@ -252,7 +248,7 @@ function ProductPanel() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: '1fr 1fr auto',
           flex: 1,
           padding: '0',
         }}>
@@ -263,17 +259,26 @@ function ProductPanel() {
               display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
             }}>
               <span style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.lg, fontWeight: 800,
                 color: BRAND.text, lineHeight: 1,
               }}>{v}</span>
               <span style={{
-                fontFamily: FONTS.main,
                 fontSize: F_SIZE.sm, letterSpacing: '0.24em',
                 textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 700,
               }}>{k}</span>
             </div>
           ))}
+          <div style={{
+            padding: '12px 24px',
+            display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3,
+            borderLeft: `1px solid rgba(0,0,0,0.05)`,
+          }}>
+            <span style={{
+              fontSize: F_SIZE.lg,
+              fontFamily: FONTS.accent,
+              color: BRAND.text, lineHeight: 1.4, fontWeight: 800,
+            }}>All other Nutrition required</span>
+          </div>
         </div>
 
         <div style={{
@@ -289,13 +294,11 @@ function ProductPanel() {
               boxShadow: `0 0 7px ${BRAND.secondary}66`,
             }} />
             <span style={{
-              fontFamily: FONTS.main,
               fontSize: F_SIZE.sm, letterSpacing: '0.16em',
               textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 700,
             }}>In Stock — Ships in 2 days</span>
           </div>
           <a href="#order" style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
             textTransform: 'uppercase', color: BRAND.primaryDark, fontWeight: 900,
             textDecoration: 'none',
@@ -348,13 +351,11 @@ function AboutLeft({ inView }: { inView: boolean }) {
       <motion.div {...fromLeft(0.12)} style={{ marginBottom: 6 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 'clamp(8px,1.2vw,16px)', flexWrap: 'nowrap' }}>
           <h2 style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 900, lineHeight: 0.88,
             letterSpacing: '-0.04em', margin: 0, color: BRAND.text,
           }}>Plain</h2>
           <h2 style={{
-            fontFamily: FONTS.main,
             fontSize: F_SIZE.xl,
             fontWeight: 300, lineHeight: 0.88,
             letterSpacing: '-0.04em', margin: 0, color: BRAND.primaryDark,
@@ -385,7 +386,6 @@ function AboutLeft({ inView }: { inView: boolean }) {
       <motion.div {...fromLeft(0.34)} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
         <div style={{ width: 20, height: 1, background: BRAND.secondary }} />
         <span style={{
-          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, letterSpacing: '0.28em',
           textTransform: 'uppercase', color: BRAND.primaryDark, fontWeight: 900,
         }}>What is PlainFuel?</span>
@@ -396,7 +396,6 @@ function AboutLeft({ inView }: { inView: boolean }) {
           // @ts-expect-error - Framer Motion cubic-bezier easing
           <motion.p key={i} {...fromLeft(0.42 + i * 0.1)}
             style={{
-              fontFamily: FONTS.main,
               fontSize: F_SIZE.md,
               fontWeight: i === 2 ? 600 : 500,
               color: BRAND.text,
@@ -415,7 +414,6 @@ function AboutLeft({ inView }: { inView: boolean }) {
       <motion.div {...fromLeft(0.72)} style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
         <a href="#order" style={{
           display: 'inline-flex', alignItems: 'center', gap: 12,
-          fontFamily: FONTS.main,
           fontSize: F_SIZE.sm, fontWeight: 900,
           letterSpacing: '0.22em', textTransform: 'uppercase',
           color: BRAND.white, background: BRAND.primaryDark,
@@ -471,7 +469,7 @@ export default function PlainFuelHero() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&display=swap');
         
         .pfa-section {
           background: #FFFFFF;

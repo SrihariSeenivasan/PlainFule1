@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Image from 'next/image';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { Sparkles, Shield, Target, ShieldCheck, Check, FlaskConical } from 'lucide-react';
 import { F_SIZE, FONTS, BRAND } from '@/lib/typography';
@@ -19,7 +20,7 @@ function ChapterStamp({ number }: { number: string }) {
           transition={{ duration: 0.6 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 20px', borderRadius: 100, background: BRAND.light, border: `1px solid ${BRAND.tertiary}` }}>
           <Sparkles size={13} color={BRAND.accent} />
-          <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.18em', textTransform: 'uppercase', fontFamily: FONTS.main }}>Chapter {number}</span>
+          <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.18em', textTransform: 'uppercase'}}>Chapter {number}</span>
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
           transition={{ duration: 0.7 }}
@@ -30,129 +31,289 @@ function ChapterStamp({ number }: { number: string }) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   SECTION 1 — DIAGONAL CONTRAST PANELS (The Challenge)
-   Style: Sliced diagonal split, problem left / solution right,
-          with animated counter badges and sliding list items
+   SECTION 1A — THE PROBLEM (Left Text + Right Video)
+   Style: Dark premium left panel with problems, right video player
 ───────────────────────────────────────────────────────────── */
-function ChallengeSection() {
+function ProblemsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   const problems = ['Multiple separate supplements', 'Confusing timings', 'Difficult to maintain consistency'];
-  const solutions = ['NO EXTRA PLANNING', 'NO EXTRA TRACKING', 'JUST A SIMPLE DAILY HABIT'];
 
   return (
-    <section ref={ref} style={{ padding: '72px 24px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
+    <section ref={ref} style={{ padding: 'clamp(40px, 5vh, 60px) 24px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
       {/* Ghost watermark */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontFamily: FONTS.main, fontSize: 'clamp(100px, 14vw, 180px)',
-        fontWeight: 900, color: `${BRAND.primary}03`,
+        position: 'absolute', top: '50%', right: '5%',
+        transform: 'translate(-50%, -50%)', fontSize: 'clamp(100px, 12vw, 160px)',
+        fontWeight: 900, color: `${BRAND.primary}10`,
         letterSpacing: '-0.06em', whiteSpace: 'nowrap',
-        userSelect: 'none', pointerEvents: 'none',
-      }}>CHALLENGE</div>
+        userSelect: 'none', pointerEvents: 'none', zIndex: 0
+      }}>PROBLEM</div>
 
       {/* Eyebrow row */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 48 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
         <motion.div initial={{ scaleX: 0 }} animate={inView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.7 }}
           style={{ height: 2, width: 40, background: BRAND.accent, transformOrigin: 'left' }} />
         <motion.span initial={{ opacity: 0, x: -10 }} animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
-          style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.2em' }}>
+          style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.2em' }}>
           The Challenge
         </motion.span>
       </div>
 
-      {/* Big headline */}
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          fontFamily: FONTS.main, fontSize: 'clamp(2rem, 4vw, 3.2rem)',
-          fontWeight: 900, color: BRAND.primary, margin: '0 0 56px',
-          letterSpacing: '-0.035em', lineHeight: 1.08, maxWidth: 700,
-        }}>
-        What do we do today?
-      </motion.h2>
-
-      {/* Asymmetric split: problem (narrow) + solution (wide) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: 2, borderRadius: 40, overflow: 'hidden', boxShadow: '0 40px 100px rgba(50,45,41,0.12)' }}>
-
-        {/* LEFT — Problem column, dark warm */}
+      {/* Two column grid: Content + Video */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 'clamp(20px, 5vw, 40px)', alignItems: 'center', borderRadius: 40, position: 'relative', zIndex: 1 }}>
+        
+        {/* LEFT — Problem content */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          style={{ background: BRAND.primary, padding: 'clamp(32px, 4vw, 52px)', position: 'relative', overflow: 'hidden' }}
+          initial={{ opacity: 0, x: -60 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          style={{ position: 'relative', zIndex: 2 }}
         >
-          {/* Decorative circle */}
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', border: `1px solid rgba(255,255,255,0.06)`, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', border: `1px solid rgba(255,255,255,0.05)`, pointerEvents: 'none' }} />
-
-          <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '0 0 32px', lineHeight: 1.25 }}>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 900, color: BRAND.primary, margin: '0 0 24px',
+              letterSpacing: '-0.035em', lineHeight: 1.15
+            }}>
             But this creates another problem:
-          </h3>
+          </motion.h2>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 40 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
             {problems.map((item, i) => (
               <motion.div key={i}
-                initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.4 + i * 0.1 }}
+                initial={{ opacity: 0, x: -30 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.35 + i * 0.12 }}
                 style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', border: `1.5px solid rgba(255,255,255,0.25)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                  <span style={{ fontFamily: FONTS.main, fontSize: '0.7rem', fontWeight: 900, color: `${BRAND.white}80` }}>{i + 1}</span>
+                {/* Numbered badge */}
+                <div style={{
+                  width: 44, height: 44, borderRadius: 10, background: `${BRAND.accent}15`, border: `2px solid ${BRAND.accent}30`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  position: 'relative', overflow: 'hidden'
+                }}>
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
+                    style={{ position: 'absolute', inset: 0, borderRadius: 10, border: `2px solid ${BRAND.accent}40` }}
+                  />
+                  <span style={{ fontSize: '1.2rem', fontWeight: 900, color: BRAND.accent, zIndex: 1 }}>{i + 1}</span>
                 </div>
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 600, color: `${BRAND.white}CC`, lineHeight: 1.5 }}>{item}</span>
+                <div style={{ paddingTop: 2 }}>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.primary, lineHeight: 1.5, display: 'block' }}>{item}</span>
+                </div>
               </motion.div>
             ))}
           </div>
 
           <motion.p
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.7 }}
-            style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: `${BRAND.white}60`, lineHeight: 1.7, margin: 0 }}>
-            Maintaining a complex routine is a logistical challenge. Most people start with good intent but stop within days. The real issue isnt effort — its that the current system is too complex for a busy life.
+            transition={{ duration: 0.7, delay: 0.8 }}
+            style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.7, margin: 0 }}>
+            Maintaining a complex routine is a logistical challenge. Most people start with good intent but stop within days. <strong style={{ color: BRAND.primary }}>The real issue isnt effort — its that the current system is too complex for a busy life.</strong>
           </motion.p>
         </motion.div>
 
-        {/* RIGHT — Solution column, accent */}
+        {/* RIGHT — Video player */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          style={{ background: BRAND.accent, padding: 'clamp(32px, 4vw, 52px)', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+          initial={{ opacity: 0, scale: 0.95 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            position: 'relative', aspectRatio: '16/10', borderRadius: 24,
+            overflow: 'hidden', boxShadow: '0 30px 60px rgba(50,45,41,0.1)',
+            background: `linear-gradient(135deg, ${BRAND.primary}15 0%, ${BRAND.accent}08 100%)`,
+            border: `1px solid rgba(50,45,41,0.08)`
+          }}
         >
-          {/* Rotating glow */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            style={{ position: 'absolute', bottom: -100, right: -100, width: 320, height: 320, borderRadius: '50%', border: `1px dashed rgba(255,255,255,0.1)`, pointerEvents: 'none' }} />
+          {/* Video placeholder with premium design */}
+          <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, #f5f1ed 0%, #faf8f6 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+            {/* Decorative elements */}
+            <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 60% 40%, ${BRAND.accent}08, transparent 60%)` }} />
+            
+            {/* Play button with glow */}
+            <motion.div
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                width: 90, height: 90, borderRadius: '50%', background: BRAND.accent,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', position: 'relative', zIndex: 2,
+                boxShadow: `0 20px 60px ${BRAND.accent}40`
+              }}
+            >
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path d="M15 10L30 20L15 30V10Z" fill="white" />
+              </svg>
+            </motion.div>
 
-          <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '0 0 20px', lineHeight: 1.25 }}>
-            What PlainFuel does?
-          </h3>
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: `${BRAND.white}E0`, lineHeight: 1.75, margin: '0 0 36px', fontWeight: 400 }}>
-            PlainFuel simplifies this entire process. Instead of managing multiple supplements, you take one sachet daily. It replaces your regular protein sachet while providing essential vitamins, minerals, and digestive support.
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {solutions.map((item, i) => (
-              <motion.div key={i}
-                initial={{ opacity: 0, x: 20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.5 + i * 0.1 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', borderRadius: 12, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                <Check size={15} color={BRAND.white} strokeWidth={3} />
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.white, letterSpacing: '0.08em' }}>{item}</span>
-              </motion.div>
+            {/* Concentric circles animation */}
+            {[1, 2].map((i) => (
+              <motion.div
+                key={i}
+                animate={{ scale: [1, 1.6], opacity: [1, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                style={{
+                  position: 'absolute', borderRadius: '50%', border: `2px solid ${BRAND.accent}`,
+                  width: 90 + i * 40, height: 90 + i * 40, pointerEvents: 'none'
+                }}
+              />
             ))}
           </div>
 
-          {/* Signature quote */}
-          <div style={{ marginTop: 'auto', paddingTop: 32, display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{ height: 1, flex: 1, background: 'rgba(255,255,255,0.2)' }} />
-            <span style={{ fontFamily: FONTS.accent, fontSize: '1.6rem', color: BRAND.white, fontWeight: 700, whiteSpace: 'nowrap' }}>One Sachet Daily.</span>
+          {/* Video info tag */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            style={{
+              position: 'absolute', bottom: 16, left: 16, background: `${BRAND.white}F0`,
+              backdropFilter: 'blur(10px)', padding: '8px 12px', borderRadius: 8,
+              display: 'flex', alignItems: 'center', gap: 6, zIndex: 10,
+              border: `1px solid ${BRAND.light}`, boxShadow: '0 4px 16px rgba(0,0,0,0.06)'
+            }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#E74C3C' }} />
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: BRAND.primary }}>PlainFuel Overview</span>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 1B — THE SOLUTION (Left Image + Right Text)
+   Style: Premium image showcase left, vibrant solution content right
+───────────────────────────────────────────────────────────── */
+function SolutionSection() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+
+  const solutions = ['NO EXTRA PLANNING', 'NO EXTRA TRACKING', 'JUST A SIMPLE DAILY HABIT'];
+
+  return (
+    <section ref={ref} style={{ padding: 'clamp(40px, 5vh, 60px) 24px', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      {/* Ghost watermark */}
+      <div style={{
+        position: 'absolute', top: '50%', left: '60%',
+        transform: 'translate(-50%, -50%)', fontSize: 'clamp(100px, 12vw, 160px)',
+        fontWeight: 900, color: `${BRAND.primary}10`,
+        letterSpacing: '-0.06em', whiteSpace: 'nowrap',
+        userSelect: 'none', pointerEvents: 'none', zIndex: 0
+      }}>SOLUTION</div>
+      
+      {/* Two column grid: Image + Content */}
+      <div style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 'clamp(20px, 5vw, 40px)', alignItems: 'center', borderRadius: 40, position: 'relative', zIndex: 1 }}>
+        
+        {/* LEFT — Premium image showcase */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            position: 'relative', aspectRatio: '1/1.3', borderRadius: 24,
+            overflow: 'hidden', background: 'transparent', border: 'none', boxShadow: 'none'
+          }}
+        >
+          {/* Actual product image */}
+          <Image 
+            src="/images/Products/product.png" 
+            alt="PlainFuel Product" 
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+            style={{
+              objectFit: 'cover', objectPosition: 'center'
+            }} 
+          />
+
+          {/* Animated gradient overlay */}
+          <motion.div
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+            style={{
+              position: 'absolute', inset: 0,
+              background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)`,
+              pointerEvents: 'none', zIndex: 1
+            }}
+          />
+        </motion.div>
+
+        {/* RIGHT — Solution content */}
+        <motion.div
+          initial={{ opacity: 0, x: 60 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          style={{ position: 'relative', zIndex: 2 }}
+        >
+          {/* Color accent line */}
+          <motion.div
+            initial={{ scaleX: 0 }} animate={inView ? { scaleX: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            style={{ height: 3, width: 40, background: `linear-gradient(90deg, ${BRAND.accent} 0%, ${BRAND.primaryDark} 100%)`, marginBottom: 14, transformOrigin: 'left' }}
+          />
+
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 900, color: BRAND.primary, margin: '0 0 12px',
+              letterSpacing: '-0.035em', lineHeight: 1.15
+            }}>
+            What <span style={{ background: `linear-gradient(135deg, ${BRAND.accent} 0%, ${BRAND.primaryDark} 100%)`, backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>PlainFuel</span> does?
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.7, margin: '0 0 28px' }}>
+            PlainFuel simplifies this entire process. Instead of managing multiple supplements, you take one sachet daily. It replaces your regular protein sachet while providing essential vitamins, minerals, and digestive support.
+          </motion.p>
+
+          {/* Solutions list */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+            {solutions.map((item, i) => {
+              const colors = [
+                { bg: `${BRAND.accent}12`, border: `${BRAND.accent}35`, badge: BRAND.accent },
+                { bg: `${BRAND.primaryDark}12`, border: `${BRAND.primaryDark}35`, badge: BRAND.primaryDark },
+                { bg: `${BRAND.secondary}12`, border: `${BRAND.secondary}35`, badge: BRAND.secondary },
+              ];
+              const color = colors[i % colors.length];
+              return (
+                <motion.div key={i}
+                  initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.5 + i * 0.1 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12,
+                    background: color.bg, border: `1.5px solid ${color.border}`,
+                    position: 'relative', overflow: 'hidden', cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}>
+                  {/* Gradient background on hover */}
+                  <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(135deg, ${color.bg} 0%, transparent 100%)`, opacity: 0, transition: 'opacity 0.3s' }} />
+                  
+                  {/* Colored badge */}
+                  <div style={{
+                    width: 30, height: 30, borderRadius: 6, background: color.badge,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    position: 'relative', zIndex: 1
+                  }}>
+                    <Check size={14} color={BRAND.white} strokeWidth={3} />
+                  </div>
+                  <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.06em', position: 'relative', zIndex: 1 }}>{item}</span>
+                </motion.div>
+              );
+            })}
           </div>
+
+          {/* Signature quote */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.8 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 14, paddingTop: 16, borderTop: `2px solid ${BRAND.light}` }}>
+            <div style={{ height: 2, flex: 1, background: `linear-gradient(90deg, ${BRAND.secondary}80 0%, ${BRAND.tertiary} 100%)` }} />
+            <span style={{ fontFamily: FONTS.accent, fontSize: '1.3rem', color: BRAND.accent, fontWeight: 700, whiteSpace: 'nowrap', fontStyle: 'italic' }}>One Sachet Daily.</span>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -230,7 +391,7 @@ function AccordionRow({ data, index, isOpen, onToggle }: {
         }}
       >
         {/* Index number */}
-        <span style={{ fontFamily: FONTS.main, fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: isOpen ? BRAND.accent : `${BRAND.primary}20`, lineHeight: 1, minWidth: 56, transition: 'color 0.4s', letterSpacing: '-0.04em' }}>
+        <span style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: isOpen ? BRAND.accent : `${BRAND.primary}20`, lineHeight: 1, minWidth: 56, transition: 'color 0.4s', letterSpacing: '-0.04em' }}>
           {String(index + 1).padStart(2, '0')}
         </span>
 
@@ -240,7 +401,7 @@ function AccordionRow({ data, index, isOpen, onToggle }: {
         </div>
 
         {/* Title */}
-        <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary, flex: 1, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+        <span style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary, flex: 1, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
           {data.headline}
         </span>
 
@@ -265,12 +426,12 @@ function AccordionRow({ data, index, isOpen, onToggle }: {
       >
         <div style={{ paddingBottom: 36, paddingLeft: 80 }}>
           {data.contentBefore && (
-            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, margin: '0 0 24px', lineHeight: 1.7, fontWeight: 400 }}>
+            <p style={{ fontSize: F_SIZE.md, color: BRAND.secondary, margin: '0 0 24px', lineHeight: 1.7, fontWeight: 800 }}>
               {data.contentBefore}
             </p>
           )}
           {data.content && (
-            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, margin: '0 0 24px', lineHeight: 1.7, fontWeight: 400 }}>
+            <p style={{ fontSize: F_SIZE.md, color: BRAND.secondary, margin: '0 0 24px', lineHeight: 1.7, fontWeight: 800 }}>
               {data.content}
             </p>
           )}
@@ -281,20 +442,20 @@ function AccordionRow({ data, index, isOpen, onToggle }: {
               <div key={i} style={{ display: 'flex', gap: 12 }}>
                 <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.accent, flexShrink: 0, marginTop: 8 }} />
                 <div>
-                  <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{item.title}</div>
-                  <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary, margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
+                  <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{item.title}</div>
+                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, margin: 0, lineHeight: 1.5,fontWeight: 800 }}>{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {data.contentAfter && (
-            <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.primary, margin: '0 0 0', fontWeight: 600 }}>{data.contentAfter}</p>
+            <p style={{ fontSize: F_SIZE.md, color: BRAND.primary, margin: '0 0 0', fontWeight: 600 }}>{data.contentAfter}</p>
           )}
           {data.contentAfterPoints && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {data.contentAfterPoints.map((p, i) => (
-                <p key={i} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.primary, margin: 0, fontWeight: 600 }}>{p}</p>
+                <p key={i} style={{ fontSize: F_SIZE.md, color: BRAND.primary, margin: 0, fontWeight: 600 }}>{p}</p>
               ))}
             </div>
           )}
@@ -325,7 +486,7 @@ function LogicSection() {
           style={{ display: 'flex', gap: 0, whiteSpace: 'nowrap', width: 'max-content' }}
         >
           {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '0 28px', opacity: 0.5 }}>
+            <span key={i} style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '0 28px', opacity: 0.5 }}>
               {item} <span style={{ marginLeft: 28, opacity: 0.4 }}>·</span>
             </span>
           ))}
@@ -339,15 +500,15 @@ function LogicSection() {
             <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }}
               style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
               <div style={{ width: 36, height: 2, background: BRAND.accent }} />
-              <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.2em' }}>The Logic</span>
+              <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.accent, textTransform: 'uppercase', letterSpacing: '0.2em' }}>The Logic</span>
             </motion.div>
             <motion.h2 initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              style={{ fontFamily: FONTS.main, fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: BRAND.primary, margin: 0, letterSpacing: '-0.035em', lineHeight: 1.08 }}>
+              style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: BRAND.primary, margin: 0, letterSpacing: '-0.035em', lineHeight: 1.08 }}>
               PlainFuel —<br />A Simple Approach.
             </motion.h2>
           </div>
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.7, delay: 0.25 }}
-            style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, lineHeight: 1.7, margin: 0, fontWeight: 400 }}>
+            style={{ fontSize: F_SIZE.md, color: BRAND.secondary, lineHeight: 1.7, margin: 0, fontWeight: 800 }}>
             Three pillars that define how PlainFuel works — what it contains, how it helps you, and how it fits seamlessly into your daily life.
           </motion.p>
         </div>
@@ -386,10 +547,10 @@ const ingredients = [
 ];
 
 const supplements = [
-  { label: 'Whey Protein', complexity: 'Essential' },
-  { label: 'Omega-3', complexity: 'Additional' },
-  { label: 'Magnesium', complexity: 'Additional' },
-  { label: 'Creatine', complexity: 'Optional' },
+  { label: 'Economical', complexity: 'Cost-Effective' },
+  { label: 'Convenient', complexity: 'Easy to Use' },
+  { label: 'Consistent', complexity: 'Daily Habit' },
+  { label: 'Complete', complexity: 'Full Support' },
 ];
 
 function SimpleProcessSection() {
@@ -404,14 +565,14 @@ function SimpleProcessSection() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 18px', borderRadius: 100, background: BRAND.light, border: `1px solid ${BRAND.tertiary}`, marginBottom: 20 }}>
           <ShieldCheck size={13} color={BRAND.accent} />
-          <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Simple Process</span>
+          <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase' }}>The Simple Process</span>
         </motion.div>
         <motion.h2 initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          style={{ fontFamily: FONTS.main, fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: BRAND.primary, margin: '0 0 16px', letterSpacing: '-0.035em', lineHeight: 1.08 }}>
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, color: BRAND.primary, margin: '0 0 16px', letterSpacing: '-0.035em', lineHeight: 1.08 }}>
           What do we do <span style={{ color: BRAND.accent }}>today?</span>
         </motion.h2>
         <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.2 }}
-          style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.secondary, maxWidth: 580, margin: '0 auto', lineHeight: 1.65 }}>
+          style={{ fontSize: F_SIZE.lg, color: BRAND.secondary, maxWidth: 880, margin: '0 auto', lineHeight: 1.65, fontWeight: 800 }}>
           To fill nutritional gaps, most people turn to multiple supplements. But this creates a new problem: its hard to track and maintain in a busy life.
         </motion.p>
       </div>
@@ -425,16 +586,16 @@ function SimpleProcessSection() {
           style={{ gridColumn: '1 / 6', gridRow: '1 / 2', background: BRAND.primary, borderRadius: 28, padding: '36px 32px', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', bottom: -40, right: -40, width: 180, height: 180, borderRadius: '50%', border: `1px solid rgba(255,255,255,0.06)`, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: -10, right: -10, width: 100, height: 100, borderRadius: '50%', border: `1px solid rgba(255,255,255,0.04)`, pointerEvents: 'none' }} />
-          <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: `${BRAND.white}50`, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Market Analysis</span>
-          <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '16px 0 20px', letterSpacing: '-0.02em', lineHeight: 1.2 }}>The Complexity Barrier.</h3>
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: `${BRAND.white}70`, lineHeight: 1.65, margin: '0 0 28px' }}>
+          <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: `${BRAND.white}50`, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Market Analysis</span>
+          <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '16px 0 20px', letterSpacing: '-0.02em', lineHeight: 1.2 }}>The Complexity Barrier.</h3>
+          <p style={{ fontSize: F_SIZE.md, color: `${BRAND.white}70`, lineHeight: 1.65, margin: '0 0 28px', fontWeight: 600 }}>
             The issue is not effort; the issue is that the system for meeting daily needs is too complex.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {supplements.map((s, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 700, color: `${BRAND.white}CC` }}>{s.label}</span>
-                <span style={{ fontFamily: FONTS.main, fontSize: '0.75rem', fontWeight: 800, color: `${BRAND.white}50`, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{s.complexity}</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: `${BRAND.white}CC` }}>{s.label}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: `${BRAND.white}50`, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{s.complexity}</span>
               </div>
             ))}
           </div>
@@ -445,28 +606,35 @@ function SimpleProcessSection() {
           transition={{ duration: 0.7, delay: 0.2 }}
           style={{ gridColumn: '6 / 9', background: BRAND.accent, borderRadius: 28, padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden', position: 'relative' }}>
           <div style={{ position: 'absolute', top: -20, right: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
-          <div>
+          <div style={{ position: 'relative', zIndex: 2 }}>
             <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: BRAND.white, marginBottom: 20 }}>
               <Target size={18} />
             </div>
-            <span style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 5vw, 4rem)', fontWeight: 900, color: BRAND.white, lineHeight: 0.9, letterSpacing: '-0.04em', display: 'block' }}>21</span>
-            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: `${BRAND.white}80`, display: 'block', marginTop: 8 }}>ingredients</span>
+            <span style={{ fontSize: 'clamp(2.8rem, 5vw, 4rem)', fontWeight: 900, color: BRAND.white, lineHeight: 0.9, letterSpacing: '-0.04em', display: 'block' }}>21</span>
+            <span style={{ fontSize: F_SIZE.sm, color: `${BRAND.white}80`, display: 'block', marginTop: 8 }}>ingredients</span>
           </div>
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: `${BRAND.white}CC`, margin: 0, lineHeight: 1.5 }}>Precision Dosage — calibrated for Indian diet</p>
+          {/* Center decorative image area */}
+          <div style={{ position: 'absolute', left: '50%', top: '65%', transform: 'translate(-50%, -50%)', width: 140, height: 140, opacity: 0.3, pointerEvents: 'none', zIndex: 1 }}>
+            <Image src="/images/Products/product.png" alt="" width={140} height={140} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          </div>
+          <p style={{ fontSize: F_SIZE.sm, color: `${BRAND.white}CC`, margin: 0, lineHeight: 1.5, position: 'relative', zIndex: 2 }}>Precision Dosage — calibrated for Indian diet</p>
         </motion.div>
 
         {/* Tile 3 — "100%" stat tile (spans 4 cols) */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.25 }}
-          style={{ gridColumn: '9 / 13', background: BRAND.light, borderRadius: 28, padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${BRAND.tertiary}` }}>
+          style={{ gridColumn: '9 / 13', background: BRAND.light, borderRadius: 28, padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${BRAND.tertiary}`, position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', left: '50%', top: '65%', transform: 'translate(-50%, -50%)', width: 160, height: 160, opacity: 0.25, pointerEvents: 'none', zIndex: 1 }}>
+            <Image src="/images/Products/product.png" alt="" width={160} height={160} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+          </div>
           <div>
             <div style={{ width: 40, height: 40, borderRadius: 12, background: `${BRAND.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: BRAND.accent, marginBottom: 20 }}>
               <Sparkles size={18} />
             </div>
-            <span style={{ fontFamily: FONTS.main, fontSize: 'clamp(2.8rem, 5vw, 4rem)', fontWeight: 900, color: BRAND.accent, lineHeight: 0.9, letterSpacing: '-0.04em', display: 'block' }}>100%</span>
-            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary, display: 'block', marginTop: 8 }}>active ingredients</span>
+            <span style={{ fontSize: 'clamp(2.8rem, 5vw, 4rem)', fontWeight: 900, color: BRAND.accent, lineHeight: 0.9, letterSpacing: '-0.04em', display: 'block' }}>100%</span>
+            <span style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, display: 'block', marginTop: 8 }}>active ingredients</span>
           </div>
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary, margin: 0, lineHeight: 1.5 }}>Zero Filler Ethics — every milligram is functional</p>
+          <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, margin: 0, lineHeight: 1.5 }}>Zero Filler Ethics — every milligram is functional</p>
         </motion.div>
 
         {/* Tile 4 — Ingredients table (spans 7 cols, row 2) */}
@@ -475,7 +643,7 @@ function SimpleProcessSection() {
           style={{ gridColumn: '1 / 8', background: BRAND.white, borderRadius: 28, padding: '28px 28px', border: `1px solid ${BRAND.quaternary}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
             <FlaskConical size={18} color={BRAND.accent} />
-            <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Ingredients</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Ingredients</span>
           </div>
           {ingredients.map((ing, i) => (
             <motion.div key={i}
@@ -491,11 +659,11 @@ function SimpleProcessSection() {
                 {ing.highlight
                   ? <Check size={13} color={BRAND.accent} strokeWidth={3} />
                   : <div style={{ width: 5, height: 5, borderRadius: '50%', background: BRAND.secondary, opacity: 0.3 }} />}
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 600, color: BRAND.text }}>{ing.name}</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 600, color: BRAND.text }}>{ing.name}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-                <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary }}>{ing.qty}</span>
-                <span style={{ fontFamily: FONTS.main, fontSize: '0.78rem', fontWeight: 900, color: ing.highlight ? BRAND.accent : BRAND.secondary, background: ing.highlight ? `${BRAND.accent}11` : BRAND.quaternary, padding: '3px 10px', borderRadius: 100 }}>{ing.rda}</span>
+                <span style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }}>{ing.qty}</span>
+                <span style={{ fontSize: '0.78rem', fontWeight: 900, color: ing.highlight ? BRAND.accent : BRAND.secondary, background: ing.highlight ? `${BRAND.accent}11` : BRAND.quaternary, padding: '3px 10px', borderRadius: 100 }}>{ing.rda}</span>
               </div>
             </motion.div>
           ))}
@@ -508,30 +676,38 @@ function SimpleProcessSection() {
             style={{ flex: 1, background: BRAND.primary, borderRadius: 28, padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', border: `1px dashed rgba(255,255,255,0.08)`, pointerEvents: 'none' }} />
+            {/* Decorative image background */}
+            <div style={{ position: 'absolute', left: '80%', top: '50%', transform: 'translate(-50%, -50%)', width: 140, height: 140, opacity: 0.3, pointerEvents: 'none', zIndex: 1 }}>
+              <Image src="/images/Products/product.png" alt="" width={140} height={140} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: BRAND.white }}>
                 <Shield size={16} />
               </div>
-              <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: `${BRAND.white}60`, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Invisible Utility</span>
+              <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: `${BRAND.white}60`, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Invisible Utility</span>
             </div>
             <div>
-              <span style={{ fontFamily: FONTS.main, fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.white, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>0 mg</span>
-              <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: `${BRAND.white}60` }}>taste or texture added</span>
+              <span style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.white, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>0 mg</span>
+              <span style={{ fontSize: F_SIZE.sm, color: `${BRAND.white}60` }}>taste or texture added</span>
             </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.45 }}
-            style={{ flex: 1, background: BRAND.light, borderRadius: 28, padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${BRAND.tertiary}` }}>
+            style={{ flex: 1, background: BRAND.light, borderRadius: 28, padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: `1px solid ${BRAND.tertiary}`, position: 'relative', overflow: 'hidden' }}>
+            {/* Decorative image background */}
+            <div style={{ position: 'absolute', right: 15, top: '50%', transform: 'translateY(-50%)', width: 150, height: 150, opacity: 0.25, pointerEvents: 'none', zIndex: 1 }}>
+              <Image src="/images/Products/product.png" alt="" width={150} height={150} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ width: 34, height: 34, borderRadius: 10, background: `${BRAND.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: BRAND.accent }}>
                 <Shield size={16} />
               </div>
-              <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.secondary, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Bio-Identical</span>
+              <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.secondary, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Bio-Identical</span>
             </div>
             <div>
-              <span style={{ fontFamily: FONTS.main, fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.accent, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>≥65%</span>
-              <span style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary }}>RDA covered per serving</span>
+              <span style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.accent, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>≥65%</span>
+              <span style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }}>RDA covered per serving</span>
             </div>
           </motion.div>
         </div>
@@ -547,12 +723,12 @@ function SimpleProcessSection() {
               style={{ position: 'absolute', right: 80, top: '50%', transform: 'translateY(-50%)', width: 100, height: 100, borderRadius: '50%', border: `2px solid rgba(255,255,255,0.4)`, pointerEvents: 'none' }} />
           ))}
           <div>
-            <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '0 0 10px', letterSpacing: '-0.02em' }}>PlainFuel simplifies the process.</h3>
+            <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.white, margin: '0 0 10px', letterSpacing: '-0.02em' }}>PlainFuel simplifies the process.</h3>
             <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: `${BRAND.white}CC`, margin: 0, fontStyle: 'italic' }}>One simple habit. Done daily. Making nutrition easier.</p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {['Simple Habit', 'Replacement', 'Minimalist', 'Versatile'].map((tag, i) => (
-              <span key={i} style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.white, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', letterSpacing: '0.05em' }}>{tag}</span>
+              <span key={i} style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.white, padding: '8px 16px', borderRadius: 100, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', letterSpacing: '0.05em' }}>{tag}</span>
             ))}
           </div>
         </motion.div>
@@ -572,7 +748,8 @@ export default function Chapter3() {
       <div style={{ position: 'absolute', bottom: '10%', left: '-5%', width: '35vw', height: '35vw', background: `radial-gradient(circle, ${BRAND.primary}05 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
       <ChapterStamp number="3" />
-      <ChallengeSection />
+      <ProblemsSection />
+      <SolutionSection />
       <LogicSection />
       <SimpleProcessSection />
 

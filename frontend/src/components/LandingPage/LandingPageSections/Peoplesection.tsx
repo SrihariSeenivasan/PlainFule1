@@ -183,19 +183,18 @@ function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; ind
             padding: '3px 10px', borderRadius: 100,
             background: `rgba(114,56,61,0.08)`,
             fontSize: '0.66rem', fontWeight: 700, color: BRAND.primaryDark,
-            textTransform: 'uppercase', letterSpacing: '0.07em',
-            fontFamily: FONTS.main, width: 'fit-content',
+            textTransform: 'uppercase', letterSpacing: '0.07em', width: 'fit-content',
             flexShrink: 0,
           }}
         >
           {review.category}
         </span>
 
-        <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
+        <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
           {review.name}
         </div>
 
-        <p style={{ fontFamily: FONTS.main, fontSize: '0.855rem', color: BRAND.secondary, lineHeight: 1.65, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', textOverflow: 'ellipsis', margin: 0, flex: 1 }}>
+        <p style={{ fontSize: '0.855rem', color: BRAND.secondary, lineHeight: 1.65, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', textOverflow: 'ellipsis', margin: 0, flex: 1 }}>
           &quot;{review.quote}&quot;
         </p>
 
@@ -205,8 +204,8 @@ function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; ind
             <Image src={review.avatar} alt={review.name} fill style={{ objectFit: 'cover' }} unoptimized />
           </div>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: '0.76rem', fontWeight: 700, color: BRAND.primary, fontFamily: FONTS.main, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{review.name}</div>
-            <div style={{ fontSize: '0.7rem', color: BRAND.secondary, fontFamily: FONTS.main, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{review.location}</div>
+            <div style={{ fontSize: '0.76rem', fontWeight: 700, color: BRAND.primary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{review.name}</div>
+            <div style={{ fontSize: '0.7rem', color: BRAND.secondary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{review.location}</div>
           </div>
         </div>
 
@@ -220,7 +219,7 @@ function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; ind
           }}
         >
           <StarRow rating={review.rating} size={11} />
-          <span style={{ fontSize: '0.73rem', color: BRAND.secondary, fontFamily: FONTS.main, fontWeight: 500 }}>
+          <span style={{ fontSize: '0.73rem', color: BRAND.secondary, fontWeight: 500 }}>
             {review.rating}.0
           </span>
         </div>
@@ -287,10 +286,10 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
 
         {/* Name + Role Overlay */}
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 18px', zIndex: 10 }}>
-          <div style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.white, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.white, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {review.name}
           </div>
-          <div style={{ fontFamily: FONTS.main, fontSize: '0.76rem', color: 'rgba(239,233,225,0.75)', lineHeight: 1.45 }}>
+          <div style={{ fontSize: '0.76rem', color: 'rgba(239,233,225,0.75)', lineHeight: 1.45 }}>
             {review.role}
           </div>
         </div>
@@ -298,7 +297,7 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
 
       {/* Card Body */}
       <div style={{ padding: '16px 18px 18px', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <p style={{ fontFamily: FONTS.main, fontSize: '0.835rem', color: 'rgba(239,233,225,0.8)', lineHeight: 1.6, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', textOverflow: 'ellipsis', flex: 1 }}>
+        <p style={{ fontSize: '0.835rem', color: 'rgba(239,233,225,0.8)', lineHeight: 1.6, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', textOverflow: 'ellipsis', flex: 1 }}>
           {review.quote}
         </p>
 
@@ -312,7 +311,7 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
           }}
         >
           <StarRow rating={review.rating} size={11} />
-          <span style={{ fontSize: '0.73rem', color: 'rgba(239,233,225,0.7)', fontFamily: FONTS.main, fontWeight: 500, marginLeft: 4 }}>
+          <span style={{ fontSize: '0.73rem', color: 'rgba(239,233,225,0.7)', fontWeight: 500, marginLeft: 4 }}>
             {review.rating}.0
           </span>
         </div>
@@ -343,7 +342,7 @@ export default function ReviewsSection() {
   const itemWidthPct = `calc(25% - 14px)`;
 
   return (
-    <section ref={ref} style={{ background: BRAND.light, padding: '72px 32px 80px', fontFamily: FONTS.main }}>
+    <section ref={ref} style={{ background: BRAND.white, padding: '72px 32px 80px'}}>
       <div style={{ maxWidth: 1140, margin: '0 auto' }}>
 
         {/* ── HEADER ── */}
@@ -370,7 +369,7 @@ export default function ReviewsSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, duration: 0.55 }}
-            style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primary, lineHeight: 1.18, marginBottom: 12 }}
+            style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primary, lineHeight: 1.18, marginBottom: 12 }}
           >
             Over <span style={{ color: BRAND.primaryDark }}>50,000</span> Happy Customers
           </motion.h2>
@@ -390,7 +389,7 @@ export default function ReviewsSection() {
 
           {/* Big Score */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-            <div style={{ fontFamily: FONTS.main, fontSize: '4rem', fontWeight: 900, color: BRAND.primary, lineHeight: 1, letterSpacing: '-0.03em' }}>4.8</div>
+            <div style={{ fontSize: '4rem', fontWeight: 900, color: BRAND.primary, lineHeight: 1, letterSpacing: '-0.03em' }}>4.8</div>
             <StarRow rating={5} size={20} />
             <div style={{ fontSize: '0.8rem', color: BRAND.secondary, fontWeight: 500 }}>Based on 52,841 reviews</div>
           </div>
@@ -423,7 +422,7 @@ export default function ReviewsSection() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary }}
+              style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary }}
             >
               Customer Reviews
             </motion.h3>
@@ -521,7 +520,7 @@ export default function ReviewsSection() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary }}
+              style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary }}
             >
               Celebrity &amp; Influencer Reviews
             </motion.h3>

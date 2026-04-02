@@ -14,8 +14,8 @@ import { productAPI, type Product as BackendProduct } from '@/lib/api';
 function PremiumBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-      {/* Off-white base */}
-      <div className="absolute inset-0" style={{ background: BRAND.light }} />
+      {/* White base */}
+      <div className="absolute inset-0" style={{ background: BRAND.white }} />
 
       {/* Ambient Light Peaks */}
       <div style={{
@@ -90,17 +90,17 @@ export default function ProductSection() {
             style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', borderRadius: 100, background: BRAND.white, border: `1px solid ${BRAND.primary}15`, backdropFilter: 'blur(10px)', marginBottom: 20 }}
           >
             <Sparkles size={14} color={BRAND.primaryDark} />
-            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase', fontFamily: FONTS.main }}>Elite Selection</span>
+            <span style={{ fontSize: F_SIZE.sm, fontWeight: 900, color: BRAND.primary, letterSpacing: '0.15em', textTransform: 'uppercase'}}>Elite Selection</span>
           </motion.div>
 
-          <h2 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primary, margin: 0, lineHeight: 1.1, letterSpacing: '-0.04em' }}>
+          <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primary, margin: 0, lineHeight: 1.1, letterSpacing: '-0.04em' }}>
             Fuel <span style={{ color: BRAND.secondary }}>Cycle.</span>
           </h2>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
             <GoldUnderline width={220} />
           </div>
 
-          <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.md, color: BRAND.primaryDark, marginTop: 24, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
+          <p style={{ fontSize: F_SIZE.md, color: BRAND.primaryDark, marginTop: 24, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
             Experience the standard in metabolic restoration. Engineered for cellular resonance.
           </p>
         </div>
@@ -179,8 +179,8 @@ export default function ProductSection() {
                 display: 'flex', flexDirection: 'column', gap: 16
               }}>
                 <div>
-                  <h3 style={{ fontFamily: FONTS.main, fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary, margin: '0 0 8px', letterSpacing: '-0.02em' }}>{p.name}</h3>
-                  <p style={{ fontFamily: FONTS.main, fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.5, margin: 0, fontWeight: 600 }}>
+                  <h3 style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary, margin: '0 0 8px', letterSpacing: '-0.02em' }}>{p.name}</h3>
+                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.5, margin: 0, fontWeight: 600 }}>
                     Cellular restoration engineered for total human performance.
                   </p>
                 </div>
