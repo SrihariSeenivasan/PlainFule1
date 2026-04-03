@@ -72,7 +72,7 @@ function ChapterStamp({ number }: { number: string }) {
           <span style={{
             fontSize: F_SIZE.lg,
             fontWeight: 800,
-            color: BRAND.primaryDark,
+            color: BRAND.primary,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
           }}>Chapter {number}</span>

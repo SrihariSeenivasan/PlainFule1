@@ -410,7 +410,7 @@ export default function Chapter1() {
                         }}
                     >
                         <Sparkles size={13} color={BRAND.primaryDark} />
-                        <span style={{ ...TYPOGRAPHY.eyebrow, color: BRAND.primaryDark, fontSize: F_SIZE.lg } as React.CSSProperties}>
+                        <span style={{ ...TYPOGRAPHY.eyebrow, color: BRAND.primary, fontSize: F_SIZE.lg } as React.CSSProperties}>
                             Chapter 1
                         </span>
                     </motion.div>
