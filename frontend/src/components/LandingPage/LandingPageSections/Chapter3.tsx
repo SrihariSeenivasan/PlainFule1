@@ -20,7 +20,7 @@ function ChapterStamp({ number }: { number: string }) {
           transition={{ duration: 0.6 }}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 20px', borderRadius: 100, background: BRAND.light, border: `1px solid ${BRAND.tertiary}` }}>
           <Sparkles size={13} color={BRAND.accent} />
-          <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.18em', textTransform: 'uppercase'}}>Chapter {number}</span>
+          <span style={{ fontSize: F_SIZE.lg, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.18em', textTransform: 'uppercase'}}>Chapter {number}</span>
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
           transition={{ duration: 0.7 }}
@@ -112,7 +112,7 @@ function ProblemsSection() {
           <motion.p
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.8 }}
-            style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.7, margin: 0 }}>
+            style={{ fontSize: F_SIZE.md, color: BRAND.secondary, lineHeight: 1.7, margin: 0, fontWeight: 800 }}>
             Maintaining a complex routine is a logistical challenge. Most people start with good intent but stop within days. <strong style={{ color: BRAND.primary }}>The real issue isnt effort — its that the current system is too complex for a busy life.</strong>
           </motion.p>
         </motion.div>
@@ -266,7 +266,7 @@ function SolutionSection() {
           <motion.p
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
-            style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, lineHeight: 1.7, margin: '0 0 28px' }}>
+            style={{ fontSize: F_SIZE.md, color: BRAND.secondary, lineHeight: 1.7, margin: '0 0 28px', fontWeight: 800 }}>
             PlainFuel simplifies this entire process. Instead of managing multiple supplements, you take one sachet daily. It replaces your regular protein sachet while providing essential vitamins, minerals, and digestive support.
           </motion.p>
 
@@ -617,7 +617,7 @@ function SimpleProcessSection() {
           <div style={{ position: 'absolute', left: '50%', top: '65%', transform: 'translate(-50%, -50%)', width: 140, height: 140, opacity: 0.3, pointerEvents: 'none', zIndex: 1 }}>
             <Image src="/images/Products/product.png" alt="" width={140} height={140} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           </div>
-          <p style={{ fontSize: F_SIZE.sm, color: `${BRAND.white}CC`, margin: 0, lineHeight: 1.5, position: 'relative', zIndex: 2 }}>Precision Dosage — calibrated for Indian diet</p>
+          <p style={{ fontSize: F_SIZE.md, color: `${BRAND.white}CC`, margin: 0, lineHeight: 1.5, position: 'relative', zIndex: 2, fontWeight: 800 }}>Precision Dosage — calibrated for Indian diet</p>
         </motion.div>
 
         {/* Tile 3 — "100%" stat tile (spans 4 cols) */}
@@ -634,7 +634,7 @@ function SimpleProcessSection() {
             <span style={{ fontSize: 'clamp(2.8rem, 5vw, 4rem)', fontWeight: 900, color: BRAND.accent, lineHeight: 0.9, letterSpacing: '-0.04em', display: 'block' }}>100%</span>
             <span style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, display: 'block', marginTop: 8 }}>active ingredients</span>
           </div>
-          <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary, margin: 0, lineHeight: 1.5 }}>Zero Filler Ethics — every milligram is functional</p>
+          <p style={{ fontSize: F_SIZE.md, color: BRAND.secondary, margin: 0, lineHeight: 1.5, fontWeight: 800 }}>Zero Filler Ethics — every milligram is functional</p>
         </motion.div>
 
         {/* Tile 4 — Ingredients table (spans 7 cols, row 2) */}
@@ -688,7 +688,7 @@ function SimpleProcessSection() {
             </div>
             <div>
               <span style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.white, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>0 mg</span>
-              <span style={{ fontSize: F_SIZE.sm, color: `${BRAND.white}60` }}>taste or texture added</span>
+              <span style={{ fontSize: F_SIZE.md, color: `${BRAND.white}60`, fontWeight: 800 }}>taste or texture added</span>
             </div>
           </motion.div>
 
@@ -707,7 +707,7 @@ function SimpleProcessSection() {
             </div>
             <div>
               <span style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, color: BRAND.accent, letterSpacing: '-0.04em', display: 'block', lineHeight: 1 }}>≥65%</span>
-              <span style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }}>RDA covered per serving</span>
+              <span style={{ fontSize: F_SIZE.md, color: BRAND.secondary, fontWeight: 800 }}>RDA covered per serving</span>
             </div>
           </motion.div>
         </div>
