@@ -33,16 +33,17 @@ const WATERMARK_IMAGES: {
    SIDEBAR NAV CONFIG
 ══════════════════════════════════════════════════════════ */
 const NAV: { id: string; num: string; label: string }[] = [
-  { id: 'hero',    num: '—',  label: 'Intro'        },
-  { id: 'sec-01',  num: '01', label: 'The Problem'  },
-  { id: 'sec-02',  num: '02', label: 'Foundation'   },
-  { id: 'sec-03',  num: '03', label: 'The Gap'      },
-  { id: 'sec-04',  num: '04', label: 'Reality'      },
-  { id: 'sec-05',  num: '05', label: 'Trade-off'    },
-  { id: 'sec-06',  num: '06', label: 'Missing Piece'},
-  { id: 'sec-07',  num: '07', label: 'Engineering'  },
-  { id: 'sec-08',  num: '08', label: 'The Answer'   },
-  { id: 'closing', num: '—',  label: 'Conclusion'   },
+  { id: 'hero',       num: '—',  label: 'Intro'         },
+  { id: 'visual-comp', num: '★', label: 'The Comparison'},
+  { id: 'sec-01',     num: '01', label: 'The Problem'   },
+  { id: 'sec-02',     num: '02', label: 'Foundation'    },
+  { id: 'sec-03',     num: '03', label: 'The Gap'       },
+  { id: 'sec-04',     num: '04', label: 'Reality'       },
+  { id: 'sec-05',     num: '05', label: 'Trade-off'     },
+  { id: 'sec-06',     num: '06', label: 'Missing Piece' },
+  { id: 'sec-07',     num: '07', label: 'Engineering'   },
+  { id: 'sec-08',     num: '08', label: 'The Answer'    },
+  { id: 'closing',    num: '—',  label: 'Conclusion'    },
 ];
 
 /* ══════════════════════════════════════════════════════════
@@ -368,6 +369,443 @@ const Enzyme = ({ name, desc }: { name: string; desc: string }) => (
 );
 
 /* ══════════════════════════════════════════════════════════
+   FOOD COMPARISON TABLE — Enhanced Premium Layout
+══════════════════════════════════════════════════════════ */
+const foodItems = [
+  { emoji: '🥚', name: 'Eggs', amount: '3 large (~150 g)', kcal: 210, barPct: 17, nutrients: 'Protein, B12, selenium, biotin' },
+  { emoji: '🥛', name: 'Milk', amount: '500 ml whole milk', kcal: 300, barPct: 24, nutrients: 'Calcium, B2, B12, vitamin D' },
+  { emoji: '🫘', name: 'Legumes', amount: '150 g cooked (~1 bowl)', kcal: 240, barPct: 19, nutrients: 'Fiber, B vitamins, zinc' },
+  { emoji: '🥦', name: 'Vegetables', amount: '100 g cooked', kcal: 25, barPct: 2, nutrients: 'Folate, magnesium' },
+  { emoji: '🍌', name: 'Banana', amount: '120 g', kcal: 105, barPct: 8, nutrients: 'B6, potassium' },
+  { emoji: '🍊', name: 'Orange', amount: '130 g', kcal: 60, barPct: 5, nutrients: 'Vitamin C' },
+];
+
+const FoodComparisonTable = () => (
+  <div style={{ fontFamily: FONTS.main, padding: '1.5rem 0' }}>
+
+    {/* ── Header ── */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1rem' }}>
+      <div style={{
+        width: 36, height: 36, borderRadius: '50%',
+        background: BRAND.light, border: `1px solid ${BRAND.quaternary}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+      }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2v5l3 2" stroke={BRAND.primaryDark} strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="8" cy="8" r="6" stroke={BRAND.primaryDark} strokeWidth="1.5" />
+        </svg>
+      </div>
+      <div>
+        <p style={{ ...TYPOGRAPHY.headingMD, fontWeight: 800, color: BRAND.primary, margin: 0, fontSize: 'clamp(1rem, 2.5vw, 1.2rem)' }}>
+          Todays Meal Breakdown
+        </p>
+        <p style={{ fontFamily: FONTS.main, fontSize: '0.72rem', fontWeight: 500, color: BRAND.secondary, margin: 0 }}>
+          Complete nutrition from ~1.3 kg of real food
+        </p>
+      </div>
+    </div>
+
+    {/* ── Total strip ── */}
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '0.6rem 1rem',
+      background: BRAND.primary, borderRadius: 10, marginBottom: '1rem',
+    }}>
+      <span style={{ fontFamily: FONTS.main, fontSize: '0.58rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: BRAND.secondary }}>
+        Total daily calories
+      </span>
+      <span style={{ fontFamily: FONTS.main, fontSize: '0.9rem', fontWeight: 800, color: BRAND.light }}>
+        1,244 <span style={{ fontSize: '0.65rem', fontWeight: 600, color: BRAND.secondary, marginLeft: 4 }}>kcal · 6 foods</span>
+      </span>
+    </div>
+
+    {/* ── Card Grid ── */}
+    <div className="fc-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
+      {foodItems.map((item, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.06, duration: 0.4 }}
+          style={{
+            borderRadius: 14, background: BRAND.white,
+            border: '1px solid #E8E2DC', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column',
+            transition: 'transform 0.2s ease',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+
+          {/* Top */}
+          <div style={{ padding: '0.85rem 0.9rem 0.75rem', borderBottom: `0.5px solid ${BRAND.light}70` }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.55rem' }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: 10,
+                background: BRAND.light,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 19, flexShrink: 0,
+              }}>
+                {item.emoji}
+              </div>
+              <div style={{
+                background: BRAND.primary, color: BRAND.light,
+                fontFamily: FONTS.main, fontSize: '0.6rem', fontWeight: 800,
+                padding: '3px 9px', borderRadius: 20, letterSpacing: '0.04em', whiteSpace: 'nowrap' as const,
+              }}>
+                {item.kcal} kcal
+              </div>
+            </div>
+            <p style={{ fontFamily: FONTS.main, fontSize: '0.88rem', fontWeight: 800, color: BRAND.primary, margin: '0 0 1px' }}>
+              {item.name}
+            </p>
+            <p style={{ fontFamily: FONTS.main, fontSize: '0.65rem', fontWeight: 600, color: BRAND.secondary, margin: 0 }}>
+              {item.amount}
+            </p>
+          </div>
+
+          {/* Energy bar */}
+          <div style={{ padding: '0.6rem 0.9rem', borderBottom: `0.5px solid ${BRAND.light}70` }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
+              <span style={{ fontFamily: FONTS.main, fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.13em', textTransform: 'uppercase' as const, color: BRAND.secondary }}>
+                Energy
+              </span>
+              <span style={{ fontFamily: FONTS.main, fontSize: '0.95rem', fontWeight: 800, color: BRAND.primary, lineHeight: 1 }}>
+                {item.kcal} <span style={{ fontSize: '0.58rem', fontWeight: 600, color: BRAND.secondary, marginLeft: 2 }}>kcal</span>
+              </span>
+            </div>
+            <div style={{ height: 4, borderRadius: 99, background: BRAND.light, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${item.barPct}%`, borderRadius: 99, background: BRAND.primaryDark }} />
+            </div>
+          </div>
+
+          {/* Nutrients */}
+          <div style={{
+            padding: '0.6rem 0.9rem', background: '#FAFAF8',
+            display: 'flex', alignItems: 'center', gap: 7, flex: 1,
+          }}>
+            <div style={{
+              width: 16, height: 16, borderRadius: '50%',
+              background: BRAND.light, border: `1px solid ${BRAND.quaternary}70`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <path d="M1.5 4l2 2 3-3" stroke={BRAND.primaryDark} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <span style={{ fontFamily: FONTS.main, fontSize: '0.65rem', fontWeight: 600, color: BRAND.primaryDark, lineHeight: 1.4 }}>
+              {item.nutrients}
+            </span>
+          </div>
+
+        </motion.div>
+      ))}
+    </div>
+
+    <style>{`
+      @media (max-width: 480px) {
+        .fc-card-grid { grid-template-columns: 1fr !important; }
+      }
+    `}</style>
+  </div>
+);
+/* ══════════════════════════════════════════════════════════
+   VISUAL COMPARISON SECTION
+══════════════════════════════════════════════════════════ */
+const VisualComparisonSection = () => (
+  <motion.section
+    id="visual-comp"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-100px' }}
+    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    style={{
+      position: 'relative',
+      borderBottom: `0.5px solid ${BRAND.quaternary}`,
+      overflow: 'hidden',
+    }}
+  >
+    <div style={{ position: 'relative', zIndex: 1 }}>
+
+      {/* ═══ ROW 1: COMPARISON BOXES WITH IMAGE ═══ */}
+      <div style={{ paddingBottom: 'clamp(2rem, 4vw, 3rem)', borderBottom: `0.5px solid ${BRAND.quaternary}40` }}>
+        <div
+          className="visual-comp-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.15fr)',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
+            alignItems: 'start',
+          }}
+        >
+
+          {/* ── LEFT: Image ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ minWidth: 0 }}
+          >
+            <div style={{ position: 'relative',top: 100, borderRadius: 20, overflow: 'hidden' }}>
+              <img
+                src="/images/sciencePage1.png"
+                alt="Visual Comparison: Traditional plate vs PlainFuel sachet"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+
+              {/* Corner science icon badge */}
+              {/* <div style={{
+                position: 'absolute',
+                top: 14,
+                right: 14,
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                background: BRAND.light,
+                border: `1.5px solid ${BRAND.quaternary}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="5.5" stroke={BRAND.primaryDark} strokeWidth="1.5" />
+                  <path d="M8 5.5V8.5L10 10" stroke={BRAND.primaryDark} strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              Bottom shelf overlay
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                padding: '1rem 1.25rem',
+                background: `${BRAND.primary}cc`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <span style={{
+                  fontFamily: FONTS.main,
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase' as const,
+                  color: `${BRAND.light}cc`,
+                }}>
+                  Nutrition Science
+                </span>
+                <span style={{
+                  fontFamily: FONTS.main,
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  color: BRAND.light,
+                  background: BRAND.primaryDark,
+                  padding: '3px 9px',
+                  borderRadius: 20,
+                  letterSpacing: '0.06em',
+                }}>
+                  PlainFuel Research
+                </span>
+              </div> */}
+            </div>
+          </motion.div>
+
+          {/* ── RIGHT: Content column ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: '2rem' }}
+          >
+
+            {/* Section tag pill */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '5px 12px 5px 8px',
+              border: `0.5px solid ${BRAND.quaternary}`,
+              borderRadius: 20,
+              width: 'fit-content',
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.primaryDark }} />
+              <span style={{
+                fontFamily: FONTS.main,
+                fontSize: '0.62rem',
+                fontWeight: 800,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase' as const,
+                color: BRAND.primaryDark,
+              }}>
+                Visual Comparison
+              </span>
+            </div>
+
+            {/* Heading */}
+            <div>
+              <h3 style={{
+                ...TYPOGRAPHY.headingLG,
+                fontWeight: 800,
+                color: BRAND.primary,
+                fontSize: 'clamp(1.4rem, 3.8vw, 1.8rem)',
+                lineHeight: 1.15,
+                margin: '0 0 0.6rem',
+              }}>
+                Same nutrition.{' '}
+                <span style={{ color: BRAND.primaryDark }}>Fraction</span>{' '}
+                of the weight.
+              </h3>
+              <p style={{
+                ...TYPOGRAPHY.bodyMD,
+                fontWeight: 600,
+                color: BRAND.secondary,
+                lineHeight: 1.75,
+                margin: 0,
+                fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+              }}>
+                <S>~1.3 kg of food</S> delivers the same nutrition as{' '}
+                <S>one 40g PlainFuel scoop</S> — engineered for density, not bulk.
+              </p>
+            </div>
+
+            {/* ── Duel Cards + Insight Strip ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+
+              {/* Duel row */}
+              <div
+                className="vc-duel"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1fr) 36px minmax(0, 1fr)',
+                  alignItems: 'stretch',
+                }}
+              >
+                {/* Card A — Traditional */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  style={{
+                    background: BRAND.white, borderRadius: 16,
+                    border: `1px solid ${BRAND.quaternary}60`,
+                    overflow: 'hidden', display: 'flex', flexDirection: 'column',
+                    transition: 'transform 0.2s ease',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                >
+                  {/* Top stripe */}
+                  <div style={{ height: 3, background: BRAND.quaternary, flexShrink: 0 }} />
+
+                  <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 }}>
+                    {/* Pill */}
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 9px', borderRadius: 20, background: BRAND.light, border: `0.5px solid ${BRAND.quaternary}`, width: 'fit-content' }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: BRAND.secondary }} />
+                      <span style={{ fontFamily: FONTS.main, fontSize: '0.56rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: BRAND.primaryDark }}>Traditional Meal</span>
+                    </div>
+
+                    <p style={{ fontFamily: FONTS.main, fontSize: 'clamp(1.3rem, 3vw, 1.6rem)', fontWeight: 800, color: BRAND.primary, lineHeight: 1, margin: 0 }}>~1244 kcal</p>
+                    <p style={{ fontFamily: FONTS.main, fontSize: '0.7rem', fontWeight: 600, color: BRAND.secondary, margin: 0 }}>~1.3 kg food</p>
+
+                    <div style={{ borderTop: `0.5px solid ${BRAND.quaternary}30`, margin: '0.1rem 0' }} />
+
+                    {/* Tags */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' as const }}>
+                      {['Bulky', 'Perishable', 'Hard to carry'].map(t => (
+                        <span key={t} style={{ fontFamily: FONTS.main, fontSize: '0.6rem', fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: BRAND.light, color: BRAND.primaryDark }}>{t}</span>
+                      ))}
+                    </div>
+
+                    <p style={{ fontFamily: FONTS.main, fontSize: '0.65rem', fontWeight: 600, color: BRAND.secondary, lineHeight: 1.4, margin: 0, marginTop: 'auto', paddingTop: '0.5rem', borderTop: `0.5px solid ${BRAND.quaternary}30` }}>
+                      Needs preparation, storage & multiple containers. <strong style={{ fontWeight: 800, color: BRAND.primary }}>Not portable.</strong>
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* VS column */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                  <div style={{ flex: 1, width: 0.5, background: `${BRAND.quaternary}60`, minHeight: 12 }} />
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: BRAND.light, border: `1px solid ${BRAND.quaternary}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONTS.main, fontSize: '0.52rem', fontWeight: 800, color: BRAND.primaryDark, flexShrink: 0 }}>vs</div>
+                  <div style={{ flex: 1, width: 0.5, background: `${BRAND.quaternary}60`, minHeight: 12 }} />
+                </div>
+
+                {/* Card B — PlainFuel */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  style={{
+                    background: BRAND.primary, borderRadius: 16,
+                    border: `1px solid ${BRAND.primary}`,
+                    overflow: 'hidden', display: 'flex', flexDirection: 'column',
+                    transition: 'transform 0.2s ease',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                >
+                  {/* Top stripe */}
+                  <div style={{ height: 3, background: BRAND.primaryDark, flexShrink: 0 }} />
+
+                  <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 }}>
+                    {/* Pill */}
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 9px', borderRadius: 20, background: `${BRAND.primaryDark}30`, border: `0.5px solid ${BRAND.primaryDark}60`, width: 'fit-content' }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: BRAND.secondary }} />
+                      <span style={{ fontFamily: FONTS.main, fontSize: '0.56rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: BRAND.secondary }}>PlainFuel Scoop</span>
+                    </div>
+
+                    <p style={{ fontFamily: FONTS.main, fontSize: 'clamp(1.3rem, 3vw, 1.6rem)', fontWeight: 800, color: BRAND.light, lineHeight: 1, margin: 0 }}>129 kcal</p>
+                    <p style={{ fontFamily: FONTS.main, fontSize: '0.7rem', fontWeight: 600, color: BRAND.secondary, margin: 0 }}>40g scoop</p>
+
+                    <div style={{ borderTop: `0.5px solid ${BRAND.white}15`, margin: '0.1rem 0' }} />
+
+                    {/* Tags */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' as const }}>
+                      {['Portable', 'Shelf-stable', 'Precise'].map(t => (
+                        <span key={t} style={{ fontFamily: FONTS.main, fontSize: '0.6rem', fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: `${BRAND.primaryDark}30`, color: BRAND.secondary }}>{t}</span>
+                      ))}
+                    </div>
+
+                    <p style={{ fontFamily: FONTS.main, fontSize: '0.65rem', fontWeight: 600, color: BRAND.secondary, lineHeight: 1.4, margin: 0, marginTop: 'auto', paddingTop: '0.5rem', borderTop: `0.5px solid ${BRAND.white}15` }}>
+                      One scoop, anywhere. No prep, no waste. <strong style={{ fontWeight: 800, color: BRAND.light }}>Precision dosed.</strong>
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+             
+            </div>
+
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ═══ ROW 2: TODAY'S MEAL BREAKDOWN ═══ */}
+      <div style={{ paddingTop: 'clamp(2.5rem, 5vw, 3.5rem)' }}>
+        <FoodComparisonTable />
+      </div>
+
+    </div>
+
+    <style>{`
+      @media (max-width: 768px) {
+        .visual-comp-grid { grid-template-columns: 1fr !important; }
+      }
+      @media (max-width: 400px) {
+        .vc-duel {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    `}</style>
+  </motion.section>
+);
+
+/* ══════════════════════════════════════════════════════════
    PAGE
 ══════════════════════════════════════════════════════════ */
 export default function SciencePage() {
@@ -378,12 +816,22 @@ export default function SciencePage() {
     const els = NAV.map(n => document.getElementById(n.id)).filter(Boolean) as HTMLElement[];
     const obs = new IntersectionObserver(
       (entries) => {
-        entries.forEach(e => { if (e.isIntersecting) setActiveId(e.target.id); });
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setActiveId(e.target.id);
+          }
+        });
       },
-      { threshold: 0.3 }
+      {
+        threshold: [0, 0.25, 0.5, 0.75],
+        rootMargin: '-50% 0px -50% 0px',
+      }
     );
     els.forEach(el => obs.observe(el));
-    return () => obs.disconnect();
+    return () => {
+      els.forEach(el => obs.unobserve(el));
+      obs.disconnect();
+    };
   }, []);
 
   return (
@@ -552,6 +1000,9 @@ export default function SciencePage() {
               </motion.div>
             </div>
           </section>
+
+          {/* ═══════════ VISUAL COMPARISON ═══════════ */}
+          <VisualComparisonSection />
 
           {/* ═══════════ 01 ═══════════ */}
           <Section id="sec-01" wmWord="PROTEIN" wmImg={WATERMARK_IMAGES[0]}>
