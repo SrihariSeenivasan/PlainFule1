@@ -88,6 +88,32 @@ export default function UserOrders() {
   const getReturnForOrder = (orderId: number) =>
     returnRequests.find((r) => r.orderId === orderId);
 
+  const parseShippingAddress = (address: string | undefined) => {
+    if (!address) return null;
+    try {
+      const parsed = JSON.parse(address);
+      return parsed;
+    } catch {
+      return address;
+    }
+  };
+
+  const formatAddressDisplay = (address: string | undefined) => {
+    const parsed = parseShippingAddress(address);
+    if (!parsed) return 'No address provided';
+    if (typeof parsed === 'string') return parsed;
+    
+    return (
+      <div className="space-y-2">
+        <div><span className="font-bold">{parsed.name}</span></div>
+        <div className="text-sm text-[#9eaaa0]">{parsed.email} · {parsed.phone}</div>
+        <div className="text-sm">{parsed.address}</div>
+        <div className="text-sm">{parsed.city}, {parsed.state} {parsed.zipCode}</div>
+        <div className="text-sm font-semibold text-[#16a34a]">{parsed.country}</div>
+      </div>
+    );
+  };
+
   const handleCancel = async (order: Order) => {
     if (!confirm(`Cancel order ${order.orderNumber}? This action cannot be undone.`)) return;
     try {
@@ -158,8 +184,8 @@ export default function UserOrders() {
 
 
 
-  const getStatusStyle = (status: string) => {
-    const styles: Record<string, { bg: string; color: string; icon: any }> = {
+  const getStatusStyle = (status: string): { bg: string; color: string; icon: React.ComponentType<React.SVGProps<SVGSVGElement>> } => {
+    const styles: Record<string, { bg: string; color: string; icon: React.ComponentType<React.SVGProps<SVGSVGElement>> }> = {
       DELIVERED: { bg: '#dcfce7', color: '#16a34a', icon: CheckCircle },
       SHIPPED: { bg: '#dbeafe', color: '#2563eb', icon: Truck },
       PROCESSING: { bg: '#f3e8ff', color: '#9333ea', icon: Clock },
@@ -289,6 +315,7 @@ export default function UserOrders() {
                          className="px-3 py-1 rounded-lg font-black uppercase tracking-widest flex items-center gap-1.5"
                          style={{ fontSize: 8, backgroundColor: status.bg, color: status.color }}
                        >
+                         {/* @ts-expect-error Lucide icons accept size prop not in SVG type definition */}
                          <status.icon size={10} /> {order.status}
                        </div>
                     </div>
@@ -327,13 +354,6 @@ export default function UserOrders() {
                       </motion.div>
                     </div>
                   </div>
-
-                  {existingReturn && (
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 h-1" 
-                      style={{ backgroundColor: getReturnStatusStyle(existingReturn.status).color }} 
-                    />
-                  )}
                 </motion.div>
               );
             })}
@@ -346,120 +366,125 @@ export default function UserOrders() {
         {view === 'detail' && selectedOrder && (
           <motion.div 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#071a0d70] backdrop-blur-md flex items-center justify-center z-[110] p-4"
+            className="fixed inset-0 bg-[#071a0d70] backdrop-blur-md flex items-center justify-center z-[9999] p-2 sm:p-4 pt-16 sm:pt-4"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-white/95 rounded-[48px] shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-white relative flex flex-col"
+              className="bg-white/95 rounded-2xl sm:rounded-3xl md:rounded-[32px] shadow-2xl w-full max-w-xs sm:max-w-lg md:max-w-2xl max-h-[80vh] sm:max-h-[85vh] overflow-hidden border border-white relative flex flex-col"
             >
               {/* Close Button */}
               <button 
                 onClick={() => { setView('list'); setSelectedOrder(null); setActionMsg(''); }}
-                className="absolute top-8 right-8 z-10 w-12 h-12 rounded-2xl bg-[#0a3d1f05] flex items-center justify-center text-[#0a3d1f] hover:bg-[#dc262610] hover:text-[#dc2626] transition-all"
+                className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#0a3d1f05] flex items-center justify-center text-[#0a3d1f] hover:bg-[#dc262610] hover:text-[#dc2626] transition-all"
               >
-                <XCircle size={24} />
+                <XCircle size={18} className="sm:w-5 sm:h-5" />
               </button>
 
-              <div className="p-12 overflow-y-auto custom-scrollbar space-y-12">
-                <div className="flex items-center justify-between gap-8 flex-wrap">
-                  <div className="space-y-1">
-                    <span style={{ fontSize: F_SIZE.sm }} className="font-black text-[#16a34a] uppercase tracking-widest block mb-1">Confirmed Order</span>
-                    <h2 style={{ fontSize: F_SIZE.xl }} className="font-black text-[#0a3d1f] tracking-tighter leading-none">{selectedOrder.orderNumber}</h2>
-                    <p className="text-sm font-semibold text-[#9eaaa0] uppercase tracking-widest">
-                      {new Date(selectedOrder.createdAt).toLocaleDateString(undefined, { dateStyle: 'full' })}
+              <div className="p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto custom-scrollbar space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 md:gap-4">
+                  <div className="space-y-0.5 sm:space-y-1 flex-1">
+                    <span style={{ fontSize: F_SIZE.sm }} className="font-black text-[#16a34a] uppercase tracking-widest block mb-0.5 sm:mb-1 text-[10px] sm:text-xs">Confirmed Order</span>
+                    <h2 style={{ fontSize: 'clamp(1rem, 4vw, 1.5rem)' }} className="font-black text-[#0a3d1f] tracking-tighter leading-none">{selectedOrder.orderNumber}</h2>
+                    <p className="text-[10px] sm:text-xs font-semibold text-[#9eaaa0] uppercase tracking-widest line-clamp-1">
+                      {new Date(selectedOrder.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
                   <div>
                     <div 
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-black uppercase tracking-widest"
+                      className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black uppercase tracking-widest whitespace-nowrap flex-shrink-0"
                       style={{ 
-                        fontSize: 12, 
+                        fontSize: 'clamp(9px, 2vw, 11px)', 
                         backgroundColor: getStatusStyle(selectedOrder.status).bg, 
                         color: getStatusStyle(selectedOrder.status).color 
                       }}
                     >
                       {(() => {
                         const Icon = getStatusStyle(selectedOrder.status).icon;
-                        return <Icon size={16} />;
+                        // @ts-expect-error Lucide icons accept size prop not in SVG type definition
+                        return <Icon size={12} className="sm:w-3.5 sm:h-3.5" />;
                       })()}
-                      {selectedOrder.status}
+                      <span className="hidden sm:inline">{selectedOrder.status}</span>
+                      <span className="sm:hidden text-[8px]">{selectedOrder.status.substring(0, 3)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                  <div className="space-y-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+                  <div className="space-y-4 sm:space-y-5">
                     {/* Delivery Terminals */}
-                    <div className="space-y-4">
-                      <h3 style={{ fontSize: F_SIZE.sm }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-2">
-                         <MapPin size={16} className="text-[#16a34a]" /> Shipping Address
+                    <div className="space-y-2 sm:space-y-3">
+                      <h3 style={{ fontSize: 'clamp(11px, 2.5vw, 13px)' }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-1.5 sm:gap-2">
+                         <MapPin size={14} className="text-[#16a34a] flex-shrink-0" /> Shipping Address
                       </h3>
-                      <div className="bg-[#0a3d1f05] p-8 rounded-[32px] border border-[#0a3d1f05]">
-                        <p className="font-bold text-[#0a3d1f] leading-relaxed text-lg">{selectedOrder.shippingAddress}</p>
+                      <div className="bg-[#0a3d1f05] p-2.5 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl border border-[#0a3d1f05]">
+                        <div className="text-[#0a3d1f] leading-relaxed text-xs sm:text-sm space-y-1">
+                          {formatAddressDisplay(selectedOrder.shippingAddress)}
+                        </div>
                       </div>
                     </div>
 
                     {/* Transaction Audit */}
-                    <div className="space-y-4">
-                      <h3 style={{ fontSize: F_SIZE.sm }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-2">
-                         <CreditCard size={16} className="text-[#16a34a]" /> Payment Details
+                    <div className="space-y-2 sm:space-y-3">
+                      <h3 style={{ fontSize: 'clamp(11px, 2.5vw, 13px)' }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-1.5 sm:gap-2">
+                         <CreditCard size={14} className="text-[#16a34a] flex-shrink-0" /> Payment Details
                       </h3>
-                      <div className="bg-[#0a3d1f05] p-8 rounded-[32px] border border-[#0a3d1f05] flex justify-between items-center">
+                      <div className="bg-[#0a3d1f05] p-2.5 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl border border-[#0a3d1f05] flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-3">
                          <div>
-                           <p className="text-xs font-black uppercase tracking-widest text-[#9eaaa0] mb-2">Payment</p>
-                           <p className="font-bold text-[#0a3d1f] uppercase tracking-tight text-xl">{selectedOrder.payment?.paymentMethod || 'Credit/Debit'}</p>
+                           <p className="text-[10px] font-black uppercase tracking-widest text-[#9eaaa0] mb-1">Payment</p>
+                           <p className="font-bold text-[#0a3d1f] uppercase tracking-tight text-sm sm:text-base">{selectedOrder.payment?.paymentMethod || 'Credit/Debit'}</p>
                          </div>
-                         <div className="text-right">
-                           <p className="text-xs font-black uppercase tracking-widest text-[#9eaaa0] mb-2">Total Paid</p>
-                           <p className="text-3xl font-black text-[#0a3d1f]">₹{parseFloat(String(selectedOrder.totalAmount)).toFixed(2)}</p>
+                         <div className="text-left">
+                           <p className="text-[10px] font-black uppercase tracking-widest text-[#9eaaa0] mb-1">Total Paid</p>
+                           <p className="text-lg sm:text-xl font-black text-[#0a3d1f]">₹{parseFloat(String(selectedOrder.totalAmount)).toFixed(2)}</p>
                          </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-8">
-                    <h3 style={{ fontSize: F_SIZE.sm }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-2">
-                       <Package size={16} className="text-[#16a34a]" /> Order Items
+                  <div className="space-y-4 sm:space-y-5">
+                    <h3 style={{ fontSize: 'clamp(11px, 2.5vw, 13px)' }} className="font-black text-[#0a3d1f] uppercase tracking-widest flex items-center gap-1.5 sm:gap-2">
+                       <Package size={14} className="text-[#16a34a] flex-shrink-0" /> Order Items
                     </h3>
-                    <div className="space-y-4">
+                    <div className="space-y-2 sm:space-y-3 max-h-[250px] overflow-y-auto custom-scrollbar">
                       {selectedOrder.items?.map((item) => (
-                        <div key={item.id} className="flex items-center gap-6 p-6 rounded-[32px] bg-white border border-[#0a3d1f05] shadow-sm">
-                          <div className="w-20 h-20 rounded-2xl bg-white border border-[#0a3d1f05] flex items-center justify-center relative overflow-hidden">
+                        <div key={item.id} className="flex gap-2 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-white border border-[#0a3d1f05] shadow-sm">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-white border border-[#0a3d1f05] flex items-center justify-center relative overflow-hidden flex-shrink-0">
                             {item.imageUrl ? (
                               <Image 
                                 src={item.imageUrl} 
                                 alt={getItemName(item)} 
                                 fill 
-                                style={{ objectFit: 'contain', padding: 8 }} 
+                                style={{ objectFit: 'contain', padding: 4 }} 
                               />
                             ) : (
-                              <Package size={32} className="text-[#16a34a]" />
+                              <Package size={18} className="text-[#16a34a]" />
                             )}
                           </div>
-                          <div className="flex-1">
-                            <p className="font-bold text-[#0a3d1f] tracking-tight text-lg">{getItemName(item)}</p>
-                            <p className="text-xs font-semibold text-[#9eaaa0] uppercase tracking-wider">{getPackageName(item) || `ID: ${item.productId}`}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-black text-[#1d1d1f] tracking-tight">₹{(parseFloat(String(item.price)) * item.quantity).toFixed(2)}</p>
-                            <p className="text-xs font-black text-[#16a34a] uppercase tracking-wider">UNT: {item.quantity}</p>
+                          <div className="flex-1 min-w-0 flex flex-col justify-between">
+                            <div>
+                              <p className="font-bold text-[#0a3d1f] tracking-tight text-xs sm:text-sm line-clamp-1">{getItemName(item)}</p>
+                              <p className="text-[9px] font-semibold text-[#9eaaa0] uppercase tracking-wider line-clamp-1">{getPackageName(item) || `ID: ${item.productId}`}</p>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <p className="font-black text-[#1d1d1f] tracking-tight text-xs sm:text-sm">₹{(parseFloat(String(item.price)) * item.quantity).toFixed(2)}</p>
+                              <p className="text-[9px] font-black text-[#16a34a] uppercase tracking-wider">×{item.quantity}</p>
+                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    <div className="pt-8 flex gap-4">
+                    <div className="pt-4 sm:pt-5 flex flex-col gap-2 sm:gap-3">
                       {canCancel(selectedOrder) && (
                         <motion.button
                           whileHover={{ scale: 1.02, backgroundColor: '#dc2626', color: '#fff' }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleCancel(selectedOrder)}
-                          className="flex-1 py-4 border-2 border-[#dc262640] text-[#dc2626] rounded-2xl font-black uppercase tracking-widest transition-all"
-                          style={{ fontSize: 11 }}
+                          className="w-full py-2 sm:py-3 border-2 border-[#dc262640] text-[#dc2626] rounded-lg sm:rounded-xl font-black uppercase tracking-widest transition-all text-[11px] sm:text-xs"
                         >
-                          Cancel Order
+                          Cancel
                         </motion.button>
                       )}
                       {canReturn(selectedOrder) && !getReturnForOrder(selectedOrder.id) && (
@@ -467,22 +492,20 @@ export default function UserOrders() {
                           whileHover={{ scale: 1.02, backgroundColor: '#ca8a04', color: '#fff' }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => openReturnModal(selectedOrder)}
-                          className="flex-1 py-4 border-2 border-[#ca8a0440] text-[#ca8a04] rounded-2xl font-black uppercase tracking-widest transition-all"
-                          style={{ fontSize: 11 }}
+                          className="w-full py-2 sm:py-3 border-2 border-[#ca8a0440] text-[#ca8a04] rounded-lg sm:rounded-xl font-black uppercase tracking-widest transition-all text-[11px] sm:text-xs"
                         >
                           Request Return
                         </motion.button>
                       )}
                       {getReturnForOrder(selectedOrder.id) && (
                         <div 
-                          className="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest flex items-center justify-center gap-2"
+                          className="w-full py-2 sm:py-3 rounded-lg sm:rounded-xl font-black uppercase tracking-widest flex items-center justify-center gap-1.5 text-[11px] sm:text-xs"
                           style={{ 
-                            fontSize: 11, 
                             backgroundColor: getReturnStatusStyle(getReturnForOrder(selectedOrder.id)!.status).bg, 
                             color: getReturnStatusStyle(getReturnForOrder(selectedOrder.id)!.status).color 
                           }}
                         >
-                          <RotateCcw size={14} /> Return Status: {getReturnForOrder(selectedOrder.id)!.status}
+                          <RotateCcw size={12} /> {getReturnForOrder(selectedOrder.id)!.status}
                         </div>
                       )}
                     </div>
@@ -501,64 +524,63 @@ export default function UserOrders() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#071a0d70] backdrop-blur-md flex items-center justify-center z-[150] p-4"
+            className="fixed inset-0 bg-[#071a0d70] backdrop-blur-md flex items-center justify-center z-[9999] p-2 sm:p-4 pt-16 sm:pt-4"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-white/95 rounded-[32px] shadow-2xl w-full max-w-xl overflow-hidden border border-white"
+              className="bg-white/95 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-xs sm:max-w-sm max-h-[80vh] overflow-hidden border border-white"
             >
-              <div className="p-10 space-y-8">
+              <div className="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-5 overflow-y-auto custom-scrollbar max-h-[80vh]">
                 <div>
-                  <h3 style={{ fontSize: F_SIZE.lg, color: BRAND.primary }} className="font-black tracking-tight mb-2 uppercase">
+                  <h3 style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)', color: BRAND.primary }} className="font-black tracking-tight mb-1 uppercase">
                     Return Details
                   </h3>
-                  <p style={{ fontSize: F_SIZE.sm, color: BRAND.secondary }} className="font-semibold uppercase tracking-widest leading-relaxed">
+                  <p style={{ fontSize: 'clamp(11px, 2vw, 13px)', color: BRAND.secondary }} className="font-semibold uppercase tracking-widest line-clamp-1">
                     Order: {returnModal.order.orderNumber}
                   </p>
                 </div>
 
-                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-2 sm:space-y-3 max-h-[200px] overflow-y-auto custom-scrollbar">
                   {returnModal.selectedItems.map((si) => (
-                    <div key={si.orderItemId} className="flex items-center justify-between p-4 rounded-2xl bg-[#0a3d1f05] border border-[#0a3d1f05]">
-                      <div>
-                        <p className="font-bold text-[#0a3d1f] tracking-tight">{si.name}</p>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-[#9eaaa0]">Max Quantity: {si.maxQty}</p>
+                    <div key={si.orderItemId} className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg bg-[#0a3d1f05] border border-[#0a3d1f05] gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-[#0a3d1f] tracking-tight text-xs sm:text-sm line-clamp-1">{si.name}</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest text-[#9eaaa0]">Max: {si.maxQty}</p>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-[#0a3d1f60]">UNITS:</label>
+                      <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                        <label className="text-[9px] font-black uppercase tracking-widest text-[#0a3d1f60]">QTY:</label>
                         <input
                           type="number"
                           min={1}
                           max={si.maxQty}
                           value={si.quantity}
                           onChange={(e) => handleReturnQtyChange(si.orderItemId, parseInt(e.target.value) || 1)}
-                          className="w-20 bg-white border border-[#0a3d1f10] rounded-xl px-3 py-2 text-center font-black text-[#0a3d1f] focus:border-[#16a34a] focus:ring-4 focus:ring-[#16a34a05] outline-none transition-all"
+                          className="w-14 bg-white border border-[#0a3d1f10] rounded-lg px-2 py-1 text-center font-black text-sm text-[#0a3d1f] focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a05] outline-none transition-all"
                         />
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-[#0a3d1f60] pl-1">Reason for Return</label>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-[#0a3d1f60]">Reason</label>
                   <textarea
                     value={returnModal.reason}
                     onChange={(e) => setReturnModal((prev) => ({ ...prev, reason: e.target.value }))}
-                    rows={3}
-                    className="w-full bg-[#0a3d1f05] border border-transparent rounded-2xl px-5 py-4 font-bold text-[#0a3d1f] focus:bg-white focus:border-[#16a34a] focus:ring-4 focus:ring-[#16a34a05] outline-none transition-all"
-                    placeholder="Tell us why you'd like to return these items..."
+                    rows={2}
+                    className="w-full bg-[#0a3d1f05] border border-transparent rounded-lg px-3 py-2 font-bold text-xs text-[#0a3d1f] focus:bg-white focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a05] outline-none transition-all resize-none"
+                    placeholder="Why are you returning..."
                   />
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-2 sm:gap-3 pt-2">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setReturnModal((prev) => ({ ...prev, open: false }))}
-                    className="flex-1 py-4 font-black uppercase tracking-widest text-[#0a3d1f60] hover:text-[#0a3d1f] transition-all"
-                    style={{ fontSize: 11 }}
+                    className="flex-1 py-2 sm:py-2.5 font-black uppercase tracking-widest text-[#0a3d1f60] hover:text-[#0a3d1f] transition-all text-[11px] sm:text-xs"
                   >
                     Cancel
                   </motion.button>
@@ -567,10 +589,9 @@ export default function UserOrders() {
                     whileTap={{ scale: 0.98 }}
                     onClick={handleReturnSubmit}
                     disabled={returnModal.submitting}
-                    className="flex-2 px-10 py-4 bg-[#0a3d1f] text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-[#0a3d1f20] disabled:bg-gray-300 transition-all"
-                    style={{ fontSize: 11 }}
+                    className="flex-1 py-2 sm:py-2.5 bg-[#0a3d1f] text-white rounded-lg sm:rounded-xl font-black uppercase tracking-widest shadow-lg shadow-[#0a3d1f20] disabled:bg-gray-300 transition-all text-[11px] sm:text-xs"
                   >
-                    {returnModal.submitting ? 'Submitting...' : 'Submit Request'}
+                    {returnModal.submitting ? 'Submitting...' : 'Submit'}
                   </motion.button>
                 </div>
               </div>

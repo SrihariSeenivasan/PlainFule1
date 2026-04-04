@@ -13,12 +13,6 @@ const SCIENCE_PAGE_FAQS = [
   { q: 'Why can\'t I just take protein & multivitamins?', a: 'Because that approach is incomplete. Protein and multivitamins alone don\'t support proper absorption, lack functional ingredients like fibre and enzymes, and don\'t work as an integrated system. This formulation is designed to work together, not as separate parts.' },
 ];
 
-/* ══════════════════════════════════════════════════════════
-   WATERMARK IMAGE POOL
-   Replace paths with your actual public/images/ assets.
-   Each image is rendered at low opacity as a decorative
-   background element — position & rotation are varied per section.
-══════════════════════════════════════════════════════════ */
 const WATERMARK_IMAGES: {
   src: string;
   top: string;
@@ -36,9 +30,6 @@ const WATERMARK_IMAGES: {
   { src: '/images/wm/protein-wave.png',     top: '5%',  right: '-2rem', size: 300, rotation: -11 },
 ];
 
-/* ══════════════════════════════════════════════════════════
-   SIDEBAR NAV CONFIG
-══════════════════════════════════════════════════════════ */
 const NAV: { id: string; num: string; label: string }[] = [
   { id: 'hero',       num: '—',  label: 'Intro'         },
   { id: 'sec-01',     num: '01', label: 'The Problem'   },
@@ -52,9 +43,6 @@ const NAV: { id: string; num: string; label: string }[] = [
   { id: 'closing',    num: '—',  label: 'Conclusion'    },
 ];
 
-/* ══════════════════════════════════════════════════════════
-   READING PROGRESS BAR
-══════════════════════════════════════════════════════════ */
 const ReadingProgress = () => {
   const { scrollYProgress } = useScroll();
   return (
@@ -72,9 +60,6 @@ const ReadingProgress = () => {
   );
 };
 
-/* ══════════════════════════════════════════════════════════
-   FIXED SIDEBAR NAVIGATOR — works as navbar to navigate sections
-══════════════════════════════════════════════════════════ */
 const Sidebar = ({ active }: { active: string }) => {
   const go = (id: string) => {
     const el = document.getElementById(id);
@@ -86,6 +71,7 @@ const Sidebar = ({ active }: { active: string }) => {
   return (
     <nav
       aria-label="Page sections"
+      className="pf-sidebar"
       style={{
         position: 'fixed',
         left: '1rem',
@@ -120,7 +106,6 @@ const Sidebar = ({ active }: { active: string }) => {
               backgroundColor: on ? `${BRAND.primary}15` : 'transparent',
             }}
           >
-            {/* pill indicator */}
             <motion.div
               animate={{ width: on ? 28 : 8 }}
               style={{
@@ -130,8 +115,6 @@ const Sidebar = ({ active }: { active: string }) => {
                 flexShrink: 0,
               }}
             />
-
-            {/* label always visible — changes color based on active state */}
             <motion.span
               animate={{ color: on ? BRAND.primaryDark : BRAND.tertiary, fontWeight: on ? 800 : 600 }}
               transition={{ duration: 0.3 }}
@@ -152,9 +135,6 @@ const Sidebar = ({ active }: { active: string }) => {
   );
 };
 
-/* ══════════════════════════════════════════════════════════
-   WATERMARK TEXT — giant ghost word centred behind content
-══════════════════════════════════════════════════════════ */
 const WmText = ({ word }: { word: string }) => (
   <div
     aria-hidden="true"
@@ -184,9 +164,6 @@ const WmText = ({ word }: { word: string }) => (
   </div>
 );
 
-/* ══════════════════════════════════════════════════════════
-   WATERMARK IMAGE — decorative, right-side
-══════════════════════════════════════════════════════════ */
 const WmImg = ({
   src, top, right, size, rotation,
 }: { src: string; top: string; right: string; size: number; rotation: number }) => (
@@ -213,9 +190,6 @@ const WmImg = ({
   </div>
 );
 
-/* ══════════════════════════════════════════════════════════
-   SECTION WRAPPER — handles reveal animation + watermarks
-══════════════════════════════════════════════════════════ */
 const Section = ({
   id, children, wmWord, wmImg,
 }: {
@@ -243,11 +217,6 @@ const Section = ({
   </motion.section>
 );
 
-/* ══════════════════════════════════════════════════════════
-   TYPOGRAPHY COMPONENTS — all use TYPOGRAPHY / BRAND constants
-══════════════════════════════════════════════════════════ */
-
-/* Chapter eyebrow: num ─── label */
 const Eyebrow = ({ num, label }: { num: string; label: string }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '0.9rem' }}>
     <span style={{ ...TYPOGRAPHY.eyebrow, fontWeight: 800, color: BRAND.primaryDark }}>{num}</span>
@@ -256,7 +225,6 @@ const Eyebrow = ({ num, label }: { num: string; label: string }) => (
   </div>
 );
 
-/* Ghost chapter number behind heading */
 const Ghost = ({ num }: { num: string }) => (
   <div style={{
     ...TYPOGRAPHY.displayXL,
@@ -270,7 +238,6 @@ const Ghost = ({ num }: { num: string }) => (
   </div>
 );
 
-/* Section heading — uses headingLG size, bigger clamped value */
 const Heading = ({ children }: { children: React.ReactNode }) => (
   <h2 style={{
     ...TYPOGRAPHY.headingLG,
@@ -283,14 +250,12 @@ const Heading = ({ children }: { children: React.ReactNode }) => (
   </h2>
 );
 
-/* Body paragraph — TYPOGRAPHY.bodyMD */
 const Body = ({ children }: { children: React.ReactNode }) => (
   <p style={{ ...TYPOGRAPHY.bodyMD, fontWeight: 800, color: BRAND.secondary, lineHeight: 1.8, margin: '0 0 0.7rem' }}>
     {children}
   </p>
 );
 
-/* Callout pull-quote — uses TYPOGRAPHY.accentLG (Caveat italic) */
 const Callout = ({ children }: { children: React.ReactNode }) => (
   <div style={{ position: 'relative', margin: '1.2rem 0', paddingLeft: '1.5rem' }}>
     <div style={{
@@ -309,12 +274,10 @@ const Callout = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-/* Inline strong — BRAND.primary + 800 weight */
 const S = ({ children }: { children: React.ReactNode }) => (
   <strong style={{ color: BRAND.primaryDark, fontWeight: 800 }}>{children}</strong>
 );
 
-/* Inline cursive accent — Caveat italic, BRAND.primaryDark */
 const C = ({ children }: { children: React.ReactNode }) => (
   <em style={{
     ...TYPOGRAPHY.accentLG,
@@ -325,7 +288,6 @@ const C = ({ children }: { children: React.ReactNode }) => (
   </em>
 );
 
-/* Numbered row list — uses TYPOGRAPHY.bodySM + eyebrow for number */
 const NumList = ({ items }: { items: string[] }) => (
   <div style={{ margin: '1.5rem 0' }}>
     {items.map((item, i) => (
@@ -352,7 +314,6 @@ const NumList = ({ items }: { items: string[] }) => (
   </div>
 );
 
-/* Enzyme card — headingMD name + bodySM desc */
 const Enzyme = ({ name, desc }: { name: string; desc: string }) => (
   <motion.div
     initial={{ opacity: 0, y: 8 }}
@@ -374,9 +335,6 @@ const Enzyme = ({ name, desc }: { name: string; desc: string }) => (
   </motion.div>
 );
 
-/* ══════════════════════════════════════════════════════════
-   FOOD COMPARISON TABLE — Enhanced Premium Layout
-══════════════════════════════════════════════════════════ */
 const foodItems = [
   { name: 'Eggs', amount: '3 large (~150 g)', kcal: 210, why: 'Protein, B12, selenium, biotin' },
   { name: 'Milk', amount: '500 ml whole milk', kcal: 300, why: 'Calcium, B2, B12, vitamin D' },
@@ -396,18 +354,9 @@ const comparisonTable = [
   { label: 'Prep time', plate: '30-45 minutes', scoop: '1 minute' },
 ];
 
-
-
-/* ══════════════════════════════════════════════════════════
-   PAGE
-══════════════════════════════════════════════════════════ */
-/* ══════════════════════════════════════════════════════════
-   PAGE
-══════════════════════════════════════════════════════════ */
 export default function SciencePage() {
   const [activeId, setActiveId] = useState('hero');
 
-  /* Sync sidebar with visible section */
   useEffect(() => {
     const els = NAV.map(n => document.getElementById(n.id)).filter(Boolean) as HTMLElement[];
     const obs = new IntersectionObserver(
@@ -436,20 +385,129 @@ export default function SciencePage() {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;0,900;1,400&family=Caveat:wght@400;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        @media (max-width: 950px) {
-          .pf-sidebar { display: none !important; }
-          .pf-content { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+
+        /* ── Sidebar: visible only on wide screens ── */
+        .pf-sidebar {
+          display: flex;
         }
 
+        /* ── Main content padding ── */
+        .pf-content {
+          padding-left: 3.5rem;
+          padding-right: 1.5rem;
+        }
+
+        /* ── Comparison grid: 2-col on desktop, 1-col on mobile ── */
+        .comparison-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: clamp(2rem, 4vw, 3rem);
+          margin-top: 2rem;
+          margin-bottom: 2.5rem;
+        }
+
+        /* ── Comparison cards grid ── */
+        .comparison-cards-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.8rem;
+        }
+
+        /* ── Closing title sizes ── */
+        .closing-title-main {
+          font-family: ${FONTS.main};
+          font-size: clamp(2.8rem, 9vw, 6rem);
+          font-weight: 900;
+          letter-spacing: -0.05em;
+          color: ${BRAND.primary};
+          line-height: 0.9;
+          margin: 0 0 0.1rem;
+        }
+        .closing-title-accent {
+          font-family: ${FONTS.accent};
+          font-style: italic;
+          font-size: clamp(3rem, 9.5vw, 6.5rem);
+          font-weight: 700;
+          color: ${BRAND.primaryDark};
+          line-height: 0.9;
+          margin: 0 0 0.1rem;
+        }
+        .closing-title-sub {
+          font-family: ${FONTS.main};
+          font-size: clamp(1.5rem, 4.5vw, 3.2rem);
+          font-weight: 500;
+          color: ${BRAND.secondary};
+          letter-spacing: -0.03em;
+          line-height: 1.1;
+        }
+
+        /* ── Hero title sizes ── */
+        .hero-title-why {
+          font-family: ${FONTS.main};
+          font-size: clamp(3.5rem, 10vw, 7rem);
+          font-weight: 900;
+          letter-spacing: -0.05em;
+          line-height: 0.9;
+          color: ${BRAND.primary};
+          margin: 0 0 0.1rem;
+        }
+        .hero-title-brand {
+          font-family: ${FONTS.accent};
+          font-style: italic;
+          font-size: clamp(3.8rem, 10.8vw, 7.8rem);
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          line-height: 0.9;
+          color: ${BRAND.primaryDark};
+          margin-bottom: 3rem;
+        }
+        .hero-watermark-text {
+          font-family: ${FONTS.main};
+          font-size: clamp(7rem, 22vw, 15rem);
+          font-weight: 900;
+          color: ${BRAND.light};
+          opacity: 0.55;
+          line-height: 1;
+          user-select: none;
+          pointer-events: none;
+          letter-spacing: -0.05em;
+          white-space: nowrap;
+        }
+
+        /* ── Tablet: ≤ 950px ── */
+        @media (max-width: 950px) {
+          .pf-sidebar {
+            display: none !important;
+          }
+          .pf-content {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+          }
+        }
+
+        /* ── Mobile: ≤ 640px ── */
+        @media (max-width: 640px) {
+          .comparison-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .comparison-cards-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .pf-content {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            padding-bottom: 3rem !important;
+          }
+        }
       `}</style>
 
       <ReadingProgress />
-      <div className="pf-sidebar"><Sidebar active={activeId} /></div>
+      <Sidebar active={activeId} />
 
       <div style={{ background: BRAND.white }}>
         <div
           className="pf-content"
-          style={{ maxWidth: 900, margin: '0 auto', padding: '0 1.5rem 5rem 3.5rem', paddingTop: '80px' }}
+          style={{ maxWidth: 900, margin: '0 auto', paddingTop: '80px', paddingBottom: '5rem' }}
         >
 
           {/* ═══════════ HERO ═══════════ */}
@@ -471,17 +529,8 @@ export default function SciencePage() {
               right: '-5rem',
               top: '50%',
               transform: 'translateY(-50%) rotate(-90deg)',
-              fontFamily: FONTS.main,
-              fontSize: 'clamp(7rem, 22vw, 15rem)',
-              fontWeight: 900,
-              color: BRAND.light,
-              opacity: 0.55,
-              lineHeight: 1,
-              userSelect: 'none' as const,
               pointerEvents: 'none' as const,
-              letterSpacing: '-0.05em',
-              whiteSpace: 'nowrap' as const,
-            }}>
+            }} className="hero-watermark-text">
               FUEL
             </div>
 
@@ -521,29 +570,8 @@ export default function SciencePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
-                <h1 style={{
-                  fontFamily: FONTS.main,
-                  fontSize: 'clamp(3.5rem, 10vw, 7rem)',
-                  fontWeight: 900,
-                  letterSpacing: '-0.05em',
-                  lineHeight: 0.9,
-                  color: BRAND.primary,
-                  margin: '0 0 0.1rem',
-                }}>
-                  Why
-                </h1>
-                <div style={{
-                  fontFamily: FONTS.accent,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(3.8rem, 10.8vw, 7.8rem)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.03em',
-                  lineHeight: 0.9,
-                  color: BRAND.primaryDark,
-                  marginBottom: '3rem',
-                }}>
-                  PlainFuel
-                </div>
+                <h1 className="hero-title-why">Why</h1>
+                <div className="hero-title-brand">PlainFuel</div>
               </motion.div>
 
               {/* Sub-heading + hero body */}
@@ -678,21 +706,14 @@ export default function SciencePage() {
             </Callout>
             <Body><S>No complicated planning required.</S></Body>
 
-            {/* Comparison content */}
             <div style={{ marginTop: '2.5rem' }}>
               <Body>
                 To get the equivalent nutrition of one PlainFuel scoop, here&apos;s what a traditional meal looks like:
               </Body>
             </div>
 
-            {/* Two-column layout */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-              gap: 'clamp(2rem, 4vw, 3rem)',
-              marginTop: '2rem',
-              marginBottom: '2.5rem',
-            }}>
+            {/* Two-column layout — collapses to single on mobile */}
+            <div className="comparison-grid">
               {/* Left: Food list */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -783,7 +804,7 @@ export default function SciencePage() {
                       <p style={{ fontFamily: FONTS.main, fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' as const, color: BRAND.secondary, margin: '0 0 0.6rem' }}>
                         {row.label}
                       </p>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+                      <div className="comparison-cards-grid">
                         <div>
                           <p style={{ fontFamily: FONTS.main, fontSize: '0.65rem', fontWeight: 600, color: BRAND.secondary, margin: '0 0 4px' }}>
                             Traditional
@@ -805,7 +826,6 @@ export default function SciencePage() {
                   ))}
                 </div>
 
-                {/* Bottom insight */}
                 <div style={{ marginTop: '1.5rem' }}>
                   <Callout>
                     <S>Same nutrition.</S> A fraction of the weight, time, and complexity.
@@ -886,8 +906,6 @@ export default function SciencePage() {
             </Body>
           </Section>
 
-          
-
           {/* ═══════════ CLOSING ═══════════ */}
           <motion.section
             id="closing"
@@ -936,38 +954,9 @@ export default function SciencePage() {
               <Eyebrow num="—" label="The Conclusion" />
 
               <div style={{ marginBottom: '3.5rem' }}>
-                <div style={{
-                  fontFamily: FONTS.main,
-                  fontSize: 'clamp(2.8rem, 9vw, 6rem)',
-                  fontWeight: 900,
-                  letterSpacing: '-0.05em',
-                  color: BRAND.primary,
-                  lineHeight: 0.9,
-                  margin: '0 0 0.1rem',
-                }}>
-                  One Sachet.
-                </div>
-                <div style={{
-                  fontFamily: FONTS.accent,
-                  fontStyle: 'italic',
-                  fontSize: 'clamp(3rem, 9.5vw, 6.5rem)',
-                  fontWeight: 700,
-                  color: BRAND.primaryDark,
-                  lineHeight: 0.9,
-                  margin: '0 0 0.1rem',
-                }}>
-                  Better Nutrition.
-                </div>
-                <div style={{
-                  fontFamily: FONTS.main,
-                  fontSize: 'clamp(1.5rem, 4.5vw, 3.2rem)',
-                  fontWeight: 500,
-                  color: BRAND.secondary,
-                  letterSpacing: '-0.03em',
-                  lineHeight: 1.1,
-                }}>
-                  Simpler Routine.
-                </div>
+                <div className="closing-title-main">One Sachet.</div>
+                <div className="closing-title-accent">Better Nutrition.</div>
+                <div className="closing-title-sub">Simpler Routine.</div>
               </div>
 
               <motion.button
@@ -996,9 +985,10 @@ export default function SciencePage() {
               </motion.button>
             </div>
           </motion.section>
-{/* ═══════════ FAQ SECTION ═══════════ */}
+
+          {/* ═══════════ FAQ SECTION ═══════════ */}
           <div style={{ margin: '2rem 0 0' }}>
-            <FAQSection 
+            <FAQSection
               title="Your Questions Answered"
               subtitle="Deep dive into the science and reasoning ✨"
               faqs={SCIENCE_PAGE_FAQS}

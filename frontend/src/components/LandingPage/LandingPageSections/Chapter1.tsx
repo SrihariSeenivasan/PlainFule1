@@ -260,50 +260,6 @@ function WordReveal({ text, delay = 0 }: { text: string; delay?: number }) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   VIDEO PLAYER
-───────────────────────────────────────────────────────────── */
-function VideoPlayer() {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const handleRestart = () => {
-        if (videoRef.current) { videoRef.current.currentTime = 0; videoRef.current.play(); }
-    };
-    return (
-        <div style={{ position: 'relative', width: '100%', maxHeight: 'clamp(280px, 60vw, 420px)' }}>
-            <motion.video
-                ref={videoRef}
-                style={{
-                    width: '100%', height: '100%', borderRadius: 16,
-                    border: `2px solid ${BRAND.tertiary}`,
-                    boxShadow: `0 16px 48px rgba(50,45,41,0.10)`,
-                    display: 'block', objectFit: 'cover',
-                }}
-                autoPlay loop muted playsInline
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-            >
-                <source src="/videos/YourTypicalDay.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-            </motion.video>
-            <motion.button
-                whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }}
-                onClick={handleRestart}
-                style={{
-                    position: 'absolute', bottom: 14, right: 14,
-                    padding: '8px 16px', background: BRAND.primaryDark, color: BRAND.white,
-                    border: 'none', borderRadius: 100, cursor: 'pointer',
-                    boxShadow: '0 6px 20px rgba(0,0,0,0.18)', zIndex: 10,
-                    ...TYPOGRAPHY.eyebrow, fontSize: '0.7rem',
-                } as React.CSSProperties}
-            >
-                ↺ Restart
-            </motion.button>
-        </div>
-    );
-}
-
-/* ─────────────────────────────────────────────────────────────
    TIMELINE STORY
 ───────────────────────────────────────────────────────────── */
 const SEVERITY_LABELS = ['Mild', 'Noticeable', 'Concerning', 'Serious', 'Critical'];
@@ -387,6 +343,74 @@ export default function Chapter1() {
     return (
         <div ref={containerRef} style={{ background: BRAND.white, overflow: 'hidden', position: 'relative' }}>
 
+            {/* Responsive styles */}
+            <style>{`
+                .ch1-sec1-grid {
+                    display: grid;
+                    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+                    gap: clamp(40px, 6vw, 80px);
+                    align-items: center;
+                    position: relative;
+                    z-index: 1;
+                }
+                .ch1-stat-row {
+                    display: flex;
+                    gap: 0;
+                    margin-top: 40px;
+                    padding-top: 28px;
+                    border-top: 1px solid ${BRAND.tertiary};
+                    flex-wrap: wrap;
+                }
+                .ch1-stat-divider {
+                    width: 1px;
+                    background: ${BRAND.tertiary};
+                    align-self: stretch;
+                }
+                .ch1-sec2-grid {
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                    gap: clamp(24px, 5vw, 64px);
+                    align-items: start;
+                    position: relative;
+                    z-index: 1;
+                }
+                .ch1-orb-wrap {
+                    display: block;
+                }
+
+                /* ── Tablet: ≤ 860px ── */
+                @media (max-width: 860px) {
+                    .ch1-sec1-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    .ch1-orb-wrap {
+                        max-width: 320px;
+                        margin: 0 auto;
+                    }
+                    .ch1-sec2-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+
+                /* ── Mobile: ≤ 600px ── */
+                @media (max-width: 600px) {
+                    .ch1-stat-divider {
+                        display: none;
+                    }
+                    .ch1-stat-row {
+                        flex-direction: column;
+                        gap: 28px;
+                    }
+                    .ch1-stat-row > div {
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                    }
+                    .ch1-orb-wrap {
+                        max-width: 260px;
+                    }
+                }
+            `}</style>
+
             {/* ── Ambient Orbs ── */}
             <AmbientOrb x="70%" y="5%" size={480} delay={0} color={BRAND.primary} />
             <AmbientOrb x="-8%" y="55%" size={360} delay={1.5} color={BRAND.secondary} />
@@ -396,10 +420,10 @@ export default function Chapter1() {
                 CHAPTER LABEL
             ════════════════════════════════════════════ */}
             <section style={{ padding: '52px 24px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(8px, 3vw, 20px)', flexWrap: 'nowrap' }}>
                     <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
                         transition={{ duration: 0.7 }}
-                        style={{ height: 1, width: 72, background: BRAND.primary, opacity: 0.18, transformOrigin: 'right' }} />
+                        style={{ height: 1, width: 'clamp(24px, 10vw, 72px)', background: BRAND.primary, opacity: 0.18, transformOrigin: 'right', flexShrink: 0 }} />
 
                     <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.6 }}
@@ -407,17 +431,18 @@ export default function Chapter1() {
                             display: 'inline-flex', alignItems: 'center', gap: 8,
                             padding: '6px 18px', borderRadius: 100,
                             background: BRAND.light, border: `1px solid ${BRAND.tertiary}`,
+                            whiteSpace: 'nowrap',
                         }}
                     >
                         <Sparkles size={13} color={BRAND.primaryDark} />
-                        <span style={{ ...TYPOGRAPHY.eyebrow, color: BRAND.primary, fontSize: F_SIZE.lg } as React.CSSProperties}>
+                        <span style={{ ...TYPOGRAPHY.eyebrow, color: BRAND.primary, fontSize: 'clamp(0.75rem, 2.5vw, 1.1rem)' } as React.CSSProperties}>
                             Chapter 1
                         </span>
                     </motion.div>
 
                     <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
                         transition={{ duration: 0.7 }}
-                        style={{ height: 1, width: 72, background: BRAND.primary, opacity: 0.18, transformOrigin: 'left' }} />
+                        style={{ height: 1, width: 'clamp(24px, 10vw, 72px)', background: BRAND.primary, opacity: 0.18, transformOrigin: 'left', flexShrink: 0 }} />
                 </div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
@@ -452,10 +477,8 @@ export default function Chapter1() {
                     01
                 </motion.div>
 
-                <div style={{
-                    display: 'grid', gridTemplateColumns: 'minmax(0, 1.15fr) minmax(0, 0.85fr)',
-                    gap: 'clamp(40px, 6vw, 80px)', alignItems: 'center', position: 'relative', zIndex: 1,
-                }}>
+                {/* Responsive grid: 2-col on desktop, 1-col on tablet/mobile */}
+                <div className="ch1-sec1-grid">
                     {/* Left copy */}
                     <div>
                         <EyebrowBadge label="The Scientific Need" delay={0.1} />
@@ -475,23 +498,22 @@ export default function Chapter1() {
                             delay={0.9}
                         />
 
-                        {/* Stat row */}
-                        <div style={{
-                            display: 'flex', gap: 0, marginTop: 40, paddingTop: 28,
-                            borderTop: `1px solid ${BRAND.tertiary}`, flexWrap: 'wrap',
-                        }}>
+                        {/* Stat row — collapses to column on mobile */}
+                        <div className="ch1-stat-row">
                             <div style={{ flex: 1, minWidth: 160, paddingRight: 28 }}>
                                 <StatSplit icon={<Activity size={16} />} number="70%" label="B12 Deficiency" sub="In the Indian population" index={0} />
                             </div>
-                            <div style={{ width: 1, background: BRAND.tertiary, alignSelf: 'stretch' }} />
+                            <div className="ch1-stat-divider" />
                             <div style={{ flex: 1, minWidth: 160, paddingLeft: 28 }}>
                                 <StatSplit icon={<Sparkles size={16} />} number="80%" label="Low Vitamin D" sub="Due to sedentary lifestyles" index={1} />
                             </div>
                         </div>
                     </div>
 
-                    {/* Right orb */}
-                    <TiltVideoOrb inView={inView} />
+                    {/* Right orb — centred below copy on mobile */}
+                    <div className="ch1-orb-wrap">
+                        <TiltVideoOrb inView={inView} />
+                    </div>
                 </div>
             </section>
 
@@ -517,7 +539,6 @@ export default function Chapter1() {
 
                 {/* ── ROW 1: HEADING + DESCRIPTION (FULL WIDTH) ── */}
                 <div style={{ marginBottom: '48px', position: 'relative', zIndex: 1 }}>
-                    {/* Eyebrow */}
                     <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.6 }}
                         style={{
@@ -533,7 +554,6 @@ export default function Chapter1() {
                         </span>
                     </motion.div>
 
-                    {/* Heading */}
                     <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.1 }}
                         style={{
@@ -554,7 +574,6 @@ export default function Chapter1() {
                         </span>
                     </motion.h2>
 
-                    {/* Body */}
                     <motion.p initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2 }}
                         style={{ ...TYPOGRAPHY.bodyMD, color: BRAND.secondary, lineHeight: 1.75, margin: 0 } as React.CSSProperties}
@@ -563,15 +582,8 @@ export default function Chapter1() {
                     </motion.p>
                 </div>
 
-                {/* ── ROW 2: VIDEO LEFT + TIMELINE RIGHT (2 EQUAL COLUMNS) ── */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-                    gap: 'clamp(24px, 5vw, 64px)',
-                    alignItems: 'start',
-                    position: 'relative',
-                    zIndex: 1,
-                }}>
+                {/* ── ROW 2: VIDEO LEFT + TIMELINE RIGHT — collapses to 1-col on tablet/mobile ── */}
+                <div className="ch1-sec2-grid">
 
                     {/* ── LEFT: VIDEO PLACEHOLDER ── */}
                     <motion.div
@@ -581,7 +593,6 @@ export default function Chapter1() {
                         transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                         style={{ minWidth: 0 }}
                     >
-                        {/* Video label */}
                         <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}
                             style={{
@@ -600,7 +611,6 @@ export default function Chapter1() {
                             </span>
                         </motion.div>
 
-                        {/* Video Placeholder */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.96 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -608,7 +618,7 @@ export default function Chapter1() {
                             transition={{ duration: 0.8 }}
                             style={{
                                 width: '100%',
-                                maxHeight: 'clamp(280px, 60vw, 420px)',
+                                aspectRatio: '4/3',
                                 borderRadius: 16,
                                 border: `2px dashed ${BRAND.tertiary}`,
                                 background: `${BRAND.primary}05`,

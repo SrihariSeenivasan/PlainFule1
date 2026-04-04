@@ -36,7 +36,7 @@ const FaqCard = ({ q, a, index }: { q: string; a: string; index: number }) => {
         background: open ? BRAND.white : 'rgba(255, 255, 255, 0.6)',
         backdropFilter: 'blur(32px)',
         borderRadius: 24,
-        padding: '32px',
+        padding: 'clamp(20px, 5vw, 32px)',
         cursor: 'pointer',
         border: `1px solid ${open ? BRAND.primaryDark + '30' : BRAND.light + '80'}`,
         boxShadow: open
@@ -98,10 +98,10 @@ export default function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
   const router = useRouter();
 
   return (
-    <section style={{ background: BRAND.white, padding: '120px 0', position: 'relative' }}>
-      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+    <section style={{ background: BRAND.white, padding: 'clamp(60px, 12vw, 120px) 0', position: 'relative' }}>
+      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 1 }}>
 
-        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 60 }}>
+        <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 'clamp(30px, 6vw, 60px)' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: BRAND.primary, padding: '8px 20px', borderRadius: 100, marginBottom: 20, boxShadow: `0 10px 20px rgba(50,45,41,0.12)` }}>
             <Sparkles size={14} color={BRAND.light} />
             <span style={{ fontFamily: FONTS.main, fontSize: 10, fontWeight: 800, color: BRAND.white, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Frequently Asked</span>
@@ -113,13 +113,13 @@ export default function FAQSection({ title, subtitle, faqs }: FAQSectionProps) {
           <p className="faq-subtext" style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.xl, color: BRAND.primaryDark, marginTop: 16, opacity: 0.9 }}>{subtitle}</p>
         </motion.div>
 
-        <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 20 }}>
+        <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(280px, 85vw, 400px), 1fr))', gap: 'clamp(12px, 3vw, 20px)' }}>
           {faqs.map((faq, i) => (
             <FaqCard key={i} q={faq.q} a={faq.a} index={i} />
           ))}
         </div>
 
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: 80 }}>
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} style={{ textAlign: 'center', marginTop: 'clamp(40px, 8vw, 80px)' }}>
           <p style={{ fontFamily: FONTS.main, fontSize: 14, fontWeight: 700, color: BRAND.secondary, marginBottom: 24 }}>Still have something on your mind?</p>
           <motion.button
             onClick={() => router.push('/contact')}

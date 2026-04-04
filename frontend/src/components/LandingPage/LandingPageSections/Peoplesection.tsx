@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ShieldCheck, RefreshCw, HelpCircle, Star, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -9,7 +9,6 @@ import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
 /* ── DATA ── */
 const TEXT_REVIEWS = [
   {
-    
     category: 'Physical Demand',
     name: 'Rajan Mehta',
     location: 'Marathon Runner · Pune',
@@ -19,7 +18,6 @@ const TEXT_REVIEWS = [
     avatar: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=80&q=80',
   },
   {
-    
     category: 'Mental Performance',
     name: 'Priya Nair',
     location: 'Product Lead · Bengaluru',
@@ -29,7 +27,6 @@ const TEXT_REVIEWS = [
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&q=80',
   },
   {
-    
     category: 'Family Growth',
     name: 'Ananya & Dev',
     location: 'Parents · Chennai',
@@ -39,7 +36,6 @@ const TEXT_REVIEWS = [
     avatar: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=80&q=80',
   },
   {
-    
     category: 'Longevity',
     name: 'Padma Iyer',
     location: 'Retired · Coimbatore',
@@ -94,6 +90,24 @@ const TRUST = [
   { icon: <HelpCircle size={16} color={BRAND.primaryDark} />, text: 'No filtered or paid reviews' },
   { icon: <RefreshCw size={16} color={BRAND.primaryDark} />, text: 'Updated weekly · 52,841 reviews' },
 ];
+
+/* ── HOOK: responsive cards per view ── */
+function useCardsPerView() {
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+  
+  useEffect(() => {
+    const handle = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handle);
+    return () => window.removeEventListener('resize', handle);
+  }, []);
+  
+  if (width < 640) return 1;
+  if (width < 900) return 2;
+  if (width < 1100) return 3;
+  return 4;
+}
 
 /* ── STAR ROW ── */
 function StarRow({ rating, size = 12 }: { rating: number; size?: number }) {
@@ -153,8 +167,6 @@ function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; ind
           style={{ objectFit: 'cover', borderRadius: 14 }}
           unoptimized
         />
-
-        
 
         {/* Verified Check */}
         <div
@@ -320,6 +332,24 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
   );
 }
 
+/* ── CAROUSEL HOOK ── */
+function useResponsiveCarousel(total: number) {
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+
+  // Update on resize
+  useEffect(() => {
+    const handle = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handle);
+    return () => window.removeEventListener('resize', handle);
+  }, []);
+
+  const perView = width < 640 ? 1 : width < 900 ? 2 : width < 1100 ? 3 : 4;
+  const maxSlide = Math.max(0, total - perView);
+  return { perView, maxSlide };
+}
+
 /* ── MAIN EXPORT ── */
 export default function ReviewsSection() {
   const ref = useRef(null);
@@ -327,22 +357,23 @@ export default function ReviewsSection() {
   const [currentTextSlide, setCurrentTextSlide] = useState(0);
   const [currentVideoSlide, setCurrentVideoSlide] = useState(0);
 
-  const textCardsPerView = 4;
-  const videoCardsPerView = 4;
+  const { perView: textCardsPerView, maxSlide: maxTextSlide } = useResponsiveCarousel(TEXT_REVIEWS.length);
+  const { perView: videoCardsPerView, maxSlide: maxVideoSlide } = useResponsiveCarousel(VIDEO_REVIEWS.length);
 
-  const maxTextSlide = Math.max(0, TEXT_REVIEWS.length - textCardsPerView);
-  const maxVideoSlide = Math.max(0, VIDEO_REVIEWS.length - videoCardsPerView);
+  // Clamp slides when perView changes
+  const safeTextSlide = Math.min(currentTextSlide, maxTextSlide);
+  const safeVideoSlide = Math.min(currentVideoSlide, maxVideoSlide);
 
   const handleTextNext = () => setCurrentTextSlide((prev) => (prev >= maxTextSlide ? 0 : prev + 1));
   const handleTextPrev = () => setCurrentTextSlide((prev) => (prev <= 0 ? maxTextSlide : prev - 1));
   const handleVideoNext = () => setCurrentVideoSlide((prev) => (prev >= maxVideoSlide ? 0 : prev + 1));
   const handleVideoPrev = () => setCurrentVideoSlide((prev) => (prev <= 0 ? maxVideoSlide : prev - 1));
 
-  /* shared carousel item width = 25% - gap */
-  const itemWidthPct = `calc(25% - 14px)`;
+  const textItemWidth = `calc(${100 / textCardsPerView}% - ${(textCardsPerView - 1) * 18 / textCardsPerView}px)`;
+  const videoItemWidth = `calc(${100 / videoCardsPerView}% - ${(videoCardsPerView - 1) * 18 / videoCardsPerView}px)`;
 
   return (
-    <section ref={ref} style={{ background: BRAND.white, padding: '72px 32px 80px'}}>
+    <section ref={ref} style={{ background: BRAND.white, padding: 'clamp(40px, 8vw, 80px) 20px' }}>
       <div style={{ maxWidth: 1140, margin: '0 auto' }}>
 
         {/* ── HEADER ── */}
@@ -385,19 +416,27 @@ export default function ReviewsSection() {
         </div>
 
         {/* ── RATING SUMMARY ── */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 40, margin: '44px 0 60px', flexWrap: 'wrap' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 'clamp(20px, 5vw, 40px)',
+          margin: 'clamp(24px, 5vw, 44px) 0 clamp(30px, 6vw, 60px)',
+          flexWrap: 'wrap',
+        }}>
 
           {/* Big Score */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-            <div style={{ fontSize: '4rem', fontWeight: 900, color: BRAND.primary, lineHeight: 1, letterSpacing: '-0.03em' }}>4.8</div>
+            <div style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', fontWeight: 900, color: BRAND.primary, lineHeight: 1, letterSpacing: '-0.03em' }}>4.8</div>
             <StarRow rating={5} size={20} />
             <div style={{ fontSize: '0.8rem', color: BRAND.secondary, fontWeight: 500 }}>Based on 52,841 reviews</div>
           </div>
 
-          <div style={{ width: 1, height: 80, background: BRAND.tertiary }} />
+          {/* Divider — hidden on mobile */}
+          <div style={{ width: 1, height: 80, background: BRAND.tertiary, display: 'var(--divider-display, block)' }} />
 
           {/* Rating Bars */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 9, minWidth: 220 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 9, minWidth: 'min(220px, 100%)' }}>
             {RATING_BARS.map((b) => (
               <div key={b.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: '0.78rem', color: BRAND.secondary, width: 28, textAlign: 'right', fontWeight: 600, flexShrink: 0 }}>{b.label}</span>
@@ -416,8 +455,8 @@ export default function ReviewsSection() {
         </div>
 
         {/* ── TEXT REVIEWS ── */}
-        <div style={{ marginBottom: 72 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+        <div style={{ marginBottom: 'clamp(36px, 8vw, 72px)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'clamp(16px, 4vw, 28px)', gap: 12, flexWrap: 'wrap' }}>
             <motion.h3
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -427,7 +466,7 @@ export default function ReviewsSection() {
               Customer Reviews
             </motion.h3>
 
-            {/* Inline dots (top) */}
+            {/* Dots (top) */}
             <div style={{ display: 'flex', gap: 6 }}>
               {Array.from({ length: maxTextSlide + 1 }).map((_, i) => (
                 <motion.button
@@ -435,9 +474,9 @@ export default function ReviewsSection() {
                   onClick={() => setCurrentTextSlide(i)}
                   whileHover={{ scale: 1.15 }}
                   style={{
-                    width: i === currentTextSlide ? 24 : 8,
+                    width: i === safeTextSlide ? 24 : 8,
                     height: 8, borderRadius: 100,
-                    background: i === currentTextSlide ? BRAND.primaryDark : BRAND.tertiary,
+                    background: i === safeTextSlide ? BRAND.primaryDark : BRAND.tertiary,
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.35s cubic-bezier(.22,.68,0,1.2)',
                   }}
@@ -450,11 +489,11 @@ export default function ReviewsSection() {
           <div style={{ overflow: 'hidden', borderRadius: 20 }}>
             <motion.div
               style={{ display: 'flex', gap: 18 }}
-              animate={{ x: `-${currentTextSlide * (100 / textCardsPerView)}%` }}
+              animate={{ x: `-${safeTextSlide * (100 / textCardsPerView)}%` }}
               transition={{ duration: 0.55, ease: [0.22, 0.68, 0, 1.2] }}
             >
               {TEXT_REVIEWS.map((review, i) => (
-                <div key={review.name} style={{ flex: `0 0 ${itemWidthPct}`, minWidth: 0 }}>
+                <div key={review.name} style={{ flex: `0 0 ${textItemWidth}`, minWidth: 0 }}>
                   <TextReviewCard review={review} index={i} />
                 </div>
               ))}
@@ -462,7 +501,7 @@ export default function ReviewsSection() {
           </div>
 
           {/* Nav */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 'clamp(16px, 4vw, 28px)' }}>
             <motion.button
               whileHover={{ scale: 1.08, background: BRAND.primary, color: BRAND.white }}
               whileTap={{ scale: 0.95 }}
@@ -484,9 +523,9 @@ export default function ReviewsSection() {
                   onClick={() => setCurrentTextSlide(i)}
                   whileHover={{ scale: 1.15 }}
                   style={{
-                    width: i === currentTextSlide ? 24 : 8,
+                    width: i === safeTextSlide ? 24 : 8,
                     height: 8, borderRadius: 100,
-                    background: i === currentTextSlide ? BRAND.primaryDark : BRAND.tertiary,
+                    background: i === safeTextSlide ? BRAND.primaryDark : BRAND.tertiary,
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.35s cubic-bezier(.22,.68,0,1.2)',
                   }}
@@ -515,7 +554,7 @@ export default function ReviewsSection() {
 
         {/* ── VIDEO REVIEWS ── */}
         <div style={{ marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, gap: 12, flexWrap: 'wrap' }}>
             <motion.h3
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -532,9 +571,9 @@ export default function ReviewsSection() {
                   onClick={() => setCurrentVideoSlide(i)}
                   whileHover={{ scale: 1.15 }}
                   style={{
-                    width: i === currentVideoSlide ? 24 : 8,
+                    width: i === safeVideoSlide ? 24 : 8,
                     height: 8, borderRadius: 100,
-                    background: i === currentVideoSlide ? BRAND.primaryDark : BRAND.tertiary,
+                    background: i === safeVideoSlide ? BRAND.primaryDark : BRAND.tertiary,
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.35s cubic-bezier(.22,.68,0,1.2)',
                   }}
@@ -547,11 +586,11 @@ export default function ReviewsSection() {
           <div style={{ overflow: 'hidden', borderRadius: 20 }}>
             <motion.div
               style={{ display: 'flex', gap: 18 }}
-              animate={{ x: `-${currentVideoSlide * (100 / videoCardsPerView)}%` }}
+              animate={{ x: `-${safeVideoSlide * (100 / videoCardsPerView)}%` }}
               transition={{ duration: 0.55, ease: [0.22, 0.68, 0, 1.2] }}
             >
               {VIDEO_REVIEWS.map((review, i) => (
-                <div key={review.name} style={{ flex: `0 0 ${itemWidthPct}`, minWidth: 0 }}>
+                <div key={review.name} style={{ flex: `0 0 ${videoItemWidth}`, minWidth: 0 }}>
                   <VideoReviewCard review={review} index={i} />
                 </div>
               ))}
@@ -581,9 +620,9 @@ export default function ReviewsSection() {
                   onClick={() => setCurrentVideoSlide(i)}
                   whileHover={{ scale: 1.15 }}
                   style={{
-                    width: i === currentVideoSlide ? 24 : 8,
+                    width: i === safeVideoSlide ? 24 : 8,
                     height: 8, borderRadius: 100,
-                    background: i === currentVideoSlide ? BRAND.primaryDark : BRAND.tertiary,
+                    background: i === safeVideoSlide ? BRAND.primaryDark : BRAND.tertiary,
                     border: 'none', cursor: 'pointer', padding: 0,
                     transition: 'all 0.35s cubic-bezier(.22,.68,0,1.2)',
                   }}
@@ -610,7 +649,7 @@ export default function ReviewsSection() {
         {/* ── TRUST STRIP ── */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: 36, marginTop: 56, paddingTop: 32,
+          gap: 'clamp(16px, 4vw, 36px)', marginTop: 56, paddingTop: 32,
           borderTop: `1px solid ${BRAND.tertiary}`, flexWrap: 'wrap',
         }}>
           {TRUST.map((t, i) => (

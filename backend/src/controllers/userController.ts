@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/auth';
 import { User } from '../models/User';
 import { Order } from '../models/Order';
 import { AppError } from '../middleware/errorHandler';
+import prisma from '../config/database';
 
 export const getUserProfile = async (req: AuthRequest, res: Response) => {
   if (!req.user) {
@@ -84,4 +85,121 @@ export const getUserOrderById = async (req: AuthRequest, res: Response) => {
     ...order,
     items
   });
+};
+
+// GET /api/users/addresses — get all user addresses
+export const getUserAddresses = async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError(401, 'Not authenticated');
+  }
+
+  const addresses = await prisma.address.findMany({
+    where: { userId: req.user.id },
+    orderBy: [{ isDefault: 'desc' }, { createdAt: 'desc' }],
+  });
+
+  res.json(addresses);
+};
+
+// POST /api/users/addresses — create new address
+export const createAddress = async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError(401, 'Not authenticated');
+  }
+
+  const { name, email, phone, address, city, state, zipCode, country, isDefault } = req.body;
+
+  // Validate required fields
+  if (!name || !email || !phone || !address || !city || !state || !zipCode || !country) {
+    throw new AppError(400, 'All address fields are required');
+  }
+
+  // If this is being set as default, unset other defaults
+  if (isDefault) {
+    await prisma.address.updateMany({
+      where: { userId: req.user.id, isDefault: true },
+      data: { isDefault: false },
+    });
+  }
+
+  const newAddress = await prisma.address.create({
+    data: {
+      name,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault: isDefault || false,
+      userId: req.user.id,
+    },
+  });
+
+  res.status(201).json({
+    message: 'Address created successfully',
+    address: newAddress,
+  });
+};
+
+// PUT /api/users/addresses/:id — update address
+export const updateAddress = async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError(401, 'Not authenticated');
+  }
+
+  const { id } = req.params;
+  const { name, email, phone, address, city, state, zipCode, country, isDefault } = req.body;
+
+  // Verify address belongs to user
+  const existingAddress = await prisma.address.findUnique({ where: { id: parseInt(id) } });
+  if (!existingAddress) throw new AppError(404, 'Address not found');
+  if (existingAddress.userId !== req.user.id) throw new AppError(403, 'You do not have access to this address');
+
+  // If this is being set as default, unset other defaults
+  if (isDefault && !existingAddress.isDefault) {
+    await prisma.address.updateMany({
+      where: { userId: req.user.id, isDefault: true },
+      data: { isDefault: false },
+    });
+  }
+
+  const updatedAddress = await prisma.address.update({
+    where: { id: parseInt(id) },
+    data: {
+      name,
+      email,
+      phone,
+      address,
+      city,
+      state,
+      zipCode,
+      country,
+      isDefault: isDefault !== undefined ? isDefault : existingAddress.isDefault,
+    },
+  });
+
+  res.json({
+    message: 'Address updated successfully',
+    address: updatedAddress,
+  });
+};
+
+// DELETE /api/users/addresses/:id — delete address
+export const deleteAddress = async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    throw new AppError(401, 'Not authenticated');
+  }
+
+  const { id } = req.params;
+
+  // Verify address belongs to user
+  const existingAddress = await prisma.address.findUnique({ where: { id: parseInt(id) } });
+  if (!existingAddress) throw new AppError(404, 'Address not found');
+  if (existingAddress.userId !== req.user.id) throw new AppError(403, 'You do not have access to this address');
+
+  await prisma.address.delete({ where: { id: parseInt(id) } });
+
+  res.json({ message: 'Address deleted successfully' });
 };

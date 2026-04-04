@@ -13,4 +13,10 @@ router.put('/profile', userController.updateUserProfile);
 router.get('/orders', userController.getUserOrders);
 router.get('/orders/:id', userController.getUserOrderById);
 
+// Address management routes
+router.get('/addresses', userController.getUserAddresses);
+router.post('/addresses', userController.createAddress);
+router.put('/addresses/:id', userController.updateAddress);
+router.delete('/addresses/:id', userController.deleteAddress);
+
 export default router;

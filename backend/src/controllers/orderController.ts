@@ -39,14 +39,14 @@ export const createOrder = async (req: AuthRequest, res: Response) => {
       totalAmount += parseFloat(pkg.price.toString()) * item.quantity;
     }
 
-    // Create order
+// Create order
     const order = await tx.order.create({
       data: {
         userId: req.user!.id,
         orderNumber,
         totalAmount,
         status: 'PENDING',
-        shippingAddress,
+        shippingAddress: typeof shippingAddress === 'string' ? shippingAddress : JSON.stringify(shippingAddress),
       },
     });
 

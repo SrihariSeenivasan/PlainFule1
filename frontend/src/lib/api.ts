@@ -254,6 +254,70 @@ export const userAPI = {
   getOrders: () => apiRequest('/user/orders'),
 
   getOrderById: (id: number) => apiRequest(`/user/orders/${id}`),
+
+  getAddresses: (): Promise<Array<{
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+    isDefault: boolean;
+  }>> => apiRequest('/user/addresses'),
+
+  createAddress: (data: {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+    isDefault?: boolean;
+  }): Promise<{
+    message: string;
+    address: {
+      id: number;
+      name: string;
+      email: string;
+      phone: string;
+      address: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      country: string;
+      isDefault: boolean;
+    };
+  }> =>
+    apiRequest('/user/addresses', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateAddress: (id: number, data: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
+    isDefault?: boolean;
+  }) =>
+    apiRequest(`/user/addresses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  deleteAddress: (id: number) =>
+    apiRequest(`/user/addresses/${id}`, {
+      method: 'DELETE',
+    }),
 };
 
 // Order APIs
@@ -439,6 +503,7 @@ export const contactAPI = {
 export const api = {
   auth: authAPI,
   user: userAPI,
+  users: userAPI, // Alias for consistency
   orders: {
     ...orderAPI,
     create: orderAPI.createOrder,

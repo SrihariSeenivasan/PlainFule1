@@ -77,10 +77,10 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
             className={`blog-card ${isLarge ? 'card-large' : 'card-small'}`}
             style={{
                 display: 'flex',
-                gap: 24,
+                gap: 'clamp(12px, 3vw, 24px)',
                 cursor: 'pointer',
                 borderRadius: 24,
-                padding: '20px',
+                padding: 'clamp(12px, 3vw, 20px)',
                 background: isLarge ? 'transparent' : `${BRAND.white}80`,
                 backdropFilter: isLarge ? 'none' : 'blur(20px)',
                 border: isLarge ? 'none' : `1px solid ${BRAND.white}60`,
@@ -146,16 +146,16 @@ export default function Blogsection() {
     const [featured, ...rest] = blogs;
 
     return (
-        <section ref={sectionRef} style={{ padding: '32px 0', background: BRAND.white, position: 'relative', overflow: 'hidden' }}>
+        <section ref={sectionRef} style={{ padding: 'clamp(30px, 8vw, 60px) 0', background: BRAND.white, position: 'relative', overflow: 'hidden' }}>
             
             {/* Ambient Background Atmosphere */}
             <div style={{ position: 'absolute', top: '15%', left: '-5%', width: '40vw', height: '40vw', background: `radial-gradient(circle, ${BRAND.primary}03 0%, transparent 70%)`, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', bottom: '15%', right: '-5%', width: '40vw', height: '40vw', background: `radial-gradient(circle, ${BRAND.primaryDark}03 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
-            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', position: 'relative', zIndex: 1 }}>
+            <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 1 }}>
                 
                 {/* ── HEADER ROW ── */}
-                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 32, flexWrap: 'wrap', gap: 40 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'clamp(20px, 4vw, 32px)', flexWrap: 'wrap', gap: 'clamp(20px, 5vw, 40px)' }}>
                     <div style={{ maxWidth: 640 }}>
                         <SectionBadge text="Research Library" icon={BookOpen} />
                         <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.text, lineHeight: 1.1, letterSpacing: '-0.04em', margin: '12px 0 0' }}>
@@ -207,7 +207,7 @@ export default function Blogsection() {
                 .blog-grid {
                     display: grid;
                     grid-template-columns: minmax(0, 55fr) 45fr;
-                    gap: 32px;
+                    gap: clamp(16px, 4vw, 32px);
                 }
                 .blog-card.card-large {
                     flex-direction: column;
@@ -220,20 +220,20 @@ export default function Blogsection() {
                     aspect-ratio: 16/9;
                 }
                 .blog-card.card-small .blog-image-wrapper {
-                    width: 140px;
+                    width: clamp(100px, 20vw, 140px);
                     aspect-ratio: 1/1;
                 }
                 
                 .list-column {
                     display: flex;
                     flex-direction: column;
-                    gap: 16px;
+                    gap: clamp(12px, 3vw, 16px);
                 }
 
                 @media (max-width: 1024px) {
                     .blog-grid {
                         grid-template-columns: 1fr;
-                        gap: 24px;
+                        gap: clamp(12px, 4vw, 24px);
                     }
                     .blog-card.card-small {
                         flex-direction: column;

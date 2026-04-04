@@ -8,98 +8,63 @@ import Image from 'next/image';
 import { F_SIZE, FONTS, BRAND } from '../../../lib/typography';
 
 /* ─────────────────────────────────────────────────────────────
-   EYEBROW PILL — uses tertiary bg, primaryDark text
+   EYEBROW PILL
 ───────────────────────────────────────────────────────────── */
 function Pill({ label, variant = 'default' }: { label: string; variant?: 'default' | 'dark' | 'accent' }) {
   const styles = {
-    default: {
-      bg: BRAND.light,
-      border: BRAND.tertiary,
-      iconColor: BRAND.primaryDark,
-      textColor: BRAND.primaryDark,
-    },
-    dark: {
-      bg: BRAND.primary,
-      border: BRAND.secondary,
-      iconColor: BRAND.tertiary,
-      textColor: BRAND.light,
-    },
-    accent: {
-      bg: BRAND.primaryDark,
-      border: BRAND.secondary,
-      iconColor: BRAND.light,
-      textColor: BRAND.white,
-    },
+    default: { bg: BRAND.light, border: BRAND.tertiary, iconColor: BRAND.primaryDark, textColor: BRAND.primaryDark },
+    dark:    { bg: BRAND.primary, border: BRAND.secondary, iconColor: BRAND.tertiary, textColor: BRAND.light },
+    accent:  { bg: BRAND.primaryDark, border: BRAND.secondary, iconColor: BRAND.light, textColor: BRAND.white },
   }[variant];
 
   return (
     <div style={{
       display: 'inline-flex', alignItems: 'center', gap: 8,
       padding: '6px 16px', borderRadius: 100,
-      background: styles.bg,
-      border: `1px solid ${styles.border}`,
+      background: styles.bg, border: `1px solid ${styles.border}`,
     }}>
       <Sparkles size={11} color={styles.iconColor} />
-      <span style={{
-        fontSize: F_SIZE.sm,
-        fontWeight: 800,
-        color: styles.textColor,
-        letterSpacing: '0.15em',
-        textTransform: 'uppercase',
-      }}>{label}</span>
+      <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: styles.textColor, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+        {label}
+      </span>
     </div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────
-   CHAPTER STAMP — tertiary lines, light bg pill, primaryDark text
+   CHAPTER STAMP
 ───────────────────────────────────────────────────────────── */
 function ChapterStamp({ number }: { number: string }) {
   return (
     <section style={{ padding: '28px 24px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(8px, 3vw, 20px)', flexWrap: 'nowrap' }}>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-          transition={{ duration: 0.7 }} style={{ height: 1, width: 80, background: BRAND.tertiary, transformOrigin: 'right' }} />
+          transition={{ duration: 0.7 }}
+          style={{ height: 1, width: 'clamp(24px, 10vw, 80px)', background: BRAND.tertiary, transformOrigin: 'right', flexShrink: 0 }} />
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 10,
             padding: '6px 20px', borderRadius: 100,
-            background: BRAND.light,
-            border: `1px solid ${BRAND.tertiary}`,
+            background: BRAND.light, border: `1px solid ${BRAND.tertiary}`,
+            whiteSpace: 'nowrap',
           }}>
           <Sparkles size={12} color={BRAND.primaryDark} />
-          <span style={{
-            fontSize: F_SIZE.lg,
-            fontWeight: 800,
-            color: BRAND.primary,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-          }}>Chapter {number}</span>
+          <span style={{ fontSize: 'clamp(0.8rem, 2.5vw, 1.1rem)', fontWeight: 800, color: BRAND.primary, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+            Chapter {number}
+          </span>
         </motion.div>
         <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
-          transition={{ duration: 0.7 }} style={{ height: 1, width: 80, background: BRAND.tertiary, transformOrigin: 'left' }} />
+          transition={{ duration: 0.7 }}
+          style={{ height: 1, width: 'clamp(24px, 10vw, 80px)', background: BRAND.tertiary, transformOrigin: 'left', flexShrink: 0 }} />
       </div>
 
-      {/* Hook line below Chapter label */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+      <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        style={{
-          textAlign: 'center',
-          marginTop: 16,
-        }}
-      >
-        <p style={{
-          fontSize: F_SIZE.lg,
-          fontWeight: 600,
-          color: BRAND.primaryDark,
-          margin: 0,
-          lineHeight: 1.6,
-        }}>
-          We all want things to be <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural</span>, but <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural food</span> can&apos;t provide that all
+        style={{ textAlign: 'center', marginTop: 16 }}>
+        <p style={{ fontSize: F_SIZE.lg, fontWeight: 600, color: BRAND.primaryDark, margin: 0, lineHeight: 1.6 }}>
+          We all want things to be <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural</span>, but{' '}
+          <span style={{ color: BRAND.primary, fontWeight: 800 }}>natural food</span> can&apos;t provide that all
         </p>
       </motion.div>
     </section>
@@ -108,8 +73,6 @@ function ChapterStamp({ number }: { number: string }) {
 
 /* ─────────────────────────────────────────────────────────────
    SECTION 1 — DIETARY ANALYSIS
-   Colors used: primary (headings), secondary (body/subtitle), primaryDark (accents/secondary heading),
-                tertiary (dividers/borders), light (backgrounds), quaternary (dot decorations)
 ───────────────────────────────────────────────────────────── */
 function DietaryAnalysisSection() {
   const ref = useRef(null);
@@ -130,11 +93,9 @@ function DietaryAnalysisSection() {
         <div style={{
           position: 'absolute', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          fontSize: 'clamp(100px, 16vw, 200px)',
-          fontWeight: 900,
-          color: `${BRAND.quaternary}50`,
-          letterSpacing: '-0.06em', whiteSpace: 'nowrap',
-          userSelect: 'none', pointerEvents: 'none',
+          fontSize: 'clamp(100px, 16vw, 200px)', fontWeight: 900,
+          color: `${BRAND.quaternary}50`, letterSpacing: '-0.06em',
+          whiteSpace: 'nowrap', userSelect: 'none', pointerEvents: 'none',
         }}>NUTRITION</div>
 
         {/* Glow blob */}
@@ -151,17 +112,9 @@ function DietaryAnalysisSection() {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}>
               <Pill label="Dietary Analysis" variant="default" />
             </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 }}
-              style={{
-                fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
-                fontWeight: 900,
-                color: BRAND.primary,
-                margin: '22px 0 12px',
-                letterSpacing: '-0.03em',
-                lineHeight: 1.15,
-              }}>
+              style={{ fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 900, color: BRAND.primary, margin: '22px 0 12px', letterSpacing: '-0.03em', lineHeight: 1.15 }}>
               Today, many of us have started paying attention to nutrition .
               <span style={{ color: BRAND.primaryDark }}> But nutrition is not just about protein.</span>
             </motion.h2>
@@ -171,85 +124,65 @@ function DietaryAnalysisSection() {
             </motion.p>
           </div>
 
-          {/* Two columns */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(16px, 3vw, 40px)', alignItems: 'start' }}>
-
-            {/* Focused column — primaryDark accent */}
+          {/* Two columns — stacks on mobile */}
+          <div className="ch2-dietary-grid">
+            {/* Focused column */}
             <motion.div initial={{ opacity: 0, x: -24 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.8, delay: 0.3 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: BRAND.primaryDark,
-                  border: `1px solid ${BRAND.primaryDark}`,
+                  background: BRAND.primaryDark, border: `1px solid ${BRAND.primaryDark}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <CheckCircle2 size={18} color={BRAND.white} />
                 </div>
-                <span style={{
-                  fontSize: F_SIZE.sm,
-                  fontWeight: 800, color: BRAND.primaryDark,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                }}>Heavily focused on</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primaryDark, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                  Heavily focused on
+                </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {focused.map((tag, i) => (
                   <motion.div key={tag}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 16,
                       padding: '20px 24px', borderRadius: 14,
-                      background: BRAND.light,
-                      border: `1.5px solid ${BRAND.primaryDark}30`,
+                      background: BRAND.light, border: `1.5px solid ${BRAND.primaryDark}30`,
                     }}>
-                    <div style={{
-                      width: 8, height: 8, borderRadius: '50%',
-                      background: BRAND.primaryDark, flexShrink: 0,
-                      boxShadow: `0 0 8px ${BRAND.primaryDark}60`,
-                    }} />
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: BRAND.primaryDark, flexShrink: 0, boxShadow: `0 0 8px ${BRAND.primaryDark}60` }} />
                     <span style={{ fontSize: F_SIZE.md, fontWeight: 700, color: BRAND.primary }}>{tag}</span>
-                    <div style={{ marginLeft: 'auto' }}>
-                      <ArrowRight size={14} color={BRAND.primaryDark} />
-                    </div>
+                    <div style={{ marginLeft: 'auto' }}><ArrowRight size={14} color={BRAND.primaryDark} /></div>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Lacking column — secondary accent */}
+            {/* Lacking column */}
             <motion.div initial={{ opacity: 0, x: 24 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.8, delay: 0.35 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: BRAND.tertiary,
-                  border: `1px solid ${BRAND.secondary}`,
+                  background: BRAND.tertiary, border: `1px solid ${BRAND.secondary}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   <AlertCircle size={18} color={BRAND.primary} />
                 </div>
-                <span style={{
-                  fontSize: F_SIZE.sm,
-                  fontWeight: 800, color: BRAND.primary,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                }}>But often lacks</span>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.primary, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                  But often lacks
+                </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {lacking.map((tag, i) => (
                   <motion.div key={tag}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
                       padding: '14px 16px', borderRadius: 12,
-                      background: BRAND.white,
-                      border: `1px solid ${BRAND.quaternary}`,
+                      background: BRAND.white, border: `1px solid ${BRAND.quaternary}`,
                     }}>
-                    <div style={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      background: BRAND.secondary, flexShrink: 0,
-                    }} />
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.secondary, flexShrink: 0 }} />
                     <span style={{ fontSize: F_SIZE.md, fontWeight: 600, color: BRAND.primaryDark }}>{tag}</span>
                   </motion.div>
                 ))}
@@ -269,9 +202,6 @@ function DietaryAnalysisSection() {
 
 /* ─────────────────────────────────────────────────────────────
    SECTION 2 — THEORETICAL VS PRACTICAL
-   CounterBlock: light bg, primaryDark number, primary label
-   TextBlock: white bg, primaryDark label dot, primary label, secondary body
-   Conclusion block: primary bg (dark), tertiary/secondary text
 ───────────────────────────────────────────────────────────── */
 function useCountUp(target: number, inView: boolean, delay = 0) {
   const [value, setValue] = useState(0);
@@ -303,31 +233,13 @@ function CounterBlock({ target, suffix, unit, inView, delay }: {
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: 'clamp(20px, 3vw, 28px) 16px',
-      background: BRAND.light,
-      position: 'relative', overflow: 'hidden',
+      background: BRAND.light, position: 'relative', overflow: 'hidden',
     }}>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse at center, ${BRAND.tertiary}60 0%, transparent 70%)`,
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        fontSize: F_SIZE.xl,
-        fontWeight: 900,
-        color: BRAND.primaryDark,
-        lineHeight: 0.85,
-        letterSpacing: '-0.03em',
-        position: 'relative', zIndex: 1,
-      }}>
+      <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center, ${BRAND.tertiary}60 0%, transparent 70%)`, pointerEvents: 'none' }} />
+      <div style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primaryDark, lineHeight: 0.85, letterSpacing: '-0.03em', position: 'relative', zIndex: 1 }}>
         {value}{suffix}
       </div>
-      <div style={{
-        fontSize: F_SIZE.sm,
-        fontWeight: 700,
-        color: BRAND.primary,
-        marginTop: 8, textAlign: 'center', lineHeight: 1.3,
-        letterSpacing: '0.05em', position: 'relative', zIndex: 1,
-      }}>
+      <div style={{ fontSize: F_SIZE.sm, fontWeight: 700, color: BRAND.primary, marginTop: 8, textAlign: 'center', lineHeight: 1.3, letterSpacing: '0.05em', position: 'relative', zIndex: 1 }}>
         {unit}
       </div>
     </div>
@@ -336,24 +248,14 @@ function CounterBlock({ target, suffix, unit, inView, delay }: {
 
 function TextBlock({ label, body }: { label: string; body: string }) {
   return (
-    <div style={{
-      padding: 'clamp(18px, 3vw, 28px)',
-      display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 6,
-      background: BRAND.white,
-    }}>
+    <div style={{ padding: 'clamp(18px, 3vw, 28px)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 6, background: BRAND.white }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
         <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.primaryDark, flexShrink: 0 }} />
-        <span style={{
-          fontSize: F_SIZE.md, fontWeight: 800,
-          color: BRAND.primaryDark, textTransform: 'uppercase',
-          letterSpacing: '0.07em', lineHeight: 1.2,
-        }}>{label}</span>
+        <span style={{ fontSize: F_SIZE.md, fontWeight: 800, color: BRAND.primaryDark, textTransform: 'uppercase', letterSpacing: '0.07em', lineHeight: 1.2 }}>
+          {label}
+        </span>
       </div>
-      <p style={{
-        fontSize: F_SIZE.md,
-        color: BRAND.secondary, fontWeight: 700,
-        margin: 0, lineHeight: 1.55,
-      }}>{body}</p>
+      <p style={{ fontSize: F_SIZE.md, color: BRAND.secondary, fontWeight: 700, margin: 0, lineHeight: 1.55 }}>{body}</p>
     </div>
   );
 }
@@ -370,64 +272,53 @@ function TheoreticalSection() {
 
   return (
     <section ref={ref} style={{ padding: '40px 24px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
       {/* Header */}
       <div style={{ maxWidth: 1080, marginBottom: 40 }}>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5 }}>
           <Pill label="Theoretical vs Practical" variant="default" />
         </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+        <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
-          style={{
-            fontSize: 'clamp(2.6rem, 5vw, 2.5rem)',
-            fontWeight: 900,
-            color: BRAND.primary,
-            margin: '18px 0 0',
-            letterSpacing: '-0.03em',
-            lineHeight: 1.1,
-          }}>
+          style={{ fontSize: 'clamp(2.6rem, 5vw, 2.5rem)', fontWeight: 900, color: BRAND.primary, margin: '18px 0 0', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
           Can we get everything from food?
         </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.25 }}
+        <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.25 }}
           style={{ fontSize: F_SIZE.lg, color: BRAND.primaryDark, margin: '14px 0 0', lineHeight: 1.65, fontWeight: 800 }}>
           In theory, yes. In reality, it is difficult to do consistently in our modern world. Let&apos;s look at the numbers:
         </motion.p>
       </div>
 
-      {/* Cards */}
+      {/* Cards — on mobile the counter/text blocks stack vertically */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {theoreticalItems.map((item, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ boxShadow: `0 6px 32px rgba(114,56,61,0.1)` }}
+            className={`ch2-theoretical-card ${item.numLeft ? 'counter-left' : 'counter-right'}`}
             style={{
               display: 'grid',
-              gridTemplateColumns: item.numLeft
-                ? 'clamp(110px, 18vw, 170px) 1px 1fr'
-                : '1fr 1px clamp(110px, 18vw, 170px)',
               alignItems: 'stretch',
               borderRadius: 18,
               border: `1px solid ${BRAND.quaternary}`,
               overflow: 'hidden',
               background: BRAND.white,
+              gridTemplateColumns: item.numLeft 
+                ? 'clamp(110px, 18vw, 170px) 1px 1fr'
+                : '1fr 1px clamp(110px, 18vw, 170px)',
             }}
           >
             {item.numLeft ? (
               <>
                 <CounterBlock target={item.target} suffix={item.suffix} unit={item.unit} inView={inView} delay={300 + i * 120} />
-                <div style={{ background: BRAND.quaternary }} />
+                <div className="ch2-card-divider" style={{ background: BRAND.quaternary }} />
                 <TextBlock label={item.label} body={item.body} />
               </>
             ) : (
               <>
                 <TextBlock label={item.label} body={item.body} />
-                <div style={{ background: BRAND.quaternary }} />
+                <div className="ch2-card-divider" style={{ background: BRAND.quaternary }} />
                 <CounterBlock target={item.target} suffix={item.suffix} unit={item.unit} inView={inView} delay={300 + i * 120} />
               </>
             )}
@@ -435,47 +326,28 @@ function TheoreticalSection() {
         ))}
       </div>
 
-      {/* Dark conclusion block — primary bg, tertiary/secondary/light text */}
+      {/* Dark conclusion block */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
+        initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, delay: 0.7 }}
         style={{
-          marginTop: 12,
-          background: BRAND.primary,
-          borderRadius: 18,
+          marginTop: 12, background: BRAND.primary, borderRadius: 18,
           padding: 'clamp(20px, 3vw, 30px)',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 18,
+          display: 'flex', alignItems: 'flex-start', gap: 18,
           border: `1px solid ${BRAND.primaryDark}`,
         }}
       >
         <div style={{
-          width: 38, height: 38, borderRadius: '50%',
-          border: `1.5px solid ${BRAND.secondary}`,
+          width: 38, height: 38, borderRadius: '50%', border: `1.5px solid ${BRAND.secondary}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0, marginTop: 2,
-          fontSize: F_SIZE.md,
-          fontWeight: 900,
-          color: BRAND.tertiary,
+          fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.tertiary,
         }}>!</div>
         <div>
-          <div style={{
-            fontSize: F_SIZE.sm, fontWeight: 800,
-            color: BRAND.secondary, letterSpacing: '0.14em',
-            textTransform: 'uppercase', marginBottom: 4,
-          }}>
+          <div style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.secondary, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 4 }}>
             Consistency &amp; Practicality
           </div>
-          <h4 style={{
-            fontSize: 'clamp(1.4rem, 3vw, 1.5rem)',
-            fontWeight: 900,
-            color: BRAND.white,
-            margin: '0 0 6px',
-            letterSpacing: '-0.02em',
-            lineHeight: 1.1,
-          }}>
+          <h4 style={{ fontSize: 'clamp(1.4rem, 3vw, 1.5rem)', fontWeight: 900, color: BRAND.white, margin: '0 0 6px', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
             This is not practical for most people.
           </h4>
           <p style={{ fontSize: F_SIZE.sm, color: BRAND.tertiary, margin: 0, lineHeight: 1.6, fontWeight: 400 }}>
@@ -487,71 +359,32 @@ function TheoreticalSection() {
           </p>
         </div>
       </motion.div>
-
     </section>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────
    SECTION 3 — LABORATORY INSIGHTS
-   NutrientCard: light bg, quaternary progress track, primaryDark fill
-   Header: primary heading, secondary body, primaryDark subheading
-   Image panel: primaryDark overlay, white/light text
-   CTA box: white bg, primaryDark border/icon, primary text, secondary body
 ───────────────────────────────────────────────────────────── */
 function NutrientCard({ pct, label, sym, role, delay = 0, inView }: {
   pct: number; label: string; sym: string; role: string; delay?: number; inView: boolean;
 }) {
   const deficiency = 100 - pct;
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        borderRadius: 14,
-        background: BRAND.primary,
-        border: `1px solid ${BRAND.quaternary}`,
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 10,
-      }}
+      style={{ borderRadius: 14, background: BRAND.primary, border: `1px solid ${BRAND.quaternary}`, padding: '16px', display: 'flex', flexDirection: 'column', gap: 10 }}
     >
-      {/* Header: Symbol and Label */}
       <div>
-        <div style={{
-          fontSize: F_SIZE.lg,
-          fontWeight: 900, color: BRAND.secondary, marginBottom: 3,
-        }}>{sym}</div>
-        <div style={{
-          fontSize: '0.875rem',
-          fontWeight: 800, color: BRAND.tertiary, marginBottom: 8,
-        }}>{label}</div>
+        <div style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.secondary, marginBottom: 3 }}>{sym}</div>
+        <div style={{ fontSize: '0.875rem', fontWeight: 800, color: BRAND.tertiary, marginBottom: 8 }}>{label}</div>
       </div>
-
-      {/* Clear Deficiency Statement */}
-      <div style={{
-        padding: '12px',
-        background: `${BRAND.secondary}15`,
-        borderRadius: 10,
-        borderLeft: `3px solid ${BRAND.secondary}`,
-      }}>
-        <div style={{
-          fontSize: F_SIZE.md,
-          fontWeight: 900, color: BRAND.white, lineHeight: 1,
-        }}>{deficiency}%</div>
-        <div style={{
-          fontSize: '0.75rem',
-          fontWeight: 800, color: BRAND.white, marginTop: 2,
-        }}>Deficient</div>
+      <div style={{ padding: '12px', background: `${BRAND.secondary}15`, borderRadius: 10, borderLeft: `3px solid ${BRAND.secondary}` }}>
+        <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.white, lineHeight: 1 }}>{deficiency}%</div>
+        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: BRAND.white, marginTop: 2 }}>Deficient</div>
       </div>
-
-      {/* Role description */}
-      <div style={{ fontSize: F_SIZE.md, color: BRAND.light, lineHeight: 1.3, fontWeight: 800, fontFamily: FONTS.main }}>
-        {role}
-      </div>
+      <div style={{ fontSize: F_SIZE.md, color: BRAND.light, lineHeight: 1.3, fontWeight: 800, fontFamily: FONTS.main }}>{role}</div>
     </motion.div>
   );
 }
@@ -578,79 +411,50 @@ function LaboratorySection() {
             <Pill label="Laboratory Insights" variant="default" />
           </motion.div>
           <motion.h2 initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.1 }}
-            style={{
-              fontSize: F_SIZE.xl,
-              fontWeight: 900,
-              color: BRAND.primary,
-              margin: '16px 0 8px',
-              // letterSpacing: '-0.035em',
-              // lineHeight: 1.1,
-            }}>
+            style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: BRAND.primary, margin: '16px 0 8px' }}>
             Beyond the Surface.
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.15 }}
-            style={{
-              fontSize: F_SIZE.lg,
-              fontWeight: 800, color: BRAND.primaryDark,
-              margin: '0 0 8px', textTransform: 'uppercase',
-            }}>
+            style={{ fontSize: F_SIZE.lg, fontWeight: 800, color: BRAND.primaryDark, margin: '0 0 8px', textTransform: 'uppercase' }}>
             Common Deficiencies in Indian Diet
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.6, delay: 0.2 }}
-            style={{
-              fontSize: F_SIZE.md,
-              color: BRAND.secondary, margin: '0 auto', maxWidth: 1000,
-              lineHeight: 1.65, fontWeight: 800,
-            }}>
+            style={{ fontSize: F_SIZE.md, color: BRAND.secondary, margin: '0 auto', maxWidth: 1000, lineHeight: 1.65, fontWeight: 800 }}>
             When we look at blood reports, the most common deficiencies are not protein — these are micronutrients, and they play a critical role in how our body functions.
           </motion.p>
         </div>
 
-        {/* Two-col grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr clamp(240px, 32%, 360px)', gap: 'clamp(16px, 3vw, 28px)', alignItems: 'start' }}>
+        {/* Two-col: nutrient cards left, image right — stacks on mobile */}
+        <div className="ch2-lab-grid">
 
           <div>
-            {/* Gradient rule — primaryDark → tertiary */}
             <motion.div initial={{ scaleX: 0 }} animate={inView ? { scaleX: 1 } : {}}
               transition={{ duration: 0.9 }}
               style={{ height: 2, background: `linear-gradient(90deg, ${BRAND.primaryDark}, ${BRAND.tertiary})`, borderRadius: 2, marginBottom: 20, transformOrigin: 'left' }} />
 
-            {/* Nutrient cards grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+            {/* Nutrient cards: 3-col on desktop, 2-col on tablet, 1-col on mobile */}
+            <div className="ch2-nutrient-grid">
               {NUTRIENTS.map((n, i) => (
-                <NutrientCard key={n.sym} pct={n.pct}
-                  label={n.name} sym={n.sym} role={n.role}
-                  delay={i * 0.06} inView={inView} />
+                <NutrientCard key={n.sym} pct={n.pct} label={n.name} sym={n.sym} role={n.role} delay={i * 0.06} inView={inView} />
               ))}
             </div>
 
-            {/* CTA box — white bg, primaryDark border */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            {/* CTA box */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6 }}
               style={{
-                marginTop: 20,
-                padding: '18px',
-                border: `2px solid ${BRAND.primaryDark}`,
-                borderRadius: 14,
-                background: BRAND.white,
-                display: 'flex', flexDirection: 'column', gap: 8,
+                marginTop: 20, padding: '18px',
+                border: `2px solid ${BRAND.primaryDark}`, borderRadius: 14,
+                background: BRAND.white, display: 'flex', flexDirection: 'column', gap: 8,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FlaskConical size={16} color={BRAND.primaryDark} />
-                <div style={{
-                  fontSize: F_SIZE.md,
-                  fontWeight: 900, color: BRAND.primaryDark,
-                  textTransform: 'uppercase', letterSpacing: '0.08em',
-                }}>
+                <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.primaryDark, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                   The Indian Nutrient Gap
                 </div>
               </div>
-              <p style={{
-                fontSize: F_SIZE.md,
-                color: BRAND.primary, margin: 0, lineHeight: 1.5, fontWeight: 800,
-              }}>
+              <p style={{ fontSize: F_SIZE.md, color: BRAND.primary, margin: 0, lineHeight: 1.5, fontWeight: 800 }}>
                 These deficiencies in Indian diets are systemic. PlainFuel bridges this gap with a scientifically-formulated solution.
               </p>
             </motion.div>
@@ -660,10 +464,10 @@ function LaboratorySection() {
           <motion.div
             initial={{ opacity: 0, x: 24 }} animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', aspectRatio: '3/4' }}
+            className="ch2-image-panel"
+            style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}
           >
             <Image src="/images/why/bg-blood.png" alt="Lab" fill style={{ objectFit: 'cover' }} priority />
-            {/* Gradient overlay — uses primary + primaryDark */}
             <div style={{
               position: 'absolute', inset: 0,
               background: `linear-gradient(to top, ${BRAND.primary}CC 0%, ${BRAND.primaryDark}60 45%, transparent 75%)`,
@@ -672,22 +476,15 @@ function LaboratorySection() {
 
             {/* Badge top-left */}
             <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 3 }}>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   padding: '8px 14px', borderRadius: 20,
-                  background: BRAND.primaryDark,
-                  border: `1px solid ${BRAND.secondary}`,
+                  background: BRAND.primaryDark, border: `1px solid ${BRAND.secondary}`,
                   backdropFilter: 'blur(8px)',
-                }}
-              >
-                <span style={{
-                  fontSize: F_SIZE.sm, fontWeight: 800,
-                  color: BRAND.white, letterSpacing: '0.08em', textTransform: 'uppercase',
                 }}>
+                <span style={{ fontSize: F_SIZE.sm, fontWeight: 800, color: BRAND.white, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   What&rsquo;s Missing
                 </span>
               </motion.div>
@@ -695,11 +492,9 @@ function LaboratorySection() {
 
             {/* Play button */}
             <div style={{ position: 'absolute', top: '44%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 3 }}>
-              <motion.div
-                whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }}
+              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }}
                 style={{
-                  width: 52, height: 52, borderRadius: '50%',
-                  background: BRAND.primaryDark,
+                  width: 52, height: 52, borderRadius: '50%', background: BRAND.primaryDark,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer', boxShadow: `0 8px 32px rgba(0,0,0,0.2)`,
                 }}>
@@ -714,13 +509,9 @@ function LaboratorySection() {
               </motion.div>
             </div>
 
-            {/* Caption bottom */}
+            {/* Caption */}
             <div style={{ position: 'absolute', bottom: 20, left: 16, right: 16, zIndex: 3 }}>
-              <p style={{
-                fontFamily: FONTS.accent, fontSize: F_SIZE.md,
-                color: BRAND.light, margin: 0, lineHeight: 1.4,
-                fontStyle: 'italic', textAlign: 'center',
-              }}>
+              <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: BRAND.light, margin: 0, lineHeight: 1.4, fontStyle: 'italic', textAlign: 'center' }}>
                 Most Indian diets are deficient in critical micronutrients needed for optimal health and vitality.
               </p>
             </div>
@@ -738,7 +529,92 @@ function LaboratorySection() {
 export default function Chapter2() {
   return (
     <div style={{ background: BRAND.white, overflow: 'hidden', position: 'relative' }}>
-      
+
+      {/* ── Responsive styles ── */}
+      <style>{`
+        /* Section 1 — Dietary two-col */
+        .ch2-dietary-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(16px, 3vw, 40px);
+          align-items: start;
+        }
+
+        /* Section 2 — Theoretical cards: counter/text side-by-side */
+        .ch2-theoretical-card.counter-left {
+          grid-template-columns: clamp(110px, 18vw, 170px) 1px 1fr;
+        }
+        .ch2-theoretical-card.counter-right {
+          grid-template-columns: 1fr 1px clamp(110px, 18vw, 170px);
+        }
+        .ch2-card-divider {
+          width: 1px;
+        }
+
+        /* Section 3 — Lab two-col */
+        .ch2-lab-grid {
+          display: grid;
+          grid-template-columns: 1fr clamp(240px, 32%, 360px);
+          gap: clamp(16px, 3vw, 28px);
+          align-items: start;
+        }
+
+        /* Section 3 — Nutrient cards 3-col */
+        .ch2-nutrient-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        /* Image panel aspect ratio */
+        .ch2-image-panel {
+          aspect-ratio: 3 / 4;
+        }
+
+        /* ── Tablet: ≤ 860px ── */
+        @media (max-width: 860px) {
+          .ch2-dietary-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .ch2-lab-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .ch2-image-panel {
+            aspect-ratio: 16 / 9 !important;
+          }
+          .ch2-nutrient-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+          }
+        }
+
+        /* ── Mobile: ≤ 600px ── */
+        @media (max-width: 600px) {
+          /* Theoretical cards: stack counter above text */
+          .ch2-theoretical-card {
+            grid-template-columns: 1fr !important;
+          }
+          .ch2-card-divider {
+            width: auto !important;
+            height: 1px !important;
+          }
+
+          /* Nutrient grid: 2-col on small screens */
+          .ch2-nutrient-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+
+          .ch2-image-panel {
+            aspect-ratio: 4 / 3 !important;
+          }
+        }
+
+        /* ── Very small: ≤ 380px ── */
+        @media (max-width: 380px) {
+          .ch2-nutrient-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
 
       {/* Ambient background blobs */}
       <div style={{

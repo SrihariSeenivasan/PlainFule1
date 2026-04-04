@@ -8,36 +8,17 @@ import { Star, ArrowRight, Sparkles, Check } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { productAPI, Product } from '@/lib/api';
 import ProductDetail from './ProductDetail';
-import { F_SIZE, BRAND } from '@/lib/typography';
+import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
 
 /* ── Design Tokens ── */
-const C = {
-  forest: BRAND.primary,
-  deep: BRAND.primary,
-  mid: BRAND.primary,
-  leaf: BRAND.primaryDark,
-  ink: BRAND.primary,
-  white: '#ffffff',
-  offwhite: BRAND.white,
-  silver: '#64748b',
-  mist: BRAND.tertiary,
-  gold: BRAND.primaryDark,
-  goldLight: '#a16207',
-  glow: 'rgba(74,222,128,0.22)',
-  glass: 'rgba(255, 255, 255, 0.92)',
-};
-
-const FONTS = {
-  main: "'Montserrat', sans-serif",
-  accent: "'Caveat', cursive",
-};
+// All styling now uses BRAND colors and FONTS from typography
 
 /* ── Components ── */
 function GoldLine({ style }: { style?: React.CSSProperties }) {
   return (
     <div style={{
       height: 1, width: '100%',
-      background: `linear-gradient(to right, transparent, ${C.gold}99, transparent)`,
+      background: `linear-gradient(to right, transparent, ${BRAND.primaryDark}99, transparent)`,
       ...style,
     }} />
   );
@@ -62,7 +43,7 @@ function DotGrid() {
     <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0, opacity: 0.08, pointerEvents: 'none' }}>
       <defs>
         <pattern id="dotgrid-prod" width="28" height="28" patternUnits="userSpaceOnUse">
-          <circle cx="14" cy="14" r="0.9" fill={C.gold} />
+          <circle cx="14" cy="14" r="0.9" fill={BRAND.primaryDark} />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#dotgrid-prod)" />
@@ -134,10 +115,10 @@ export default function Products() {
         }} />
       </div>
       
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '160px 24px 80px', position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(80px, 12vw, 160px) 20px clamp(40px, 8vw, 80px)', position: 'relative', zIndex: 1 }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: 80 }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 8vw, 80px)' }}>
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -150,7 +131,7 @@ export default function Products() {
             </Chip>
           </motion.div>
           
-          <h2 style={{ fontSize: F_SIZE.xl, fontWeight: 900, color: C.ink, margin: 0, lineHeight: 0.88, letterSpacing: '-0.04em' }}>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 6vw, 2.5rem)', fontWeight: 900, color: BRAND.primaryDark, margin: 0, lineHeight: 0.88, letterSpacing: '-0.04em' }}>
             Available <span style={{ fontWeight: 300, color: BRAND.primary }}>Selections</span>
           </h2>
           
@@ -159,7 +140,7 @@ export default function Products() {
           </div>
           
           <p style={{ 
-            fontFamily: FONTS.accent, fontSize: F_SIZE.lg, fontWeight: 700, color: BRAND.primary,
+            fontFamily: FONTS.accent, fontSize: 'clamp(1rem, 2.5vw, 1.125rem)', fontWeight: 700, color: BRAND.primary,
             margin: '32px auto 0', letterSpacing: '0.01em', maxWidth: 600
           }}>
             Select your daily fuel system formulated for maximum bio-efficiency.
@@ -169,8 +150,8 @@ export default function Products() {
         {/* Grid Section */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
-          gap: 40,
+          gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(280px, 80vw, 340px), 1fr))', 
+          gap: 'clamp(20px, 5vw, 40px)',
           margin: '0 auto'
         }}>
           {products.map((p, i) => (
@@ -184,10 +165,10 @@ export default function Products() {
               onClick={() => setSelectedProduct(p)}
               style={{
                 position: 'relative',
-                height: 580,
+                height: 'clamp(500px, 100vw, 580px)',
                 borderRadius: 16,
                 overflow: 'hidden',
-                background: C.white,
+                background: BRAND.white,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)',
                 cursor: 'pointer',
                 border: '1px solid rgba(0,0,0,0.05)',
@@ -202,7 +183,7 @@ export default function Products() {
               }}>
                 <div style={{ 
                     position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    width: '120%', height: '100%', background: `radial-gradient(circle, ${C.glow} 0%, transparent 70%)`,
+                    width: '120%', height: '100%', background: `radial-gradient(circle, ${BRAND.light} 0%, transparent 70%)`,
                     opacity: 0.15
                 }} />
                 
@@ -224,7 +205,7 @@ export default function Products() {
                 <div style={{ position: 'absolute', top: 20, left: 24, zIndex: 10 }}>
                    <span style={{
                     fontFamily: FONTS.main, fontSize: F_SIZE.sm, letterSpacing: '0.2em',
-                    color: `${C.ink}44`, fontWeight: 700,
+                    color: `${BRAND.primaryDark}44`, fontWeight: 700,
                   }}>PRODUCT-{String(i+1).padStart(2, '0')}</span>
                 </div>
               </div>
@@ -232,7 +213,7 @@ export default function Products() {
               {/* Verified Circle */}
               <div style={{ position: 'absolute', top: 345, right: 32, zIndex: 20 }}>
                 <div style={{ 
-                  width: 30, height: 30, borderRadius: '50%', background: C.white, 
+                  width: 30, height: 30, borderRadius: '50%', background: BRAND.white,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', 
                   boxShadow: '0 4px 12px rgba(0,0,0,0.1)', border: `1px solid ${BRAND.primary}10` 
                 }}>
@@ -245,7 +226,7 @@ export default function Products() {
                 position: 'absolute', bottom: 0, left: 0, right: 0,
                 height: 220,
                 padding: '28px 32px 32px',
-                background: C.glass,
+                background: BRAND.light,
                 backdropFilter: 'blur(22px)',
                 WebkitBackdropFilter: 'blur(22px)',
                 zIndex: 10,
@@ -255,13 +236,13 @@ export default function Products() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
                     <h3 style={{ 
-                      fontSize: F_SIZE.lg, fontWeight: 800, color: C.ink, margin: 0, 
+                      fontSize: F_SIZE.lg, fontWeight: 800, color: BRAND.primaryDark, margin: 0, 
                       letterSpacing: '-0.02em', lineHeight: 1 
                     }}>{p.name}</h3>
                     <span style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.md, color: BRAND.primary, fontWeight: 700 }}>Formula</span>
                   </div>
                   <p style={{ 
-                    fontSize: F_SIZE.sm, color: C.silver, letterSpacing: '0.14em', 
+                    fontSize: F_SIZE.sm, color: BRAND.light, letterSpacing: '0.14em', 
                     textTransform: 'uppercase', margin: 0, fontWeight: 600
                   }}>
                     Scientifically Engineered
@@ -273,8 +254,8 @@ export default function Products() {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Star size={14} fill={C.gold} color={C.gold} />
-                      <span style={{ fontSize: F_SIZE.md, fontWeight: 800, color: C.ink }}>{p.rating || 5.0}</span>
+                      <Star size={14} fill={BRAND.primaryDark} color={BRAND.primaryDark} />
+                      <span style={{ fontSize: F_SIZE.md, fontWeight: 800, color: BRAND.primaryDark }}>{p.rating || 5.0}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                        <span style={{ 
@@ -298,7 +279,7 @@ export default function Products() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 4 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: BRAND.primaryDark, boxShadow: `0 0 7px ${BRAND.primaryDark}66` }} />
-                  <span style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.silver, fontWeight: 700 }}>
+                  <span style={{ fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: BRAND.light, fontWeight: 700 }}>
                     Quality Verified — In Stock
                   </span>
                 </div>
