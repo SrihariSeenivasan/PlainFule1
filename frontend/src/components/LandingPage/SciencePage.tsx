@@ -5,6 +5,13 @@ import { useState, useEffect } from 'react';
 import MainLayout from '@/components/MainLayout';
 import { ArrowRight, Beaker } from 'lucide-react';
 import { F_SIZE, BRAND, FONTS, TYPOGRAPHY } from '@/lib/typography';
+import FAQSection from './LandingPageSections/FAQSection';
+
+const SCIENCE_PAGE_FAQS = [
+  { q: 'Why not carbs & fats?', a: 'Most people already get enough carbs and fats from their daily meals. Adding them here would increase unnecessary calorie intake and reduce flexibility in managing your diet. The focus is on nutrients people commonly lack — protein and micronutrients.' },
+  { q: 'Why not omega 3?', a: 'Omega-3 works best when taken separately. It requires specific dosing and fat-based delivery for proper absorption. Including it in this format would reduce stability and effectiveness.' },
+  { q: 'Why can\'t I just take protein & multivitamins?', a: 'Because that approach is incomplete. Protein and multivitamins alone don\'t support proper absorption, lack functional ingredients like fibre and enzymes, and don\'t work as an integrated system. This formulation is designed to work together, not as separate parts.' },
+];
 
 /* ══════════════════════════════════════════════════════════
    WATERMARK IMAGE POOL
@@ -879,6 +886,8 @@ export default function SciencePage() {
             </Body>
           </Section>
 
+          
+
           {/* ═══════════ CLOSING ═══════════ */}
           <motion.section
             id="closing"
@@ -887,7 +896,7 @@ export default function SciencePage() {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              padding: '9rem 0 4rem',
+              padding: '4rem 0 2rem',
               position: 'relative',
               overflow: 'hidden',
             }}
@@ -913,7 +922,7 @@ export default function SciencePage() {
                 fontSize: 'clamp(5rem, 18vw, 13rem)',
                 fontWeight: 900,
                 color: BRAND.quaternary,
-                opacity: 0.14,
+                opacity: 0.34,
                 letterSpacing: '-0.05em',
                 userSelect: 'none' as const,
                 textTransform: 'uppercase' as const,
@@ -987,7 +996,14 @@ export default function SciencePage() {
               </motion.button>
             </div>
           </motion.section>
-
+{/* ═══════════ FAQ SECTION ═══════════ */}
+          <div style={{ margin: '2rem 0 0' }}>
+            <FAQSection 
+              title="Your Questions Answered"
+              subtitle="Deep dive into the science and reasoning ✨"
+              faqs={SCIENCE_PAGE_FAQS}
+            />
+          </div>
         </div>
       </div>
     </MainLayout>
