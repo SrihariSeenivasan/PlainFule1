@@ -101,7 +101,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--green-bright);
+  background: var(--primary-dark);
   border-radius: 10px;
 }
 
@@ -121,6 +121,7 @@
   --cream-dim: rgba(34, 197, 94, 0.4);
   --border: rgba(0, 0, 0, 0.1);
   --border-green: rgba(34, 197, 94, 0.2);
+  --primary-dark: #723C3D;
 }
 
 /* Glow Effects */

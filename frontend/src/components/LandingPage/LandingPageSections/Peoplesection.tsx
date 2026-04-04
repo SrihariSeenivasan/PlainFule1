@@ -522,7 +522,7 @@ export default function ReviewsSection() {
               viewport={{ once: true }}
               style={{ fontSize: F_SIZE.lg, fontWeight: 900, color: BRAND.primary }}
             >
-              Celebrity &amp; Influencer Reviews
+              Real Peoples Real Results
             </motion.h3>
 
             <div style={{ display: 'flex', gap: 6 }}>

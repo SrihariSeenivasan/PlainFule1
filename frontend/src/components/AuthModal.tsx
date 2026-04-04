@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import LoginPage from './Login/LoginPage';
 import RegisterPage from './Login/RegisterPage';
 import ForgotPassword from './Login/ForgotPassword';
+import { BRAND } from '@/lib/typography';
 
 type ModalView = 'login' | 'register' | 'forgot' | null;
 
@@ -141,7 +142,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#16a34a',
+                  color: BRAND.primaryDark,
                   fontWeight: '800',
                   cursor: 'pointer',
                   letterSpacing: '0.02em',
@@ -163,7 +164,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#16a34a',
+                  color: BRAND.primaryDark,
                   fontWeight: '800',
                   cursor: 'pointer',
                   letterSpacing: '0.02em',
