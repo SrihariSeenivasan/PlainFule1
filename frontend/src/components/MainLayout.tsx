@@ -6,17 +6,16 @@ import FinalCTA from './FinalCTA';
 interface MainLayoutProps {
   children: React.ReactNode;
   background?: string;
-  showFAQ?: boolean;
 }
 
-export default function MainLayout({ children, background = '#ffffff', showFAQ = true }: MainLayoutProps) {
+export default function MainLayout({ children, background = '#ffffff' }: MainLayoutProps) {
   return (
     <main style={{ minHeight: '100vh', background }}>
       {/* This div clips horizontal overflow WITHOUT breaking sticky */}
       <div style={{ overflowX: 'clip' }}>
         <Navbar />
         {children}
-        <FinalCTA showFAQ={showFAQ} />
+        <FinalCTA />
       </div>
     </main>
   );

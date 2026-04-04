@@ -50,7 +50,7 @@ export default function SectionPage() {
     case 'my-orders':
       return (
         <AuthGuard>
-          <MainLayout background="#ffffff" showFAQ={false}>
+          <MainLayout background="#ffffff">
             <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserOrders />
             </div>
@@ -60,7 +60,7 @@ export default function SectionPage() {
     case 'my-profile':
       return (
         <AuthGuard>
-          <MainLayout background="#ffffff" showFAQ={false}>
+          <MainLayout background="#ffffff">
             <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px', paddingTop: 120 }}>
               <UserProfile />
             </div>
