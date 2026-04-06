@@ -62,7 +62,7 @@ export default function BlogEditor({ blog, onSave, onCancel }: BlogEditorProps) 
     metaKeywords: blog?.metaKeywords || '',
     status: blog?.status || 'DRAFT',
     scheduledAt: blog?.scheduledAt ? new Date(blog.scheduledAt).toISOString().slice(0, 16) : '',
-    tags: blog?.tags.map(t => t.id) || [],
+    tags: blog?.tags?.map(t => t.id) || [],
   });
 
   const [selectedTags, setSelectedTags] = useState<BlogTag[]>(blog?.tags || []);
@@ -73,7 +73,7 @@ export default function BlogEditor({ blog, onSave, onCancel }: BlogEditorProps) 
   const [featuredImagePreview, setFeaturedImagePreview] = useState(blog?.featuredImage || '');
   
   const [carouselImages, setCarouselImages] = useState<File[]>([]);
-  const [carouselPreviews, setCarouselPreviews] = useState<string[]>(blog?.images.map(img => img.url) || []);
+  const [carouselPreviews, setCarouselPreviews] = useState<string[]>(blog?.images?.map(img => img.url) || []);
   
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
