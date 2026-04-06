@@ -2,22 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit2, Trash2, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { buildApiUrl } from '@/lib/api-config';
+import { api, CustomerReview } from '@/lib/api';
 import CustomerReviewForm from './CustomerReviewForm';
-
-interface CustomerReview {
-  id: number;
-  category: string;
-  name: string;
-  location: string;
-  quote: string;
-  rating: number;
-  mainImage: string;
-  avatarImage: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  displayOrder: number;
-  createdAt: string;
-}
 
 interface Pagination {
   page: number;
@@ -45,24 +31,13 @@ export default function CustomerReviewManager() {
   const fetchReviews = useCallback(async (page = 1, status = '') => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      params.append('page', page.toString());
-      params.append('limit', '10');
-      if (status) params.append('status', status);
-
-      const response = await fetch(buildApiUrl('/testimonials/admin/customer-reviews?') + params, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch reviews');
-
-      const data = await response.json();
+      const data = await api.testimonials.getAdminCustomerReviews(page, 10, status || undefined);
       setReviews(data.data);
       setPagination(data.pagination);
+      setError('');
     } catch (error) {
       console.error('Error fetching reviews:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch reviews');
     } finally {
       setLoading(false);
     }
@@ -84,21 +59,13 @@ export default function CustomerReviewManager() {
     if (!confirm('Are you sure you want to delete this review?')) return;
 
     try {
-      const response = await fetch(buildApiUrl(`/testimonials/admin/customer-reviews/${id}`), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) throw new Error('Failed to delete review');
-
+      await api.testimonials.deleteCustomerReview(id);
       setSuccessMsg(`Review "${name}" deleted successfully`);
       setTimeout(() => setSuccessMsg(''), 3000);
       fetchReviews(pagination.page, filterStatus);
     } catch (error) {
       console.error('Error deleting review:', error);
-      setError('Failed to delete review');
+      setError(error instanceof Error ? error.message : 'Failed to delete review');
       setTimeout(() => setError(''), 3000);
     }
   };

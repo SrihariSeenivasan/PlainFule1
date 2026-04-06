@@ -3,18 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, AlertCircle, Upload } from 'lucide-react';
 import Image from 'next/image';
-import { buildApiUrl } from '@/lib/api-config';
-
-interface DoctorReview {
-  id: number;
-  name: string;
-  title: string;
-  quote: string;
-  rating: number;
-  image: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  displayOrder: number;
-}
+import { api, DoctorReview } from '@/lib/api';
 
 interface Props {
   review: DoctorReview | null;
@@ -87,23 +76,10 @@ export default function DoctorReviewForm({ review, onClose, onSave }: Props) {
         formDataToSend.append('image', imageFile);
       }
 
-      const url = review
-        ? buildApiUrl(`/testimonials/admin/doctor-reviews/${review.id}`)
-        : buildApiUrl('/testimonials/admin/doctor-reviews');
-
-      const method = review ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        body: formDataToSend,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save review');
+      if (review) {
+        await api.testimonials.updateDoctorReview(review.id, formDataToSend);
+      } else {
+        await api.testimonials.createDoctorReview(formDataToSend);
       }
 
       onSave();

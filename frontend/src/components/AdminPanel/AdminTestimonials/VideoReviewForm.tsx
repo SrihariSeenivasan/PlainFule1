@@ -3,19 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, AlertCircle, CheckCircle2, Upload } from 'lucide-react';
 import Image from 'next/image';
-import { buildApiUrl } from '@/lib/api-config';
-
-interface VideoReview {
-  id: number;
-  name: string;
-  role: string;
-  quote: string;
-  rating: number;
-  thumbnailImage: string;
-  videoUrl: string | null;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  displayOrder: number;
-}
+import { api, VideoReview, getApiUrl } from '@/lib/api';
 
 interface Props {
   review: VideoReview | null;
@@ -65,11 +53,14 @@ export default function VideoReviewForm({ review, onClose, onSave }: Props) {
     const formDataToSend = new FormData();
     formDataToSend.append('images', file);
 
-    const response = await fetch(buildApiUrl('/uploads/images'), {
+    const url = `${getApiUrl()}/uploads/images`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+    const response = await fetch(url, {
       method: 'POST',
       body: formDataToSend,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
     });
 
@@ -159,23 +150,10 @@ export default function VideoReviewForm({ review, onClose, onSave }: Props) {
         formDataToSend.append('thumbnailImage', thumbnailImage);
       }
 
-      const url = review
-        ? buildApiUrl(`/testimonials/admin/video-reviews/${review.id}`)
-        : buildApiUrl('/testimonials/admin/video-reviews');
-
-      const method = review ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        body: formDataToSend,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save review');
+      if (review) {
+        await api.testimonials.updateVideoReview(review.id, formDataToSend);
+      } else {
+        await api.testimonials.createVideoReview(formDataToSend);
       }
 
       onSave();

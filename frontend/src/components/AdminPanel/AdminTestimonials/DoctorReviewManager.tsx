@@ -3,18 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Edit2, Trash2, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import DoctorReviewForm from './DoctorReviewForm';
-import { buildApiUrl } from '@/lib/api-config';
-
-interface DoctorReview {
-  id: number;
-  name: string;
-  title: string;
-  quote: string;
-  rating: number;
-  image: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  displayOrder: number;
-}
+import { api, DoctorReview } from '@/lib/api';
 
 export default function DoctorReviewManager() {
   const [reviews, setReviews] = useState<DoctorReview[]>([]);
@@ -31,23 +20,7 @@ export default function DoctorReviewManager() {
     setLoading(true);
     setError('');
     try {
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        limit: '10',
-        ...(statusFilter && { status: statusFilter }),
-      });
-
-      const response = await fetch(buildApiUrl(`/testimonials/admin/doctor-reviews?${params}`), {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch reviews');
-      }
-
-      const data = await response.json();
+      const data = await api.testimonials.getAdminDoctorReviews(currentPage, 10, statusFilter || undefined);
       setReviews(data.data || []);
       setTotalPages(data.pagination?.pages || 1);
     } catch (err: unknown) {
@@ -67,17 +40,7 @@ export default function DoctorReviewManager() {
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
     try {
-      const response = await fetch(buildApiUrl(`/testimonials/admin/doctor-reviews/${id}`), {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete review');
-      }
-
+      await api.testimonials.deleteDoctorReview(id);
       showToast('success', 'Review deleted successfully');
       fetchReviews();
     } catch (err: unknown) {

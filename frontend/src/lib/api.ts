@@ -162,6 +162,67 @@ export interface ContactMessage {
   updatedAt: string;
 }
 
+// Testimonial Types
+export interface CustomerReview {
+  id: number;
+  category: string;
+  name: string;
+  location: string;
+  quote: string;
+  rating: number;
+  mainImage: string;
+  avatarImage: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  displayOrder: number;
+  createdBy: number;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface VideoReview {
+  id: number;
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+  videoUrl: string;
+  thumbnailImage: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  displayOrder: number;
+  createdBy: number;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface DoctorReview {
+  id: number;
+  name: string;
+  title: string;
+  quote: string;
+  rating: number;
+  image: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
+  displayOrder: number;
+  createdBy: number;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
+}
+
 export interface AuthResponse {
   message: string;
   token: string;
@@ -196,6 +257,35 @@ async function apiRequest<T = unknown>(
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.error || 'API request failed');
+  }
+
+  return response.json();
+}
+
+// Helper function for API requests with FormData (file uploads)
+async function apiRequestFormData<T = unknown>(
+  endpoint: string,
+  formData: FormData,
+  method: 'POST' | 'PUT' = 'POST'
+): Promise<T> {
+  const url = `${API_URL}${endpoint}`;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+  const headers: Record<string, string> = {};
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method,
+    body: formData,
+    headers,
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || error.message || 'API request failed');
   }
 
   return response.json();
@@ -499,6 +589,63 @@ export const contactAPI = {
     }),
 };
 
+// Testimonial APIs
+export const testimonialAPI = {
+  // Customer Reviews
+  getAdminCustomerReviews: (page = 1, limit = 10, status?: string) => {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    if (status) params.append('status', status);
+    return apiRequest<{ data: CustomerReview[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/testimonials/admin/customer-reviews?${params}`);
+  },
+
+  createCustomerReview: (formData: FormData) => 
+    apiRequestFormData<{ message: string; data: CustomerReview }>('/testimonials/admin/customer-reviews', formData, 'POST'),
+
+  updateCustomerReview: (id: number, formData: FormData) =>
+    apiRequestFormData<{ message: string; data: CustomerReview }>(`/testimonials/admin/customer-reviews/${id}`, formData, 'PUT'),
+
+  deleteCustomerReview: (id: number) =>
+    apiRequest<{ message: string }>(`/testimonials/admin/customer-reviews/${id}`, { method: 'DELETE' }),
+
+  // Video Reviews
+  getAdminVideoReviews: (page = 1, limit = 10, status?: string) => {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    if (status) params.append('status', status);
+    return apiRequest<{ data: VideoReview[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/testimonials/admin/video-reviews?${params}`);
+  },
+
+  createVideoReview: (formData: FormData) =>
+    apiRequestFormData<{ message: string; data: VideoReview }>('/testimonials/admin/video-reviews', formData, 'POST'),
+
+  updateVideoReview: (id: number, formData: FormData) =>
+    apiRequestFormData<{ message: string; data: VideoReview }>(`/testimonials/admin/video-reviews/${id}`, formData, 'PUT'),
+
+  deleteVideoReview: (id: number) =>
+    apiRequest<{ message: string }>(`/testimonials/admin/video-reviews/${id}`, { method: 'DELETE' }),
+
+  // Doctor Reviews
+  getAdminDoctorReviews: (page = 1, limit = 10, status?: string) => {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    if (status) params.append('status', status);
+    return apiRequest<{ data: DoctorReview[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/testimonials/admin/doctor-reviews?${params}`);
+  },
+
+  createDoctorReview: (formData: FormData) =>
+    apiRequestFormData<{ message: string; data: DoctorReview }>('/testimonials/admin/doctor-reviews', formData, 'POST'),
+
+  updateDoctorReview: (id: number, formData: FormData) =>
+    apiRequestFormData<{ message: string; data: DoctorReview }>(`/testimonials/admin/doctor-reviews/${id}`, formData, 'PUT'),
+
+  deleteDoctorReview: (id: number) =>
+    apiRequest<{ message: string }>(`/testimonials/admin/doctor-reviews/${id}`, { method: 'DELETE' }),
+};
+
 // Consolidated API export
 export const api = {
   auth: authAPI,
@@ -513,4 +660,5 @@ export const api = {
   cart: cartAPI,
   faq: faqAPI,
   contact: contactAPI,
+  testimonials: testimonialAPI,
 };

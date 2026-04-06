@@ -3,20 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, AlertCircle, Upload } from 'lucide-react';
 import Image from 'next/image';
-import { buildApiUrl } from '@/lib/api-config';
-
-interface CustomerReview {
-  id: number;
-  category: string;
-  name: string;
-  location: string;
-  quote: string;
-  rating: number;
-  mainImage: string;
-  avatarImage: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'PENDING';
-  displayOrder: number;
-}
+import { api, CustomerReview } from '@/lib/api';
 
 interface Props {
   review: CustomerReview | null;
@@ -105,23 +92,10 @@ export default function CustomerReviewForm({ review, onClose, onSave }: Props) {
         formDataToSend.append('avatarImage', avatarImage);
       }
 
-      const url = review
-        ? buildApiUrl(`/testimonials/admin/customer-reviews/${review.id}`)
-        : buildApiUrl('/testimonials/admin/customer-reviews');
-
-      const method = review ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        body: formDataToSend,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save review');
+      if (review) {
+        await api.testimonials.updateCustomerReview(review.id, formDataToSend);
+      } else {
+        await api.testimonials.createCustomerReview(formDataToSend);
       }
 
       onSave();
