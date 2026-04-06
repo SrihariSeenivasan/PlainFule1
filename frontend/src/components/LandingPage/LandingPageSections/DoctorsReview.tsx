@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { F_SIZE, BRAND } from '@/lib/typography';
 import { Star } from 'lucide-react';
-import { buildApiUrl } from '@/lib/api-config';
+import { getApiUrl } from '@/lib/api';
 
 const StarDoodle = ({ size = 20, rotate = 0, style = {} }: { size?: number; rotate?: number; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} style={{ transform: `rotate(${rotate}deg)`, ...style }} aria-hidden>
@@ -262,7 +262,7 @@ export default function DoctorsReview() {
   useEffect(() => {
     const fetchDoctorReviews = async () => {
       try {
-        const response = await fetch(buildApiUrl('/testimonials/doctor-reviews'));
+        const response = await fetch(`${getApiUrl()}/testimonials/doctor-reviews`);
         if (response.ok) {
           const data = await response.json();
           if (data && Array.isArray(data)) {

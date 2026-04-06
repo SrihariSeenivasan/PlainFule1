@@ -5,7 +5,7 @@ import { motion, useInView } from 'framer-motion';
 import { ShieldCheck, RefreshCw, HelpCircle, Star, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
-import { buildApiUrl } from '@/lib/api-config';
+import { getApiUrl } from '@/lib/api';
 
 /* ── TYPES ── */
 interface TextReview {
@@ -476,7 +476,7 @@ export default function ReviewsSection() {
         setLoading(true);
         
         // Fetch customer reviews
-        const customerRes = await fetch(buildApiUrl('/testimonials/customer-reviews'));
+        const customerRes = await fetch(`${getApiUrl()}/testimonials/customer-reviews`);
         if (customerRes.ok) {
           const customerData = await customerRes.json();
           const formattedCustomer: TextReview[] = customerData.map((review: any) => ({
@@ -494,7 +494,7 @@ export default function ReviewsSection() {
         }
 
         // Fetch video reviews
-        const videoRes = await fetch(buildApiUrl('/testimonials/video-reviews'));
+        const videoRes = await fetch(`${getApiUrl()}/testimonials/video-reviews`);
         if (videoRes.ok) {
           const videoData = await videoRes.json();
           const formattedVideo: VideoReview[] = videoData.map((review: any) => ({
