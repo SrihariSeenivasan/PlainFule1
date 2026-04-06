@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { F_SIZE, BRAND } from '@/lib/typography';
 import { Star } from 'lucide-react';
+import { buildApiUrl } from '@/lib/api-config';
 
 const StarDoodle = ({ size = 20, rotate = 0, style = {} }: { size?: number; rotate?: number; style?: React.CSSProperties }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} style={{ transform: `rotate(${rotate}deg)`, ...style }} aria-hidden>
@@ -13,8 +14,8 @@ const StarDoodle = ({ size = 20, rotate = 0, style = {} }: { size?: number; rota
   </svg>
 );
 
-// ── Data ──
-const DOCTORS = [
+// ── Fallback Data (in case backend fails) ──
+const FALLBACK_DOCTORS = [
   {
     id: 1, name: 'Dr. Rajesh Sharma', title: 'Chief Nutritionist',
     image: '/images/Doctors/user1.png',
@@ -54,7 +55,7 @@ const DOCTORS = [
 ];
 
 // ── Doctor Card with overlay ──
-function DoctorCard({ doctor, index }: { doctor: typeof DOCTORS[0]; index: number }) {
+function DoctorCard({ doctor, index }: { doctor: typeof FALLBACK_DOCTORS[0]; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -254,6 +255,46 @@ export default function DoctorsReview() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [doctors, setDoctors] = useState(FALLBACK_DOCTORS);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch doctor reviews from backend
+  useEffect(() => {
+    const fetchDoctorReviews = async () => {
+      try {
+        const response = await fetch(buildApiUrl('/testimonials/doctor-reviews'));
+        if (response.ok) {
+          const data = await response.json();
+          if (data && Array.isArray(data)) {
+            // Transform API response to match component format
+            const transformedDoctors = data.map((review: {
+              id: number;
+              name: string;
+              title: string;
+              image: string;
+              quote: string;
+              rating: number;
+            }) => ({
+              id: review.id,
+              name: review.name,
+              title: review.title,
+              image: review.image,
+              review: review.quote, // Map 'quote' from API to 'review' for component
+              rating: review.rating,
+            }));
+            setDoctors(transformedDoctors);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch doctor reviews:', error);
+        // Keep fallback data on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctorReviews();
+  }, []);
 
   // Detect mobile
   useEffect(() => {
@@ -264,7 +305,7 @@ export default function DoctorsReview() {
   }, []);
 
   const cardsPerView = isMobile ? 1 : 3;
-  const totalSlides = Math.ceil(DOCTORS.length / cardsPerView);
+  const totalSlides = Math.ceil(doctors.length / cardsPerView);
 
   const navigate = useCallback((direction: 'next' | 'prev') => {
     if (isAnimating) return;
@@ -289,7 +330,7 @@ export default function DoctorsReview() {
 
   // Get visible cards for current slide
   const startIndex = currentSlide * cardsPerView;
-  const visibleCards = DOCTORS.slice(startIndex, startIndex + cardsPerView);
+  const visibleCards = doctors.slice(startIndex, startIndex + cardsPerView);
 
   return (
     <>
@@ -362,7 +403,7 @@ export default function DoctorsReview() {
             {/* Counter + navigation info */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, padding: '0 2px', flexWrap: 'wrap', gap: 12 }}>
               <span style={{ fontSize: F_SIZE.sm, color: BRAND.primary, fontWeight: 600 }}>
-                ✦ Experts {startIndex + 1}–{Math.min(startIndex + cardsPerView, DOCTORS.length)} of {DOCTORS.length}
+                ✦ Experts {startIndex + 1}–{Math.min(startIndex + cardsPerView, doctors.length)} of {doctors.length}
               </span>
             </div>
 

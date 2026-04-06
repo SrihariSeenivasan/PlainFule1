@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { AppError } from '../middleware/errorHandler';
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB for videos
 const MAX_FILES = 5;
-const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+const ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+const ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'mpeg', 'mov', 'avi', 'webm', 'mkv'];
 
 // Initialize S3 client
 const s3Client = new S3Client({
@@ -74,19 +75,30 @@ export const uploadImages = async (req: Request, res: Response) => {
         'image/png': 'png',
         'image/webp': 'webp',
         'image/svg+xml': 'svg',
-        'image/gif': 'gif'
+        'image/gif': 'gif',
+        'video/mp4': 'mp4',
+        'video/mpeg': 'mpeg',
+        'video/quicktime': 'mov',
+        'video/x-msvideo': 'avi',
+        'video/webm': 'webm',
+        'video/x-matroska': 'mkv',
       };
       
       const ext = mimetypeMap[file.mimetype] || file.originalname.split('.').pop()?.toLowerCase() || 'jpg';
       
-      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      // Check if this is an image or video
+      const isImage = ALLOWED_IMAGE_EXTENSIONS.includes(ext);
+      const isVideo = ALLOWED_VIDEO_EXTENSIONS.includes(ext);
+      
+      if (!isImage && !isVideo) {
         throw new AppError(400, `File type ".${ext}" is not allowed`);
       }
 
-      // Generate unique filename
+      // Generate unique filename with appropriate folder
       const timestamp = Date.now();
       const random = Math.random().toString(36).slice(2);
-      const filename = `products/${timestamp}-${random}.${ext}`;
+      const folder = isVideo ? 'videos' : 'products';
+      const filename = `${folder}/${timestamp}-${random}.${ext}`;
 
       // Upload to S3
       try {

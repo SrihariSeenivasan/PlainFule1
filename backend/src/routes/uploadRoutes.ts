@@ -8,9 +8,12 @@ const router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB for videos
   fileFilter: (req, file, cb) => {
-    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedImageMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedVideoMimes = ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo', 'video/webm'];
+    const allowedMimes = [...allowedImageMimes, ...allowedVideoMimes];
+    
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {
@@ -43,6 +46,14 @@ const multerErrorHandler = (err: unknown, req: Request, res: Response, next: Nex
 // Upload images route with error handling
 router.post(
   '/',
+  upload.array('images', 5),
+  multerErrorHandler,
+  uploadController.uploadImages
+);
+
+// Upload images with explicit /images endpoint
+router.post(
+  '/images',
   upload.array('images', 5),
   multerErrorHandler,
   uploadController.uploadImages

@@ -11,6 +11,7 @@ import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminReturns from '@/components/AdminPanel/AdminReturns';
 import AdminMessages from '@/components/AdminPanel/AdminMessages';
 import AdminBlogManager from '@/components/AdminPanel/AdminBlog/AdminBlogManager';
+import { AdminTestimonials } from '@/components/AdminPanel/AdminTestimonials';
 
 export default function AdminSectionPage() {
   const params = useParams();
@@ -38,6 +39,8 @@ export default function AdminSectionPage() {
         return <AdminMessages />;
       case 'blog':
         return <AdminBlogManager />;
+      case 'testimonials':
+        return <AdminTestimonials />;
       default:
         return <AdminDashboard />;
     }

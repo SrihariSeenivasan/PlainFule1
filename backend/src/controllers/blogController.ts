@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import { AppError } from '../middleware/errorHandler';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
@@ -81,7 +82,7 @@ export const getBlogs = async (req: Request, res: Response) => {
     const skip = (page - 1) * limit;
 
     // Build filter
-    const where: any = { status: 'PUBLISHED', publishedAt: { lte: new Date() } };
+    const where: Prisma.BlogWhereInput = { status: 'PUBLISHED', publishedAt: { lte: new Date() } };
 
     if (tag) {
       where.tags = { some: { slug: tag } };
@@ -118,7 +119,7 @@ export const getBlogs = async (req: Request, res: Response) => {
         pages: Math.ceil(total / limit),
       },
     });
-  } catch (err) {
+  } catch {
     throw new AppError(500, 'Failed to fetch blogs');
   }
 };
@@ -172,7 +173,7 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
 export const createBlog = async (req: Request, res: Response) => {
   try {
     const { title, excerpt, content, tags, scheduledAt, status, metaTitle, metaDescription, metaKeywords } = req.body;
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
 
     if (!userId) {
       throw new AppError(401, 'Unauthorized');
@@ -187,7 +188,7 @@ export const createBlog = async (req: Request, res: Response) => {
     if (tags) {
       try {
         parsedTags = typeof tags === 'string' ? JSON.parse(tags) : tags;
-      } catch (e) {
+      } catch {
         parsedTags = [];
       }
     }
@@ -195,7 +196,7 @@ export const createBlog = async (req: Request, res: Response) => {
     let slug = generateSlug(title);
     
     // Check if slug exists
-    let existingCount = await prisma.blog.count({ where: { slug } });
+    const existingCount = await prisma.blog.count({ where: { slug } });
     if (existingCount > 0) {
       slug = `${slug}-${Date.now()}`;
     }
@@ -266,7 +267,7 @@ export const updateBlog = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { title, excerpt, content, tags, status, scheduledAt, metaTitle, metaDescription, metaKeywords } = req.body;
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
 
     const blog = await prisma.blog.findUnique({ where: { id: parseInt(id) } });
 
@@ -283,7 +284,7 @@ export const updateBlog = async (req: Request, res: Response) => {
     if (tags) {
       try {
         parsedTags = typeof tags === 'string' ? JSON.parse(tags) : tags;
-      } catch (e) {
+      } catch {
         parsedTags = [];
       }
     }
@@ -336,7 +337,7 @@ export const updateBlog = async (req: Request, res: Response) => {
         tags: parsedTags
           ? {
               set: [],
-              connect: parsedTags.map((tagId: number) => ({ id: tagId })),
+              connect: parsedTags.map((tagId) => ({ id: tagId })),
             }
           : undefined,
       },
@@ -387,7 +388,7 @@ export const updateBlog = async (req: Request, res: Response) => {
 export const deleteBlog = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
 
     const blog = await prisma.blog.findUnique({
       where: { id: parseInt(id) },
@@ -414,8 +415,8 @@ export const deleteBlog = async (req: Request, res: Response) => {
     await prisma.blog.delete({ where: { id: parseInt(id) } });
 
     res.json({ message: 'Blog deleted successfully' });
-  } catch (err) {
-    if (err instanceof AppError) throw err;
+  } catch (_) {
+    if (_ instanceof AppError) throw _;
     throw new AppError(500, 'Failed to delete blog');
   }
 };
@@ -423,16 +424,16 @@ export const deleteBlog = async (req: Request, res: Response) => {
 // Get admin blogs (draft + published)
 export const getAdminBlogs = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const status = req.query.status as string;
 
     const skip = (page - 1) * limit;
 
-    const where: any = { createdBy: userId };
+    const where: Prisma.BlogWhereInput = { createdBy: userId };
     if (status) {
-      where.status = status;
+      where.status = status as unknown as Prisma.BlogWhereUniqueInput['status'];
     }
 
     const [blogs, total] = await Promise.all([
@@ -462,7 +463,7 @@ export const getAdminBlogs = async (req: Request, res: Response) => {
       data: blogs,
       pagination: { page, limit, total, pages: Math.ceil(total / limit) },
     });
-  } catch (err) {
+  } catch {
     throw new AppError(500, 'Failed to fetch blogs');
   }
 };
@@ -476,7 +477,7 @@ export const getTags = async (req: Request, res: Response) => {
       include: { _count: { select: { blogs: true } } },
     });
     res.json(tags);
-  } catch (err) {
+  } catch {
     throw new AppError(500, 'Failed to fetch tags');
   }
 };
@@ -501,7 +502,7 @@ export const createTag = async (req: Request, res: Response) => {
     });
 
     res.status(201).json(tag);
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof AppError) throw err;
     throw new AppError(500, 'Failed to create tag');
   }
@@ -514,13 +515,13 @@ export const addBlogComment = async (req: Request, res: Response) => {
   try {
     const { blogId } = req.params;
     const { content, parentCommentId } = req.body;
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
 
     console.log('Add comment request:', {
       blogId,
       content,
       userId,
-      user: (req as any).user,
+      user: (req as unknown as { user?: { id: number; firstName?: string; lastName?: string; email?: string } }).user,
       parentCommentId,
     });
 
@@ -555,7 +556,7 @@ export const addBlogComment = async (req: Request, res: Response) => {
     if (err instanceof AppError) throw err;
     console.error('Add comment error:', {
       message: err instanceof Error ? err.message : 'Unknown error',
-      code: (err as any).code,
+      code: (err as unknown as { code?: string }).code,
       stack: err instanceof Error ? err.stack : undefined,
       fullError: err
     });
@@ -567,7 +568,7 @@ export const addBlogComment = async (req: Request, res: Response) => {
 export const deleteBlogComment = async (req: Request, res: Response) => {
   try {
     const { commentId } = req.params;
-    const userId = (req as any).user?.id;
+    const userId = (req as unknown as { user?: { id: number } }).user?.id;
 
     const comment = await prisma.blogComment.findUnique({
       where: { id: parseInt(commentId) },
@@ -588,7 +589,7 @@ export const deleteBlogComment = async (req: Request, res: Response) => {
     if (err instanceof AppError) throw err;
     console.error('Delete comment error:', {
       message: err instanceof Error ? err.message : 'Unknown error',
-      code: (err as any).code,
+      code: (err as unknown as { code?: string }).code,
       stack: err instanceof Error ? err.stack : undefined,
     });
     throw new AppError(500, 'Failed to delete comment');

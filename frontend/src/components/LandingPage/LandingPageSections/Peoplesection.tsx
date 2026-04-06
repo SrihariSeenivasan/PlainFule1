@@ -5,9 +5,30 @@ import { motion, useInView } from 'framer-motion';
 import { ShieldCheck, RefreshCw, HelpCircle, Star, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { F_SIZE, BRAND, FONTS } from '@/lib/typography';
+import { buildApiUrl } from '@/lib/api-config';
 
-/* ── DATA ── */
-const TEXT_REVIEWS = [
+/* ── TYPES ── */
+interface TextReview {
+  category: string;
+  name: string;
+  location: string;
+  quote: string;
+  rating: number;
+  img: string;
+  avatar: string;
+}
+
+interface VideoReview {
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+  img: string;
+  videoUrl?: string;
+}
+
+/* ── FALLBACK DATA (for SSR/errors) ── */
+const FALLBACK_TEXT_REVIEWS: TextReview[] = [
   {
     category: 'Physical Demand',
     name: 'Rajan Mehta',
@@ -17,63 +38,15 @@ const TEXT_REVIEWS = [
     img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80',
     avatar: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=80&q=80',
   },
-  {
-    category: 'Mental Performance',
-    name: 'Priya Nair',
-    location: 'Product Lead · Bengaluru',
-    quote: 'Three months in — my afternoon brain fog is completely gone. My whole team noticed I was sharper in meetings before I told anyone.',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&q=80',
-  },
-  {
-    category: 'Family Growth',
-    name: 'Ananya & Dev',
-    location: 'Parents · Chennai',
-    quote: 'As new parents we needed something we could fully trust. The clean label sold us — 60 days later both of us are on it every morning.',
-    rating: 4,
-    img: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=80',
-    avatar: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=80&q=80',
-  },
-  {
-    category: 'Longevity',
-    name: 'Padma Iyer',
-    location: 'Retired · Coimbatore',
-    quote: 'My joints feel noticeably better after 45 days. My doctor even asked what I changed. Highly recommend for anyone over 55.',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1515377553641-5b868e6584c6?w=400&q=80',
-    avatar: 'https://images.unsplash.com/photo-1515377553641-5b868e6584c6?w=80&q=80',
-  },
 ];
 
-const VIDEO_REVIEWS = [
+const FALLBACK_VIDEO_REVIEWS: VideoReview[] = [
   {
     name: 'Steven Bartlett',
     role: 'Award Winning Podcaster\nbehind The Diary of a CEO',
     quote: '&quot;Huel is an ally on my busiest days&quot;',
     rating: 5,
     img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80',
-  },
-  {
-    name: 'Kristen Holmes',
-    role: 'Head of Performance + Nutrition\nExpert',
-    quote: '&quot;What you put into your body really matters. When life gets busy, having products I trust to fill the gaps gives me peace of mind&quot;',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&q=80',
-  },
-  {
-    name: 'Alex Rodriguez',
-    role: 'Former Elite Athlete + World\nSeries Champion',
-    quote: '&quot;I travel a lot, Huel makes it easy to stay fueled. It\'s one of my go to drinks.&quot;',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80',
-  },
-  {
-    name: 'Idris Elba',
-    role: 'Actor, Producer + Entrepreneur',
-    quote: '&quot;I\'ve been a Hueligan for several years now&quot;',
-    rating: 5,
-    img: 'https://images.unsplash.com/photo-1519085360771-9852ef158dba?w=500&q=80',
   },
 ];
 
@@ -109,7 +82,78 @@ function useCardsPerView() {
   return 4;
 }
 
-/* ── STAR ROW ── */
+/* ── VIDEO MODAL ── */
+function VideoModal({ videoUrl, onClose }: { videoUrl: string; onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 50,
+        padding: '20px',
+      }}
+    >
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '900px',
+          aspectRatio: '16 / 9',
+          backgroundColor: '#000',
+          borderRadius: '12px',
+          overflow: 'hidden',
+        }}
+      >
+        <video
+          src={videoUrl}
+          controls
+          autoPlay
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+          }}
+        />
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px',
+            zIndex: 10,
+          }}
+        >
+          ✕
+        </button>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+
 function StarRow({ rating, size = 12 }: { rating: number; size?: number }) {
   return (
     <div style={{ display: 'flex', gap: 3 }}>
@@ -126,7 +170,7 @@ function StarRow({ rating, size = 12 }: { rating: number; size?: number }) {
 }
 
 /* ── TEXT REVIEW CARD ── */
-function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; index: number }) {
+function TextReviewCard({ review, index }: { review: TextReview; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -241,9 +285,21 @@ function TextReviewCard({ review, index }: { review: typeof TEXT_REVIEWS[0]; ind
 }
 
 /* ── VIDEO REVIEW CARD ── */
-function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; index: number }) {
+function VideoReviewCard({ review, index }: { review: VideoReview; index: number }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const cardRef = useRef(null);
+  const isInView = useInView(cardRef, { once: false, amount: 0.5 });
+
+  // Auto-play when card comes into view
+  useEffect(() => {
+    if (isInView && review.videoUrl) {
+      setIsPlaying(true);
+    }
+  }, [isInView, review.videoUrl]);
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -259,7 +315,7 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
         transition: 'transform 0.3s ease',
       }}
     >
-      {/* Image Zone */}
+      {/* Image/Video Zone */}
       <div
         style={{
           position: 'relative',
@@ -270,41 +326,94 @@ function VideoReviewCard({ review, index }: { review: typeof VIDEO_REVIEWS[0]; i
           flexShrink: 0,
         }}
       >
-        <Image
-          src={review.img}
-          alt={review.name}
-          fill
-          style={{ objectFit: 'cover' }}
-          unoptimized
-        />
+        {!isPlaying ? (
+          <>
+            {/* Thumbnail Image */}
+            <Image
+              src={review.img}
+              alt={review.name}
+              fill
+              style={{ objectFit: 'cover' }}
+              unoptimized
+            />
 
-        {/* Gradient Overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(50,45,41,0.75) 0%, transparent 55%)' }} />
+            {/* Gradient Overlay */}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(50,45,41,0.75) 0%, transparent 55%)' }} />
 
-        {/* Play Button */}
-        <div
-          style={{
-            position: 'absolute', top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 52, height: 52, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.18)',
-            border: '1.5px solid rgba(255,255,255,0.35)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer',
-          }}
-        >
-          <Play size={16} fill={BRAND.white} stroke="none" />
-        </div>
+            {/* Play Button */}
+            <motion.button
+              whileHover={{ scale: 1.12 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => review.videoUrl && setIsPlaying(true)}
+              disabled={!review.videoUrl}
+              style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 52, height: 52, borderRadius: '50%',
+                background: review.videoUrl ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.08)',
+                border: '1.5px solid rgba(255,255,255,0.35)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: review.videoUrl ? 'pointer' : 'not-allowed',
+                opacity: review.videoUrl ? 1 : 0.5,
+                zIndex: 5,
+              }}
+            >
+              <Play size={16} fill={BRAND.white} stroke="none" />
+            </motion.button>
 
-        {/* Name + Role Overlay */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 18px', zIndex: 10 }}>
-          <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.white, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {review.name}
-          </div>
-          <div style={{ fontSize: '0.76rem', color: 'rgba(239,233,225,0.75)', lineHeight: 1.45 }}>
-            {review.role}
-          </div>
-        </div>
+            {/* Name + Role Overlay */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 18px', zIndex: 10 }}>
+              <div style={{ fontSize: F_SIZE.md, fontWeight: 900, color: BRAND.white, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {review.name}
+              </div>
+              <div style={{ fontSize: '0.76rem', color: 'rgba(239,233,225,0.75)', lineHeight: 1.45 }}>
+                {review.role}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Video Player */}
+            <video
+              src={review.videoUrl}
+              controls
+              autoPlay
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                backgroundColor: '#000',
+              }}
+              onEnded={() => setIsPlaying(false)}
+            />
+            
+            {/* Close Button */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsPlaying(false)}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px',
+                zIndex: 20,
+              }}
+            >
+              ✕
+            </motion.button>
+          </>
+        )}
       </div>
 
       {/* Card Body */}
@@ -356,9 +465,63 @@ export default function ReviewsSection() {
   const inView = useInView(ref, { once: true });
   const [currentTextSlide, setCurrentTextSlide] = useState(0);
   const [currentVideoSlide, setCurrentVideoSlide] = useState(0);
+  const [textReviews, setTextReviews] = useState<TextReview[]>(FALLBACK_TEXT_REVIEWS);
+  const [videoReviews, setVideoReviews] = useState<VideoReview[]>(FALLBACK_VIDEO_REVIEWS);
+  const [loading, setLoading] = useState(true);
 
-  const { perView: textCardsPerView, maxSlide: maxTextSlide } = useResponsiveCarousel(TEXT_REVIEWS.length);
-  const { perView: videoCardsPerView, maxSlide: maxVideoSlide } = useResponsiveCarousel(VIDEO_REVIEWS.length);
+  // Fetch reviews from backend on mount
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch customer reviews
+        const customerRes = await fetch(buildApiUrl('/testimonials/customer-reviews'));
+        if (customerRes.ok) {
+          const customerData = await customerRes.json();
+          const formattedCustomer: TextReview[] = customerData.map((review: any) => ({
+            category: review.category || 'Customer Feedback',
+            name: review.name,
+            location: review.location || '',
+            quote: review.quote,
+            rating: review.rating,
+            img: review.mainImage || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80',
+            avatar: review.avatarImage || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=80&q=80',
+          }));
+          if (formattedCustomer.length > 0) {
+            setTextReviews(formattedCustomer);
+          }
+        }
+
+        // Fetch video reviews
+        const videoRes = await fetch(buildApiUrl('/testimonials/video-reviews'));
+        if (videoRes.ok) {
+          const videoData = await videoRes.json();
+          const formattedVideo: VideoReview[] = videoData.map((review: any) => ({
+            name: review.name,
+            role: review.role || '',
+            quote: review.quote,
+            rating: review.rating,
+            img: review.thumbnailImage || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80',
+            videoUrl: review.videoUrl || undefined,
+          }));
+          if (formattedVideo.length > 0) {
+            setVideoReviews(formattedVideo);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch reviews:', error);
+        // Keep fallback data on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  const { perView: textCardsPerView, maxSlide: maxTextSlide } = useResponsiveCarousel(textReviews.length);
+  const { perView: videoCardsPerView, maxSlide: maxVideoSlide } = useResponsiveCarousel(videoReviews.length);
 
   // Clamp slides when perView changes
   const safeTextSlide = Math.min(currentTextSlide, maxTextSlide);
@@ -492,8 +655,8 @@ export default function ReviewsSection() {
               animate={{ x: `-${safeTextSlide * (100 / textCardsPerView)}%` }}
               transition={{ duration: 0.55, ease: [0.22, 0.68, 0, 1.2] }}
             >
-              {TEXT_REVIEWS.map((review, i) => (
-                <div key={review.name} style={{ flex: `0 0 ${textItemWidth}`, minWidth: 0 }}>
+              {textReviews.map((review, i) => (
+                <div key={`${review.name}-${i}`} style={{ flex: `0 0 ${textItemWidth}`, minWidth: 0 }}>
                   <TextReviewCard review={review} index={i} />
                 </div>
               ))}
@@ -589,9 +752,12 @@ export default function ReviewsSection() {
               animate={{ x: `-${safeVideoSlide * (100 / videoCardsPerView)}%` }}
               transition={{ duration: 0.55, ease: [0.22, 0.68, 0, 1.2] }}
             >
-              {VIDEO_REVIEWS.map((review, i) => (
-                <div key={review.name} style={{ flex: `0 0 ${videoItemWidth}`, minWidth: 0 }}>
-                  <VideoReviewCard review={review} index={i} />
+              {videoReviews.map((review, i) => (
+                <div key={`${review.name}-${i}`} style={{ flex: `0 0 ${videoItemWidth}`, minWidth: 0 }}>
+                  <VideoReviewCard 
+                    review={review} 
+                    index={i}
+                  />
                 </div>
               ))}
             </motion.div>

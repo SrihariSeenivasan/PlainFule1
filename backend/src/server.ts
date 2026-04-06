@@ -19,6 +19,7 @@ import cartRoutes from './routes/cartRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import contactRoutes from './routes/contactRoutes';
 import blogRoutes from './routes/blogRoutes';
+import testimonialRoutes from './routes/testimonialRoutes';
 
 
 dotenv.config();
@@ -55,7 +56,7 @@ app.get('/health', (_req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/uploads', uploadRoutes);
 app.use('/api/user', authMiddleware, userRoutes);
 app.use('/api/admin', authMiddleware, adminRoutes);
 app.use('/api/orders', authMiddleware, orderRoutes);
@@ -64,6 +65,7 @@ app.use('/api/faqs', faqRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 
 // 404 handler

@@ -33,6 +33,11 @@ model User {
   // Blog relations
   createdBlogs   Blog[] @relation("BlogCreator")
   blogComments   BlogComment[] @relation("BlogComments")
+  
+  // Testimonial relations
+  customerReviews CustomerReview[] @relation("CustomerReviewCreator")
+  videoReviews    VideoReview[] @relation("VideoReviewCreator")
+  doctorReviews   DoctorReview[] @relation("DoctorReviewCreator")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -443,4 +448,94 @@ model BlogComment {
   @@index([blogId])
   @@index([userId])
   @@index([parentCommentId])
+}
+
+// ── TESTIMONIALS / REVIEWS SYSTEM ──
+
+enum TestimonialStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+model CustomerReview {
+  id            Int      @id @default(autoincrement())
+  category      String   // "Physical Demand", "Mental Performance", etc.
+  name          String
+  location      String   // "Marathon Runner · Pune"
+  quote         String   @db.Text
+  rating        Int      // 1-5 stars
+  
+  // Images
+  mainImage     String   // Main profile/review image
+  avatarImage   String?  // Avatar/thumbnail image
+  
+  // Status & Display
+  status        TestimonialStatus @default(PENDING)
+  displayOrder  Int      @default(0)
+  
+  // Admin tracking
+  createdBy     Int
+  creator       User @relation("CustomerReviewCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([status])
+  @@index([category])
+  @@index([displayOrder])
+  @@index([createdBy])
+}
+
+model VideoReview {
+  id            Int      @id @default(autoincrement())
+  name          String
+  role          String   @db.Text  // Can be multi-line
+  quote         String   @db.Text
+  rating        Int      // 1-5 stars
+  
+  // Video/Image
+  thumbnailImage String  // Cover/thumbnail image
+  videoUrl      String?  // Optional: URL to video
+  
+  // Status & Display
+  status        TestimonialStatus @default(PENDING)
+  displayOrder  Int      @default(0)
+  
+  // Admin tracking
+  createdBy     Int
+  creator       User @relation("VideoReviewCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([status])
+  @@index([displayOrder])
+  @@index([createdBy])
+}
+
+model DoctorReview {
+  id            Int      @id @default(autoincrement())
+  name          String
+  title         String   @db.Text  // Job title/qualification
+  quote         String   @db.Text
+  rating        Int      // 1-5 stars
+  
+  // Image
+  image         String   // Doctor profile image
+  
+  // Status & Display
+  status        TestimonialStatus @default(PENDING)
+  displayOrder  Int      @default(0)
+  
+  // Admin tracking
+  createdBy     Int
+  creator       User @relation("DoctorReviewCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@index([status])
+  @@index([displayOrder])
+  @@index([createdBy])
 }
