@@ -29,6 +29,10 @@ model User {
   cart           Cart?
   returnRequests ReturnRequest[]
   addresses      Address[]
+  
+  // Blog relations
+  createdBlogs   Blog[] @relation("BlogCreator")
+  blogComments   BlogComment[] @relation("BlogComments")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -337,4 +341,106 @@ enum MessageStatus {
   READ
   REPLIED
   ARCHIVED
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+}
+
+// ── BLOG SYSTEM MODELS ──
+
+model Blog {
+  id                Int      @id @default(autoincrement())
+  title             String
+  slug              String   @unique
+  excerpt           String?
+  content           String   // Rich HTML content
+  readTime          Int?     // in minutes
+  
+  // SEO Fields
+  metaTitle         String?
+  metaDescription   String?
+  metaKeywords      String?
+  
+  // Status & Publishing
+  status            BlogStatus @default(DRAFT)
+  publishedAt       DateTime?
+  scheduledAt       DateTime?
+  
+  // Featured/Cover image
+  featuredImage     String?
+  
+  // Admin tracking
+  createdBy         Int
+  creator           User @relation("BlogCreator", fields: [createdBy], references: [id], onDelete: SetNull)
+  
+  // Relations
+  tags              BlogTag[]
+  comments          BlogComment[]
+  images            BlogImage[]
+  relatedBlogs      Blog[] @relation("RelatedBlogs")
+  relatedFrom       Blog[] @relation("RelatedBlogs")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([status])
+  @@index([createdBy])
+  @@index([publishedAt])
+}
+
+model BlogTag {
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  slug              String   @unique
+  color             String?
+  
+  blogs             Blog[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([slug])
+}
+
+model BlogImage {
+  id                Int      @id @default(autoincrement())
+  url               String
+  altText           String?
+  caption           String?
+  order             Int      @default(0)
+  
+  blogId            Int
+  blog              Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  
+  createdAt         DateTime @default(now())
+  
+  @@index([blogId])
+}
+
+model BlogComment {
+  id                Int      @id @default(autoincrement())
+  content           String
+  
+  userId            Int
+  user              User @relation("BlogComments", fields: [userId], references: [id], onDelete: Cascade)
+  
+  blogId            Int
+  blog              Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  
+  parentCommentId   Int?
+  parentComment     BlogComment? @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  replies           BlogComment[] @relation("CommentReplies")
+  
+  isApproved        Boolean   @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([blogId])
+  @@index([userId])
+  @@index([parentCommentId])
 }

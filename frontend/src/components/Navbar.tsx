@@ -362,6 +362,7 @@ const MobileDrawer = ({ open, onClose, onOpenAuth, isAuthenticated, user, onLogo
     { href: '/about', label: 'About' },
     { href: '/science', label: 'Science' },
     { href: '/products', label: 'Products' },
+    { href: '/blog', label: 'Blogs' },
   ] as const;
 
   return (
@@ -582,6 +583,7 @@ export default function Navbar() {
               <NavLink href="/about">About</NavLink>
               <NavLink href="/science">Science</NavLink>
               <NavLink href="/products">Products</NavLink>
+              <NavLink href="/blog">Blogs</NavLink>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>

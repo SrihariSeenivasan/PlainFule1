@@ -5,55 +5,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { 
     Calendar, BookOpen, ArrowRight, Bookmark, ChevronRight, 
-    LucideIcon
+    LucideIcon, Loader
 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { F_SIZE, FONTS, BRAND } from '@/lib/typography';
+import { getBlogs } from '@/lib/blogApi';
 
 
-interface Blog {
+interface BlogDisplay {
     id: number;
     title: string;
     excerpt: string;
     date: string;
     image: string;
     tag: string;
+    slug: string;
     featured: boolean;
     readTime: string;
 }
 
-const blogs: Blog[] = [
-    {
-        id: 1,
-        title: "The Indian Diet Gap: Biometric Deficits in Modern Life.",
-        excerpt: "A clinical analysis of common Indian dietary patterns and the resulting microscopic gaps in daily nutritional baseline.",
-        date: "Oct 24, 2025",
-        image: "/images/ingredients.png",
-        tag: "Biometrics",
-        featured: true,
-        readTime: "8 min read"
-    },
-    {
-        id: 2,
-        title: "Bioavailability: The Pharmacist's Guide to Absorption.",
-        excerpt: "Why the molecular form of your micronutrients dictates systemic recovery more than simple dosage numbers.",
-        date: "Oct 12, 2025",
-        image: "/images/scoop.png",
-        tag: "Bioavailability",
-        featured: false,
-        readTime: "5 min read"
-    },
-    {
-        id: 3,
-        title: "Microbiome Resilience & Systemic Immunity.",
-        excerpt: "Understanding the gut-brain axis and how targeted fiber restoration supports metabolic consistency.",
-        date: "Sep 30, 2025",
-        image: "/images/ingredients.png",
-        tag: "Meta-Health",
-        featured: false,
-        readTime: "6 min read"
-    },
-];
+function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function formatReadTime(readTime?: number): string {
+    if (!readTime) return '5 min read';
+    return `${readTime} min read`;
+}
 
 /* ── SUB-COMPONENTS ── */
 
@@ -66,7 +45,7 @@ function SectionBadge({ text, icon: Icon }: { text: string; icon?: LucideIcon })
     );
 }
 
-function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: number; size?: 'large' | 'small' }) {
+function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: BlogDisplay; index: number; size?: 'large' | 'small' }) {
     const isLarge = size === 'large';
     return (
         <motion.article
@@ -143,6 +122,48 @@ function ClinicalBlogCard({ blog, index, size = 'large' }: { blog: Blog; index: 
 export default function Blogsection() {
     const sectionRef = useRef(null);
     const inView = useInView(sectionRef, { once: true, margin: '-100px' });
+    const [blogs, setBlogs] = useState<BlogDisplay[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                
+                // Fetch published blogs, limit to 3 for the section
+                const response = await getBlogs(1, 3);
+                
+                // Transform API blogs to display format
+                const transformedBlogs: BlogDisplay[] = response.data
+                    .filter(blog => blog.status === 'PUBLISHED')
+                    .map((blog, index) => ({
+                        id: blog.id,
+                        title: blog.title,
+                        slug: blog.slug,
+                        excerpt: blog.excerpt || '',
+                        date: formatDate(blog.publishedAt || blog.createdAt),
+                        image: blog.featuredImage || '/images/ingredients.png',
+                        tag: blog.tags[0]?.name || 'Insights',
+                        featured: index === 0,
+                        readTime: formatReadTime(blog.readTime),
+                    }));
+                
+                setBlogs(transformedBlogs);
+            } catch (err) {
+                console.error('Failed to fetch blogs:', err);
+                setError('Unable to load blogs');
+                // Fallback to empty state
+                setBlogs([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogs();
+    }, []);
+
     const [featured, ...rest] = blogs;
 
     return (
@@ -175,29 +196,44 @@ export default function Blogsection() {
                 </div>
 
                 {/* ── CONTENT GRID ── */}
-                <div className="blog-grid">
-                    
-                    {/* Featured Article */}
-                    <div className="featured-column">
-                        <ClinicalBlogCard blog={featured} index={0} size="large" />
+                {loading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400, gap: 12 }}>
+                        <Loader size={24} color={BRAND.primary} className="animate-spin" />
+                        <span style={{ fontSize: F_SIZE.md, color: BRAND.textMuted, fontWeight: 700 }}>Loading blogs...</span>
                     </div>
-
-                    {/* Secondary List */}
-                    <div className="list-column">
-                        <div style={{ paddingBottom: 24, borderBottom: `1px solid ${BRAND.border}`, display: 'flex', alignItems: 'center', gap: 12, color: BRAND.textMuted, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                            <Bookmark size={14} color={BRAND.primaryDark} />
-                            Trending Peer Reviews
-                        </div>
-                        {rest.map((blog, i) => (
-                            <ClinicalBlogCard key={blog.id} blog={blog} index={i + 1} size="small" />
-                        ))}
+                ) : blogs.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '40px 20px', background: BRAND.light, borderRadius: 24 }}>
+                        <p style={{ fontSize: F_SIZE.md, color: BRAND.textMuted, fontWeight: 700, margin: 0 }}>No published blogs available yet</p>
+                    </div>
+                ) : (
+                    <div className="blog-grid">
                         
-                        <div style={{ marginTop: 'auto', padding: '20px', borderRadius: 24, background: BRAND.light, border: `1px solid ${BRAND.primary}05`, textAlign: 'center' }}>
-                            <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.primaryDark, margin: 0, fontWeight: 700 }}>✦ More clinical data arriving weekly ✦</p>
+                        {/* Featured Article */}
+                        <div className="featured-column">
+                            <Link href={`/blog/${featured.slug}`} style={{ textDecoration: 'none' }}>
+                                <ClinicalBlogCard blog={featured} index={0} size="large" />
+                            </Link>
                         </div>
-                    </div>
 
-                </div>
+                        {/* Secondary List */}
+                        <div className="list-column">
+                            <div style={{ paddingBottom: 24, borderBottom: `1px solid ${BRAND.border}`, display: 'flex', alignItems: 'center', gap: 12, color: BRAND.textMuted, fontSize: F_SIZE.sm, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                                <Bookmark size={14} color={BRAND.primaryDark} />
+                                Trending Peer Reviews
+                            </div>
+                            {rest.map((blog, i) => (
+                                <Link key={blog.id} href={`/blog/${blog.slug}`} style={{ textDecoration: 'none' }}>
+                                    <ClinicalBlogCard blog={blog} index={i + 1} size="small" />
+                                </Link>
+                            ))}
+                            
+                            <div style={{ marginTop: 'auto', padding: '20px', borderRadius: 24, background: BRAND.light, border: `1px solid ${BRAND.primary}05`, textAlign: 'center' }}>
+                                <p style={{ fontFamily: FONTS.accent, fontSize: F_SIZE.lg, color: BRAND.primaryDark, margin: 0, fontWeight: 700 }}>✦ More clinical data arriving weekly ✦</p>
+                            </div>
+                        </div>
+
+                    </div>
+                )}
 
             </div>
 

@@ -18,6 +18,7 @@ import reviewRoutes from './routes/reviewRoutes';
 import cartRoutes from './routes/cartRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import contactRoutes from './routes/contactRoutes';
+import blogRoutes from './routes/blogRoutes';
 
 
 dotenv.config();
@@ -62,6 +63,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/blogs', blogRoutes);
 
 
 // 404 handler

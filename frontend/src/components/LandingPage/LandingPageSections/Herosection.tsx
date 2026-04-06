@@ -1,8 +1,24 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { F_SIZE, FONTS, BRAND } from '@/lib/typography';
+import { getApiUrl } from '@/lib/api';
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface Review {
+  id: number;
+  rating: number;
+  text: string;
+  user: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  createdAt: string;
+}
 
 // ── Slides data ───────────────────────────────────────────────────────────────
 const SLIDES = [
@@ -58,6 +74,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 // ── Product Panel ────────────────────────────────────────────────────────────
 function ProductPanel() {
+  const router = useRouter();
   const [idx, setIdx] = useState(0);
   const [dir, setDir] = useState(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -298,12 +315,16 @@ function ProductPanel() {
               textTransform: 'uppercase', color: `${BRAND.textMuted}`, fontWeight: 700,
             }}>In Stock — Ships in 2 days</span>
           </div>
-          <a href="#order" style={{
+          <button onClick={() => router.push('/products')} style={{
             fontSize: F_SIZE.sm, letterSpacing: '0.2em',
             textTransform: 'uppercase', color: BRAND.primaryDark, fontWeight: 900,
             textDecoration: 'none',
             display: 'flex', alignItems: 'center', gap: 6,
             transition: 'opacity 0.2s',
+            border: 'none',
+            background: 'none',
+            cursor: 'pointer',
+            padding: 0,
           }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.6')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
@@ -312,7 +333,7 @@ function ProductPanel() {
             <svg viewBox="0 0 16 16" width={10} height={10} fill="none">
               <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -321,6 +342,36 @@ function ProductPanel() {
 
 // ── Left Content ─────────────────────────────────────────────────────────────
 function AboutLeft({ inView }: { inView: boolean }) {
+  const router = useRouter();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [avgRating, setAvgRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const apiUrl = getApiUrl();
+        const response = await fetch(`${apiUrl}/reviews/product/4`);
+        if (response.ok) {
+          const data = await response.json();
+          const reviewsList = data.data || [];
+          setReviews(reviewsList);
+          setReviewCount(reviewsList.length);
+
+          if (reviewsList.length > 0) {
+            const total = reviewsList.reduce((sum: number, r: Review) => sum + r.rating, 0);
+            const avg = Math.round((total / reviewsList.length) * 10) / 10;
+            setAvgRating(avg);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
   const paragraphs = [
     "PlainFuel is a daily nutrition supplement designed to simplify how we meet our body's needs.",
     "Instead of taking multiple supplements or tracking different nutrients, PlainFuel brings everything together in one sachet. It combines protein, essential micronutrients, and fiber in a structured way so that your body gets consistent support every day.",
@@ -332,6 +383,15 @@ function AboutLeft({ inView }: { inView: boolean }) {
     animate: inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 },
     transition: { duration: 0.62, delay, ease: [0.22, 1, 0.36, 1] },
   });
+
+  // Get unique user initials from reviews (max 3)
+  const userAvatars = reviews.slice(0, 3).map(r => ({
+    initials: `${r.user.firstName?.[0] || ''}${r.user.lastName?.[0] || ''}`.toUpperCase(),
+    name: `${r.user.firstName || ''} ${r.user.lastName || ''}`.trim(),
+  }));
+
+  // Generate placeholder colors for avatars
+  const avatarColors = [BRAND.secondary, BRAND.tertiary, BRAND.quaternary];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -412,7 +472,7 @@ function AboutLeft({ inView }: { inView: boolean }) {
 
       {/* @ts-expect-error - Framer Motion cubic-bezier easing */}
       <motion.div {...fromLeft(0.72)} style={{ display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap' }}>
-        <a href="#order" style={{
+        <button onClick={() => router.push('/products')} style={{
           display: 'inline-flex', alignItems: 'center', gap: 12,
           fontSize: F_SIZE.sm, fontWeight: 900,
           letterSpacing: '0.22em', textTransform: 'uppercase',
@@ -421,6 +481,8 @@ function AboutLeft({ inView }: { inView: boolean }) {
           textDecoration: 'none',
           boxShadow: `0 8px 32px ${BRAND.primaryDark}1f`,
           transition: 'all 0.25s ease',
+          border: 'none',
+          cursor: 'pointer',
         }}
           onMouseEnter={e => { e.currentTarget.style.background = BRAND.primaryDark; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 14px 40px ${BRAND.primaryDark}33`; }}
           onMouseLeave={e => { e.currentTarget.style.background = BRAND.primaryDark; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `0 8px 32px ${BRAND.primaryDark}1f`; }}
@@ -429,31 +491,57 @@ function AboutLeft({ inView }: { inView: boolean }) {
           <svg viewBox="0 0 16 16" width={11} height={11} fill="none">
             <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </a>
+        </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ display: 'flex' }}>
-            {[BRAND.secondary, BRAND.tertiary, BRAND.quaternary].map((bg, i) => (
-              <div key={i} style={{
-                width: 28, height: 28, borderRadius: '50%',
-                border: `2px solid ${BRAND.white}`,
-                background: bg, marginLeft: i > 0 ? -9 : 0,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              }} />
-            ))}
+            {reviewCount > 0 ? (
+              userAvatars.map((avatar, i) => (
+                <div
+                  key={i}
+                  title={avatar.name}
+                  style={{
+                    width: 28, height: 28, borderRadius: '50%',
+                    border: `2px solid ${BRAND.white}`,
+                    background: avatarColors[i],
+                    marginLeft: i > 0 ? -9 : 0,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: BRAND.white,
+                  }}
+                >
+                  {avatar.initials}
+                </div>
+              ))
+            ) : (
+              [BRAND.secondary, BRAND.tertiary, BRAND.quaternary].map((bg, i) => (
+                <div key={i} style={{
+                  width: 28, height: 28, borderRadius: '50%',
+                  border: `2px solid ${BRAND.white}`,
+                  background: bg, marginLeft: i > 0 ? -9 : 0,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                }} />
+              ))
+            )}
           </div>
           <div>
             <div style={{ display: 'flex', gap: 2, marginBottom: 3 }}>
               {[1, 2, 3, 4, 5].map(s => (
                 <svg key={s} viewBox="0 0 10 10" width={9} height={9}>
-                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={BRAND.secondary} />
+                  <polygon points="5,0.5 6.2,3.8 9.5,3.8 6.9,5.9 7.9,9.1 5,7.1 2.1,9.1 3.1,5.9 0.5,3.8 3.8,3.8" fill={s <= (reviewCount > 0 ? Math.round(avgRating) : 5) ? BRAND.secondary : `${BRAND.secondary}40`} />
                 </svg>
               ))}
             </div>
             <span style={{
               fontFamily: FONTS.accent,
               fontSize: F_SIZE.sm, color: BRAND.textMuted, fontWeight: 700,
-            }}>1,200+ daily users</span>
+            }}>
+              {reviewCount > 50 ? `${Math.floor(reviewCount / 10) * 10}+ users` : reviewCount > 0 ? `${reviewCount} users` : '50+ users'}
+            </span>
           </div>
         </div>
       </motion.div>
